@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
-
+// Creación del menu con la Vista Base
 public abstract class VistaBase {
 
     private String cabecera;

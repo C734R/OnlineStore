@@ -55,6 +55,7 @@ public class OnlineStore {
     /**
      * Método que inicia el programa, cargando el menú principal.
      */
+
     private static void iniciarPrograma(){
         int opcion;
         while(true) {
@@ -76,7 +77,6 @@ public class OnlineStore {
             }
         }
     }
-
     /**
      * Método que carga el MVC.
      */
@@ -98,6 +98,5 @@ public class OnlineStore {
         vPedidos = new VistaPedidos();
         cPedidos = new ControlPedidos(mStore, vPedidos);
     }
-
 
 }
