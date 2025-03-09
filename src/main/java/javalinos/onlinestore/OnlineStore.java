@@ -61,6 +61,7 @@ public class OnlineStore {
             opcion = cMenuPrincipal.iniciar();
             switch (opcion) {
                 case 1:
+
                     cClientes.iniciar();
                     break;
                 case 2:

@@ -29,7 +29,9 @@ public class ControlClientes extends ControlBase {
 
     }
 
-    public void addCliente() {}
+    public void addCliente() {
+
+    }
 
     public void removeCliente() {}
 
