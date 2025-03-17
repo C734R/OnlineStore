@@ -1,16 +1,14 @@
 package javalinos.onlinestore.modelo.primitivos;
 
-import java.time.LocalDate;
-
 public class Articulo {
 
     private String codigo;
     private String descripcion;
     private Float precio;
-    private LocalDate preparacion;
+    private Float preparacion;
     private Integer stock;
 
-    public Articulo(String codigo, String descripcion, Float precio, LocalDate preparacion) {
+    public Articulo(String codigo, String descripcion, Float precio, Float preparacion) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -22,7 +20,7 @@ public class Articulo {
         this.codigo = "";
         this.descripcion = "";
         this.precio = 0.0f;
-        this.preparacion = LocalDate.now();
+        this.preparacion = null;
         this.stock = 0;
     }
 
@@ -50,11 +48,11 @@ public class Articulo {
         this.precio = precio;
     }
 
-    public LocalDate getPreparacion() {
+    public Float getPreparacion() {
         return preparacion;
     }
 
-    public void setPreparacion(LocalDate preparacion) {
+    public void setPreparacion(Float preparacion) {
         this.preparacion = preparacion;
     }
 
@@ -71,7 +69,7 @@ public class Articulo {
         return  "Código: " + codigo + "\n" +
                 "Descripcion='" + descripcion + "\n" +
                 "Precio" + precio + "\n" +
-                "Tiempo de preparacion: " + preparacion.toString() + "\n" +
+                "Tiempo de preparacion: " + preparacion + "\n" +
                 "Stock: " + stock;
     }
 }
