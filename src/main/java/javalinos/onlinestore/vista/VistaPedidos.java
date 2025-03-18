@@ -17,9 +17,11 @@ public class VistaPedidos extends VistaBase {
                 *********************************************""";
         super.setCabecera(cabecera);
         List<String> listaMenu = new ArrayList<>(Arrays.asList(
-                "Añadir pedido", "Eliminar pedido",
-                "Listar pedidos por cliente",
-                "Listar pedidos por fecha"));
+                "Añadir pedido",
+                "Eliminar pedido",
+                "Listar todos los pedidos",
+                "Listar pedidos pendientes",
+                "Listar pedidos enviados"));
         super.setListaMenu(listaMenu);
     }
 
@@ -28,12 +30,12 @@ public class VistaPedidos extends VistaBase {
     }
 
     public void showListPedidos(List<Pedido> pedidos, Boolean cliente) {
-        if (!cliente) showListGenerica(pedidos, "LISTA DE INSCRIPCIONES", true, false);
-        else showListGenerica(pedidos, "LISTA DE EXCURSIONES DEL SOCIO " + pedidos.getFirst().getCliente().getNombre(), true, false);
+        if (!cliente) showListGenerica(pedidos, "LISTA DE PEDIDOS", true, false);
+        else showListGenerica(pedidos, "LISTA DE PEDIDOS DEL CLIENTE " + pedidos.getFirst().getCliente().getNombre(), true, false);
     }
 
     public void showListClientes(List<Cliente> clientes) {
-        showListGenerica(clientes, "LISTA DE CLIENTES", true, false);
+        showListGenerica(clientes, "LISTA DE CLIENTES", true, true);
     }
 
     public void showListArticulos(List<Articulo> articulos) {

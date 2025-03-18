@@ -2,20 +2,30 @@ package javalinos.onlinestore.controlador;
 
 import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.ModeloClientes;
+import javalinos.onlinestore.modelo.gestores.ModeloPedidos;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
+import javalinos.onlinestore.modelo.primitivos.Cliente;
 import javalinos.onlinestore.modelo.primitivos.Pedido;
 import javalinos.onlinestore.vista.VistaPedidos;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javalinos.onlinestore.utils.Utilidades.listToStr;
 
 public class ControlPedidos extends ControlBase{
 
     private VistaPedidos vPedidos;
     private ModeloArticulos mArticulos;
     private ModeloClientes mClientes;
+    private ModeloPedidos mPedidos;
 
     public ControlPedidos(ModeloStore mStore, VistaPedidos vPedidos) {
         super.setModeloStore(mStore);
         this.mArticulos = mStore.getModeloArticulos();
         this.mClientes = mStore.getModeloClientes();
+        this.mPedidos = mStore.getModeloPedidos();
         this.vPedidos = vPedidos;
     }
 
@@ -69,14 +79,82 @@ public class ControlPedidos extends ControlBase{
     }
 
     public void listPedidos(boolean fCliente) {
-        if(fCliente) {
-            vPedidos.showListClientes(this.getModeloStore().getModeloClientes().getClientes());
+        if (mPedidos.getPedidos().isEmpty()) {
+            vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
+            return;
         }
+        List<Pedido> pedidos = null;
+        if(fCliente) {
+            if (!mClientes.getClientes().isEmpty()) {
+                vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
+                int indexCliente = -1 + vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 1, mClientes.sizeClientes(), true, true);
+                if (indexCliente < 0) return;
+                Cliente cliente = mClientes.getClientes().get(indexCliente);
+                pedidos = mPedidos.getPedidosCliente(cliente);
+                if (pedidos.isEmpty()) {
+                    vPedidos.showMensaje("No hay pedidos registrados para este cliente.", true);
+                }
+            }
+            else vPedidos.showMensajePausa("Error. No existen clientes registrados.", true);
+        }
+        else {
+            pedidos = mPedidos.getPedidos();
+        }
+        vPedidos.showListPedidos(pedidos,fCliente);
+        vPedidos.showMensajePausa("", true);
     }
 
-    public void listPedidosPendientes(boolean fCliente) {}
+    public void listPedidosPendientes(boolean fCliente) {
+        if (mPedidos.getPedidos().isEmpty()) {
+            vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
+            return;
+        }
+        List<Pedido> pedidos = null;
+        if(fCliente) {
+            if (!mClientes.getClientes().isEmpty()) {
+                vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
+                int indexCliente = -1 + vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 1, mClientes.sizeClientes(), true, true);
+                if (indexCliente < 0) return;
+                Cliente cliente = mClientes.getClientes().get(indexCliente);
+                pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), false, cliente);
+                if (pedidos.isEmpty()) {
+                    vPedidos.showMensaje("No hay pedidos pendientes registrados para este cliente.", true);
+                }
+            }
+            else vPedidos.showMensajePausa("Error. No existen clientes registrados.", true);
+        }
+        else {
+            pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), false, null);
+        }
+        vPedidos.showListPedidos(pedidos,fCliente);
+        vPedidos.showMensajePausa("", true);
+    }
 
-    public void listPedidosEnviados(boolean fCliente) {}
+    public void listPedidosEnviados(boolean fCliente) {
+        if (mPedidos.getPedidos().isEmpty()) {
+            vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
+            return;
+        }
+        List<Pedido> pedidos = null;
+        if(fCliente) {
+            if (!mClientes.getClientes().isEmpty()) {
+                vPedidos.showOptions(listToStr(this.mClientes.getClientes()), 3, true, true);
+                int indexCliente = -1 + vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 1, mClientes.sizeClientes(), true, true);
+                if (indexCliente < 0) return;
+                Cliente cliente = mClientes.getClientes().get(indexCliente);
+                pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), true, cliente);
+                if (pedidos.isEmpty()) {
+                    vPedidos.showMensaje("No hay pedidos enviados registrados para este cliente.", true);
+                }
+            }
+            else vPedidos.showMensajePausa("Error. No existen clientes registrados.", true);
+        }
+        else {
+            pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), true, null);
+        }
+        vPedidos.showListPedidos(pedidos,fCliente);
+        vPedidos.showMensajePausa("", true);
+    }
 
     private void calcPedido() {}
 
