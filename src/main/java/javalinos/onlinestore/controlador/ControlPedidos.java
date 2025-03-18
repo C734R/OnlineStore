@@ -75,7 +75,48 @@ public class ControlPedidos extends ControlBase{
     public void addPedidos() {}
 
     public void removePedidos() {
-        vPedidos.showMensaje("Vuelva a intentarlo.", true);
+        List<Pedido> pedidos = mPedidos.getPedidos();
+
+        // Comprobamos que existen pedidos en la lista.
+        if (pedidos.isEmpty()) {
+            vPedidos.showMensaje("No hay pedidos disponibles para borrar.", true);
+            return;
+        }
+
+        // Obtenemos el último número de pedido iterando sobre la lista
+        int ultimoNumeroPedido = 0;
+        for (Pedido pedido : pedidos) {
+            if (pedido.getNumero() > ultimoNumeroPedido) {
+                ultimoNumeroPedido = pedido.getNumero();
+            }
+        }
+
+        // Pedimos al usuario que introduzca el numero del pedido que desea borrar.
+        Integer numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, ultimoNumeroPedido, true, true);
+
+        // Creamos un booleano por si no se encuentra el numero de pedido escrito por el usuario.
+        boolean pedidoEncontrado = false;
+
+        // Creamos una lista donde se guardará el pedido a eliminar
+        Pedido pedidoAEliminar = null;
+
+        // Iteramos en la lista de todos los pedidos buscando el pedido con el mismo numero que el introducido.
+        for (Pedido pedido : pedidos){
+            if (pedido.getNumero().equals(numPedidoBorrar)){
+                pedidoAEliminar = pedido;
+                pedidoEncontrado = true;
+            }
+        }
+
+        // Si no se ha encontrado el numero de pedido se enseña este mensaje.
+        if (!pedidoEncontrado){
+            vPedidos.showMensaje("Este numero de pedido no coincide con ningun pedido del sistema", true);
+            vPedidos.showMensaje("Vuelva a intentarlo.", true);
+        }
+        else{
+            getModeloStore().getModeloPedidos().removePedido(pedidoAEliminar);
+            vPedidos.showMensaje("El pedido ha sido eliminado correctamente.", true);
+        }
     }
 
     public void listPedidos(boolean fCliente) {
