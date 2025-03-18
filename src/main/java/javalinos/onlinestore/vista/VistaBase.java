@@ -13,11 +13,17 @@ public abstract class VistaBase {
     private String cabecera;
     private List<String> listaMenu;
 
+    /**
+     * Constructor de una vista.
+     */
     public VistaBase(String cabecera, List<String> listaMenu) {
         this.cabecera = cabecera;
         this.listaMenu = listaMenu;
     }
 
+    /**
+     * Constructor de una vista vacío.
+     */
     public VistaBase() {
         cabecera = "";
         listaMenu = null;
@@ -62,7 +68,7 @@ public abstract class VistaBase {
      * @param reintentar recibe si se reintentará.
      * @return int devuelve el entero.
      */
-    public int askInt(String mensaje, int min, int max, boolean reintentar) {
+    public int askInt(String mensaje, int min, int max, boolean reintentar, boolean maxIntentos) {
         Scanner scanner = new Scanner(System.in);
         int integer, intentos = 0;
         if(!reintentar) intentos = 2;
@@ -72,11 +78,11 @@ public abstract class VistaBase {
                 integer = scanner.nextInt();
                 if (integer >= min && integer <= max) return integer;
                 else if(reintentar) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
-                intentos++;
+                if (maxIntentos) intentos++;
             }
             catch (InputMismatchException e) {
                 if(reintentar) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
-                intentos++;
+                if (maxIntentos) intentos++;
                 scanner.next();
             }
         }
@@ -110,6 +116,14 @@ public abstract class VistaBase {
         }
         showMensajePausa("Error. Demasiados intentos fallidos. Volviendo...", true);
         return null;
+    }
+
+    public Boolean askBoolean(String mensaje, boolean reintentar, boolean maxIntentos) {
+        showMensaje(mensaje,true);
+        showMensaje("1. Sí", true);
+        showMensaje("0. No", true);
+        int respuesta = askInt("Introduce una opción", 0, 1, reintentar, maxIntentos);
+        return respuesta != 0;
     }
 
     /**

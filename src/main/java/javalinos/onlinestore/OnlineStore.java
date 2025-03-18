@@ -34,27 +34,32 @@ public class OnlineStore {
     public static ControlPedidos cPedidos;
 
     /**
-     * Método principal de la aplicación.
+     * Main de la aplicación.
      * @param args recibe los argumentos.
      */
     public static void main(String[] args) {
-        if (!args[1].isEmpty()) configuracion = Integer.parseInt(args[1]);
-        precargaDatos();
+        if (args.length != 0) configuracion = Integer.parseInt(args[1]);
+        else configuracion = 0;
+        precargaDatos(configuracion);
         iniciarPrograma();
     }
 
     /**
-     * Método que precarga los datos.
+     * Precarga los datos.
      */
-    private static void precargaDatos() {
-        loadMVC();
-        cClientes.loadClientes();
-        cArticulos.loadArticulos();
-        cPedidos.loadPedidos();
+    private static void precargaDatos(int configuracion) {
+        loadMVC(configuracion);
+        while (true) {
+            if (    !cClientes.loadClientes(configuracion)||!cArticulos.loadArticulos(configuracion)||!cPedidos.loadPedidos(configuracion)) {
+                if (!cMenuPrincipal.errorPrecarga()) break;
+            }
+            else break;
+        }
+
     }
 
     /**
-     * Método que inicia el programa, cargando el menú principal.
+     * Inicia el programa, cargando el menú principal.
      */
     private static void iniciarPrograma(){
         int opcion;
@@ -62,7 +67,6 @@ public class OnlineStore {
             opcion = cMenuPrincipal.iniciar();
             switch (opcion) {
                 case 1:
-
                     cClientes.iniciar();
                     break;
                 case 2:
@@ -79,25 +83,34 @@ public class OnlineStore {
     }
 
     /**
-     * Método que carga el MVC.
+     * Carga el MVC.
      */
-    private static void loadMVC(){
-        mClientes = new ModeloClientes();
-        mArticulos = new ModeloArticulos();
-        mPedidos = new ModeloPedidos();
-        mStore = new ModeloStore(mClientes, mArticulos, mPedidos);
+    private static void loadMVC(int configuracion){
 
-        vMenuPrincipal = new VistaMenuPrincipal();
-        cMenuPrincipal = new ControlMenuPrincipal(mStore, vMenuPrincipal);
+        if (configuracion == 0) {
+            mClientes = new ModeloClientes();
+            mArticulos = new ModeloArticulos();
+            mPedidos = new ModeloPedidos();
+            mStore = new ModeloStore(mClientes, mArticulos, mPedidos);
 
-        vClientes = new VistaClientes();
-        cClientes = new ControlClientes(mStore, vClientes);
+            vMenuPrincipal = new VistaMenuPrincipal();
+            cMenuPrincipal = new ControlMenuPrincipal(mStore, vMenuPrincipal);
 
-        vArticulos = new VistaArticulos();
-        cArticulos = new ControlArticulos(mStore, vArticulos);
+            vClientes = new VistaClientes();
+            cClientes = new ControlClientes(mStore, vClientes);
 
-        vPedidos = new VistaPedidos();
-        cPedidos = new ControlPedidos(mStore, vPedidos);
+            vArticulos = new VistaArticulos();
+            cArticulos = new ControlArticulos(mStore, vArticulos);
+
+            vPedidos = new VistaPedidos();
+            cPedidos = new ControlPedidos(mStore, vPedidos);
+        }
+        else if (configuracion == 1) {
+            //TODO Implementar ORM
+        }
+        else {
+            //TODO necesario?
+        }
     }
 
 
