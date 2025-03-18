@@ -67,7 +67,7 @@ public class Articulo {
     @Override
     public String toString() {
         return  "Código: " + codigo + "\n" +
-                "Descripcion='" + descripcion + "\n" +
+                "Descripcion: " + descripcion + "\n" +
                 "Precio" + precio + "\n" +
                 "Tiempo de preparacion: " + preparacion + "\n" +
                 "Stock: " + stock;

@@ -119,7 +119,10 @@ public abstract class VistaBase {
     }
 
     public Boolean askBoolean(String mensaje, boolean reintentar, boolean maxIntentos) {
-        int respuesta = askInt(mensaje, 0, 1, reintentar, maxIntentos);
+        showMensaje(mensaje,true);
+        showMensaje("1. Sí", true);
+        showMensaje("0. No", true);
+        int respuesta = askInt("Introduce una opción", 0, 1, reintentar, maxIntentos);
         return respuesta != 0;
     }
 
