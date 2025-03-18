@@ -87,7 +87,7 @@ public class ControlClientes extends ControlBase {
 
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {
-            return false;
+            return this.getModeloStore().getModeloClientes().loadClientes(configuracion);
         }
         else {
             return false;

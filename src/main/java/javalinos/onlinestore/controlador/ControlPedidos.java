@@ -70,7 +70,7 @@ public class ControlPedidos extends ControlBase{
 
     public void listPedidos(boolean fCliente) {
         if(fCliente) {
-            vPedidos.showListClientes(this.getmStore().getModeloClientes().getClientes());
+            vPedidos.showListClientes(this.getModeloStore().getModeloClientes().getClientes());
         }
     }
 
@@ -86,7 +86,7 @@ public class ControlPedidos extends ControlBase{
 
     public boolean loadPedidos(int configuracion) {
         if (configuracion == 0) {
-            return this.getmStore().getModeloPedidos().loadPedidos(configuracion, mClientes.getClientes(), mArticulos.getArticulos());
+            return this.getModeloStore().getModeloPedidos().loadPedidos(configuracion, mClientes.getClientes(), mArticulos.getArticulos());
         }
         else {
             return false;

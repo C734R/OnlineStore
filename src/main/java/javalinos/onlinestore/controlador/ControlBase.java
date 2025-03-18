@@ -14,7 +14,7 @@ public abstract class ControlBase {
         this.mStore = null;
     }
 
-    public ModeloStore getmStore() {
+    public ModeloStore getModeloStore() {
         return mStore;
     }
 

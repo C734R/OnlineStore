@@ -63,7 +63,7 @@ public class ControlArticulos extends ControlBase{
 
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {
-            return this.getmStore().getModeloArticulos().loadArticulos(configuracion);
+            return this.getModeloStore().getModeloArticulos().loadArticulos(configuracion);
         }
         else {
             return false;

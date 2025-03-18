@@ -8,7 +8,7 @@ public class Cliente {
     private String email;
     private Categoria categoria;
 
-    public Cliente(String nombre, String domicilio, String nif, String email, Float cuota, Float descuento, Categoria categoria) {
+    public Cliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.nif = nif;
