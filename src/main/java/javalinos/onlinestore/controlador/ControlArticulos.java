@@ -41,7 +41,7 @@ public class ControlArticulos extends ControlBase{
                     listArticulos();
                     break;
                 case 0:
-                    vArticulos.showMensajePausa("Volviendo al menú principal... ", true);
+                    vArticulos.showMensaje("Volviendo al menú principal... ", true);
                     return;
                 default:
                     vArticulos.showMensajePausa("Error. Opción invalida. Introduce alguna de las opciones indicadas.",true);

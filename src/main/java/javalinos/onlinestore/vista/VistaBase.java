@@ -118,8 +118,8 @@ public abstract class VistaBase {
         return null;
     }
 
-    public Boolean askBoolean(String mensaje, boolean reintentar) {
-        int respuesta = askInt(mensaje, 0, 1, reintentar);
+    public Boolean askBoolean(String mensaje, boolean reintentar, boolean maxIntentos) {
+        int respuesta = askInt(mensaje, 0, 1, reintentar, maxIntentos);
         return respuesta != 0;
     }
 

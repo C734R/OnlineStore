@@ -10,25 +10,14 @@ import java.util.List;
 
 public class ModeloPedidos {
 
-    private List<String> opciones;
     private List<Pedido> pedidos;
 
-    public ModeloPedidos(List<String> opciones, List<Pedido> pedidos) {
-        this.opciones = opciones;
+    public ModeloPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
 
     public ModeloPedidos() {
-        this.opciones = null;
-        this.pedidos = null;
-    }
-
-    public List<String> getOpciones() {
-        return opciones;
-    }
-
-    public void setOpciones(List<String> opciones) {
-        this.opciones = opciones;
+        this.pedidos = new ArrayList<Pedido>();
     }
 
     public List<Pedido> getPedidos() {

@@ -18,7 +18,7 @@ public abstract class ControlBase {
         return mStore;
     }
 
-    public void setmStore(ModeloStore mStore) {
+    public void setModeloStore(ModeloStore mStore) {
         this.mStore = mStore;
     }
 }

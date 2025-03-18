@@ -13,7 +13,7 @@ public class ControlPedidos extends ControlBase{
     private ModeloClientes mClientes;
 
     public ControlPedidos(ModeloStore mStore, VistaPedidos vPedidos) {
-        super.setmStore(mStore);
+        super.setModeloStore(mStore);
         this.mArticulos = mStore.getModeloArticulos();
         this.mClientes = mStore.getModeloClientes();
         this.vPedidos = vPedidos;
@@ -46,13 +46,13 @@ public class ControlPedidos extends ControlBase{
                     removePedidos();
                     break;
                 case 3:
-                    listPedidos(vPedidos.askBoolean("¿Deseas filtrar por usuario?", true));
+                    listPedidos(vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true));
                     break;
                 case 4:
-                    listPedidosPendientes(vPedidos.askBoolean("¿Deseas filtrar por usuario?", true));
+                    listPedidosPendientes(vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true));
                     break;
                 case 5:
-                    listPedidosEnviados(vPedidos.askBoolean("¿Deseas filtrar por usuario?", true));
+                    listPedidosEnviados(vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true));
                 case 0:
                     vPedidos.showMensaje("Volviendo al menú principal...", true);
                     return;

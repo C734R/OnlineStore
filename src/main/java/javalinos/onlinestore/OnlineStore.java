@@ -50,11 +50,10 @@ public class OnlineStore {
     private static void precargaDatos(int configuracion) {
         loadMVC(configuracion);
         while (true) {
-            if (    !cClientes.loadClientes(configuracion)||
-                    !cArticulos.loadArticulos(configuracion)||
-                    !cPedidos.loadPedidos(configuracion)
-            )
+            if (    !cClientes.loadClientes(configuracion)||!cArticulos.loadArticulos(configuracion)||!cPedidos.loadPedidos(configuracion)) {
                 if (!cMenuPrincipal.errorPrecarga()) break;
+            }
+            else break;
         }
 
     }

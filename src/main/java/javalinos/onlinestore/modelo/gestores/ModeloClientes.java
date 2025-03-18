@@ -3,29 +3,19 @@ package javalinos.onlinestore.modelo.gestores;
 import javalinos.onlinestore.modelo.primitivos.Categoria;
 import javalinos.onlinestore.modelo.primitivos.Cliente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModeloClientes {
 
-    private List<String> opciones;
     private List<Cliente> clientes;
 
-    public ModeloClientes(List<String> opciones, List<Cliente> clientes) {
-        this.opciones = opciones;
+    public ModeloClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
 
     public ModeloClientes() {
-        opciones = null;
-        clientes = null;
-    }
-
-    public List<String> getOpciones() {
-        return opciones;
-    }
-
-    public void setOpciones(List<String> opciones) {
-        this.opciones = opciones;
+        clientes = new ArrayList<Cliente>();
     }
 
     public List<Cliente> getClientes() {

@@ -53,7 +53,7 @@ public class ControlMenuPrincipal extends ControlBase {
 
     public boolean errorPrecarga() {
         vMenuPrincipal.showMensajePausa("Error. Se ha producido un error en la precarga de datos.", true);
-        return vMenuPrincipal.askBoolean("¿Deseas volver a intentarlo?", true);
+        return vMenuPrincipal.askBoolean("¿Deseas volver a intentarlo?", true, false);
     }
     public void salir() {
         vMenuPrincipal.showMensaje("********* ¡¡Hasta pronto!! *********",true);

@@ -8,25 +8,14 @@ import java.util.List;
 
 public class ModeloArticulos {
 
-    private List<String> opciones;
     private List<Articulo> articulos;
 
-    public ModeloArticulos(List<String> opciones, List<Articulo> articulos) {
-        this.opciones = opciones;
+    public ModeloArticulos(List<Articulo> articulos) {
         this.articulos = articulos;
     }
 
     public ModeloArticulos() {
-        this.opciones = null;
-        this.articulos = null;
-    }
-
-    public List<String> getOpciones() {
-        return opciones;
-    }
-
-    public void setOpciones(List<String> opciones) {
-        this.opciones = opciones;
+        this.articulos = new ArrayList<Articulo>();
     }
 
     public List<Articulo> getArticulos() {
