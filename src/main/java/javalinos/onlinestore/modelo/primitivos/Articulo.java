@@ -13,7 +13,7 @@ public class Articulo {
         this.descripcion = descripcion;
         this.precio = precio;
         this.preparacion = preparacion;
-        this.stock = 0;
+        this.stock = 2;
     }
 
     public Articulo() {

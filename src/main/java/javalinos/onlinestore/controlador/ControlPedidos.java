@@ -4,6 +4,7 @@ import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.ModeloClientes;
 import javalinos.onlinestore.modelo.gestores.ModeloPedidos;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
+import javalinos.onlinestore.modelo.primitivos.Articulo;
 import javalinos.onlinestore.modelo.primitivos.Cliente;
 import javalinos.onlinestore.modelo.primitivos.Pedido;
 import javalinos.onlinestore.vista.VistaPedidos;
@@ -47,7 +48,7 @@ public class ControlPedidos extends ControlBase{
         while(true) {
             vPedidos.showCabecera();
             vPedidos.showMenu(2);
-            opcion = vPedidos.askInt("Introduce una opción", 0, 4,false, false);
+            opcion = vPedidos.askInt("Introduce una opción", 0, 5,false, false);
             switch (opcion) {
                 case 1:
                     addPedidos();
@@ -63,6 +64,7 @@ public class ControlPedidos extends ControlBase{
                     break;
                 case 5:
                     listPedidosEnviados(vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true));
+                    break;
                 case 0:
                     vPedidos.showMensaje("Volviendo al menú principal...", true);
                     return;
@@ -72,7 +74,50 @@ public class ControlPedidos extends ControlBase{
         }
     }
 
-    public void addPedidos() {}
+    public void addPedidos() {
+        List<Articulo> articulosDisponibles = new ArrayList<>();
+
+
+        vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
+        int indexCliente = vPedidos.askInt("Selecciona el cliente que quiere hacer el pedido", 0, mClientes.sizeClientes(), true, true);
+        if (indexCliente == 0) return;
+        indexCliente = indexCliente - 1;
+        Cliente cliente = mClientes.getClientes().get(indexCliente);
+
+        for (Articulo articulo : mArticulos.getArticulos()){
+            if (articulo.getStock() > 0){
+                articulosDisponibles.add(articulo);
+            }
+        }
+
+        if (articulosDisponibles.size() > 0) {
+            vPedidos.showOptions(listToStr(articulosDisponibles), 3, true, true);
+            int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 0, articulosDisponibles.size(), true, true);
+            if (indexArticulo == 0) return;
+            indexArticulo = indexArticulo - 1;
+            Articulo articulo = mArticulos.getArticulos().get(indexArticulo);
+
+            Integer stockComprado = vPedidos.askInt("Ingresa la cantidad que quiere comprar", 1, articulo.getStock(), true, true);
+
+            LocalDate fechaPedido = vPedidos.askFecha("del pedido");
+
+            float precioEnvio = 5f;
+
+            float precioFinal = articulo.getPrecio() * stockComprado + precioEnvio;
+
+            Pedido pedido = mPedidos.makePedido(cliente, articulo, stockComprado, fechaPedido, precioEnvio, precioFinal);
+
+            if (mPedidos.makePedido(cliente, articulo, stockComprado, fechaPedido, precioEnvio, precioFinal) != null) {
+                vPedidos.showMensaje("Pedido añadido correctamente", true);
+                mPedidos.addPedido(pedido);
+            } else {
+                vPedidos.showMensaje("Error al añadir el pedido.. Saliendo", true);
+            }
+        }
+        else{
+            vPedidos.showMensaje("No hay articulos disponibles para comprar en este momento", true);
+        }
+    }
 
     public void removePedidos() {
         List<Pedido> pedidos = mPedidos.getPedidos();
@@ -128,8 +173,9 @@ public class ControlPedidos extends ControlBase{
         if(fCliente) {
             if (!mClientes.getClientes().isEmpty()) {
                 vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
-                int indexCliente = -1 + vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 1, mClientes.sizeClientes(), true, true);
-                if (indexCliente < 0) return;
+                int indexCliente = vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 0, mClientes.sizeClientes(), true, true);
+                if (indexCliente == 0) return;
+                indexCliente = indexCliente - 1;
                 Cliente cliente = mClientes.getClientes().get(indexCliente);
                 pedidos = mPedidos.getPedidosCliente(cliente);
                 if (pedidos.isEmpty()) {
@@ -154,8 +200,9 @@ public class ControlPedidos extends ControlBase{
         if(fCliente) {
             if (!mClientes.getClientes().isEmpty()) {
                 vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
-                int indexCliente = -1 + vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 1, mClientes.sizeClientes(), true, true);
-                if (indexCliente < 0) return;
+                int indexCliente = vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 0, mClientes.sizeClientes(), true, true);
+                if (indexCliente == 0) return;
+                indexCliente = indexCliente - 1;
                 Cliente cliente = mClientes.getClientes().get(indexCliente);
                 pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), false, cliente);
                 if (pedidos.isEmpty()) {
@@ -180,8 +227,9 @@ public class ControlPedidos extends ControlBase{
         if(fCliente) {
             if (!mClientes.getClientes().isEmpty()) {
                 vPedidos.showOptions(listToStr(this.mClientes.getClientes()), 3, true, true);
-                int indexCliente = -1 + vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 1, mClientes.sizeClientes(), true, true);
-                if (indexCliente < 0) return;
+                int indexCliente = vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 0, mClientes.sizeClientes(), true, true);
+                if (indexCliente == 0) return;
+                indexCliente = indexCliente - 1;
                 Cliente cliente = mClientes.getClientes().get(indexCliente);
                 pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), true, cliente);
                 if (pedidos.isEmpty()) {
