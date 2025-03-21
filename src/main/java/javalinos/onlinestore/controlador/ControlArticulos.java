@@ -1,9 +1,12 @@
 package javalinos.onlinestore.controlador;
-
+import java.util.List;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaArticulos;
+import javalinos.onlinestore.modelo.primitivos.Articulo;
+import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
+import javalinos.onlinestore.controlador.ControlBase;
 
-public class ControlArticulos extends ControlBase{
+public class ControlArticulos extends ControlBase {
 
     private VistaArticulos vArticulos;
 
@@ -26,11 +29,11 @@ public class ControlArticulos extends ControlBase{
 
     public void iniciar() {
         int opcion;
-        while(true){
+        while (true) {
             vArticulos.showCabecera();
             vArticulos.showMenu(2);
-            opcion = vArticulos.askInt("Introduce una opción",0,3, false, false);
-            switch(opcion){
+            opcion = vArticulos.askInt("Introduce una opción", 0, 3, false, false);
+            switch (opcion) {
                 case 1:
                     addArticulo();
                     break;
@@ -44,28 +47,71 @@ public class ControlArticulos extends ControlBase{
                     vArticulos.showMensaje("Volviendo al menú principal... ", true);
                     return;
                 default:
-                    vArticulos.showMensajePausa("Error. Opción invalida. Introduce alguna de las opciones indicadas.",true);
+                    vArticulos.showMensajePausa("Error. Opción inválida. Introduce una opción válida.", true);
             }
         }
     }
 
     public void addArticulo() {
+        String codigo = vArticulos.askString("Introduce el código del artículo ");
+        String descripcion = vArticulos.askString("Introduce la descripción del artículo ");
+        Float precio = vArticulos.askFloat("Introduce el precio del artículo ");
+        Float preparacion = vArticulos.askFloat("Introduce el tiempo de preparación del artículo ");
+        //stock vemos como lo metemos
+        Articulo articulo = new Articulo(codigo, descripcion, precio, preparacion);
 
+        // hacemos un booleano para verificar que se haya añadido correctamente
+        boolean exito = ModeloArticulos.getInstancia().addArticulo(articulo);
+        if (exito) {
+            vArticulos.showMensaje("Artículo añadido correctamente.", true);
+        } else {
+            vArticulos.showMensaje("Error al añadir el artículo.", true);
+        }
     }
-
+ // cómo eliminar el artículo. Seleccionamos array.
     public void removeArticulo() {
+        List<Articulo> articulos = ModeloArticulos.getInstancia().getArticulos();
+        if (articulos.isEmpty()) {
+            vArticulos.showMensaje("No hay artículos para eliminar.", true); // ya hay creado así quue no creo que se activa
+            return;
+        }
 
+        // Mostramos la lista de artículos para eliminar
+        vArticulos.showMensaje("Selecciona un artículo para eliminar:", false);
+        for (int i = 0; i < articulos.size(); i++) {
+            vArticulos.showMensaje((i + 1) + ". " + articulos.get(i).getCodigo() + " - " + articulos.get(i).getDescripcion(), false);
+        }
+
+        // Pedimos la selección del usuario
+        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulos.size(), false, false);
+        Articulo articuloAEliminar = articulos.get(seleccion - 1);
+
+        // Eliminamos el artículo
+        boolean exito = ModeloArticulos.getInstancia().removeArticulo(articuloAEliminar);
+        if (exito) {
+            vArticulos.showMensaje("Artículo eliminado correctamente.", true);
+        } else {
+            vArticulos.showMensaje("Error al eliminar el artículo.", true);
+        }
     }
-
+        // Queremos listar los articulos
     public void listArticulos() {
-
+        List<Articulo> articulos = ModeloArticulos.getInstancia().getArticulos();
+        if (articulos.isEmpty()) {
+            vArticulos.showMensaje("No hay artículos disponibles.", true);
+            return;
+        }
+        // preguntar Alan
+        vArticulos.showMensaje("Lista de artículos disponibles:", false);
+        for (Articulo articulo : articulos) {
+            vArticulos.showMensaje(articulo.getCodigo() + " - " + articulo.getDescripcion() + " - $" + articulo.getPrecio(), false);
+        }
     }
-
+    // Cargamos los artículos. Preguntar a Alan**
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {
             return this.getModeloStore().getModeloArticulos().loadArticulos(configuracion);
-        }
-        else {
+        } else {
             return false;
         }
     }

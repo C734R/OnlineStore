@@ -35,13 +35,14 @@ public class ModeloStore {
         this.mPedidos = mPedidos;
     }
 
-    public ModeloArticulos getModeloArticulos() {
-        return mArticulos;
-    }
-
     public void setModeloArticulos(ModeloArticulos mArticulos) {
         this.mArticulos = mArticulos;
     }
+
+    public ModeloArticulos getModeloArticulos() {
+        return ModeloArticulos.getInstancia();
+    }
+
 
 
 }

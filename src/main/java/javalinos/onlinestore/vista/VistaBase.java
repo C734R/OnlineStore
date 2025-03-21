@@ -118,7 +118,6 @@ public abstract class VistaBase {
         return null;
     }
 
-    // CORRECCIÓN AQUÍ: añadido el 5º parámetro
     public Boolean askBoolean(String mensaje, boolean reintentar) {
         int respuesta = askInt(mensaje, 0, 1, reintentar, true);
         return respuesta != 0;
