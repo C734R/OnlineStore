@@ -104,7 +104,7 @@ public class ControlPedidos extends ControlBase{
 
             float precioEnvio = 5f;
 
-            float precioFinal = articulo.getPrecio() * stockComprado + precioEnvio;
+            float precioFinal = calcPedido(articulo, stockComprado, precioEnvio);
 
             Pedido pedido = mPedidos.makePedido(cliente, articulo, stockComprado, fechaPedido, precioEnvio, precioFinal);
 
@@ -239,7 +239,10 @@ public class ControlPedidos extends ControlBase{
         vPedidos.showMensajePausa("", true);
     }
 
-    private void calcPedido() {}
+    private float calcPedido(Articulo articulo, int stockComprado, float precioEnvio) {
+        float precioFinal = articulo.getPrecio() * stockComprado + (precioEnvio * (float) Math.pow(1.1f, stockComprado));
+        return precioFinal;
+    }
 
     private boolean checkPreparacion(Pedido pedido) {
         return false;
