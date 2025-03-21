@@ -95,6 +95,14 @@ public class ModeloPedidos {
         return listaPedidosSolicitados;
     }
 
+    public int getLastNumPedido() {
+        return pedidos.getLast().getNumero();
+    }
+
+    public int getFirstNumPedido() {
+        return pedidos.getFirst().getNumero();
+    }
+
     public boolean loadPedidos(int condiguracion, List<Cliente> clientes, List<Articulo> articulos) {
         try {
             this.pedidos.clear();

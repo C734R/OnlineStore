@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javalinos.onlinestore.OnlineStore.cClientes;
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
 
 public class ControlPedidos extends ControlBase{
@@ -75,8 +76,8 @@ public class ControlPedidos extends ControlBase{
     }
 
     public void addPedidos() {
+        vPedidos.showMensaje("******** Añadir Inscripción ********", true);
         List<Articulo> articulosDisponibles = new ArrayList<>();
-
 
         vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
         int indexCliente = vPedidos.askInt("Selecciona el cliente que quiere hacer el pedido", 0, mClientes.sizeClientes(), true, true);
@@ -90,7 +91,7 @@ public class ControlPedidos extends ControlBase{
             }
         }
 
-        if (articulosDisponibles.size() > 0) {
+        if (!articulosDisponibles.isEmpty()) {
             vPedidos.showOptions(listToStr(articulosDisponibles), 3, true, true);
             int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 0, articulosDisponibles.size(), true, true);
             if (indexArticulo == 0) return;
@@ -119,6 +120,24 @@ public class ControlPedidos extends ControlBase{
         }
     }
 
+    public Cliente askCliente (boolean crear) {
+        int numSocio;
+        List<Cliente> clientes = cClientes.getListaClientes();
+        vPedidos.showListClientes(clientes);
+        if(crear) numSocio = vPedidos.askInt("Introduce el número de un socio existente o crea uno eligiendo " + (cClientes.getNumCliente(true)+1), cClientes.getNumCliente(false), (cClientes.getNumCliente(true)+1), true);
+        else numSocio = vPedidos.askInt("Introduce el número de un socio existente", cClientes.getNumCliente(false), cClientes.getNumCliente(true), true);
+        if (numSocio == -99999) return null;
+        if (numSocio == (cClientes.getNumCliente(true)+1)) {
+            cClientes.addCliente();
+        }
+        Cliente cliente = cClientes.getCliente(numSocio);
+        if (cliente == null) {
+            vPedidos.showMensajePausa("Error. El socio no existe. Volviendo...", true);
+            return null;
+        }
+        return cliente;
+    }
+
     public void removePedidos() {
         List<Pedido> pedidos = mPedidos.getPedidos();
 
@@ -128,40 +147,15 @@ public class ControlPedidos extends ControlBase{
             return;
         }
 
-        // Obtenemos el último número de pedido iterando sobre la lista
-        int ultimoNumeroPedido = 0;
-        for (Pedido pedido : pedidos) {
-            if (pedido.getNumero() > ultimoNumeroPedido) {
-                ultimoNumeroPedido = pedido.getNumero();
-            }
-        }
-
         // Pedimos al usuario que introduzca el numero del pedido que desea borrar.
-        Integer numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, ultimoNumeroPedido, true, true);
+        Integer numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, mPedidos.getLastNumPedido(), true, true);
 
         // Creamos un booleano por si no se encuentra el numero de pedido escrito por el usuario.
         boolean pedidoEncontrado = false;
 
-        // Creamos una lista donde se guardará el pedido a eliminar
-        Pedido pedidoAEliminar = null;
-
-        // Iteramos en la lista de todos los pedidos buscando el pedido con el mismo numero que el introducido.
-        for (Pedido pedido : pedidos){
-            if (pedido.getNumero().equals(numPedidoBorrar)){
-                pedidoAEliminar = pedido;
-                pedidoEncontrado = true;
-            }
-        }
-
-        // Si no se ha encontrado el numero de pedido se enseña este mensaje.
-        if (!pedidoEncontrado){
-            vPedidos.showMensaje("Este numero de pedido no coincide con ningun pedido del sistema", true);
-            vPedidos.showMensaje("Vuelva a intentarlo.", true);
-        }
-        else{
-            getModeloStore().getModeloPedidos().removePedido(pedidoAEliminar);
-            vPedidos.showMensaje("El pedido ha sido eliminado correctamente.", true);
-        }
+        // Obtener pedido a eliminar
+        mPedidos.removePedido(mPedidos.getPedidoNumero(numPedidoBorrar));
+        vPedidos.showMensaje("El pedido ha sido eliminado correctamente.", true);
     }
 
     public void listPedidos(boolean fCliente) {
