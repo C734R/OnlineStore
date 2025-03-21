@@ -240,8 +240,7 @@ public class ControlPedidos extends ControlBase{
     }
 
     private float calcPedido(Articulo articulo, int stockComprado, float precioEnvio) {
-        float precioFinal = articulo.getPrecio() * stockComprado + (precioEnvio * (float) Math.pow(1.1f, stockComprado));
-        return precioFinal;
+        return articulo.getPrecio() * stockComprado + (precioEnvio * (float) Math.pow(1.1f, stockComprado));
     }
 
     private boolean checkPreparacion(Pedido pedido) {

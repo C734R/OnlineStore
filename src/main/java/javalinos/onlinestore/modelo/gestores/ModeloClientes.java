@@ -25,6 +25,10 @@ public class ModeloClientes {
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
+    public void setCliente(Cliente clienteOld, Cliente clienteNew) {
+        int index = this.clientes.indexOf(clienteOld);
+        clientes.set(index,clienteNew);
+    }
 
     public Cliente makeCliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
         return new Cliente(nombre, domicilio, nif, email, categoria);
@@ -64,6 +68,31 @@ public class ModeloClientes {
         return null; // No encontrado
     }
 
+    public Categoria getCategoria(int opcion) {
+        return switch (opcion) {
+            case 1 -> Categoria.ESTANDAR;
+            case 2 -> Categoria.PREMIUM;
+            default -> null;
+        };
+    }
+
+    /**
+     * Devuelve el número del último cliente.
+     * @return int devuelve el número del último cliente.
+     */
+    public int getLastIndexCliente() {
+        if(clientes.isEmpty()) return -1;
+        return clientes.indexOf(clientes.getLast());
+    }
+
+    /**
+     * Devuelve el número del primer cliente.
+     * @return int devuelve el número del primer cliente.
+     */
+    public int getFirstIndexCliente() {
+        if(clientes.isEmpty()) return -1;
+        return clientes.indexOf(clientes.getFirst());
+    }
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {
             try {
