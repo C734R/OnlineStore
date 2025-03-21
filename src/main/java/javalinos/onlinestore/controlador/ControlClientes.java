@@ -14,6 +14,7 @@ public class ControlClientes extends ControlBase {
     public ControlClientes(ModeloStore mStore, VistaClientes vClientes) {
         super(mStore);
         this.vClientes = vClientes;
+        mClientes = mStore.getModeloClientes();
     }
 
     public ControlClientes() {
@@ -103,6 +104,7 @@ public class ControlClientes extends ControlBase {
 
     public void showListClientesTipo(int tipoCliente) {
     }
+
     public void showCliente() {
         String nif = vClientes.askString("Ingrese el NIF del cliente:", 9);
         Cliente cliente = mClientes.getClienteNif(nif);
@@ -112,6 +114,7 @@ public class ControlClientes extends ControlBase {
             vClientes.showMensaje("Cliente no encontrado.", true);
         }
     }
+
     public void showListClientes() {
         for (Cliente cliente : mClientes.getClientes()) {
             vClientes.showMensaje(cliente.toString(), true);
