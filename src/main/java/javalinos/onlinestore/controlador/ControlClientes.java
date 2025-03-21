@@ -81,7 +81,7 @@ public class ControlClientes extends ControlBase {
         Cliente cliente = mStore.getModeloClientes().getClienteNif(nif);
         if (cliente != null) {
             mStore.getModeloClientes().removeCliente(cliente);
-            vClientes.showMensaje("Cliente eliminado correctamente.", true);
+            vClientes.showMensaje("Cliente eliminado correctamente", true);
         } else {
             vClientes.showMensaje("Cliente no encontrado.", true);
         }

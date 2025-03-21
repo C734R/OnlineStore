@@ -69,7 +69,7 @@ public class ModeloClientes {
             try {
                 this.clientes.clear();
 
-                addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", Categoria.PREMIUM));
+                addCliente(makeCliente("Antonio Lópz", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", Categoria.PREMIUM));
                 addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", Categoria.ESTANDAR));
                 addCliente(makeCliente("José Martínez", "Paseo de Gracia, 15, Barcelona", "34567890C", "jose.martinez@email.com", Categoria.ESTANDAR));
                 addCliente(makeCliente("Isabel Fernández", "Calle Larios, 5, Málaga", "45678901D", "isabel.fernandez@email.com", Categoria.PREMIUM));
