@@ -13,61 +13,33 @@ public abstract class VistaBase {
     private String cabecera;
     private List<String> listaMenu;
 
-    /**
-     * Constructor de una vista.
-     */
     public VistaBase(String cabecera, List<String> listaMenu) {
         this.cabecera = cabecera;
         this.listaMenu = listaMenu;
     }
 
-    /**
-     * Constructor de una vista vacío.
-     */
     public VistaBase() {
         cabecera = "";
         listaMenu = null;
     }
 
-    /**
-     * Establece la cabecera.
-     * @param cabecera recibe la cabecera.
-     */
     public void setCabecera(String cabecera) {
         this.cabecera = cabecera;
     }
 
-    /**
-     * Muestra la cabecera.
-     */
     public void showCabecera(){
         showMensaje(cabecera,true);
     }
 
-    /**
-     * Muestra el menú.
-     * @param retorno recibe el retorno.
-     */
     public void showMenu (int retorno){
         showOptions(listaMenu,retorno, false, true);
     }
 
-    /**
-     * Establece la lista de menú.
-     * @param listaMenu recibe la lista de menú.
-     */
     public void setListaMenu(List<String> listaMenu) {
         this.listaMenu = listaMenu;
     }
 
-    /**
-     * Pide un entero.
-     * @param mensaje recibe el mensaje.
-     * @param min recibe el mínimo.
-     * @param max recibe el máximo.
-     * @param reintentar recibe si se reintentará.
-     * @return int devuelve el entero.
-     */
+    // MÉTODO ORIGINAL
     public int askInt(String mensaje, int min, int max, boolean reintentar, boolean maxIntentos) {
         Scanner scanner = new Scanner(System.in);
         int integer, intentos = 0;
@@ -90,12 +62,11 @@ public abstract class VistaBase {
         return -99999;
     }
 
-    /**
-     * Pide una cadena.
-     * @param mensaje recibe el mensaje.
-     * @param longitud recibe la longitud.
-     * @return String devuelve la cadena.
-     */
+    // SOBRE CARGA OPCIONAL
+    public int askInt(String mensaje, int min, int max, boolean reintentar) {
+        return askInt(mensaje, min, max, reintentar, true);
+    }
+
     public String askString(String mensaje, int longitud) {
         int intentos = 0;
         Scanner scanner = new Scanner(System.in);
@@ -118,16 +89,12 @@ public abstract class VistaBase {
         return null;
     }
 
+    // CORRECCIÓN AQUÍ: añadido el 5º parámetro
     public Boolean askBoolean(String mensaje, boolean reintentar) {
-        int respuesta = askInt(mensaje, 0, 1, reintentar);
+        int respuesta = askInt(mensaje, 0, 1, reintentar, true);
         return respuesta != 0;
     }
 
-    /**
-     * Muestra un mensaje.
-     * @param mensaje recibe el mensaje.
-     * @param salto recibe si hay salto.
-     */
     public void showMensaje(String mensaje, boolean salto){
         if (salto) {
             System.out.println(mensaje);
@@ -137,13 +104,6 @@ public abstract class VistaBase {
         }
     }
 
-    /**
-     * Muestra un listado con opciones.
-     * @param lista recibe la lista.
-     * @param tipoRetorno recibe el tipo de retorno.
-     * @param encuadre recibe si hay encuadre.
-     * @param numeracion recibe si hay numeración.
-     */
     public void showOptions(List<String> lista, int tipoRetorno, Boolean encuadre, Boolean numeracion){
         int i = 1;
         for(String entrada: lista) {
@@ -169,25 +129,12 @@ public abstract class VistaBase {
         }
     }
 
-    /**
-     * Muestra una lista genérica.
-     * @param lista recibe la lista.
-     * @param titulo recibe el título.
-     * @param <T> recibe el tipo genérico.
-     * @param encuadre recibe si hay encuadre.
-     * @param numeracion recibe si hay numeración.
-     */
     public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) {
         showMensaje("******** " + titulo + " ********", true);
         showOptions(listToStr(lista), 0, encuadre, numeracion);
         showMensaje("********************************************", true);
     }
 
-    /**
-     * Pide una fecha.
-     * @param mensaje recibe el mensaje.
-     * @return LocalDate devuelve la fecha.
-     */
     public LocalDate askFecha(String mensaje) {
         int intentos = 0;
         while (intentos < 3) {
@@ -202,11 +149,6 @@ public abstract class VistaBase {
         return null;
     }
 
-    /**
-     * Muestra un mensaje de pausa y espera a que se pulse enter.
-     * @param mensaje recibe el mensaje.
-     * @param salto recibe si hay salto.
-     */
     public void showMensajePausa(String mensaje, boolean salto) {
         if(mensaje.isEmpty()) showMensaje("Pulsa enter para continuar.", salto);
         else showMensaje(mensaje + " Pulsa enter para continuar.", salto);
