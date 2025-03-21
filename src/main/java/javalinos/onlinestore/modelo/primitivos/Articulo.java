@@ -1,11 +1,10 @@
 package javalinos.onlinestore.modelo.primitivos;
 
 public class Articulo {
-
     private String codigo;
     private String descripcion;
     private Float precio;
-    private Float preparacion;
+    private Float preparacion; // días!
     private Integer stock;
 
     public Articulo(String codigo, String descripcion, Float precio, Float preparacion) {
@@ -15,7 +14,7 @@ public class Articulo {
         this.preparacion = preparacion;
         this.stock = 0;
     }
-
+//constructor con sobrecarga
     public Articulo() {
         this.codigo = "";
         this.descripcion = "";
@@ -55,21 +54,21 @@ public class Articulo {
     public void setPreparacion(Float preparacion) {
         this.preparacion = preparacion;
     }
-
+//no utilizamos getStock finalmente?
     public Integer getStock() {
         return stock;
     }
-
+//same
     public void setStock(Integer stock) {
         this.stock = stock;
     }
-
+// no aprovechamos este toSting xd
     @Override
     public String toString() {
         return  "Código: " + codigo + "\n" +
                 "Descripcion: " + descripcion + "\n" +
                 "Precio" + precio + "\n" +
                 "Tiempo de preparacion: " + preparacion + "\n" +
-                "Stock: " + stock;
+                "Stock: " + stock; // en principio esto no lo está pidiendo el programa
     }
 }

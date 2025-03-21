@@ -30,7 +30,8 @@ public class VistaMenuPrincipal extends VistaBase {
                  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX \s
                  X                                           X \s
                  X                                           X \s
-                 X       *** |   ONLINE & STORE   | ****     X
+                 X      *** |   ONLINE & STORE   | ****      X \s
+                 X                                           X \s
                  X                                           X \s
                  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX \s
                                                                \s

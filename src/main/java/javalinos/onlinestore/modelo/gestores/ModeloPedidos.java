@@ -10,25 +10,14 @@ import java.util.List;
 
 public class ModeloPedidos {
 
-    private List<String> opciones;
     private List<Pedido> pedidos;
 
-    public ModeloPedidos(List<String> opciones, List<Pedido> pedidos) {
-        this.opciones = opciones;
+    public ModeloPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
 
     public ModeloPedidos() {
-        this.opciones = null;
-        this.pedidos = null;
-    }
-
-    public List<String> getOpciones() {
-        return opciones;
-    }
-
-    public void setOpciones(List<String> opciones) {
-        this.opciones = opciones;
+        this.pedidos = new ArrayList<Pedido>();
     }
 
     public List<Pedido> getPedidos() {
@@ -119,7 +108,7 @@ public class ModeloPedidos {
             this.pedidos.add(makePedido(clientes.get(2), articulos.get(6), 1, LocalDate.now().minusWeeks(2), 3.99f, 149.99f));
             this.pedidos.add(makePedido(clientes.get(6), articulos.get(7), 6, LocalDate.now().minusMonths(2), 8.99f, 24.99f));
             this.pedidos.add(makePedido(clientes.get(3), articulos.get(8), 3, LocalDate.now().minusDays(5), 7.00f, 75.00f));
-
+            return true;
         }
         catch (Exception e) {
             return false;

@@ -49,15 +49,19 @@ public class OnlineStore {
      */
     private static void precargaDatos(int configuracion) {
         loadMVC(configuracion);
-        if (!cClientes.loadClientes(configuracion)||
-            cArticulos.loadArticulos(configuracion)||
-            cPedidos.loadPedidos(configuracion))
-            cMenuPrincipal.errorPrecarga();
+        while (true) {
+            if (    !cClientes.loadClientes(configuracion)||!cArticulos.loadArticulos(configuracion)||!cPedidos.loadPedidos(configuracion)) {
+                if (!cMenuPrincipal.errorPrecarga()) break;
+            }
+            else break;
+        }
+
     }
 
     /**
      * Inicia el programa, cargando el menú principal.
      */
+
     private static void iniciarPrograma(){
         int opcion;
         while(true) {
@@ -78,7 +82,6 @@ public class OnlineStore {
             }
         }
     }
-
     /**
      * Carga el MVC.
      */
@@ -86,7 +89,7 @@ public class OnlineStore {
 
         if (configuracion == 0) {
             mClientes = new ModeloClientes();
-            mArticulos = new ModeloArticulos();
+            mArticulos = ModeloArticulos.getInstancia();
             mPedidos = new ModeloPedidos();
             mStore = new ModeloStore(mClientes, mArticulos, mPedidos);
 
@@ -109,6 +112,5 @@ public class OnlineStore {
             //TODO necesario?
         }
     }
-
 
 }
