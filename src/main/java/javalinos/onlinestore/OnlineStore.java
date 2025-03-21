@@ -61,6 +61,7 @@ public class OnlineStore {
     /**
      * Inicia el programa, cargando el menú principal.
      */
+
     private static void iniciarPrograma(){
         int opcion;
         while(true) {
@@ -81,7 +82,6 @@ public class OnlineStore {
             }
         }
     }
-
     /**
      * Carga el MVC.
      */
@@ -89,7 +89,7 @@ public class OnlineStore {
 
         if (configuracion == 0) {
             mClientes = new ModeloClientes();
-            mArticulos = new ModeloArticulos();
+            mArticulos = ModeloArticulos.getInstancia();
             mPedidos = new ModeloPedidos();
             mStore = new ModeloStore(mClientes, mArticulos, mPedidos);
 
@@ -112,6 +112,5 @@ public class OnlineStore {
             //TODO necesario?
         }
     }
-
 
 }
