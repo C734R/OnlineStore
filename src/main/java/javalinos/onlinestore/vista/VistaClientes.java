@@ -76,7 +76,7 @@ public class VistaClientes extends VistaBase {
     public Categoria askTipoCliente() {
         System.out.println("Seleccione el tipo de cliente:");
         System.out.println("1. ESTANDAR (Cuota: 0, Descuento: 0%)");
-        System.out.println("2. PREMIUM (Cuota: 50, Descuento: 5%)");
+        System.out.println("2. PREMIUM (Cuota: 30, Descuento: 20%)");
 
         int opcion = askInt("Ingrese una opción: ", 1, 2, false, false);
 
@@ -105,7 +105,7 @@ public class VistaClientes extends VistaBase {
         System.out.println("""
                 Tipos de clientes disponibles:
                 1. ESTANDAR - Cuota: 0€, Descuento: 0%
-                2. PREMIUM  - Cuota: 50€, Descuento: 5%
+                2. PREMIUM  - Cuota: 30€, Descuento: 20%
                 """);
     }
 
