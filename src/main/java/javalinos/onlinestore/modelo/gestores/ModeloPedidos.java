@@ -121,5 +121,6 @@ public class ModeloPedidos {
         catch (Exception e) {
             return false;
         }
+        return true;
     }
 }

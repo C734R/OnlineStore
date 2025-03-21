@@ -47,11 +47,21 @@ public class ModeloClientes {
     }
 
     public Cliente getClienteNif(String nif) {
-        return new Cliente();
+        for (Cliente cliente : clientes) {
+            if (cliente.getNif().equalsIgnoreCase(nif)) {
+                return cliente;
+            }
+        }
+        return null; // No encontrado
     }
 
     public Cliente getClienteEmail(String email) {
-        return new Cliente();
+        for (Cliente cliente : clientes) {
+            if (cliente.getEmail().equalsIgnoreCase(email)) {
+                return cliente;
+            }
+        }
+        return null; // No encontrado
     }
 
     public boolean loadClientes(int configuracion) {
