@@ -1,80 +1,73 @@
 package javalinos.onlinestore.modelo.gestores;
 
-
 import javalinos.onlinestore.modelo.primitivos.Categoria;
 import javalinos.onlinestore.modelo.primitivos.Cliente;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ModeloClientes {
 
-
     private List<Cliente> clientes;
-
 
     public ModeloClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
 
-
     public ModeloClientes() {
         clientes = new ArrayList<Cliente>();
     }
-
 
     public List<Cliente> getClientes() {
         return clientes;
     }
 
-
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-
 
     public Cliente makeCliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
         return new Cliente(nombre, domicilio, nif, email, categoria);
     }
 
-
     public void addCliente(Cliente cliente) {
         clientes.add(cliente);
     }
-
 
     public void removeCliente(Cliente cliente) {
         clientes.remove(cliente);
     }
 
-
     public Cliente getClienteIndex(int index) {
         return clientes.get(index);
     }
-
 
     public int sizeClientes() {
         return clientes.size();
     }
 
-
     public Cliente getClienteNif(String nif) {
-        return new Cliente();
+        for (Cliente cliente : clientes) {
+            if (cliente.getNif().equalsIgnoreCase(nif)) {
+                return cliente;
+            }
+        }
+        return null; // No encontrado
     }
-
 
     public Cliente getClienteEmail(String email) {
-        return new Cliente();
+        for (Cliente cliente : clientes) {
+            if (cliente.getEmail().equalsIgnoreCase(email)) {
+                return cliente;
+            }
+        }
+        return null; // No encontrado
     }
-
 
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {
             try {
                 this.clientes.clear();
-
 
                 addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", Categoria.PREMIUM));
                 addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", Categoria.ESTANDAR));
@@ -87,14 +80,11 @@ public class ModeloClientes {
                 addCliente(makeCliente("Luis Ramírez", "Avenida Constitución, 8, Valencia", "90123456I", "luis.ramirez@email.com", Categoria.ESTANDAR));
                 addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", Categoria.PREMIUM));
 
-
                 return true;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 return false;
             }
-        }
-        else {
+        } else {
             return false;
         }
     }
