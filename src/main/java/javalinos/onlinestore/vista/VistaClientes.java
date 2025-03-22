@@ -12,7 +12,7 @@ import static javalinos.onlinestore.utils.Utilidades.checkNIF;
 
 public class VistaClientes extends VistaBase {
 
-    private final List<String> listMods = new ArrayList<>(Arrays.asList("Modificar número", "Modificar nombre", "Modificar domicilio", "Modificar NIF", "Modificar email", "Modificar categoría"));
+    private final List<String> listMods = new ArrayList<>(Arrays.asList("Modificar nombre", "Modificar domicilio", "Modificar NIF", "Modificar email", "Modificar categoría"));
     private final List<String> listCategorias = new ArrayList<>(Arrays.asList("Estándar", "Premium"));
     private final List<String> listMetodos = new ArrayList<>(Arrays.asList("Por NIF", "Por Email"));
 
@@ -25,8 +25,7 @@ public class VistaClientes extends VistaBase {
         List<String> listaMenu = new ArrayList<>(Arrays.asList(
                 "Añadir cliente", "Eliminar cliente",
                 "Mostrar cliente", "Modificar cliente",
-                "Listar clientes", "Listar cliente por tipo",
-                "Salir"));
+                "Listar clientes", "Listar cliente por tipo"));
         super.setListaMenu(listaMenu);
     }
 
@@ -95,7 +94,7 @@ public class VistaClientes extends VistaBase {
     public int askCategoriaCliente() {
         while (true) {
             showCategorias();
-            int categoria = askInt("Seleccione la categoría del cliente", 0, listCategorias.size(), false, false);
+            int categoria = askInt("Seleccione la categoría del cliente", 0, listCategorias.size(), true, false);
             if (categoria > 0 && categoria <= listCategorias.size()) return categoria;
             else if (categoria == 0) {
                 showMensaje("Volviendo atrás...", true);

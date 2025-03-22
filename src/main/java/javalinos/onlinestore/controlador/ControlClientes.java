@@ -34,7 +34,7 @@ public class ControlClientes extends ControlBase {
         while (true) {
             vClientes.showCabecera();
             vClientes.showMenu(2);
-            opcion = vClientes.askInt("Seleccione una opción", 0, 7, false, false);
+            opcion = vClientes.askInt("Seleccione una opción", 0, 6, false, false);
             switch (opcion) {
                 case 1:
                     addCliente();
@@ -265,10 +265,12 @@ public class ControlClientes extends ControlBase {
                 vClientes.showMensajePausa("Error. El cliente indicado no existe. Vuelve a intentarlo.", true);
                 break;
             }
-            vClientes.showMensaje("******** Datos del cliente a modificar ********", true);
-            vClientes.showMensaje(cliente.toString(), true);
-            vClientes.showMensaje("***********************************************", true);
-            vClientes.showMensajePausa("", true);
+            else {
+                vClientes.showMensaje("******** Datos del cliente a modificar ********", true);
+                vClientes.showMensaje(cliente.toString(), true);
+                vClientes.showMensaje("***********************************************", true);
+                vClientes.showMensajePausa("", true);
+            }
             if (intentos > 2) {
                 vClientes.showMensajePausa("Error. Intentos máximos superados. Volviendo al programa principal...", true);
                 return null;
@@ -333,6 +335,7 @@ public class ControlClientes extends ControlBase {
             return;
         }
         vClientes.showCliente(cliente);
+        vClientes.showMensajePausa("", true);
     }
 
     /**
@@ -340,6 +343,7 @@ public class ControlClientes extends ControlBase {
      */
     public void showListClientes() {
         vClientes.showListClientes(getListaClientes());
+        vClientes.showMensajePausa("", true);
     }
 
     /**
@@ -348,6 +352,7 @@ public class ControlClientes extends ControlBase {
     public void showListClientesCategoria() {
         Categoria categoria = getCategoria(vClientes.askCategoriaCliente());
         vClientes.showListClientesCategoria(getListClientesCategoria(categoria), categoria);
+        vClientes.showMensajePausa("", true);
     }
 
     //*************************** Obtener listas ***************************//
