@@ -54,21 +54,21 @@ public class Articulo {
     public void setPreparacion(Float preparacion) {
         this.preparacion = preparacion;
     }
-//no utilizamos getStock finalmente?
+
     public Integer getStock() {
         return stock;
     }
-//same
+
     public void setStock(Integer stock) {
         this.stock = stock;
     }
-// no aprovechamos este toSting xd
+
     @Override
     public String toString() {
         return  "Código: " + codigo + "\n" +
                 "Descripcion: " + descripcion + "\n" +
                 "Precio" + precio + " €\n" +
                 "Tiempo de preparacion: " + preparacion + " días\n" +
-                "Stock: " + stock + " unidades"; // en principio esto no lo está pidiendo el programa
+                "Stock: " + stock + " unidades";
     }
 }

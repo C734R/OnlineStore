@@ -9,10 +9,12 @@ import javalinos.onlinestore.controlador.ControlBase;
 public class ControlArticulos extends ControlBase {
 
     private VistaArticulos vArticulos;
+    private ModeloArticulos mArticulos;
 
     public ControlArticulos(ModeloStore mStore, VistaArticulos vistaArticulos) {
         super(mStore);
         this.vArticulos = vistaArticulos;
+        this.mArticulos = mStore.getModeloArticulos();
     }
 
     public ControlArticulos() {
@@ -53,12 +55,11 @@ public class ControlArticulos extends ControlBase {
     }
 
     public void addArticulo() {
-        String codigo = vArticulos.askString("Introduce el código del artículo ");
-        String descripcion = vArticulos.askString("Introduce la descripción del artículo ");
-        Float precio = vArticulos.askFloat("Introduce el precio del artículo ");
-        Float preparacion = vArticulos.askFloat("Introduce el tiempo de preparación del artículo ");
-        //stock vemos como lo metemos
-        Articulo articulo = new Articulo(codigo, descripcion, precio, preparacion);
+        String descripcion = vArticulos.askString("Introduce la descripción del artículo", 250);
+        Float precio = vArticulos.askPrecio(0.0f,9999.0f);
+        Float preparacion = vArticulos.askFloat("Introduce el tiempo de preparación del artículo",0.01f,10.0f,true, false);
+        Integer stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false);
+        Articulo articulo = mArticulos.makeArticulo(descripcion, precio, preparacion, stock);
 
         // hacemos un booleano para verificar que se haya añadido correctamente
         boolean exito = ModeloArticulos.getInstancia().addArticulo(articulo);

@@ -30,7 +30,7 @@ public class ModeloArticulos {
         this.articulos = articulos;
     }
 // como hacer el articulo a partir del codigo
-    public Articulo makeArticulo(String descripcion, Float precio, Float preparacion) {
+    public Articulo makeArticulo(String descripcion, Float precio, Float preparacion, Integer stock) {
         String codigo;
 
         if (articulos.isEmpty()) {
@@ -54,15 +54,15 @@ public class ModeloArticulos {
         if (configuracion == 0) {
             try {
                 this.articulos.clear();
-                addArticulo(makeArticulo("\nGuitarra española de juguete.", 6f, 0.05f));
-                addArticulo(makeArticulo("\nExin Castillos - Set de construcción.", 12.5f, 0.08f));
-                addArticulo(makeArticulo("\nScalextric - Circuito de coches eléctricos.", 25f, 0.10f));
-                addArticulo(makeArticulo("\nCinexin - Proyector de cine infantil.", 18f, 0.07f));
-                addArticulo(makeArticulo("\nTelesketch - Pizarra mágica para dibujar.", 10f, 0.06f));
-                addArticulo(makeArticulo("\nMuñeca Nancy - Famosa.", 20f, 0.06f));
-                addArticulo(makeArticulo("\nMadelman - Figura de acción articulada.", 15f, 0.05f));
-                addArticulo(makeArticulo("\nOperación - Juego de mesa de precisión.", 8.5f, 0.04f));
-                addArticulo(makeArticulo("\nSimon - Juego electrónico de memoria.", 14f, 0.08f));
+                addArticulo(makeArticulo("Guitarra española de juguete.", 6f, 0.05f,5));
+                addArticulo(makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 0.08f,9));
+                addArticulo(makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 0.10f,14));
+                addArticulo(makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 0.07f,2));
+                addArticulo(makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 0.06f,100));
+                addArticulo(makeArticulo("Muñeca Nancy - Famosa.", 20f, 0.06f,45));
+                addArticulo(makeArticulo("Madelman - Figura de acción articulada.", 15f, 0.05f,83));
+                addArticulo(makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 0.04f,32));
+                addArticulo(makeArticulo("Simon - Juego electrónico de memoria.", 14f, 0.08f,67));
                 return true;
             } catch (Exception e) {
                 return false;

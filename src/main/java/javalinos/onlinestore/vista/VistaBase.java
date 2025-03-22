@@ -126,6 +126,29 @@ public abstract class VistaBase {
         return respuesta != 0;
     }
 
+    public Float askFloat(String mensaje, float min, float max, boolean reintentar, boolean maxIntentos) {
+        Scanner scanner = new Scanner(System.in);
+        float _float;
+        int intentos = 0;
+        if(!reintentar) intentos = 2;
+        while(intentos < 3) {
+            try {
+                showMensaje(mensaje + " (entre " + min + " y " + max + "): ", true);
+                _float = scanner.nextFloat();
+                if (_float >= min && _float <= max) return _float;
+                else if(reintentar) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
+                if (maxIntentos) intentos++;
+            }
+            catch (InputMismatchException e) {
+                if(reintentar) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
+                if (maxIntentos) intentos++;
+                scanner.next();
+            }
+        }
+        if(reintentar) showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...",true);
+        return -99999.0f;
+    }
+
     /**
      * Muestra un mensaje.
      * @param mensaje recibe el mensaje.

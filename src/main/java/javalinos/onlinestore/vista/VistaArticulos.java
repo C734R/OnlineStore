@@ -11,7 +11,7 @@ public class VistaArticulos extends VistaBase {
 
     public VistaArticulos() {
         String cabecera = """
-                \n*********************************************
+                *********************************************
                 **           Gestión de Artículos          **
                 *********************************************""";
         super.setCabecera(cabecera);
@@ -42,22 +42,5 @@ public class VistaArticulos extends VistaBase {
         }
         showMensajePausa("Demasiados intentos fallidos. Volviendo...", true);
         return -1;
-    }
-
-    public Float askFloat(String mensaje) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(mensaje);
-        while (!scanner.hasNextFloat()) {
-            System.out.println("Por favor, introduce un número válido.");
-            scanner.next();
-        }
-        return scanner.nextFloat();
-    }
-
-    // Método askString (suponiendo que ya existe)
-    public String askString(String mensaje) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print(mensaje);
-        return scanner.nextLine();
     }
 }

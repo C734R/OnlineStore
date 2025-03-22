@@ -141,8 +141,7 @@ public class ControlPedidos extends ControlBase{
     //*************************** Obtener listas ***************************//
 
     public List<Pedido> listPedidos(Cliente cliente) {
-
-        List<Pedido> pedidos = mPedidos.getPedidos();
+        List<Pedido> pedidos = listPedidosCheck();
         if (cliente == null) return pedidos;
         List<Pedido> pedidosCliente = new ArrayList<>();
         for (Pedido pedido : pedidos){
@@ -151,32 +150,24 @@ public class ControlPedidos extends ControlBase{
         return pedidosCliente;
     }
 
-    //TODO filtrar acotar fechas
     public List<Pedido> listPedidosPendientes(Cliente cliente) {
-        List<Pedido> pedidos = listPedidosCheck();
-        if (pedidos == null) return pedidos;
+        List<Pedido> pedidos = listPedidos(cliente);
+        if (pedidos.isEmpty()) return pedidos;
         List<Pedido> pedidosPendientesCliente = new ArrayList<>();
-        LocalDate fechaHoy = LocalDate.now();
-        for (Pedido pedido : pedidos){
-            if (pedido.getCliente().equals(cliente)){
-                //if (pedido.getFechahora().isBefor(pedido.get)
-            }
+        for(Pedido pedido : pedidos){
+            if (!checkEnviado(pedido)) pedidosPendientesCliente.add(pedido);
         }
-        return null;
+        return pedidosPendientesCliente;
     }
 
-    //TODO filtrar acotar fechas
     public List<Pedido> listPedidosEnviados(Cliente cliente) {
         List<Pedido> pedidos = listPedidosCheck();
         if (pedidos == null) return pedidos;
-        List<Pedido> pedidosPendientesCliente = new ArrayList<>();
-        LocalDate fechaHoy = LocalDate.now();
-        for (Pedido pedido : pedidos){
-            if (pedido.getCliente().equals(cliente)){
-                //if (pedido.getFechahora().isAfter(pedido.get)
-            }
+        List<Pedido> pedidosEnviadosCliente = new ArrayList<>();
+        for(Pedido pedido : pedidos){
+            if (checkEnviado(pedido)) pedidosEnviadosCliente.add(pedido);
         }
-        return null;
+        return pedidosEnviadosCliente;
     }
 
     public List<Pedido> listPedidosCheck() {
@@ -324,7 +315,7 @@ public class ControlPedidos extends ControlBase{
         return articulo.getPrecio() * stockComprado + (precioEnvio * (float) Math.pow(1.1f, stockComprado));
     }
 
-    private boolean checkEnvíado(Pedido pedido) {
+    private boolean checkEnviado(Pedido pedido) {
         LocalDate fechaHoy = LocalDate.now();
         LocalDate fechaEnvio = pedido.getFechahora().plusDays(pedido.getDiasPreparacion());
         return fechaHoy.isAfter(fechaEnvio);

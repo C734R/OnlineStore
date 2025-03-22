@@ -30,7 +30,7 @@ public class VistaPedidos extends VistaBase {
     }
 
     public void showListPedidos(List<Pedido> pedidos, Cliente cliente) {
-        if (!cliente) showListGenerica(pedidos, "LISTA DE PEDIDOS", true, false);
+        if (cliente == null) showListGenerica(pedidos, "LISTA DE PEDIDOS", true, false);
         else showListGenerica(pedidos, "LISTA DE PEDIDOS DEL CLIENTE " + pedidos.getFirst().getCliente().getNombre(), true, false);
     }
 

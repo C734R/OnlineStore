@@ -82,7 +82,16 @@ public class ControlClientes extends ControlBase {
         if (categoria == null) return;
         Cliente nuevoCliente = mClientes.makeCliente(nombre, domicilio, nif, email, categoria);
         mClientes.addCliente(nuevoCliente);
-        vClientes.showMensaje("Cliente registrado con éxito.", true);
+        vClientes.showMensajePausa("Cliente registrado con éxito.", true);
+    }
+
+    /**
+     * Sustituye los datos de un cliente por los nuevos.
+     * @param clienteOld se le pasan los datos del cliente a modificar.
+     * @param clienteNew se le pasan los nuevos datos.
+     */
+    public void setCliente (Cliente clienteOld, Cliente clienteNew){
+        mClientes.updateCliente(clienteOld, clienteNew);
     }
 
     /**
@@ -108,11 +117,11 @@ public class ControlClientes extends ControlBase {
         if (nif == null) return;
         Cliente cliente = mClientes.getClienteNif(nif);
         if (cliente == null){
-            vClientes.showMensaje("El NIF introducido no corresponde a ningún usuario.", true);
+            vClientes.showMensajePausa("Error. El NIF introducido no corresponde a ningún usuario.", true);
             return;
         }
         mClientes.removeCliente(cliente);
-        vClientes.showMensaje("Cliente eliminado correctamente.", true);
+        vClientes.showMensajePausa("Cliente eliminado correctamente.", true);
     }
 
     /**
@@ -123,11 +132,11 @@ public class ControlClientes extends ControlBase {
         if (email == null) return;
         Cliente cliente = mClientes.getClienteEmail(email);
         if (cliente == null) {
-            vClientes.showMensaje("El Email introducido no corresponde a ningún usuario.", true);
+            vClientes.showMensajePausa("Error. El Email introducido no corresponde a ningún usuario.", true);
             return;
         }
         mClientes.removeCliente(cliente);
-        vClientes.showMensaje("Cliente eliminado correctamente.", true);
+        vClientes.showMensajePausa("Cliente eliminado correctamente.", true);
     }
 
     //*************************** Modificar datos cliente ***************************//
@@ -233,7 +242,7 @@ public class ControlClientes extends ControlBase {
         oldCategoria = clienteOld.getCategoria();
         newCategoria = mClientes.getCategoria(vClientes.askCategoriaCliente());
         setCliente(clienteOld, clienteNew);
-        showExitoMod("Categoria",oldCategoria,newCategoria);
+        showExitoMod("categoria",oldCategoria,newCategoria);
     }
 
     //*************************** Peticiones especializadas ***************************//
@@ -279,16 +288,6 @@ public class ControlClientes extends ControlBase {
         if (last) return mClientes.getLastIndexCliente();
         else return mClientes.getFirstIndexCliente();
     }
-
-    /**
-     * Sustituye los datos de un cliente por los nuevos.
-     * @param clienteOld se le pasan los datos del cliente a modificar.
-     * @param clienteNew se le pasan los nuevos datos.
-     */
-    public void setCliente (Cliente clienteOld, Cliente clienteNew){
-        mClientes.updateCliente(clienteOld, clienteNew);
-    }
-
     /**
      * Obtiene una categoría en función de la opción seleccionada.
      * @param opcion se le pasa la opción seleccionada.
@@ -297,8 +296,6 @@ public class ControlClientes extends ControlBase {
     public Categoria getCategoria (int opcion){
         return mClientes.getCategoria(opcion);
     }
-
-    //*************************** Registrar datos singulares ***************************//
 
     /**
      * Obtiene un cliente a través de su índice en la colección.
