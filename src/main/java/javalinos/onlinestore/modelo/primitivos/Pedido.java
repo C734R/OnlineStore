@@ -11,6 +11,7 @@ public class Pedido {
     private LocalDate fechahora;
     private Float envio;
     private Float precio;
+    private Integer diasPreparacion;
 
     public Pedido(Integer numero, Cliente cliente, Articulo articulo, Integer cantidad, LocalDate fechahora, Float envio, Float precio) {
         this.numero = numero;
@@ -20,6 +21,7 @@ public class Pedido {
         this.fechahora = fechahora;
         this.envio = envio;
         this.precio = precio;
+        this.diasPreparacion = calcTotalPreparacion(articulo.getPreparacion(), cantidad);
     }
 
     public Pedido() {
@@ -87,6 +89,15 @@ public class Pedido {
     public void setPrecio(Float precio) {
         this.precio = precio;
     }
+    public Integer getDiasPreparacion() {
+        return diasPreparacion;
+    }
+    public void setDiasPreparacion(Integer diasPreparacion) {
+        this.diasPreparacion = diasPreparacion;
+    }
+    private Integer calcTotalPreparacion (Float preparacion, Integer cantidad) {
+        return (int)Math.ceil(preparacion * cantidad);
+    }
 
     @Override
     public String toString() {
@@ -96,6 +107,7 @@ public class Pedido {
                 "Cantidad: " + cantidad + "\n" +
                 "Fechahora: " + fechahora + "\n" +
                 "Envio: " + envio + "\n" +
+                "Días preparacion: " + diasPreparacion + "\n" +
                 "Precio: " + precio;
     }
 }

@@ -1,5 +1,6 @@
 package javalinos.onlinestore.vista;
 
+import javalinos.onlinestore.modelo.primitivos.Categoria;
 import javalinos.onlinestore.modelo.primitivos.Cliente;
 
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class VistaClientes extends VistaBase {
         super(cabecera, listMenu);
     }
 
-
+    //*************************** Pedir datos ***************************//
 
     /**
      * Pide un NIF.
@@ -74,23 +75,17 @@ public class VistaClientes extends VistaBase {
         return null;
     }
 
-    /**
-     * Muestra la lista de clientes pasada por parámetro.
-     * @param clientes Lista de clientes.
-     */
-    public void showListClientes(List<Cliente> clientes) {
-        showListGenerica(clientes,"CLIENTES", true, false);
-    }
-
-    public void showListCategoriaCliente(List<Cliente> clientes, int categoria) {
-        String mensaje = "LISTA DE CLIENTES DE CATEGORÍA ";
-        if (categoria == 1) {
-            mensaje = mensaje.concat("ESTÁNDAR ");
-        } else if (categoria == 2) {
-            mensaje = mensaje.concat("PREMIUM ");
+    public int askMetodoEliminar() {
+        while (true) {
+            showMetodosEliminar();
+            int metodo = askInt("Seleccione el método de eliminación", 0, listCategorias.size(), false, false);
+            if (metodo > 0 && metodo <= listCategorias.size()) return metodo;
+            else if (metodo == 0) {
+                showMensaje("Volviendo atrás...", true);
+                return metodo;
+            }
+            else showMensaje("Introduce una de las opciones listadas.", true);
         }
-        else mensaje = mensaje.concat("DESCONOCIDO ");
-        showListGenerica(clientes, mensaje, true, false);
     }
 
     /**
@@ -110,6 +105,25 @@ public class VistaClientes extends VistaBase {
         }
     }
 
+    //*************************** Mostrar datos ***************************//
+
+    /**
+     * Muestra la lista de clientes pasada por parámetro.
+     * @param clientes Lista de clientes.
+     */
+    public void showListClientes(List<Cliente> clientes) {
+        showListGenerica(clientes,"CLIENTES", true, false);
+    }
+
+    /**
+     * Mostrar listado de clientes por categoría.
+     * @param clientes se le pasa el listado de clientes filtrados a mostrar.
+     * @param categoria se le pasa la opción de categoría seleccionada.
+     */
+    public void showListClientesCategoria(List<Cliente> clientes, Categoria categoria) {
+        showListGenerica(clientes, "LISTA DE CLIENTES DE CATEGORÍA "+ categoria.getNombre(), true, false);
+    }
+
     /**
      * Muestra las modificaciones disponibles.
      */
@@ -125,21 +139,21 @@ public class VistaClientes extends VistaBase {
         showOptions(listCategorias, 3,false, true);
     }
 
-    public int askMetodoEliminar() {
-        while (true) {
-            showMetodosEliminar();
-            int metodo = askInt("Seleccione el método de eliminación", 0, listCategorias.size(), false, false);
-            if (metodo > 0 && metodo <= listCategorias.size()) return metodo;
-            else if (metodo == 0) {
-                showMensaje("Volviendo atrás...", true);
-                return metodo;
-            }
-            else showMensaje("Introduce una de las opciones listadas.", true);
-        }
-    }
-
+    /**
+     * Mostrar métodos de eliminación.
+     */
     public void showMetodosEliminar() {
         showMensaje("******** METODOS DE ELIMINACIÓN DE USUARIO ********", true);
         showOptions(listMetodos, 3,false, true);
+    }
+
+    /**
+     * Mostrar datos de cliente.
+     * @param cliente se le pasa el cliente a mostrar.
+     */
+    public void showCliente(Cliente cliente) {
+        showMensaje("******** DATOS DEL CLIENTE " + cliente.getNombre() +" ********", true);
+        showMensaje(cliente.toString(), true);
+        showMensaje("*****************************************", true);
     }
 }

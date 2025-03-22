@@ -99,8 +99,12 @@ public class ControlClientes extends ControlBase {
                 break;
         }
     }
+
+    /**
+     * Eliminar un cliente por NIF.
+     */
     public void removeClienteNif() {
-        String nif = vClientes.askString("Ingrese el NIF del cliente a eliminar:", 9);
+        String nif = vClientes.askString("Ingrese el NIF del cliente a eliminar:", 15);
         if (nif == null) return;
         Cliente cliente = mClientes.getClienteNif(nif);
         if (cliente == null){
@@ -110,8 +114,12 @@ public class ControlClientes extends ControlBase {
         mClientes.removeCliente(cliente);
         vClientes.showMensaje("Cliente eliminado correctamente.", true);
     }
+
+    /**
+     * Eliminar un cliente por Email.
+     */
     public void removeClienteEmail() {
-        String email = vClientes.askString("Ingrese el Email del cliente a eliminar:", 9);
+        String email = vClientes.askString("Ingrese el Email del cliente a eliminar:", 250);
         if (email == null) return;
         Cliente cliente = mClientes.getClienteEmail(email);
         if (cliente == null) {
@@ -137,19 +145,19 @@ public class ControlClientes extends ControlBase {
             if(cliente == null) continue;
             switch (opcion) {
                 case 1:
-                    modClienteNombre();
+                    modClienteNombre(cliente);
                     break;
                 case 2:
-                    modClienteDomicilio();
+                    modClienteDomicilio(cliente);
                     break;
                 case 3:
-                    modClienteNIF();
+                    modClienteNIF(cliente);
                     break;
                 case 4:
-                    modClienteEmail();
+                    modClienteEmail(cliente);
                     break;
                 case 5:
-                    modClienteCategoria();
+                    modClienteCategoria(cliente);
                     break;
                 case 0:
                     vClientes.showMensajePausa("Volviendo al menú de gestión de clientes...", true);
@@ -160,25 +168,80 @@ public class ControlClientes extends ControlBase {
         }
     }
 
-    public void modClienteNombre(){
-        String oldNameCliente,newNamecliente;
-        Cliente clienteOld,clienteNew;
-        clienteOld = askClienteModificar();
-        if (clienteOld == null) return;
+    /**
+     * Modificar nombre de cliente.
+     * @param clienteOld se le pasa el cliente a modificar.
+     */
+    public void modClienteNombre(Cliente clienteOld) {
+        String oldNameCliente,newNameCliente;
+        Cliente clienteNew;
         clienteNew = clienteOld;
         oldNameCliente = clienteOld.getNombre();
-        newNamecliente = vClientes.askString("Introduce el nuevo nombre del usuario: ", 50);
-        clienteNew.setNombre(newNamecliente);
+        newNameCliente = vClientes.askString("Introduce el nuevo nombre del usuario: ", 250);
+        clienteNew.setNombre(newNameCliente);
         setCliente(clienteOld, clienteNew);
         showExitoMod("nombre",oldNameCliente,clienteNew.getNombre());
     }
-    public void modClienteDomicilio(){}
-    public void modClienteNIF(){}
-    public void modClienteEmail(){}
-    public void modClienteCategoria(){}
+    /**
+     * Modificar domicilio de cliente.
+     * @param clienteOld se le pasa el cliente a modificar.
+     */
+    public void modClienteDomicilio(Cliente clienteOld){
+        String oldDomicilio,newDomicilio;
+        Cliente clienteNew;
+        clienteNew = clienteOld;
+        oldDomicilio = clienteOld.getDomicilio();
+        newDomicilio = vClientes.askString("Introduce el nuevo domicilio: ", 250);
+        clienteNew.setDomicilio(newDomicilio);
+        setCliente(clienteOld, clienteNew);
+        showExitoMod("domicilio",oldDomicilio,newDomicilio);
+    }
+    /**
+     * Modificar NIF de cliente.
+     * @param clienteOld se le pasa el cliente a modificar.
+     */
+    public void modClienteNIF(Cliente clienteOld){
+        String oldNIF,newNIF;
+        Cliente clienteNew;
+        clienteNew = clienteOld;
+        oldNIF = clienteOld.getNif();
+        newNIF = vClientes.askNIF();
+        setCliente(clienteOld, clienteNew);
+        showExitoMod("NIF",oldNIF,newNIF);
+    }
+    /**
+     * Modificar Email de cliente.
+     * @param clienteOld se le pasa el cliente a modificar.
+     */
+    public void modClienteEmail(Cliente clienteOld){
+        String oldEmail,newEmail;
+        Cliente clienteNew;
+        clienteNew = clienteOld;
+        oldEmail = clienteOld.getEmail();
+        newEmail = vClientes.askEmail();
+        setCliente(clienteOld, clienteNew);
+        showExitoMod("email",oldEmail,newEmail);
+    }
+    /**
+     * Modificar categoría de cliente.
+     * @param clienteOld se le pasa el cliente a modificar.
+     */
+    public void modClienteCategoria(Cliente clienteOld){
+        Categoria oldCategoria,newCategoria;
+        Cliente clienteNew;
+        clienteNew = clienteOld;
+        oldCategoria = clienteOld.getCategoria();
+        newCategoria = mClientes.getCategoria(vClientes.askCategoriaCliente());
+        setCliente(clienteOld, clienteNew);
+        showExitoMod("Categoria",oldCategoria,newCategoria);
+    }
 
     //*************************** Peticiones especializadas ***************************//
 
+    /**
+     * Preguntar el cliente a modificar y mostrar datos.
+     * @return Cliente devolver cliente a modificar.
+     */
     public Cliente askClienteModificar(){
         String datoCliente = "";
         int intentos = 0;
@@ -190,7 +253,7 @@ public class ControlClientes extends ControlBase {
             else cliente = mClientes.getClienteNif(datoCliente);
             intentos++;
             if (cliente == null) {
-                vClientes.showMensajePausa("Error. El socio indicado no existe. Vuelve a intentarlo.", true);
+                vClientes.showMensajePausa("Error. El cliente indicado no existe. Vuelve a intentarlo.", true);
                 break;
             }
             vClientes.showMensaje("******** Datos del cliente a modificar ********", true);
@@ -207,13 +270,23 @@ public class ControlClientes extends ControlBase {
 
     //*************************** Obtener datos singulares ***************************//
 
+    /**
+     * Obtener índice inicial o final de la lista de clientes.
+     * @param last se le pasa la opción de inicial o final.
+     * @return devuelve el índice del primer o último del cliente.
+     */
     public int getIndexCliente(Boolean last) {
         if (last) return mClientes.getLastIndexCliente();
         else return mClientes.getFirstIndexCliente();
     }
 
+    /**
+     * Sustituye los datos de un cliente por los nuevos.
+     * @param clienteOld se le pasan los datos del cliente a modificar.
+     * @param clienteNew se le pasan los nuevos datos.
+     */
     public void setCliente (Cliente clienteOld, Cliente clienteNew){
-        mClientes.setCliente(clienteOld, clienteNew);
+        mClientes.updateCliente(clienteOld, clienteNew);
     }
 
     /**
@@ -227,47 +300,85 @@ public class ControlClientes extends ControlBase {
 
     //*************************** Registrar datos singulares ***************************//
 
+    /**
+     * Obtiene un cliente a través de su índice en la colección.
+     * @param indexCliente se le pasa el índice del cliente en la colección.
+     * @return Cliente devuelve el cliente que corresponde al índice pasado.
+     */
     public Cliente getCliente (int indexCliente) {
         return mClientes.getClienteIndex(-1);
     }
 
     //*************************** Mostrar mensajes vista ***************************//
 
-    public <VO,VN> void showExitoMod (String mensaje, VO valorOld, VN valorNew ){
-        vClientes.showMensaje("El " + mensaje + " del cliente se ha cambiado de forma exitosa de " + valorOld + " a " + valorNew + ".",true);
+    /**
+     * Mostrar éxito en la modificación.
+     * @param datoModificar se le pasa el dato a modificar.
+     * @param valorOld se le pasa el dato antigüo.
+     * @param valorNew se le pasa el dato nuevo.
+     * @param <VO> tipo de dato antigüo.
+     * @param <VN> tipo de dato nuevo.
+     */
+    public <VO,VN> void showExitoMod (String datoModificar, VO valorOld, VN valorNew ){
+        vClientes.showMensaje("El " + datoModificar + " del cliente se ha cambiado de forma exitosa de " + valorOld + " a " + valorNew + ".",true);
         vClientes.showMensajePausa("",true);
     }
-
+    /**
+     * Muestra un cliente a través de su NIF o Email.
+     */
     public void showCliente() {
-        String nif = vClientes.askString("Ingrese el NIF del cliente:", 9);
-        Cliente cliente = mClientes.getClienteNif(nif);
-        if (cliente != null) {
-            vClientes.showMensaje(cliente.toString(), true);
-        } else {
-            vClientes.showMensaje("Cliente no encontrado.", true);
+        Cliente cliente;
+        String datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a mostrar", 250);
+        if (mClientes.getClienteNif(datoCliente) == null) cliente = mClientes.getClienteEmail(datoCliente);
+        else cliente = mClientes.getClienteNif(datoCliente);
+        if (cliente == null) {
+            vClientes.showMensajePausa("Error. El cliente indicado no existe.", true);
+            return;
         }
+        vClientes.showCliente(cliente);
     }
 
+    /**
+     * Mostrar listado de clientes sin filtrar.
+     */
     public void showListClientes() {
-        vClientes.showListClientes(listClientes());
+        vClientes.showListClientes(getListaClientes());
     }
 
-    public void showListClientesCategoria(int categoria) {
-        vClientes.showListClientesCategoria(listClientesCategoria(categoria));
+    /**
+     * Mostrar listado de clientes por categoría.
+     */
+    public void showListClientesCategoria() {
+        Categoria categoria = getCategoria(vClientes.askCategoriaCliente());
+        vClientes.showListClientesCategoria(getListClientesCategoria(categoria), categoria);
     }
 
     //*************************** Obtener listas ***************************//
 
-    public List<Cliente> listClientes() {
+    /**
+     * Obtener lista de clientes.
+     * @return List<Cliente> devuelve colección clientes.
+     */
+    public List<Cliente> getListaClientes() {
         return mClientes.getClientes();
     }
 
-    public List<Cliente> listClientesCategoria(int categoria) {
+    /**
+     * Obtener listado de clientes por categoría.
+     * @param categoria se le pasa la categoría por la que filtrar los clientes.
+     * @return List<Cliente> devuelve colección de clientes filtrada por categoría.
+     */
+    public List<Cliente> getListClientesCategoria(Categoria categoria) {
         return mClientes.getClientesCategoria(categoria);
     }
 
     //*************************** Carga de datos ***************************//
 
+    /**
+     * Reaplizar precarga de colección de clientes.
+     * @param configuracion se le pasa la configuración establecida por argumento.
+     * @return boolean devuelve resultado de la operación.
+     */
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {
             return mClientes.loadClientes(configuracion);

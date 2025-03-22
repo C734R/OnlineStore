@@ -18,6 +18,8 @@ public class ModeloClientes {
         clientes = new ArrayList<Cliente>();
     }
 
+    //*************************** Getters & Setters ***************************//
+
     public List<Cliente> getClientes() {
         return clientes;
     }
@@ -25,14 +27,8 @@ public class ModeloClientes {
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
-    public void setCliente(Cliente clienteOld, Cliente clienteNew) {
-        int index = this.clientes.indexOf(clienteOld);
-        clientes.set(index,clienteNew);
-    }
 
-    public Cliente makeCliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
-        return new Cliente(nombre, domicilio, nif, email, categoria);
-    }
+    //*************************** CRUD ***************************//
 
     public void addCliente(Cliente cliente) {
         clientes.add(cliente);
@@ -45,6 +41,13 @@ public class ModeloClientes {
     public Cliente getClienteIndex(int index) {
         return clientes.get(index);
     }
+
+    public void updateCliente(Cliente clienteOld, Cliente clienteNew) {
+        int index = this.clientes.indexOf(clienteOld);
+        clientes.set(index,clienteNew);
+    }
+
+    //*************************** Obtener datos ***************************//
 
     public int sizeClientes() {
         return clientes.size();
@@ -66,6 +69,17 @@ public class ModeloClientes {
             }
         }
         return null; // No encontrado
+    }
+
+    public List<Cliente> getClientesCategoria(Categoria categoria) {
+        if(clientes.isEmpty()) return null;
+        List<Cliente> clientesCategoria = new ArrayList<>();
+        for (Cliente cliente : clientes) {
+            if (cliente.getCategoria().equals(categoria)) {
+                clientesCategoria.add(cliente);
+            }
+        }
+        return clientesCategoria;
     }
 
     public Categoria getCategoria(int opcion) {
@@ -93,6 +107,13 @@ public class ModeloClientes {
         if(clientes.isEmpty()) return -1;
         return clientes.indexOf(clientes.getFirst());
     }
+
+    //*************************** Crear datos ***************************//
+
+    public Cliente makeCliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
+        return new Cliente(nombre, domicilio, nif, email, categoria);
+    }
+
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {
             try {

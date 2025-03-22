@@ -18,6 +18,8 @@ public class ControlMenuPrincipal extends ControlBase {
         super();
     }
 
+    //*************************** Getters & Setters ***************************//
+
     public VistaMenuPrincipal getVistaMenuPrincipal() {
         return vMenuPrincipal;
     }
@@ -25,6 +27,8 @@ public class ControlMenuPrincipal extends ControlBase {
     public void setVistaMenuPrincipal(VistaMenuPrincipal vistaMenuPrincipal) {
         this.vMenuPrincipal = vMenuPrincipal;
     }
+
+    //*************************** Menu principal ***************************//
 
     public int iniciar() {
         int opcion;
@@ -51,10 +55,15 @@ public class ControlMenuPrincipal extends ControlBase {
         }
     }
 
+    //*************************** Error precarga ***************************//
+
     public boolean errorPrecarga() {
         vMenuPrincipal.showMensajePausa("Error. Se ha producido un error en la precarga de datos.", true);
         return vMenuPrincipal.askBoolean("¿Deseas volver a intentarlo?", true, false);
     }
+
+    //*************************** Salir programa ***************************//
+
     public void salir() {
         vMenuPrincipal.showMensaje("********* ¡¡Hasta pronto!! *********",true);
     }

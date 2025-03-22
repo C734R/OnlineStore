@@ -67,8 +67,8 @@ public class Articulo {
     public String toString() {
         return  "Código: " + codigo + "\n" +
                 "Descripcion: " + descripcion + "\n" +
-                "Precio" + precio + "\n" +
-                "Tiempo de preparacion: " + preparacion + "\n" +
-                "Stock: " + stock; // en principio esto no lo está pidiendo el programa
+                "Precio" + precio + " €\n" +
+                "Tiempo de preparacion: " + preparacion + " días\n" +
+                "Stock: " + stock + " unidades"; // en principio esto no lo está pidiendo el programa
     }
 }
