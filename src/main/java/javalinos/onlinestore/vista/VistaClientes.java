@@ -47,7 +47,7 @@ public class VistaClientes extends VistaBase {
             nif = askNIF();
             if (checkNIF(nif)) return nif;
             else {
-                if(intentos < 2) showMensaje("El DNI introducido es erróneo. Vuelve a intentarlo.", true);
+                if(intentos < 2) showMensaje("El DNI introducido es erróneo. Vuelve a intentarlo", true);
                 intentos++;
             }
         }
