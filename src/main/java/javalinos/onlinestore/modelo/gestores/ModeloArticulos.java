@@ -39,7 +39,7 @@ public class ModeloArticulos {
             String lastCodigo = articulos.get(articulos.size() - 1).getCodigo();
             codigo = "ART" + String.format("%03d", Integer.parseInt(lastCodigo.substring(3)) + 1);
         }
-        return new Articulo(codigo, descripcion, precio, preparacion);
+        return new Articulo(codigo, descripcion, precio, preparacion, stock);
     }
 
     public boolean addArticulo(Articulo articulo) {

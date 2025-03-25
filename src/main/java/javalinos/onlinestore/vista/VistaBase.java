@@ -141,7 +141,7 @@ public abstract class VistaBase {
 
         while (intentos < maxIntentosPermitidos) {
             try {
-                System.out.print(mensaje + " (entre " + min + " y " + max + "): ");
+                showMensaje(mensaje + " (entre " + min + " y " + max + "):", true);
                 _float = scanner.nextFloat();
 
                 if (_float >= min && _float <= max) {

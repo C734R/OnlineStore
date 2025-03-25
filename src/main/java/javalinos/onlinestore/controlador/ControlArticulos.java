@@ -134,13 +134,13 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensaje("No hay artículos disponibles.", true);
             return;
         }
-        // preguntar Alan
+
         vArticulos.showMensaje("Lista de artículos disponibles:", true);
         for (Articulo articulo : articulos) {
-            System.out.println(articulo.getCodigo() + " - " + articulo.getDescripcion() + " - $" + articulo.getPrecio());
+            vArticulos.showMensaje(articulo.toString(), false);
         }
     }
-    // Cargamos los artículos. Preguntar a Alan**
+    // Cargamos los artículos.
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {
             return this.getModeloStore().getModeloArticulos().loadArticulos(configuracion);
