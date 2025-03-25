@@ -80,7 +80,7 @@ public class ControlArticulos extends ControlBase {
         // Mostramos la lista de artículos para eliminar
         vArticulos.showMensaje("Selecciona un artículo para eliminar:", false);
         for (int i = 0; i < articulos.size(); i++) {
-            vArticulos.showMensaje((i + 1) + ". " + articulos.get(i).getCodigo() + " - " + articulos.get(i).getDescripcion(), false);
+            vArticulos.showMensaje((i + 1) + ". " + articulos.get(i).getCodigo() + " - " + articulos.get(i).getDescripcion() + "\n", false);
         }
 
         // Pedimos la selección del usuario
@@ -103,9 +103,9 @@ public class ControlArticulos extends ControlBase {
             return;
         }
         // preguntar Alan
-        vArticulos.showMensaje("Lista de artículos disponibles:", false);
+        vArticulos.showMensaje("Lista de artículos disponibles:", true);
         for (Articulo articulo : articulos) {
-            vArticulos.showMensaje(articulo.getCodigo() + " - " + articulo.getDescripcion() + " - $" + articulo.getPrecio(), false);
+            System.out.println(articulo.getCodigo() + " - " + articulo.getDescripcion() + " - $" + articulo.getPrecio());
         }
     }
     // Cargamos los artículos. Preguntar a Alan**
