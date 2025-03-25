@@ -58,7 +58,7 @@ public class ControlArticulos extends ControlBase {
         // Queremos obtener antes la lista de artículos:
         List<Articulo> articulos = mArticulos.getInstancia().getArticulos();
 
-        // Añadir un artículo al código ya creado para que no sea del 1 al 9.
+        // Añadir un artículo al código ya creado para que siga en incremento
         int codigoMax = 0;
         if (!articulos.isEmpty()) {
             for (Articulo articulo : articulos) {
@@ -78,13 +78,13 @@ public class ControlArticulos extends ControlBase {
             codigoMax = 0;
         }
 
-        // Incrementamos el código máximo encontrado para obtener el siguiente código disponible, para que no se estanque en 9..
+        // Incrementamos el código máximo encontrado para obtener el siguiente código disponible, para que no se estanque un numero determinado..
         int nuevoCodigo = codigoMax + 1;
         System.out.println("\nEl siguiente código disponible es: ART00" + nuevoCodigo);
 
         String descripcion = vArticulos.askString("Introduce la descripción del artículo", 250);
         Float precio = vArticulos.askPrecio(0.0f, 9999.0f);
-        Float preparacion = vArticulos.askFloat("Introduce el tiempo de preparación del artículo", 0.01f, 10.0f, true, false);
+        Float preparacion = vArticulos.askFloat("Introduce los días de preparación del artículo", 0.01f, 10.0f, true, false);
         Integer stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false);
 
        //añadimos nuestro articulo
