@@ -30,6 +30,6 @@ public enum Categoria {
     public String toString() {
         return  "Categoría: " + nombre + "\n" +
                 "Cuota: " + cuota + "\n" +
-                "Descuento: " + descuento;
+                "Descuento: " + descuento*100 + "%";
     }
 }

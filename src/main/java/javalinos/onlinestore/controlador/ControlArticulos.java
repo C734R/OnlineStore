@@ -4,7 +4,8 @@ import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaArticulos;
 import javalinos.onlinestore.modelo.primitivos.Articulo;
 import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
-import javalinos.onlinestore.controlador.ControlBase;
+
+import static javalinos.onlinestore.utils.Utilidades.listToStr;
 
 public class ControlArticulos extends ControlBase {
 
@@ -55,32 +56,11 @@ public class ControlArticulos extends ControlBase {
     }
 
     public void addArticulo() {
-        // Queremos obtener antes la lista de artículos:
-        List<Articulo> articulos = mArticulos.getInstancia().getArticulos();
+        vArticulos.showMensaje("******** Añadir Artículo ********", true);
 
-        // Añadir un artículo al código ya creado para que siga en incremento
-        int codigoMax = 0;
-        if (!articulos.isEmpty()) {
-            for (Articulo articulo : articulos) {
-                String codigoArticulo = articulo.getCodigo(); // lo pasamos a string
-
-                try {
-                    String numeroCodigo = codigoArticulo.replaceAll("[^0-9]", ""); // pasamos de vuelta a string
-                    int codigoArticuloInt = Integer.parseInt(numeroCodigo);
-                    if (codigoArticuloInt > codigoMax) {
-                        codigoMax = codigoArticuloInt;
-                    }
-                } catch (NumberFormatException e) {
-                    System.out.println("Error al analizar el código del artículo: " + codigoArticulo);
-                }
-            }
-        } else {
-            codigoMax = 0;
-        }
-
-        // Incrementamos el código máximo encontrado para obtener el siguiente código disponible, para que no se estanque un numero determinado..
-        int nuevoCodigo = codigoMax + 1;
-        System.out.println("\nEl siguiente código disponible es: ART00" + nuevoCodigo);
+        // Obtener siguiente número de artículo
+        int numeroArticulo = mArticulos.getArticulos().size();
+        vArticulos.showMensaje("El siguiente código disponible es: ART00" + numeroArticulo, true);
 
         String descripcion = vArticulos.askString("Introduce la descripción del artículo", 250);
         Float precio = vArticulos.askPrecio(0.0f, 9999.0f);
@@ -91,26 +71,29 @@ public class ControlArticulos extends ControlBase {
         Articulo articulo = mArticulos.makeArticulo(descripcion, precio, preparacion, stock);
 
         // Asignamos el nuevo código al artículo
-        articulo.setCodigo("ART" + String.format("%03d", nuevoCodigo));
+        articulo.setCodigo("ART" + String.format("%03d", numeroArticulo));
 
         // Verificamos si se ha añadido correctamente el artículo
-        boolean exito = ModeloArticulos.getInstancia().addArticulo(articulo);
+        boolean exito = mArticulos.addArticulo(articulo);
         if (exito) {
             vArticulos.showMensaje("Artículo añadido correctamente.", true);
         } else {
-            vArticulos.showMensaje("Error al añadir el artículo.", true);
+            vArticulos.showMensajePausa("Error al añadir el artículo.", true);
         }
     }
- // Cómo eliminar el artículo. Seleccionamos array.
+
+    // Cómo eliminar el artículo. Seleccionamos array.
     public void removeArticulo() {
-        List<Articulo> articulos = ModeloArticulos.getInstancia().getArticulos();
+        vArticulos.showMensaje("******** Eliminar Artículo ********", true);
+
+        List<Articulo> articulos = mArticulos.getArticulos();
         if (articulos.isEmpty()) {
-            vArticulos.showMensaje("No hay artículos para eliminar.", true); // ya hay creado así quue no creo que se activa
+            vArticulos.showMensajePausa("No hay artículos para eliminar.", true); // ya hay creado así quue no creo que se activa
             return;
         }
 
         // Mostramos la lista de artículos para eliminar
-        vArticulos.showMensaje("Selecciona un artículo para eliminar:\n", false);
+        vArticulos.showMensaje("Selecciona un artículo para eliminar: ", true);
         for (int i = 0; i < articulos.size(); i++) {
             vArticulos.showMensaje((i + 1) + ". " + articulos.get(i).getCodigo() + " - " + articulos.get(i).getDescripcion() + "\n", false);
         }
@@ -120,25 +103,26 @@ public class ControlArticulos extends ControlBase {
         Articulo articuloAEliminar = articulos.get(seleccion - 1);
 
         // Eliminamos el artículo
-        boolean exito = ModeloArticulos.getInstancia().removeArticulo(articuloAEliminar);
+        boolean exito = mArticulos.removeArticulo(articuloAEliminar);
         if (exito) {
             vArticulos.showMensaje("Artículo eliminado correctamente.", true);
         } else {
-            vArticulos.showMensaje("Error al eliminar el artículo.", true);
+            vArticulos.showMensajePausa("Error al eliminar el artículo.", true);
         }
     }
         // Queremos listar los articulos
     public void listArticulos() {
-        List<Articulo> articulos = ModeloArticulos.getInstancia().getArticulos();
+        vArticulos.showMensaje("******** Listar Artículos ********", true);
+
+        List<Articulo> articulos = mArticulos.getArticulos();
         if (articulos.isEmpty()) {
-            vArticulos.showMensaje("No hay artículos disponibles.", true);
+            vArticulos.showMensajePausa("No hay artículos disponibles.", true);
             return;
         }
 
         vArticulos.showMensaje("Lista de artículos disponibles:", true);
-        for (Articulo articulo : articulos) {
-            vArticulos.showMensaje(articulo.toString(), false);
-        }
+
+        vArticulos.showOptions(listToStr(articulos),0, true, false);
     }
     // Cargamos los artículos.
     public boolean loadArticulos(int configuracion) {

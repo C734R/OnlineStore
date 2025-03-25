@@ -89,7 +89,7 @@ public class OnlineStore {
 
         if (configuracion == 0) {
             mClientes = new ModeloClientes();
-            mArticulos = ModeloArticulos.getInstancia();
+            mArticulos = new ModeloArticulos();
             mPedidos = new ModeloPedidos();
             mStore = new ModeloStore(mClientes, mArticulos, mPedidos);
 

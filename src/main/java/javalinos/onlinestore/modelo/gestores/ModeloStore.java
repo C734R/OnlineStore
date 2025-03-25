@@ -40,7 +40,7 @@ public class ModeloStore {
     }
 
     public ModeloArticulos getModeloArticulos() {
-        return ModeloArticulos.getInstancia();
+        return mArticulos;
     }
 
 

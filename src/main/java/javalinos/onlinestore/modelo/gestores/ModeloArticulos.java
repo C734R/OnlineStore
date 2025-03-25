@@ -6,30 +6,23 @@ import java.util.List;
 
 public class ModeloArticulos {
 
-    private static ModeloArticulos instancia; // Única instancia
     private List<Articulo> articulos;
 
-    // Constructor privado para Singleton
-    private ModeloArticulos() {
+    public ModeloArticulos() {
         this.articulos = new ArrayList<>();
     }
 
-    // Método estático para obtener la única instancia. Recordar que es un metodo de unica instancia y no puede ser null
-    public static ModeloArticulos getInstancia() {
-        if (instancia == null) {
-            instancia = new ModeloArticulos();
-        }
-        return instancia;
-    }
-// Array para listar el metodo de articulos
+    // Array para listar el metodo de articulos
     public List<Articulo> getArticulos() {
         return articulos;
     }
-// donde guardaremos los articulos ya creados
+
+    // Donde guardaremos los articulos ya creados
     public void setArticulos(List<Articulo> articulos) {
         this.articulos = articulos;
     }
-// como hacer el articulo a partir del codigo
+
+    // Como hacer el articulo a partir del codigo
     public Articulo makeArticulo(String descripcion, Float precio, Float preparacion, Integer stock) {
         String codigo;
 

@@ -99,6 +99,7 @@ public class ControlClientes extends ControlBase {
      */
     public void removeCliente() {
         int opcion = vClientes.askMetodoEliminar();
+
         switch (opcion) {
             case 1:
                 removeClienteNif();
@@ -147,11 +148,11 @@ public class ControlClientes extends ControlBase {
     public void modCliente() {
         int opcion ;
         while (true){
+            Cliente cliente = null;
             vClientes.showMensaje("******** Menú de Modificación de Clientes ********", true);
             vClientes.showMods();
             opcion = vClientes.askInt("Introduce el tipo de modificación que deseas realizar", 0, 5, false, false);
-            Cliente cliente = askClienteModificar();
-            if(cliente == null) continue;
+            if(opcion != 0) cliente = askClienteModificar();
             switch (opcion) {
                 case 1:
                     modClienteNombre(cliente);
@@ -203,7 +204,7 @@ public class ControlClientes extends ControlBase {
         newDomicilio = vClientes.askString("Introduce el nuevo domicilio: ", 250);
         clienteNew.setDomicilio(newDomicilio);
         setCliente(clienteOld, clienteNew);
-        showExitoMod("domicilio",oldDomicilio,newDomicilio);
+        showExitoMod("domicilio",oldDomicilio,clienteNew.getDomicilio());
     }
     /**
      * Modificar NIF de cliente.
@@ -217,7 +218,7 @@ public class ControlClientes extends ControlBase {
         newNIF = vClientes.askNIF();
         clienteNew.setNif(newNIF);
         setCliente(clienteOld, clienteNew);
-        showExitoMod("NIF",oldNIF,newNIF);
+        showExitoMod("NIF",oldNIF,clienteNew.getNif());
     }
     /**
      * Modificar Email de cliente.
@@ -228,9 +229,10 @@ public class ControlClientes extends ControlBase {
         Cliente clienteNew;
         clienteNew = clienteOld;
         oldEmail = clienteOld.getEmail();
-        newEmail = vClientes.askEmail();
+        newEmail = vClientes.askEmail(true);
+        clienteNew.setEmail(newEmail);
         setCliente(clienteOld, clienteNew);
-        showExitoMod("email",oldEmail,newEmail);
+        showExitoMod("email",oldEmail,clienteNew.getEmail());
     }
     /**
      * Modificar categoría de cliente.
@@ -242,8 +244,9 @@ public class ControlClientes extends ControlBase {
         clienteNew = clienteOld;
         oldCategoria = clienteOld.getCategoria();
         newCategoria = mClientes.getCategoria(vClientes.askCategoriaCliente());
+        clienteNew.setCategoria(newCategoria);
         setCliente(clienteOld, clienteNew);
-        showExitoMod("categoria",oldCategoria,newCategoria);
+        showExitoMod("categoria",oldCategoria.getNombre(),clienteNew.getCategoria().getNombre());
     }
 
     //*************************** Peticiones especializadas ***************************//
@@ -258,24 +261,21 @@ public class ControlClientes extends ControlBase {
         Cliente cliente = null;
         while (true) {
             showListClientes();
-            datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar", 250);
+            datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 250);
             if (mClientes.getClienteNif(datoCliente) == null) cliente = mClientes.getClienteEmail(datoCliente);
             else cliente = mClientes.getClienteNif(datoCliente);
             intentos++;
-            if (cliente == null) {
-                vClientes.showMensajePausa("Error. El cliente indicado no existe. Vuelve a intentarlo.", true);
-                break;
-            }
-            else {
+            if (cliente != null) {
                 vClientes.showMensaje("******** Datos del cliente a modificar ********", true);
                 vClientes.showMensaje(cliente.toString(), true);
                 vClientes.showMensaje("***********************************************", true);
-                vClientes.showMensajePausa("", true);
+                break;
             }
             if (intentos > 2) {
                 vClientes.showMensajePausa("Error. Intentos máximos superados. Volviendo al programa principal...", true);
                 return null;
             }
+            vClientes.showMensajePausa("Error. El cliente indicado no existe. Vuelve a intentarlo.", true);
         }
         return cliente;
     }
@@ -326,7 +326,7 @@ public class ControlClientes extends ControlBase {
      */
     public void showCliente() {
         Cliente cliente;
-        String datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a mostrar", 250);
+        String datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a mostrar: ", 250);
         if (mClientes.getClienteNif(datoCliente) == null) cliente = mClientes.getClienteEmail(datoCliente);
         else cliente = mClientes.getClienteNif(datoCliente);
         if (cliente == null) {
@@ -334,7 +334,6 @@ public class ControlClientes extends ControlBase {
             return;
         }
         vClientes.showCliente(cliente);
-        vClientes.showMensajePausa("", true);
     }
 
     /**
@@ -342,7 +341,10 @@ public class ControlClientes extends ControlBase {
      */
     public void showListClientes() {
         vClientes.showListClientes(getListaClientes());
-        vClientes.showMensajePausa("", true);
+    }
+
+    public void showListClientesNumerada() {
+        vClientes.showListClientesNumerada( getListaClientes());
     }
 
     /**

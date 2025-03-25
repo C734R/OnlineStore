@@ -15,3 +15,4 @@ module javalinos.onlinestore {
     opens javalinos.onlinestore to javafx.fxml;
     exports javalinos.onlinestore;
 }
+

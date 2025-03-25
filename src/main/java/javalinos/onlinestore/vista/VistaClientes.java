@@ -58,11 +58,12 @@ public class VistaClientes extends VistaBase {
      * Pide un Email
      * @return String devuelve el Email.
      */
-    public String askEmail() {
+    public String askEmail(boolean nuevo) {
         String email;
         int intentos = 0;
         while (intentos < 3) {
-            email = askString("Introduce el email: ", 50);
+            if (nuevo) email = askString("Introduce el nuevo email: ", 50);
+            else email = askString("Introduce el email: ", 50);
             if (checkEmail(email)) return email;
             else {
                 if (intentos < 2) showMensaje("El email introducido es erróneo. Vuelve a intentarlo.", true);
@@ -111,6 +112,10 @@ public class VistaClientes extends VistaBase {
      */
     public void showListClientes(List<Cliente> clientes) {
         showListGenerica(clientes,"CLIENTES", true, false);
+    }
+
+    public void showListClientesNumerada(List<Cliente> clientes) {
+        showListGenerica(clientes,"CLIENTES NUMERADOS", true, true);
     }
 
     /**
