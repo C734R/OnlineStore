@@ -29,7 +29,7 @@ public class VistaArticulos extends VistaBase {
         int intentos = 0;
         while (intentos < 3) {
             try {
-                showMensaje("Introduce el precio de la excursión de " + min + "€ a " + max + "€: ", true);
+                showMensaje("Introduce el precio del articulo de " + min + "€ a " + max + "€: ", true);
                 numero = scanner.nextFloat();
                 if (numero >= min && numero <= max) return numero;
                 else
