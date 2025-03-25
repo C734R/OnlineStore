@@ -7,12 +7,12 @@ public class Articulo {
     private Float preparacion; // días!
     private Integer stock;
 
-    public Articulo(String codigo, String descripcion, Float precio, Float preparacion) {
+    public Articulo(String codigo, String descripcion, Float precio, Float preparacion, Integer stock) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
         this.preparacion = preparacion;
-        this.stock = 0;
+        this.stock = stock;
     }
 //constructor con sobrecarga
     public Articulo() {
@@ -65,10 +65,10 @@ public class Articulo {
 
     @Override
     public String toString() {
-        return  "Código: " + codigo + "\n" +
+        return  "\nCódigo: " + codigo + "\n" +
                 "Descripcion: " + descripcion + "\n" +
-                "Precio" + precio + " €\n" +
+                "Precio " + precio + " €\n" +
                 "Tiempo de preparacion: " + preparacion + " días\n" +
-                "Stock: " + stock + " unidades";
+                "Stock: " + stock + " unidades\n";
     }
 }
