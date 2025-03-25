@@ -130,22 +130,34 @@ public abstract class VistaBase {
         Scanner scanner = new Scanner(System.in);
         float _float;
         int intentos = 0;
-        if(!reintentar) intentos = 2;
-        while(intentos < 3) {
+        int maxIntentosPermitidos;
+
+        // Ponemos un numero maximo de intentos de hasta 3 veces
+        if (maxIntentos) {
+            maxIntentosPermitidos = 3;
+        } else {
+            maxIntentosPermitidos = 1000; // ponemos un nuemro que sea grande pero no llegaremos nunca a esto
+        }
+
+        while (intentos < maxIntentosPermitidos) {
             try {
-                showMensaje(mensaje + " (entre " + min + " y " + max + "): ", true);
+                System.out.print(mensaje + " (entre " + min + " y " + max + "): ");
                 _float = scanner.nextFloat();
-                if (_float >= min && _float <= max) return _float;
-                else if(reintentar) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
-                if (maxIntentos) intentos++;
-            }
-            catch (InputMismatchException e) {
-                if(reintentar) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
-                if (maxIntentos) intentos++;
+
+                if (_float >= min && _float <= max) {
+                    return _float;
+                }
+
+                System.out.println("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".");
+            } catch (InputMismatchException e) {
+                System.out.println("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".");
                 scanner.next();
             }
+
+            intentos++;
         }
-        if(reintentar) showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...",true);
+
+        System.out.println("Error. Has sobrepasado el número de intentos. Volviendo...");
         return -99999.0f;
     }
 
