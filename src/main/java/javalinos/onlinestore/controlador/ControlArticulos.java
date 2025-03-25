@@ -110,7 +110,7 @@ public class ControlArticulos extends ControlBase {
         }
 
         // Mostramos la lista de artículos para eliminar
-        vArticulos.showMensaje("Selecciona un artículo para eliminar:", false);
+        vArticulos.showMensaje("Selecciona un artículo para eliminar:\n", false);
         for (int i = 0; i < articulos.size(); i++) {
             vArticulos.showMensaje((i + 1) + ". " + articulos.get(i).getCodigo() + " - " + articulos.get(i).getDescripcion() + "\n", false);
         }
