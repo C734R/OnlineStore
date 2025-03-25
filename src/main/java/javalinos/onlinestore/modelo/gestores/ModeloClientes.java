@@ -15,7 +15,7 @@ public class ModeloClientes {
     }
 
     public ModeloClientes() {
-        clientes = new ArrayList<Cliente>();
+        clientes = new ArrayList<>();
     }
 
     //*************************** Getters & Setters ***************************//
@@ -39,12 +39,17 @@ public class ModeloClientes {
     }
 
     public Cliente getClienteIndex(int index) {
-        return clientes.get(index);
+        if (index >= 0 && index < clientes.size()) {
+            return clientes.get(index);
+        }
+        return null; // Retorna null si el índice está fuera de rango
     }
 
     public void updateCliente(Cliente clienteOld, Cliente clienteNew) {
         int index = this.clientes.indexOf(clienteOld);
-        clientes.set(index,clienteNew);
+        if (index != -1) {
+            clientes.set(index, clienteNew);
+        }
     }
 
     //*************************** Obtener datos ***************************//
@@ -72,7 +77,7 @@ public class ModeloClientes {
     }
 
     public List<Cliente> getClientesCategoria(Categoria categoria) {
-        if(clientes.isEmpty()) return null;
+        if (clientes.isEmpty()) return null;
         List<Cliente> clientesCategoria = new ArrayList<>();
         for (Cliente cliente : clientes) {
             if (cliente.getCategoria().equals(categoria)) {
@@ -83,29 +88,32 @@ public class ModeloClientes {
     }
 
     public Categoria getCategoria(int opcion) {
-        return switch (opcion) {
-            case 1 -> Categoria.ESTANDAR;
-            case 2 -> Categoria.PREMIUM;
-            default -> null;
-        };
+        switch (opcion) {
+            case 1:
+                return Categoria.ESTANDAR;
+            case 2:
+                return Categoria.PREMIUM;
+            default:
+                return null; // Opción no válida
+        }
     }
 
     /**
      * Devuelve el número del último cliente.
-     * @return int devuelve el número del último cliente.
+     * @return int devuelve el número del último cliente, o -1 si la lista está vacía.
      */
     public int getLastIndexCliente() {
-        if(clientes.isEmpty()) return -1;
-        return clientes.indexOf(clientes.getLast());
+        if (clientes.isEmpty()) return -1;
+        return clientes.size() - 1; // Último índice
     }
 
     /**
      * Devuelve el número del primer cliente.
-     * @return int devuelve el número del primer cliente.
+     * @return int devuelve el número del primer cliente, o -1 si la lista está vacía.
      */
     public int getFirstIndexCliente() {
-        if(clientes.isEmpty()) return -1;
-        return clientes.indexOf(clientes.getFirst());
+        if (clientes.isEmpty()) return -1;
+        return 0; // Primer índice
     }
 
     //*************************** Crear datos ***************************//
@@ -131,13 +139,10 @@ public class ModeloClientes {
                 addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", Categoria.PREMIUM));
 
                 return true;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 return false;
             }
         }
-        else {
-            return false;
-        }
+        return false;
     }
 }

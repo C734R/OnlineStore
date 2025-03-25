@@ -43,10 +43,10 @@ public class VistaClientes extends VistaBase {
         String nif;
         int intentos = 0;
         while (intentos < 3) {
-            nif = askNIF();
+            nif = askString("Introduce el NIF: ", 9);
             if (checkNIF(nif)) return nif;
             else {
-                if(intentos < 2) showMensaje("El DNI introducido es erróneo. Vuelve a intentarlo", true);
+                if (intentos < 2) showMensaje("El DNI introducido es erróneo. Vuelve a intentarlo", true);
                 intentos++;
             }
         }
@@ -62,11 +62,10 @@ public class VistaClientes extends VistaBase {
         String email;
         int intentos = 0;
         while (intentos < 3) {
-            System.out.print("Introduce el email: ");
-            email = askEmail();
+            email = askString("Introduce el email: ", 50);
             if (checkEmail(email)) return email;
             else {
-                if(intentos < 2) showMensaje("El email introducido es erróneo. Vuelve a intentarlo.", true);
+                if (intentos < 2) showMensaje("El email introducido es erróneo. Vuelve a intentarlo.", true);
                 intentos++;
             }
         }

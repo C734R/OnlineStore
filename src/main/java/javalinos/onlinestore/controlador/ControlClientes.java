@@ -215,6 +215,7 @@ public class ControlClientes extends ControlBase {
         clienteNew = clienteOld;
         oldNIF = clienteOld.getNif();
         newNIF = vClientes.askNIF();
+        clienteNew.setNif(newNIF);
         setCliente(clienteOld, clienteNew);
         showExitoMod("NIF",oldNIF,newNIF);
     }
@@ -252,13 +253,13 @@ public class ControlClientes extends ControlBase {
      * @return Cliente devolver cliente a modificar.
      */
     public Cliente askClienteModificar(){
-        String datoCliente = "";
+        String datoCliente;
         int intentos = 0;
         Cliente cliente = null;
         while (true) {
             showListClientes();
             datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar", 250);
-            if (mClientes.getClienteNif(datoCliente) == null) mClientes.getClienteEmail(datoCliente);
+            if (mClientes.getClienteNif(datoCliente) == null) cliente = mClientes.getClienteEmail(datoCliente);
             else cliente = mClientes.getClienteNif(datoCliente);
             intentos++;
             if (cliente == null) {
@@ -304,9 +305,7 @@ public class ControlClientes extends ControlBase {
      * @param indexCliente se le pasa el índice del cliente en la colección.
      * @return Cliente devuelve el cliente que corresponde al índice pasado.
      */
-    public Cliente getCliente (int indexCliente) {
-        return mClientes.getClienteIndex(-1);
-    }
+    public Cliente getCliente(int indexCliente) { return mClientes.getClienteIndex(indexCliente); }
 
     //*************************** Mostrar mensajes vista ***************************//
 
