@@ -74,6 +74,11 @@ public class VistaClientes extends VistaBase {
         return null;
     }
 
+    /**
+     * Pide como eliminar un cliente.
+     *
+     * @return Int con el metodo de eliminación
+     */
     public int askMetodoEliminar() {
         while (true) {
             showMetodosEliminar();
