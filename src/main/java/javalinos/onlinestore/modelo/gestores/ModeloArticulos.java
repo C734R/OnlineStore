@@ -22,6 +22,10 @@ public class ModeloArticulos {
         this.articulos = articulos;
     }
 
+    public Articulo getArticulo(int id) {
+        List<Articulo> articulos = getArticulos();
+        return articulos.get(id);
+    }
     // Como hacer el articulo a partir del codigo
     public Articulo makeArticulo(String descripcion, Float precio, Float preparacion, Integer stock) {
         String codigo;

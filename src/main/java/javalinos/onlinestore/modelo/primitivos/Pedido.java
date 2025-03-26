@@ -89,12 +89,15 @@ public class Pedido {
     public void setPrecio(Float precio) {
         this.precio = precio;
     }
+
     public Integer getDiasPreparacion() {
         return diasPreparacion;
     }
+
     public void setDiasPreparacion(Integer diasPreparacion) {
         this.diasPreparacion = diasPreparacion;
     }
+
     private Integer calcTotalPreparacion (Float preparacion, Integer cantidad) {
         return (int)Math.ceil(preparacion * cantidad);
     }
