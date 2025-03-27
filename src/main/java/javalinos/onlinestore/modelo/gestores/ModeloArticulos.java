@@ -12,7 +12,11 @@ public class ModeloArticulos {
         this.articulos = new ArrayList<>();
     }
 
-    // Array para listar el metodo de articulos
+    /**
+     * Devuelve una lista con todos los artículos
+     *
+     * @return Lista con todos los articulos
+     */
     public List<Articulo> getArticulos() {
         return articulos;
     }
@@ -22,11 +26,26 @@ public class ModeloArticulos {
         this.articulos = articulos;
     }
 
+    /**
+     * Devuelve un solo artículo
+     *
+     * @param id El id del artículo que se quiere devolver
+     * @return Articulo deseado
+     */
     public Articulo getArticulo(int id) {
         List<Articulo> articulos = getArticulos();
         return articulos.get(id);
     }
-    // Como hacer el articulo a partir del codigo
+
+    /**
+     * Crear un nuevo artículo
+     *
+     * @param descripcion Descripción del artículo
+     * @param precio Precio del artículo
+     * @param preparacion Tiempo de preparación del artículo
+     * @param stock Strock del artículo
+     * @return Articulo nuevo
+     */
     public Articulo makeArticulo(String descripcion, Float precio, Float preparacion, Integer stock) {
         String codigo;
 
@@ -39,14 +58,32 @@ public class ModeloArticulos {
         return new Articulo(codigo, descripcion, precio, preparacion, stock);
     }
 
+    /**
+     * Añadir artículo a la lista de artículos
+     *
+     * @param articulo El artículo que se va a añadir
+     * @return Boolean si se ha añadido bien o no
+     */
     public boolean addArticulo(Articulo articulo) {
         return this.articulos.add(articulo);
     }
 
+    /**
+     * Borrar un artículo
+     *
+     * @param articulo El artículo que se va a eliminar
+     * @return Boolean si se borra bien o no
+     */
     public boolean removeArticulo(Articulo articulo) {
         return this.articulos.remove(articulo);
     }
 
+    /**
+     * Carga de todos los artículos
+     *
+     * @param configuracion
+     * @return Boolena si se cargan bien o no
+     */
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {
             try {
@@ -69,6 +106,12 @@ public class ModeloArticulos {
         }
     }
 
+    /**
+     * Comprueba si existe un artículo
+     *
+     * @param codigo el codigo artículo del artículo que se va a comprobar
+     * @return Boolean si existe o no
+     */
     public boolean checkArticulo(String codigo) {
         for (Articulo articulo : articulos) {
             if (articulo.getCodigo().equals(codigo)) {

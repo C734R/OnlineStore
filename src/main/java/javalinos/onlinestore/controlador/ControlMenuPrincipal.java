@@ -9,6 +9,11 @@ public class ControlMenuPrincipal extends ControlBase {
 
     private VistaMenuPrincipal vMenuPrincipal;
 
+    /**
+     * Constructor de ControlMenuPrincipal
+     * @param mStore el ModelStore que va a utilizar
+     * @param vMenuPrincipal La vista que va a utilizar
+     */
     public ControlMenuPrincipal(ModeloStore mStore, VistaMenuPrincipal vMenuPrincipal) {
         super(mStore);
         this.vMenuPrincipal = vMenuPrincipal;
@@ -30,6 +35,11 @@ public class ControlMenuPrincipal extends ControlBase {
 
     //*************************** Menu principal ***************************//
 
+    /**
+     * Inicia el menú prinicpal
+     *
+     * @return Int en función de la opción seleccionada
+     */
     public int iniciar() {
         int opcion;
         while(true) {
@@ -57,13 +67,19 @@ public class ControlMenuPrincipal extends ControlBase {
 
     //*************************** Error precarga ***************************//
 
+    /**
+     * Error en la carga del menú
+     *
+     * @return Boolean en función de si da error
+     */
     public boolean errorPrecarga() {
         vMenuPrincipal.showMensajePausa("Error. Se ha producido un error en la precarga de datos.", true);
         return vMenuPrincipal.askBoolean("¿Deseas volver a intentarlo?", true, false);
     }
 
-    //*************************** Salir programa ***************************//
-
+    /**
+     * Salir del programa
+     */
     public void salir() {
         vMenuPrincipal.showMensaje("********* ¡¡Hasta pronto!! *********",true);
     }

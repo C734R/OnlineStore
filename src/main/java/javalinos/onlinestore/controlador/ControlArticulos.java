@@ -7,11 +7,20 @@ import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
 
+/**
+ * Clase ControlArticulos
+ */
 public class ControlArticulos extends ControlBase {
 
     private VistaArticulos vArticulos;
     private ModeloArticulos mArticulos;
 
+    /**
+     * Constructor ControlAtículos
+     *
+     * @param mStore ModeloStore para comunicación
+     * @param vistaArticulos VistaArtículos para comunicación
+     */
     public ControlArticulos(ModeloStore mStore, VistaArticulos vistaArticulos) {
         super(mStore);
         this.vArticulos = vistaArticulos;
@@ -22,14 +31,27 @@ public class ControlArticulos extends ControlBase {
         super();
     }
 
+    /**
+     * Devolver la vista artículos
+     *
+     * @return VistaArtículos
+     */
     public VistaArticulos getVistaArticulos() {
         return vArticulos;
     }
 
+    /**
+     * Cambiar vista artículos
+     *
+     * @param vistaArticulos La nueva vista artículos
+     */
     public void setVistaArticulos(VistaArticulos vistaArticulos) {
         this.vArticulos = vistaArticulos;
     }
 
+    /**
+     * Inicia el menú de gestión de artículos
+     */
     public void iniciar() {
         int opcion;
         while (true) {
@@ -55,6 +77,9 @@ public class ControlArticulos extends ControlBase {
         }
     }
 
+    /**
+     * Añadir un artículo
+     */
     public void addArticulo() {
         vArticulos.showMensaje("******** Añadir Artículo ********", true);
 
@@ -82,7 +107,9 @@ public class ControlArticulos extends ControlBase {
         }
     }
 
-    // Cómo eliminar el artículo. Seleccionamos array.
+    /**
+     * Eliminar un artículo
+     */
     public void removeArticulo() {
         vArticulos.showMensaje("******** Eliminar Artículo ********", true);
 
@@ -110,7 +137,10 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("Error al eliminar el artículo.", true);
         }
     }
-        // Queremos listar los articulos
+
+    /**
+     * Listar los artículos
+     */
     public void listArticulos() {
         vArticulos.showMensaje("******** Listar Artículos ********", true);
 
@@ -124,7 +154,13 @@ public class ControlArticulos extends ControlBase {
 
         vArticulos.showOptions(listToStr(articulos),0, true, false);
     }
-    // Cargamos los artículos.
+
+    /**
+     * Cargar los artículos del sistema
+     *
+     * @param configuracion
+     * @return Si se cargan bien o no
+     */
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {
             return this.getModeloStore().getModeloArticulos().loadArticulos(configuracion);

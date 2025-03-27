@@ -20,6 +20,11 @@ public class ModeloClientes {
 
     //*************************** Getters & Setters ***************************//
 
+    /**
+     * Devuelve lista con todos los clientes
+     *
+     * @return Lista con los clientes
+     */
     public List<Cliente> getClientes() {
         return clientes;
     }
@@ -30,14 +35,30 @@ public class ModeloClientes {
 
     //*************************** CRUD ***************************//
 
+    /**
+     * Añadir un cliente a la lista de todos los clientes
+     *
+     * @param cliente El cliente a añadir
+     */
     public void addCliente(Cliente cliente) {
         clientes.add(cliente);
     }
 
+    /**
+     * Elimianr un cliente
+     *
+     * @param cliente El cliente a eliminar
+     */
     public void removeCliente(Cliente cliente) {
         clientes.remove(cliente);
     }
 
+    /**
+     * Obtener el cliente de una lista
+     *
+     * @param index El cliente seleccionado de una lista numerica
+     * @return El cliente deseado
+     */
     public Cliente getClienteIndex(int index) {
         if (index >= 0 && index < clientes.size()) {
             return clientes.get(index);
@@ -45,6 +66,12 @@ public class ModeloClientes {
         return null; // Retorna null si el índice está fuera de rango
     }
 
+    /**
+     * Modificar a un cliente
+     *
+     * @param clienteOld Cliente antiguo
+     * @param clienteNew Nuevo cliente
+     */
     public void updateCliente(Cliente clienteOld, Cliente clienteNew) {
         int index = this.clientes.indexOf(clienteOld);
         if (index != -1) {
@@ -54,10 +81,21 @@ public class ModeloClientes {
 
     //*************************** Obtener datos ***************************//
 
+    /**
+     * Obtener cantidad de clientes
+     *
+     * @return Int con el numero de clientes
+     */
     public int sizeClientes() {
         return clientes.size();
     }
 
+    /**
+     * Obtener Cliente a partir del NIF
+     *
+     * @param nif NIF del cliente deseado
+     * @return Cliente con ese NIF
+     */
     public Cliente getClienteNif(String nif) {
         for (Cliente cliente : clientes) {
             if (cliente.getNif().equalsIgnoreCase(nif)) {
@@ -67,6 +105,12 @@ public class ModeloClientes {
         return null; // No encontrado
     }
 
+    /**
+     * Obtener Cliente a partir del correo
+     *
+     * @param email Email del cliente deseado
+     * @return El cliente con ese correo
+     */
     public Cliente getClienteEmail(String email) {
         for (Cliente cliente : clientes) {
             if (cliente.getEmail().equalsIgnoreCase(email)) {
@@ -76,6 +120,12 @@ public class ModeloClientes {
         return null; // No encontrado
     }
 
+    /**
+     * Obtener la lista de clientes según la categoria
+     *
+     * @param categoria La categoria de la que se quiere obtener la lista
+     * @return Lista con los clientes de esa categoria
+     */
     public List<Cliente> getClientesCategoria(Categoria categoria) {
         if (clientes.isEmpty()) return null;
         List<Cliente> clientesCategoria = new ArrayList<>();
@@ -87,6 +137,12 @@ public class ModeloClientes {
         return clientesCategoria;
     }
 
+    /**
+     * Obtener categoria por Int
+     *
+     * @param opcion La categoria que se quiere ver según un Int
+     * @return Categoria deseada
+     */
     public Categoria getCategoria(int opcion) {
         switch (opcion) {
             case 1:
@@ -118,10 +174,26 @@ public class ModeloClientes {
 
     //*************************** Crear datos ***************************//
 
+    /**
+     * Crear cliente
+     *
+     * @param nombre Nombre del cliente
+     * @param domicilio Domicilio del cliente
+     * @param nif NIF del cliente
+     * @param email Email del cliente
+     * @param categoria Categoria del cliente
+     * @return Cliente nuevo
+     */
     public Cliente makeCliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
         return new Cliente(nombre, domicilio, nif, email, categoria);
     }
 
+    /**
+     * Cargar los clientes existentes
+     *
+     * @param configuracion
+     * @return Boolean si se han cargado bien o no
+     */
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {
             try {

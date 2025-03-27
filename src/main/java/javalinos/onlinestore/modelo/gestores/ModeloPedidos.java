@@ -20,6 +20,11 @@ public class ModeloPedidos {
         this.pedidos = new ArrayList<Pedido>();
     }
 
+    /**
+     * Devuelve todos los pedidos
+     *
+     * @return Lista con todos los pedidos
+     */
     public List<Pedido> getPedidos() {
         return pedidos;
     }
@@ -28,6 +33,17 @@ public class ModeloPedidos {
         this.pedidos = pedidos;
     }
 
+    /**
+     * Crear nuevo pedido
+     *
+     * @param cliente Cliente que realiza el pedido
+     * @param articulo Artículo comprado en el pedido
+     * @param cantidad Cantidad comprada
+     * @param fechahora Fecha y hora del pedido
+     * @param envio Coste de envio del pedido
+     * @param precio Predo del pedido
+     * @return El nuevo pedido
+     */
     public Pedido makePedido(Cliente cliente, Articulo articulo, Integer cantidad, LocalDate fechahora, Float envio, Float precio) {
         int numPedido;
         if (pedidos.isEmpty()) numPedido = 1;
@@ -35,18 +51,40 @@ public class ModeloPedidos {
         return new Pedido(numPedido, cliente, articulo, cantidad, fechahora, envio, precio);
     }
 
+    /**
+     * Añadir pedido a la lista de pedidos
+     *
+     * @param pedido El pedido que se quiere añadir
+     */
     public void addPedido(Pedido pedido) {
         pedidos.add(pedido);
     }
 
+    /**
+     * Eliminar pedido
+     *
+     * @param pedido El pedido que se quiere eliminar
+     */
     public void removePedido(Pedido pedido) {
         pedidos.remove(pedido);
     }
 
+    /**
+     * Obtener un pedido por numero de pedido
+     *
+     * @param numero El número de pedido del pedido que se quiere obtener
+     * @return Pedido deseado
+     */
     public Pedido getPedidoNumero(int numero) {
         return pedidos.get(numero);
     }
 
+    /**
+     * Obtener pedidos de un cliente
+     *
+     * @param cliente El cliente del que se quieren ver los pedidos
+     * @return Lista con los pedidos del cliente
+     */
     public List<Pedido> getPedidosCliente(Cliente cliente) {
 
         if (pedidos.isEmpty()) return null;
@@ -62,6 +100,14 @@ public class ModeloPedidos {
         else return pedidos;
     }
 
+    /**
+     * Lista con pedidos pendientes de envio
+     *
+     * @param hoy Fecha de hoy
+     * @param enviado Boolean si se ha enviado o no
+     * @param cliente Cliente de que realiza los pedidos
+     * @return Lista con los pedidos pendientes envio
+     */
     public List<Pedido> getPedidosPendientesEnviados(LocalDate hoy, Boolean enviado, Cliente cliente) {
         List<Pedido> listaPedidos = new ArrayList<Pedido>();
         List<Pedido> listaPedidosSolicitados = new ArrayList<Pedido>();
@@ -95,14 +141,32 @@ public class ModeloPedidos {
         return listaPedidosSolicitados;
     }
 
+    /**
+     * Obtener úlitmo número de pedido
+     *
+     * @return Int con el último número de pedido
+     */
     public int getLastNumPedido() {
         return pedidos.getLast().getNumero();
     }
 
+    /**
+     * Obtener primer número de pedido
+     *
+     * @return Int con el primer número de pedido
+     */
     public int getFirstNumPedido() {
         return pedidos.getFirst().getNumero();
     }
 
+    /**
+     * Cargar los pedidos en el programa
+     *
+     * @param condiguracion
+     * @param clientes Cliente que realiza el pedido
+     * @param articulos Artículo comprado
+     * @return Boolean si ha cargado bien o no los pedidos
+     */
     public boolean loadPedidos(int condiguracion, List<Cliente> clientes, List<Articulo> articulos) {
         try {
             this.pedidos.clear();

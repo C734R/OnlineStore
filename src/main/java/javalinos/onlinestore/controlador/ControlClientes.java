@@ -8,6 +8,9 @@ import javalinos.onlinestore.vista.VistaClientes;
 
 import java.util.List;
 
+/**
+ * Clase control Clientes
+ */
 public class ControlClientes extends ControlBase {
 
     private VistaClientes vClientes;
