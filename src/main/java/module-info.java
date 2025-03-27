@@ -12,11 +12,10 @@ module javalinos.onlinestore {
     requires com.almasb.fxgl.all;
     requires java.desktop;
 
-    // 🚨 Añadido para habilitar pruebas con JUnit 5 (Jupiter)
-    opens javalinos.onlinestore to javafx.fxml, org.junit.jupiter.api;
-    opens javalinos.onlinestore.controlador to org.junit.jupiter.api;
-    opens javalinos.onlinestore.modelo.gestores to org.junit.jupiter.api;
-    opens javalinos.onlinestore.modelo.primitivos to org.junit.jupiter.api;
+    opens javalinos.onlinestore to javafx.fxml;
+    opens javalinos.onlinestore.controlador to javafx.fxml;
+    opens javalinos.onlinestore.modelo.gestores to javafx.fxml;
+    opens javalinos.onlinestore.modelo.primitivos to javafx.fxml;
 
     exports javalinos.onlinestore;
     exports javalinos.onlinestore.controlador;
