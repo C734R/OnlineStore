@@ -1,5 +1,3 @@
-package javalinos.onlinestore;
-
 import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.ModeloClientes;
 import javalinos.onlinestore.modelo.gestores.ModeloPedidos;

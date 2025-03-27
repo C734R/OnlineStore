@@ -1,5 +1,3 @@
-package javalinos.onlinestore;
-
 import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 import javalinos.onlinestore.modelo.primitivos.Articulo;
 import org.junit.jupiter.api.Test;
@@ -13,11 +11,13 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ModeloArticulosTest {
 
     ModeloArticulos mArticulos;
+    List<Articulo> articulos;
 
     @BeforeEach
     void setUp() {
         mArticulos = new ModeloArticulos();
-        assertTrue(mArticulos.loadArticulos(1));
+        testLoadArticulos();
+        articulos = mArticulos.getArticulos();
     }
     @AfterEach
     void tearDown() {
@@ -26,7 +26,8 @@ public class ModeloArticulosTest {
 
     @Test
     void testLoadArticulos() {
-        List<Articulo> articulos = mArticulos.getArticulos();
+        mArticulos.loadArticulos(0);
+        articulos = mArticulos.getArticulos();
         assertEquals(9, articulos.size());
     }
 
@@ -37,7 +38,8 @@ public class ModeloArticulosTest {
         assertEquals(15.45f, articulo.getPrecio(), 0.001);
         assertEquals(0.43f, articulo.getPreparacion(), 0.001);
         assertEquals(36, articulo.getStock());
-        assertSame(articulo, mArticulos.getArticulo(10));
+        mArticulos.addArticulo(articulo);
+        assertSame(articulo, mArticulos.getArticulo(9));
     }
 
     @Test
