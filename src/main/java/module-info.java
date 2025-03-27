@@ -2,10 +2,7 @@ module javalinos.onlinestore {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-
-    requires java.base;
-    requires org.junit.jupiter.api;
-    requires org.junit.platform.commons;
+    requires java.desktop;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
@@ -14,7 +11,6 @@ module javalinos.onlinestore {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires java.desktop;
 
     opens javalinos.onlinestore to javafx.fxml;
     opens javalinos.onlinestore.controlador to javafx.fxml;
