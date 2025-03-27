@@ -3,6 +3,10 @@ module javalinos.onlinestore {
     requires javafx.fxml;
     requires javafx.web;
 
+    requires java.base;
+    requires org.junit.jupiter.api;
+    requires org.junit.platform.commons;
+
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
