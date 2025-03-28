@@ -107,21 +107,24 @@ class ModeloPedidosTest {
 
     @Test
     void getPedidosPendientesEnviadosTest() {
-        LocalDate fechaReferencia = LocalDate.now().plusDays(10);
-        List<Pedido> pendientes = mPedidos.getPedidosPendientesEnviados(fechaReferencia, false, null);
-        List<Pedido> enviados = mPedidos.getPedidosPendientesEnviados(fechaReferencia, true, null);
+        LocalDate hoy = LocalDate.now();
+
+        List<Pedido> pendientes = mPedidos.getPedidosPendientesEnviados(false, null);
+        List<Pedido> enviados = mPedidos.getPedidosPendientesEnviados(true, null);
 
         assertNotNull(pendientes);
         assertNotNull(enviados);
 
         for (Pedido p : pendientes) {
             LocalDate fechaEnvio = p.getFechahora().plusDays(p.getDiasPreparacion());
-            assertTrue(fechaReferencia.isBefore(fechaEnvio) || fechaReferencia.isEqual(fechaEnvio));
+            assertTrue(hoy.isBefore(fechaEnvio) || hoy.isEqual(fechaEnvio),
+                    "Pedido pendiente tiene fecha de envío pasada");
         }
 
         for (Pedido p : enviados) {
             LocalDate fechaEnvio = p.getFechahora().plusDays(p.getDiasPreparacion());
-            assertTrue(fechaReferencia.isAfter(fechaEnvio));
+            assertTrue(hoy.isAfter(fechaEnvio),
+                    "Pedido enviado aún no ha superado su fecha de envío");
         }
     }
 

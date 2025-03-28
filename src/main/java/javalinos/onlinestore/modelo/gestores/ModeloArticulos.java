@@ -106,7 +106,7 @@ public class ModeloArticulos {
      * @param preparacion Tiempo de preparación del artículo
      * @return Articulo - Artículo nuevo
      */
-    public Articulo makeArticulo(String descripcion, Float precio, Float preparacion) {
+    public Articulo makeArticulo(String descripcion, Float precio, Integer preparacion) {
         String codigo;
         if (articulos.isEmpty()) codigo = "ART000";
         else {
@@ -126,31 +126,31 @@ public class ModeloArticulos {
             try {
                 articulos.clear();
                 Articulo articuloTemp = new Articulo();
-                articuloTemp = makeArticulo("Guitarra española de juguete.", 6f, 0.05f);
+                articuloTemp = makeArticulo("Guitarra española de juguete.", 6f, 50);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 5);
-                articuloTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 0.08f);
+                articuloTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 100);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 9);
-                articuloTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 0.10f);
+                articuloTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 70);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 14);
-                articuloTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 0.07f);
+                articuloTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 30);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 20);
-                articuloTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 0.06f);
+                articuloTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 200);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 8);
-                articuloTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 0.06f);
+                articuloTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 25);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 10);
-                articuloTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 0.05f);
+                articuloTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 1000);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 12);
-                articuloTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 0.04f);
+                articuloTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 450);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 14);
-                articuloTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 0.08f);
+                articuloTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 245);
                 addArticulo(articuloTemp);
                 addStockArticulo(articuloTemp, 20);
                 return true;

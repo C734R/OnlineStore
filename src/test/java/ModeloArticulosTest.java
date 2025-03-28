@@ -32,16 +32,16 @@ public class ModeloArticulosTest {
 
     @Test
     void testMakeArticulo() {
-        Articulo articulo = mArticulos.makeArticulo("Prueba", 15.45f, 0.43f);
+        Articulo articulo = mArticulos.makeArticulo("Prueba", 15.45f, 300);
         assertEquals("Prueba", articulo.getDescripcion());
-        assertEquals(15.45f, articulo.getPrecio(), 0.001);
-        assertEquals(0.43f, articulo.getPreparacion(), 0.001);
+        assertEquals(15.45f, articulo.getPrecio());
+        assertEquals(300, articulo.getMinutosPreparacion());
         assertTrue(articulo.getCodigo().startsWith("ART"));
     }
 
     @Test
     void testAddArticuloAndStock() {
-        Articulo nuevo = mArticulos.makeArticulo("Prueba", 12.5f, 0.2f);
+        Articulo nuevo = mArticulos.makeArticulo("Prueba", 12.5f, 50);
         mArticulos.addArticulo(nuevo);
         mArticulos.addStockArticulo(nuevo, 7);
 
@@ -54,7 +54,7 @@ public class ModeloArticulosTest {
 
     @Test
     void testRemoveArticuloAndStock() {
-        Articulo articulo = mArticulos.getArticulos().get(0);
+        Articulo articulo = mArticulos.getArticulos().getFirst();
         mArticulos.removeArticulo(articulo);
         mArticulos.removeStockArticulo(articulo);
 
@@ -65,7 +65,7 @@ public class ModeloArticulosTest {
     @Test
     void testUpdateArticulo() {
         Articulo articuloOld = mArticulos.getArticulos().getFirst();
-        Articulo articuloNew = new Articulo(articuloOld.getCodigo(), "Nuevo nombre", 99.99f, 1.5f);
+        Articulo articuloNew = new Articulo(articuloOld.getCodigo(), "Nuevo nombre", 99.99f, 60);
         mArticulos.updateArticulo(articuloOld, articuloNew);
 
         Articulo obtenido = mArticulos.getArticuloIndex(0);

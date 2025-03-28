@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import static javalinos.onlinestore.utils.Utilidades.listToStr;
+
 public class VistaPedidos extends VistaBase {
 
     public VistaPedidos() {
@@ -37,9 +39,17 @@ public class VistaPedidos extends VistaBase {
      * @param pedidos Lista de pedidos
      * @param cliente Filtro de clientes
      */
-    public void showListPedidos(List<Pedido> pedidos, Cliente cliente) {
-        if (cliente == null) showListGenerica(pedidos, "LISTA DE PEDIDOS", true, false);
-        else showListGenerica(pedidos, "LISTA DE PEDIDOS DEL CLIENTE " + pedidos.getFirst().getCliente().getNombre(), true, false);
+    public void showListPedidos(List<Pedido> pedidos, Cliente cliente, boolean opcion) {
+        if (cliente == null) {
+            showMensaje("******************* LISTA DE PEDIDOS *******************", true);
+            showOptions(listToStr(pedidos), 0, true, false, opcion);
+            showMensaje("********************************************************", true);
+        }
+        else {
+            showMensaje("******************* LISTA DE PEDIDOS DEL CLIENTE  " + pedidos.getFirst().getCliente().getNombre() + " *******************", true);
+            showOptions(listToStr(pedidos), 0, true, false, opcion);
+            showMensaje("********************************************************", true);
+        }
     }
 
     /**

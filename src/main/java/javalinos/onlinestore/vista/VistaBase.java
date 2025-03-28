@@ -123,12 +123,12 @@ public abstract class VistaBase {
         return -99999f;
     }
 
-        /**
-         * Pide una cadena.
-         * @param mensaje recibe el mensaje.
-         * @param longitud recibe la longitud.
-         * @return String devuelve la cadena.
-         */
+    /**
+     * Pide una cadena.
+     * @param mensaje recibe el mensaje.
+     * @param longitud recibe la longitud.
+     * @return String devuelve la cadena.
+     */
     public String askString(String mensaje, int longitud) {
         int intentos = 0;
         Scanner scanner = new Scanner(System.in);
@@ -151,6 +151,13 @@ public abstract class VistaBase {
         return null;
     }
 
+    /**
+     * Pide una respuesta sí o no y devuelve true o false
+     * @param mensaje se le pasa el mensaje a mostrar
+     * @param reintentar se indica si se desea que haya reintentos
+     * @param maxIntentos se indica si se desea que haya un máximo de intentos
+     * @return devuelve el valor de la respuesta.
+     */
     public Boolean askBoolean(String mensaje, boolean reintentar, boolean maxIntentos) {
         showMensaje(mensaje,true);
         showMensaje("1. Sí", true);

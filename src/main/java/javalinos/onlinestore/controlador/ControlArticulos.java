@@ -7,8 +7,6 @@ import javalinos.onlinestore.vista.VistaArticulos;
 import javalinos.onlinestore.modelo.primitivos.Articulo;
 import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 
-import static javalinos.onlinestore.utils.Utilidades.listToStr;
-
 /**
  * Clase ControlArticulos
  */
@@ -69,7 +67,7 @@ public class ControlArticulos extends ControlBase {
                     removeArticulo();
                     break;
                 case 3:
-                    listArticulos();
+                    showListArticulos();
                     break;
                 case 4:
                     updateArticulo();
@@ -87,10 +85,6 @@ public class ControlArticulos extends ControlBase {
         }
     }
 
-    private void showStockArticulos(Map<Articulo, Integer> stockArticulos) {
-        vArticulos.showStockArticulos(stockArticulos);
-    }
-
     //*************************** CRUD ***************************//
     /**
      * Añadir un artículo
@@ -105,7 +99,7 @@ public class ControlArticulos extends ControlBase {
         if(descripcion == null) return;
         float precio = vArticulos.askPrecio(0.0f, 9999.0f);
         if(precio == -99999f) return;
-        Float preparacion = vArticulos.askFloat("Introduce los días de preparación del artículo", 0.01f, 10.0f, true, false);
+        int preparacion = vArticulos.askInt("Introduce los minutos de preparación del artículo", 1, 9999, true, false);
         if(preparacion == -99999f) return;
         int stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false);
         if(stock == -99999) return;
@@ -173,8 +167,8 @@ public class ControlArticulos extends ControlBase {
         if (precio != null) articuloNew.setPrecio(precio);
 
         // Días de preparación
-        Float preparacion = vArticulos.askFloatOpcional("Días de preparación actuales: " + articuloOld.getPreparacion(), 0.01f, 10.0f);
-        if (preparacion != null) articuloNew.setPreparacion(preparacion);
+        Integer minutosPreparacion = vArticulos.askIntOpcional("Minutos de preparación actuales: " + articuloOld.getMinutosPreparacion(), 1, 9999);
+        if (minutosPreparacion != null) articuloNew.setMinutosPreparacion(minutosPreparacion);
 
         // Stock
         Integer stock = vArticulos.askIntOpcional("Stock actual: " + mArticulos.getStockArticulo(articuloOld), 0, 999);
@@ -186,13 +180,13 @@ public class ControlArticulos extends ControlBase {
         vArticulos.showMensajePausa("Artículo y stock actualizado correctamente.", true);
     }
 
-    //*************************** Obtener listas ***************************//
+    //*************************** Mostrar listados ***************************//
 
 
     /**
-     * Listar los artículos
+     * Mostrar listado de artículos.
      */
-    public void listArticulos() {
+    public void showListArticulos() {
         vArticulos.showMensaje("******** Listar Artículos ********", true);
 
         List<Articulo> articulos = mArticulos.getArticulos();
@@ -203,6 +197,14 @@ public class ControlArticulos extends ControlBase {
 
         vArticulos.showMensaje("Lista de artículos disponibles:", true);
         vArticulos.showListArticulos(articulos);
+    }
+
+    /**
+     * Mostrar stock disponible
+     * @param stockArticulos mapeado de artículo - stock.
+     */
+    private void showStockArticulos(Map<Articulo, Integer> stockArticulos) {
+        vArticulos.showStockArticulos(stockArticulos);
     }
 
     /**

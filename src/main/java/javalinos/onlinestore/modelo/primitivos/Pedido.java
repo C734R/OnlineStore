@@ -32,7 +32,7 @@ public class Pedido {
         this.fechahora = fechahora;
         this.envio = envio;
         this.precio = precio;
-        this.diasPreparacion = calcTotalPreparacion(articulo.getPreparacion(), cantidad);
+        this.diasPreparacion = calcTotalPreparacion(articulo.getMinutosPreparacion(), cantidad);
     }
 
     public Pedido() {
@@ -96,7 +96,7 @@ public class Pedido {
 
     /**
      * Devuelve el artículo de un pedido
-     * @return Articulo del pedido
+     * @return Artículo del pedido
      */
     public Articulo getArticulo() {
         return articulo;
@@ -191,13 +191,16 @@ public class Pedido {
     }
 
     /**
-     * Calculo total de los días de preparación del pedido
-     * @param preparacion Tiempo de preparación
+     * Cálculo total de los días de preparación del pedido.
+     * Convierte los minutos a días, redondeando hacia arriba, con mínimo de 1 día.
+     * @param minutosPreparacion Tiempo de preparación en minutos por unidad
      * @param cantidad Cantidad comprada
      * @return Integer con los días de preparación del pedido
      */
-    private Integer calcTotalPreparacion (Float preparacion, Integer cantidad) {
-        return (int)Math.ceil(preparacion * cantidad);
+    private Integer calcTotalPreparacion(Integer minutosPreparacion, Integer cantidad) {
+        int totalMinutos = minutosPreparacion * cantidad;
+        double dias = (double) totalMinutos / (60 * 24);
+        return Math.max(1, (int) Math.ceil(dias));
     }
 
     /**

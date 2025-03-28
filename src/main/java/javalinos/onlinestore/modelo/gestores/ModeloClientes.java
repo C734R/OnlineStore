@@ -10,12 +10,12 @@ public class ModeloClientes {
 
     private List<Cliente> clientes;
 
-    public ModeloClientes(List<Cliente> clientes) {
-        this.clientes = clientes;
-    }
-
     public ModeloClientes() {
         clientes = new ArrayList<>();
+    }
+
+    public ModeloClientes(List<Cliente> clientes) {
+        this.clientes = clientes;
     }
 
     //*************************** Getters & Setters ***************************//

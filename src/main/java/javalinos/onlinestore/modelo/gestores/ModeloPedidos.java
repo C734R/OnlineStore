@@ -12,12 +12,12 @@ public class ModeloPedidos {
 
     private List<Pedido> pedidos;
 
-    public ModeloPedidos(List<Pedido> pedidos) {
-        this.pedidos = pedidos;
-    }
-
     public ModeloPedidos() {
         this.pedidos = new ArrayList<Pedido>();
+    }
+
+    public ModeloPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
     }
 
     //*************************** Getters & Setters ***************************//
@@ -112,41 +112,48 @@ public class ModeloPedidos {
     }
 
     /**
-     * Lista con pedidos pendientes de envío
-     * @param hoy Fecha de hoy
-     * @param enviado Boolean si se ha enviado o no
-     * @param cliente Cliente de que realiza los pedidos
-     * @return Lista con los pedidos pendientes envío
+     * Lista con pedidos enviados o pendientes de envío.
+     * @param enviado true para pedidos enviados, false para pendientes
+     * @param cliente Cliente que realiza los pedidos
+     * @return Lista de pedidos filtrados por estado y cliente
      */
-    public List<Pedido> getPedidosPendientesEnviados(LocalDate hoy, Boolean enviado, Cliente cliente) {
-        List<Pedido> listaPedidos;
-        List<Pedido> listaPedidosSolicitados = new ArrayList<>();
+    public List<Pedido> getPedidosPendientesEnviados(Boolean enviado, Cliente cliente) {
+        List<Pedido> listaFiltrada = new ArrayList<>();
 
-        if (pedidos.isEmpty()) return null;
         if (cliente != null) {
-            List<Pedido> pedidosCliente = new ArrayList<>();
             for (Pedido pedido : pedidos) {
                 if (pedido.getCliente().equals(cliente)) {
-                    pedidosCliente.add(pedido);
+                    listaFiltrada.add(pedido);
                 }
             }
-            listaPedidos = pedidosCliente;
-        }
-        else listaPedidos = pedidos;
-
-        for (Pedido pedido : listaPedidos) {
-            LocalDate fechaPedido = pedido.getFechahora();
-            Float preparacionFloat = pedido.getArticulo().getPreparacion();
-            int diasPreparacion = (int) Math.ceil(preparacionFloat * pedido.getCantidad());
-            if (!enviado & hoy.isBefore(fechaPedido.plusDays(diasPreparacion))) {
-                listaPedidosSolicitados.add(pedido);
-            }
-            else if (enviado & hoy.isAfter(pedido.getFechahora().plusDays(diasPreparacion))) {
-                listaPedidosSolicitados.add(pedido);
-            }
+        } else {
+            listaFiltrada = pedidos;
         }
 
-        return listaPedidosSolicitados;
+        List<Pedido> resultado = new ArrayList<>();
+
+        for (Pedido pedido : listaFiltrada) {
+            boolean estaEnviado = checkEnviado(pedido);
+
+            if (enviado && estaEnviado) {
+                resultado.add(pedido);
+            } else if (!enviado && !estaEnviado) {
+                resultado.add(pedido);
+            }
+        }
+
+        return resultado;
+    }
+
+    /**
+     * Comprueba si se ha enviado un pedido
+     * @param pedido el pedido que se va a comprobar
+     * @return Boolean con si se ha enviado o no
+     */
+    public boolean checkEnviado(Pedido pedido) {
+        LocalDate hoy = LocalDate.now();
+        LocalDate finPreparacion = pedido.getFechahora().plusDays(pedido.getDiasPreparacion());
+        return hoy.isAfter(finPreparacion);
     }
 
     /**
@@ -182,13 +189,12 @@ public class ModeloPedidos {
     }
 
     private float calcPrecioTotal(Articulo articulo, int stockComprado, float precioEnvio, Cliente cliente) {
-        return (articulo.getPrecio() * stockComprado + calcEnvioTotal(stockComprado, precioEnvio)) * (((100f - (100f * cliente.getDescuento())) / 100f));
+        return (((articulo.getPrecio() * stockComprado) + calcEnvioTotal(stockComprado, precioEnvio))) * (((100f - (100f * cliente.getDescuento())) / 100f));
     }
 
     public Float calcEnvioTotal(Integer cantidad, Float precioEnvio) {
         return precioEnvio + (1.05f * cantidad);
     }
-
 
     /**
      * Cargar los pedidos en el programa

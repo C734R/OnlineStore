@@ -58,6 +58,7 @@ public class ControlPedidos extends ControlBase{
     public void setPrecioEnvio(float precioEnvio) {
         this.precioEnvio = precioEnvio;
     }
+
     //*************************** Menu gestión pedidos ***************************//
 
     /**
@@ -81,15 +82,12 @@ public class ControlPedidos extends ControlBase{
                     break;
                 case 4:
                     showListPedidos(askFiltrarCliente(0));
-                    vPedidos.showMensajePausa("", true);
                     break;
                 case 5:
                     showListPedidosPendientesEnviados(askFiltrarCliente(2), false);
-                    vPedidos.showMensajePausa("", true);
                     break;
                 case 6:
                     showListPedidosPendientesEnviados(askFiltrarCliente(1), true);
-                    vPedidos.showMensajePausa("", true);
                     break;
                 case 0:
                     vPedidos.showMensaje("Volviendo al menú principal...", true);
@@ -141,19 +139,20 @@ public class ControlPedidos extends ControlBase{
      * Metodo para eliminar pedidos
      */
     public void removePedidos() {
-        List<Pedido> pedidos = mPedidos.getPedidos();
+        List<Pedido> pedidos = mPedidos.getPedidosPendientesEnviados(false, null);
         Map<Articulo,Integer> stockArticulos = mArticulos.getStockArticulos();
         if (pedidos.isEmpty()) {
             vPedidos.showMensajePausa("Error. No existen pedidos a eliminar.", true);
             return;
         }
-        showPedidos( null);
-        int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, mPedidos.getLastNumPedido(), true, true);
+        vPedidos.showListPedidos(pedidos,null, true);
+        int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true);
         if(numPedidoBorrar == -99999) return;
-        Pedido pedido = mPedidos.getPedido(numPedidoBorrar);
+        Pedido pedido = pedidos.get(numPedidoBorrar-1);
+
         Articulo articulo = pedido.getArticulo();
         mPedidos.removePedido(pedido);
-        mArticulos.updateStockArticulo(articulo, stockArticulos.get(articulo) - pedido.getCantidad());
+        mArticulos.updateStockArticulo(articulo, stockArticulos.get(articulo) + pedido.getCantidad());
         vPedidos.showMensajePausa("El pedido ha sido eliminado correctamente.", true);
     }
 
@@ -162,14 +161,14 @@ public class ControlPedidos extends ControlBase{
      */
     public void updatePedido() {
         vPedidos.showMensaje("******** Modificar Pedido ********", true);
-        List<Pedido> pedidos = mPedidos.getPedidos();
+        List<Pedido> pedidos = mPedidos.getPedidosPendientesEnviados(false, null);
         Map<Articulo,Integer> stockArticulos= mArticulos.getStockArticulos();
         if (pedidos.isEmpty()) {
             vPedidos.showMensajePausa("No hay pedidos disponibles para modificar.", true);
             return;
         }
 
-        vPedidos.showListPedidos(pedidos, null);
+        vPedidos.showListPedidos(pedidos, null, true);
         int seleccion = vPedidos.askInt("Selecciona el número del pedido a modificar", 1, pedidos.size(), true, true);
         if (seleccion == -99999) return;
 
@@ -210,31 +209,34 @@ public class ControlPedidos extends ControlBase{
             }
         }
         else pedidos = mPedidos.getPedidos();
-        vPedidos.showListPedidos(pedidos, cliente);
+        vPedidos.showListPedidos(pedidos, cliente, false);
     }
 
     /**
-     * Muestra por pantalla los pedidos pendientes de enviar
-     * @param cliente El cliente por el que se quiere filtrar
+     * Muestra por pantalla los pedidos pendientes o enviados.
+     * @param cliente Cliente por el que se quiere filtrar (puede ser null)
+     * @param enviado true si se buscan pedidos enviados, false si pendientes
      */
     public void showListPedidosPendientesEnviados(Cliente cliente, boolean enviado) {
-        List<Pedido> pedidos = new ArrayList<>();
         if (mPedidos.getPedidos().isEmpty()) {
             vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
             return;
         }
-        if(cliente != null) {
-            pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), enviado, cliente);
-            if (pedidos.isEmpty()) {
-                if (enviado) {
-                    vPedidos.showMensaje("No hay pedidos enviados registrados para este cliente.", true);
-                }
-                else vPedidos.showMensaje("No hay pedidos pendientes registrados para este cliente.", true);
-                return;
+
+        List<Pedido> pedidos = mPedidos.getPedidosPendientesEnviados(enviado, cliente);
+
+        if (pedidos.isEmpty()) {
+            if (enviado) {
+                vPedidos.showMensaje("No hay pedidos enviados registrados" +
+                        (cliente != null ? " para este cliente." : "."), true);
+            } else {
+                vPedidos.showMensaje("No hay pedidos pendientes registrados" +
+                        (cliente != null ? " para este cliente." : "."), true);
             }
+            return;
         }
-        if(cliente == null) pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), enviado, null);
-        vPedidos.showListPedidos(pedidos,cliente);
+
+        vPedidos.showListPedidos(pedidos, cliente, false);
     }
 
     /**
@@ -338,9 +340,7 @@ public class ControlPedidos extends ControlBase{
      * @return Boolean con si se ha enviado o no
      */
     private boolean checkEnviado(Pedido pedido) {
-        LocalDate fechaHoy = LocalDate.now();
-        LocalDate fechaEnvio = pedido.getFechahora().plusDays(pedido.getDiasPreparacion());
-        return fechaHoy.isAfter(fechaEnvio);
+        return mPedidos.checkEnviado(pedido);
     }
 
     /**

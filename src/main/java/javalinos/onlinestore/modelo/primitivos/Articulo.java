@@ -7,7 +7,7 @@ public class Articulo {
     private String codigo;
     private String descripcion;
     private Float precio;
-    private Float preparacion; // días!
+    private Integer minutosPreparacion; // días!
 
     /**
      * Constructor de un artículo.
@@ -15,13 +15,13 @@ public class Articulo {
      * @param codigo Codigo de artículo
      * @param descripcion Descripción de un artículo
      * @param precio Precio del artículo
-     * @param preparacion Tiempo de preparación de un artículo
+     * @param minutosPreparacion Tiempo de preparación de un artículo
      */
-    public Articulo(String codigo, String descripcion, Float precio, Float preparacion) {
+    public Articulo(String codigo, String descripcion, Float precio, Integer minutosPreparacion) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.preparacion = preparacion;
+        this.minutosPreparacion = minutosPreparacion;
     }
 
     /**
@@ -31,7 +31,7 @@ public class Articulo {
         this.codigo = "";
         this.descripcion = "";
         this.precio = 0.0f;
-        this.preparacion = null;
+        this.minutosPreparacion = null;
     }
 
     /**
@@ -41,7 +41,7 @@ public class Articulo {
         this.codigo = articulo.getCodigo();
         this.descripcion = articulo.getDescripcion();
         this.precio = articulo.getPrecio();
-        this.preparacion = articulo.getPreparacion();
+        this.minutosPreparacion = articulo.getMinutosPreparacion();
     }
 
     /**
@@ -103,17 +103,17 @@ public class Articulo {
      *
      * @return Float con el tiempo de preparación del artículo
      */
-    public Float getPreparacion() {
-        return preparacion;
+    public Integer getMinutosPreparacion() {
+        return minutosPreparacion;
     }
 
     /**
      * Cambia el tiempo de preparación del artículo
      *
-     * @param preparacion El nuevo tiempo de preparación
+     * @param minutosPreparacion El nuevo tiempo de preparación
      */
-    public void setPreparacion(Float preparacion) {
-        this.preparacion = preparacion;
+    public void setMinutosPreparacion(Integer minutosPreparacion) {
+        this.minutosPreparacion = minutosPreparacion;
     }
 
     /**
@@ -126,6 +126,6 @@ public class Articulo {
         return  "Código: " + codigo + "\n" +
                 "Descripción: " + descripcion + "\n" +
                 "Precio " + precio + " €\n" +
-                "Tiempo de preparacion: " + preparacion + " días";
+                "Tiempo de preparacion: " + minutosPreparacion + " minutos";
     }
 }
