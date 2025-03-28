@@ -1,5 +1,7 @@
 package javalinos.onlinestore.controlador;
 import java.util.List;
+import java.util.Map;
+
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaArticulos;
 import javalinos.onlinestore.modelo.primitivos.Articulo;
@@ -17,7 +19,6 @@ public class ControlArticulos extends ControlBase {
 
     /**
      * Constructor ControlAtículos
-     *
      * @param mStore ModeloStore para comunicación
      * @param vistaArticulos VistaArtículos para comunicación
      */
@@ -31,9 +32,10 @@ public class ControlArticulos extends ControlBase {
         super();
     }
 
+    //*************************** Getters & Setters ***************************//
+
     /**
      * Devolver la vista artículos
-     *
      * @return VistaArtículos
      */
     public VistaArticulos getVistaArticulos() {
@@ -42,13 +44,14 @@ public class ControlArticulos extends ControlBase {
 
     /**
      * Cambiar vista artículos
-     *
      * @param vistaArticulos La nueva vista artículos
      */
     public void setVistaArticulos(VistaArticulos vistaArticulos) {
         this.vArticulos = vistaArticulos;
     }
 
+
+    //*************************** Menu gestión artículos ***************************//
     /**
      * Inicia el menú de gestión de artículos
      */
@@ -57,7 +60,7 @@ public class ControlArticulos extends ControlBase {
         while (true) {
             vArticulos.showCabecera();
             vArticulos.showMenu(2);
-            opcion = vArticulos.askInt("Introduce una opción", 0, 3, false, false);
+            opcion = vArticulos.askInt("Introduce una opción", 0, 5, false, false);
             switch (opcion) {
                 case 1:
                     addArticulo();
@@ -68,6 +71,13 @@ public class ControlArticulos extends ControlBase {
                 case 3:
                     listArticulos();
                     break;
+                case 4:
+                    updateArticulo();
+                    break;
+                case 5:
+                    showStockArticulos(mArticulos.getStockArticulos());
+                    vArticulos.showMensajePausa("", true);
+                    break;
                 case 0:
                     vArticulos.showMensaje("Volviendo al menú principal... ", true);
                     return;
@@ -77,34 +87,37 @@ public class ControlArticulos extends ControlBase {
         }
     }
 
+    private void showStockArticulos(Map<Articulo, Integer> stockArticulos) {
+        vArticulos.showStockArticulos(stockArticulos);
+    }
+
+    //*************************** CRUD ***************************//
     /**
      * Añadir un artículo
      */
     public void addArticulo() {
         vArticulos.showMensaje("******** Añadir Artículo ********", true);
 
-        // Obtener siguiente número de artículo
         int numeroArticulo = mArticulos.getArticulos().size();
         vArticulos.showMensaje("El siguiente código disponible es: ART00" + numeroArticulo, true);
 
         String descripcion = vArticulos.askString("Introduce la descripción del artículo", 250);
-        Float precio = vArticulos.askPrecio(0.0f, 9999.0f);
+        if(descripcion == null) return;
+        float precio = vArticulos.askPrecio(0.0f, 9999.0f);
+        if(precio == -99999f) return;
         Float preparacion = vArticulos.askFloat("Introduce los días de preparación del artículo", 0.01f, 10.0f, true, false);
-        Integer stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false);
+        if(preparacion == -99999f) return;
+        int stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false);
+        if(stock == -99999) return;
 
-       //añadimos nuestro articulo
-        Articulo articulo = mArticulos.makeArticulo(descripcion, precio, preparacion, stock);
-
-        // Asignamos el nuevo código al artículo
-        articulo.setCodigo("ART" + String.format("%03d", numeroArticulo));
-
-        // Verificamos si se ha añadido correctamente el artículo
-        boolean exito = mArticulos.addArticulo(articulo);
-        if (exito) {
-            vArticulos.showMensaje("Artículo añadido correctamente.", true);
-        } else {
-            vArticulos.showMensajePausa("Error al añadir el artículo.", true);
+        Articulo articulo = mArticulos.makeArticulo(descripcion, precio, preparacion);
+        if (articulo == null) {
+            vArticulos.showMensajePausa("Error. No se ha podido crear el artículo.", true);
+            return;
         }
+        mArticulos.addArticulo(articulo);
+        mArticulos.addStockArticulo(articulo, stock);
+        vArticulos.showMensajePausa("Artículo añadido correctamente", true);
     }
 
     /**
@@ -115,28 +128,66 @@ public class ControlArticulos extends ControlBase {
 
         List<Articulo> articulos = mArticulos.getArticulos();
         if (articulos.isEmpty()) {
-            vArticulos.showMensajePausa("No hay artículos para eliminar.", true); // ya hay creado así quue no creo que se activa
+            vArticulos.showMensajePausa("No hay artículos para eliminar.", true);
             return;
         }
 
-        // Mostramos la lista de artículos para eliminar
+        vArticulos.showListArticulosNumerada(articulos);
         vArticulos.showMensaje("Selecciona un artículo para eliminar: ", true);
-        for (int i = 0; i < articulos.size(); i++) {
-            vArticulos.showMensaje((i + 1) + ". " + articulos.get(i).getCodigo() + " - " + articulos.get(i).getDescripcion() + "\n", false);
-        }
 
-        // Pedimos la selección del usuario
         int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulos.size(), false, false);
-        Articulo articuloAEliminar = articulos.get(seleccion - 1);
+        if(seleccion == -99999) return;
 
-        // Eliminamos el artículo
-        boolean exito = mArticulos.removeArticulo(articuloAEliminar);
-        if (exito) {
-            vArticulos.showMensaje("Artículo eliminado correctamente.", true);
-        } else {
-            vArticulos.showMensajePausa("Error al eliminar el artículo.", true);
-        }
+        Articulo articulo = articulos.get(seleccion-1);
+        mArticulos.removeArticulo(articulo);
+        mArticulos.removeStockArticulo(articulo);
+        vArticulos.showMensajePausa("Artículo y stock eliminados correctamente.", true);
     }
+
+    /**
+     * Actualizar un artículo
+     */
+    public void updateArticulo() {
+        vArticulos.showMensaje("******** Modificar Artículo ********", true);
+
+        List<Articulo> articulos = mArticulos.getArticulos();
+        if (articulos.isEmpty()) {
+            vArticulos.showMensajePausa("No hay artículos disponibles para modificar.", true);
+            return;
+        }
+
+        vArticulos.showListArticulosStock(mArticulos.getStockArticulos());
+        int seleccion = vArticulos.askInt("Selecciona el número del artículo a modificar", 1, articulos.size(), true, true);
+        if (seleccion == -99999) return;
+
+        Articulo articuloOld = articulos.get(seleccion - 1);
+        Articulo articuloNew = new Articulo(articuloOld);
+
+        vArticulos.showMensaje("Deja un campo vacío para mantener el valor actual", true);
+
+        String descripcion = vArticulos.askStringOpcional("Descripción actual: " + articuloOld.getDescripcion(), 250);
+        if (descripcion != null && !descripcion.isEmpty()) articuloNew.setDescripcion(descripcion);
+
+        // Precio
+        Float precio = vArticulos.askPrecioOpcional("Precio actual: " + articuloOld.getPrecio(), 0.0f, 9999.0f);
+        if (precio != null) articuloNew.setPrecio(precio);
+
+        // Días de preparación
+        Float preparacion = vArticulos.askFloatOpcional("Días de preparación actuales: " + articuloOld.getPreparacion(), 0.01f, 10.0f);
+        if (preparacion != null) articuloNew.setPreparacion(preparacion);
+
+        // Stock
+        Integer stock = vArticulos.askIntOpcional("Stock actual: " + mArticulos.getStockArticulo(articuloOld), 0, 999);
+        if (stock == null) stock = mArticulos.getStockArticulo(articuloOld);
+
+        mArticulos.updateArticulo(articuloOld, articuloNew);
+        mArticulos.removeStockArticulo(articuloOld);
+        mArticulos.addStockArticulo(articuloNew, stock);
+        vArticulos.showMensajePausa("Artículo y stock actualizado correctamente.", true);
+    }
+
+    //*************************** Obtener listas ***************************//
+
 
     /**
      * Listar los artículos
@@ -151,14 +202,12 @@ public class ControlArticulos extends ControlBase {
         }
 
         vArticulos.showMensaje("Lista de artículos disponibles:", true);
-
-        vArticulos.showOptions(listToStr(articulos),0, true, false);
+        vArticulos.showListArticulos(articulos);
     }
 
     /**
      * Cargar los artículos del sistema
-     *
-     * @param configuracion
+     * @param configuracion determina la configuración seleccionada
      * @return Si se cargan bien o no
      */
     public boolean loadArticulos(int configuracion) {

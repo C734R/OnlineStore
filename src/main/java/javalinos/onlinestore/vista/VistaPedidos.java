@@ -7,6 +7,7 @@ import javalinos.onlinestore.modelo.primitivos.Pedido;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 public class VistaPedidos extends VistaBase {
 
@@ -19,6 +20,7 @@ public class VistaPedidos extends VistaBase {
         List<String> listaMenu = new ArrayList<>(Arrays.asList(
                 "Añadir pedido",
                 "Eliminar pedido",
+                "Editar pedido",
                 "Listar todos los pedidos",
                 "Listar pedidos pendientes",
                 "Listar pedidos enviados"));
@@ -49,6 +51,17 @@ public class VistaPedidos extends VistaBase {
         showListGenerica(clientes, "LISTA DE CLIENTES", true, true);
     }
 
+    public void showListClientesPedidos(List<Cliente> clientes) {
+        showListGenerica(clientes, "LISTA DE CLIENTES CON PEDIDOS", true, true);
+    }
+
+    public void showListClientesPedidosPendientes(List<Cliente> clientes) {
+        showListGenerica(clientes, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, true);
+    }
+
+    public void showListClientesPedidosEnviados(List<Cliente> clientes) {
+        showListGenerica(clientes, "LISTA DE CLIENTES CON ENVIADOS", true, true);
+    }
     /**
      * Muestra una lista con todos los artículos
      *
@@ -88,5 +101,38 @@ public class VistaPedidos extends VistaBase {
     public void showPedidosEnviados(List<Pedido> pedidos, Cliente cliente) {
         if (cliente == null) showListGenerica(pedidos, "PEDIDOS ENVIADOS", true, true);
         else showListGenerica(pedidos, "PEDIDOS ENVIADOS DEL CLIENTE " + cliente.getNombre(), true, true);
+    }
+
+    /**
+     * Pide un cliente opcionalmente (ENTER para mantener el actual).
+     * @param clientes lista de clientes disponibles.
+     * @param clienteActual cliente actual que se mostrará como referencia.
+     * @return Cliente seleccionado o null si se mantiene el actual.
+     */
+    public Cliente askClienteOpcional(List<Cliente> clientes, Cliente clienteActual) {
+        if (clientes.isEmpty()) {
+            showMensajePausa("No hay clientes registrados.", true);
+            return null;
+        }
+
+        showListClientes(clientes);
+        showMensaje("Cliente actual: " + clienteActual.getNombre() + " (" + clienteActual.getNif() + ")", true);
+        showMensaje("Selecciona un nuevo cliente o pulsa ENTER para mantener el actual:", true);
+
+        Scanner scanner = new Scanner(System.in);
+        String index = scanner.nextLine();
+
+        if(index.isEmpty()) return null;
+        try {
+            int valorIndex = Integer.parseInt(index);
+            if (valorIndex < 1 || valorIndex > clientes.size()) {
+                showMensajePausa("Índice fuera de rango. Se mantendrá el cliente actual.", true);
+                return null;
+            }
+            return clientes.get(valorIndex - 1);
+        } catch (NumberFormatException e) {
+            showMensajePausa("Entrada no válida. Se mantendrá el cliente actual.", true);
+            return null;
+        }
     }
 }

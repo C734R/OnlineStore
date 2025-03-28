@@ -1,107 +1,165 @@
 package javalinos.onlinestore.modelo.gestores;
 
 import javalinos.onlinestore.modelo.primitivos.Articulo;
-import java.util.ArrayList;
-import java.util.List;
+import javalinos.onlinestore.modelo.primitivos.Cliente;
+
+import java.util.*;
 
 public class ModeloArticulos {
 
     private List<Articulo> articulos;
+    private Map<Articulo, Integer> stockArticulos;
 
     public ModeloArticulos() {
         this.articulos = new ArrayList<>();
+        this.stockArticulos = new LinkedHashMap<>();
     }
+
+    //*************************** Getters & Setters ***************************//
 
     /**
      * Devuelve una lista con todos los artículos
-     *
      * @return Lista con todos los articulos
      */
     public List<Articulo> getArticulos() {
         return articulos;
     }
 
-    // Donde guardaremos los articulos ya creados
+    public Articulo getArticuloIndex(int index) {
+        if (index < 0 || index >= articulos.size()) return null;
+        return articulos.get(index);
+    }
+
+    public Map<Articulo, Integer> getStockArticulos() {
+        return stockArticulos;
+    }
+
+    public Integer getStockArticulo(Articulo articulo) {
+        if (stockArticulos.isEmpty()) return null;
+        return stockArticulos.get(articulo);
+    }
+
+    /**
+     * Establece la lista de artículos.
+     * @param articulos Lista de artículos.
+     */
     public void setArticulos(List<Articulo> articulos) {
         this.articulos = articulos;
     }
 
-    /**
-     * Devuelve un solo artículo
-     *
-     * @param id El id del artículo que se quiere devolver
-     * @return Articulo deseado
-     */
-    public Articulo getArticulo(int id) {
-        List<Articulo> articulos = getArticulos();
-        return articulos.get(id);
+    public void setStockArticulos(Map<Articulo, Integer> stockArticulos) {
+        this.stockArticulos = stockArticulos;
     }
 
-    /**
-     * Crear un nuevo artículo
-     *
-     * @param descripcion Descripción del artículo
-     * @param precio Precio del artículo
-     * @param preparacion Tiempo de preparación del artículo
-     * @param stock Strock del artículo
-     * @return Articulo nuevo
-     */
-    public Articulo makeArticulo(String descripcion, Float precio, Float preparacion, Integer stock) {
-        String codigo;
-
-        if (articulos.isEmpty()) {
-            codigo = "ART000";
-        } else {
-            String lastCodigo = articulos.get(articulos.size() - 1).getCodigo();
-            codigo = "ART" + String.format("%03d", Integer.parseInt(lastCodigo.substring(3)) + 1);
-        }
-        return new Articulo(codigo, descripcion, precio, preparacion, stock);
+    public void setStockArticulo(Articulo articulo, Integer stock) {
+        this.stockArticulos.put(articulo, stock);
     }
+
+    //*************************** CRUD ***************************//
 
     /**
      * Añadir artículo a la lista de artículos
-     *
      * @param articulo El artículo que se va a añadir
-     * @return Boolean si se ha añadido bien o no
      */
-    public boolean addArticulo(Articulo articulo) {
-        return this.articulos.add(articulo);
+    public void addArticulo(Articulo articulo) {
+        articulos.add(articulo);
+    }
+
+    public void addStockArticulo(Articulo articulo, int stock) {
+        stockArticulos.put(articulo, stock);
     }
 
     /**
      * Borrar un artículo
-     *
      * @param articulo El artículo que se va a eliminar
-     * @return Boolean si se borra bien o no
      */
-    public boolean removeArticulo(Articulo articulo) {
-        return this.articulos.remove(articulo);
+    public void removeArticulo(Articulo articulo) {
+        articulos.remove(articulo);
+    }
+
+    public void removeStockArticulo(Articulo articulo) {
+        stockArticulos.remove(articulo);
+    }
+
+    /**
+     * Modificar a un artículo
+     * @param articuloOld Articulo antiguo
+     * @param articuloNew Nuevo artículo
+     */
+    public void updateArticulo(Articulo articuloOld, Articulo articuloNew) {
+        int index = articulos.indexOf(articuloOld);
+        if (index != -1) {
+            articulos.set(index, articuloNew);
+        }
+    }
+
+    public void updateStockArticulo(Articulo articulo, int stockNew) {
+        stockArticulos.put(articulo, stockNew);
+    }
+
+    //*************************** Crear datos ***************************//
+
+    /**
+     * Crear un nuevo artículo
+     * @param descripcion Descripción del artículo
+     * @param precio Precio del artículo
+     * @param preparacion Tiempo de preparación del artículo
+     * @return Articulo - Artículo nuevo
+     */
+    public Articulo makeArticulo(String descripcion, Float precio, Float preparacion) {
+        String codigo;
+        if (articulos.isEmpty()) codigo = "ART000";
+        else {
+            String lastCodigo = articulos.getLast().getCodigo();
+            codigo = "ART" + String.format("%03d", Integer.parseInt(lastCodigo.substring(3)) + 1);
+        }
+        return new Articulo(codigo, descripcion, precio, preparacion);
     }
 
     /**
      * Carga de todos los artículos
-     *
-     * @param configuracion
+     * @param configuracion define la configuración seleccionada.
      * @return Boolena si se cargan bien o no
      */
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {
             try {
-                this.articulos.clear();
-                addArticulo(makeArticulo("Guitarra española de juguete.", 6f, 0.05f,5));
-                addArticulo(makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 0.08f,9));
-                addArticulo(makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 0.10f,14));
-                addArticulo(makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 0.07f,2));
-                addArticulo(makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 0.06f,100));
-                addArticulo(makeArticulo("Muñeca Nancy - Famosa.", 20f, 0.06f,45));
-                addArticulo(makeArticulo("Madelman - Figura de acción articulada.", 15f, 0.05f,83));
-                addArticulo(makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 0.04f,32));
-                addArticulo(makeArticulo("Simon - Juego electrónico de memoria.", 14f, 0.08f,67));
+                articulos.clear();
+                Articulo articuloTemp = new Articulo();
+                articuloTemp = makeArticulo("Guitarra española de juguete.", 6f, 0.05f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 5);
+                articuloTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 0.08f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 9);
+                articuloTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 0.10f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 14);
+                articuloTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 0.07f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 20);
+                articuloTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 0.06f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 8);
+                articuloTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 0.06f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 10);
+                articuloTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 0.05f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 12);
+                articuloTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 0.04f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 14);
+                articuloTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 0.08f);
+                addArticulo(articuloTemp);
+                addStockArticulo(articuloTemp, 20);
                 return true;
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 return false;
             }
-        } else {
+        }
+        else {
             return false;
         }
     }

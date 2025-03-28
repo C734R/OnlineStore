@@ -8,7 +8,6 @@ public class Articulo {
     private String descripcion;
     private Float precio;
     private Float preparacion; // días!
-    private Integer stock;
 
     /**
      * Constructor de un artículo.
@@ -17,14 +16,12 @@ public class Articulo {
      * @param descripcion Descripción de un artículo
      * @param precio Precio del artículo
      * @param preparacion Tiempo de preparación de un artículo
-     * @param stock Stock disponible de un artículo
      */
-    public Articulo(String codigo, String descripcion, Float precio, Float preparacion, Integer stock) {
+    public Articulo(String codigo, String descripcion, Float precio, Float preparacion) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
         this.preparacion = preparacion;
-        this.stock = stock;
     }
 
     /**
@@ -35,7 +32,16 @@ public class Articulo {
         this.descripcion = "";
         this.precio = 0.0f;
         this.preparacion = null;
-        this.stock = 0;
+    }
+
+    /**
+     * Constructor de copia
+     */
+    public Articulo(Articulo articulo) {
+        this.codigo = articulo.getCodigo();
+        this.descripcion = articulo.getDescripcion();
+        this.precio = articulo.getPrecio();
+        this.preparacion = articulo.getPreparacion();
     }
 
     /**
@@ -111,34 +117,15 @@ public class Articulo {
     }
 
     /**
-     * Devuelve el stock de un artículo
-     *
-     * @return Int con la cantidad de stock del artículo
-     */
-    public Integer getStock() {
-        return stock;
-    }
-
-    /**
-     * Cambia el Stock de un artículo
-     *
-     * @param stock El nuevo stock del artículo
-     */
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
-    /**
      * Devuelve el string completo de un artículo
      *
      * @return String con todos los componentes de un artículo
      */
     @Override
     public String toString() {
-        return  "\nCódigo: " + codigo + "\n" +
-                "Descripcion: " + descripcion + "\n" +
+        return  "Código: " + codigo + "\n" +
+                "Descripción: " + descripcion + "\n" +
                 "Precio " + precio + " €\n" +
-                "Tiempo de preparacion: " + preparacion + " días\n" +
-                "Stock: " + stock + " unidades\n";
+                "Tiempo de preparacion: " + preparacion + " días";
     }
 }

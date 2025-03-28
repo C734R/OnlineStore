@@ -37,10 +37,10 @@ public class VistaMenuPrincipal extends VistaBase {
                                                                \s
                                                                \s
                 Bienvenido al sistema de gestión integral de tu tienda online.
-                Iniciando MenuPrincipal...
+                Iniciando Menú Principal...
                 """;
         super.setCabecera(cabecera);
-        List<String> listaMenu = new ArrayList<>(Arrays.asList("Menu Clientes", "Menu Artículos", "Menu Pedidos"));
+        List<String> listaMenu = new ArrayList<>(Arrays.asList("Gestión Clientes", "Gestión Artículos", "Gestión Pedidos"));
         super.setListaMenu(listaMenu);
     }
 

@@ -49,7 +49,7 @@ public abstract class VistaBase {
      * @param retorno recibe el retorno.
      */
     public void showMenu (int retorno){
-        showOptions(listaMenu,retorno, false, true);
+        showOptions(listaMenu,retorno, false, true, false);
     }
 
     /**
@@ -66,6 +66,7 @@ public abstract class VistaBase {
      * @param min recibe el mínimo.
      * @param max recibe el máximo.
      * @param reintentar recibe si se reintentará.
+     * @param sumIntentos recibe si hay máximo de intentos.
      * @return int devuelve el entero.
      */
     public int askInt(String mensaje, int min, int max, boolean reintentar, boolean sumIntentos) {
@@ -78,12 +79,10 @@ public abstract class VistaBase {
                 integer = scanner.nextInt();
                 if (integer >= min && integer <= max) return integer;
                 else if(reintentar) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
-//                if (sumIntentos) intentos++;
                 if (sumIntentos || !reintentar) intentos++;
             }
             catch (InputMismatchException e) {
                 if(reintentar) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
-//                if (sumIntentos) intentos++;
                 if (sumIntentos || !reintentar) intentos++;
                 scanner.next();
             }
@@ -92,6 +91,15 @@ public abstract class VistaBase {
         return -99999;
     }
 
+    /**
+     * Pide un flaot
+     * @param mensaje recibe el mensaje.
+     * @param min recibe el mínimo.
+     * @param max recibe el máximo.
+     * @param reintentar recibe si se reintentará.
+     * @param sumIntentos recibe si hay máximo de intentos.
+     * @return float devuelve el float.
+     */
     public Float askFloat(String mensaje, float min, float max, boolean reintentar, boolean sumIntentos) {
         Scanner scanner = new Scanner(System.in);
         float _float;
@@ -103,12 +111,10 @@ public abstract class VistaBase {
                 _float = scanner.nextFloat();
                 if (_float >= min && _float <= max) return _float;
                 else if(reintentar) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
-//                if (sumIntentos) intentos++;
                 if (sumIntentos || !reintentar) intentos++;
             }
             catch (InputMismatchException e) {
                 if(reintentar) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
-//                if (sumIntentos) intentos++;
                 if (sumIntentos || !reintentar) intentos++;
                 scanner.next();
             }
@@ -153,41 +159,6 @@ public abstract class VistaBase {
         return respuesta != 0;
     }
 
-//    public Float askFloat(String mensaje, float min, float max, boolean reintentar, boolean maxIntentos) {
-//        Scanner scanner = new Scanner(System.in);
-//        float _float;
-//        int intentos = 0;
-//        int maxIntentosPermitidos;
-//
-//        // Ponemos un numero maximo de intentos de hasta 3 veces
-//        if (maxIntentos) {
-//            maxIntentosPermitidos = 3;
-//        } else {
-//            maxIntentosPermitidos = 1000; // ponemos un nuemro que sea grande pero no llegaremos nunca a esto
-//        }
-//
-//        while (intentos < maxIntentosPermitidos) {
-//            try {
-//                showMensaje(mensaje + " (entre " + min + " y " + max + "):", true);
-//                _float = scanner.nextFloat();
-//
-//                if (_float >= min && _float <= max) {
-//                    return _float;
-//                }
-//
-//                showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
-//            } catch (InputMismatchException e) {
-//                showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
-//                scanner.next();
-//            }
-//
-//            intentos++;
-//        }
-//
-//        showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...", true);
-//        return -99999.0f;
-//    }
-
     /**
      * Muestra un mensaje.
      * @param mensaje recibe el mensaje.
@@ -209,11 +180,12 @@ public abstract class VistaBase {
      * @param encuadre recibe si hay encuadre.
      * @param numeracion recibe si hay numeración.
      */
-    public void showOptions(List<String> lista, int tipoRetorno, Boolean encuadre, Boolean numeracion){
+    public void showOptions(List<String> lista, int tipoRetorno, Boolean encuadre, Boolean numeracion, Boolean opcion){
         int i = 1;
         for(String entrada: lista) {
             if(encuadre) showMensaje("--------------------------------------", true);
-            if(numeracion) showMensaje(i + ".", false);
+            if(opcion) showMensaje("Opción " + i + ": ", true);
+            if(numeracion && !opcion) showMensaje(i + ".", false);
             showMensaje(entrada, true);
             if(encuadre) showMensaje("--------------------------------------", true);
             ++i;
@@ -244,7 +216,7 @@ public abstract class VistaBase {
      */
     public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) {
         showMensaje("******** " + titulo + " ********", true);
-        showOptions(listToStr(lista), 0, encuadre, numeracion);
+        showOptions(listToStr(lista), 0, encuadre, numeracion, false);
         showMensaje("********************************************", true);
     }
 
@@ -281,5 +253,109 @@ public abstract class VistaBase {
         }
         catch(Exception _)
         {}
+    }
+
+    /**
+     * Pide una cadena opcional (ENTER para mantener valor actual).
+     * @param mensaje mensaje mostrado al usuario.
+     * @param maxLongitud longitud máxima permitida.
+     * @return String nueva entrada o null si se mantiene el valor actual.
+     */
+    public String askStringOpcional(String mensaje, int maxLongitud) {
+        Scanner scanner = new Scanner(System.in);
+        int intentos = 0;
+
+        while (intentos < 3) {
+            showMensaje(mensaje + " (ENTER para mantener actual): ", false);
+            try {
+                String entrada = scanner.nextLine();
+                if (entrada.isEmpty()) return null;
+                if (entrada.length() > maxLongitud) {
+                    showMensajePausa("Error. Máximo " + maxLongitud + " caracteres.", true);
+                    intentos++;
+                } else {
+                    return entrada;
+                }
+            } catch (Exception e) {
+                showMensajePausa("Error. Entrada inválida. Intenta de nuevo.", true);
+                intentos++;
+            }
+        }
+
+        showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
+        return null;
+    }
+
+    /**
+     * Pide un float opcional (ENTER para mantener valor actual).
+     * @param mensaje mensaje mostrado al usuario.
+     * @param min mínimo permitido.
+     * @param max máximo permitido.
+     * @return Float nueva entrada o null si se mantiene el valor actual.
+     */
+    public Float askFloatOpcional(String mensaje, float min, float max) {
+        Scanner scanner = new Scanner(System.in);
+        int intentos = 0;
+
+        while (intentos < 3) {
+            showMensaje(mensaje + " (ENTER para mantener actual): ", false);
+            String _float = scanner.nextLine().trim();
+
+            if (_float.isEmpty()) return null;
+            try {
+                float valor = Float.parseFloat(_float);
+                if (valor >= min && valor <= max) return valor;
+                else showMensajePausa("Error. Introduce un número entre " + min + " y " + max + ".", true);
+            } catch (NumberFormatException e) {
+                showMensajePausa("Error. Formato inválido. Introduce un número decimal.", true);
+            }
+
+            intentos++;
+        }
+
+        showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
+        return null;
+    }
+
+    /**
+     * Pide un precio opcional (ENTER para mantener valor actual).
+     * @param mensaje mensaje mostrado al usuario.
+     * @param min mínimo permitido.
+     * @param max máximo permitido.
+     * @return Float nueva entrada o null si se mantiene el valor actual.
+     */
+    public Float askPrecioOpcional(String mensaje, float min, float max) {
+        return askFloatOpcional(mensaje, min, max);
+    }
+
+    /**
+     * Pide un entero opcional (ENTER para mantener valor actual).
+     * @param mensaje mensaje mostrado al usuario.
+     * @param min mínimo permitido.
+     * @param max máximo permitido.
+     * @return Integer nueva entrada o null si se mantiene el valor actual.
+     */
+    public Integer askIntOpcional(String mensaje, int min, int max) {
+        Scanner scanner = new Scanner(System.in);
+        int intentos = 0;
+
+        while (intentos < 3) {
+            showMensaje(mensaje + " (ENTER para mantener actual): ", false);
+            String entero = scanner.nextLine().trim();
+
+            if (entero.isEmpty()) return null;
+            try {
+                int valor = Integer.parseInt(entero);
+                if (valor >= min && valor <= max) return valor;
+                else showMensajePausa("Error. Introduce un número entre " + min + " y " + max + ".", true);
+            } catch (NumberFormatException e) {
+                showMensajePausa("Error. Formato inválido. Introduce un número entero.", true);
+            }
+
+            intentos++;
+        }
+
+        showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
+        return null;
     }
 }

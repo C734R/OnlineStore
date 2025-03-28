@@ -40,6 +40,18 @@ public class Cliente {
     }
 
     /**
+     * Constructor de copia
+     * @param clienteOld se le pasa otro cliente
+     */
+    public Cliente(Cliente clienteOld) {
+        this.nombre = clienteOld.getNombre();
+        this.domicilio = clienteOld.getDomicilio();
+        this.nif = clienteOld.getNif();
+        this.email = clienteOld.getEmail();
+        this.categoria = clienteOld.getCategoria();
+    }
+
+    /**
      * Cambiar nombre de un cliente
      *
      * @param nombre El nuevo nombre del cliente

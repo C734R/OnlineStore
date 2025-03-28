@@ -58,11 +58,11 @@ public class VistaClientes extends VistaBase {
      * Pide un Email
      * @return String devuelve el Email.
      */
-    public String askEmail(boolean nuevo) {
+    public String askEmail(boolean modificar) {
         String email;
         int intentos = 0;
         while (intentos < 3) {
-            if (nuevo) email = askString("Introduce el nuevo email: ", 50);
+            if (modificar) email = askString("Introduce el nuevo email: ", 50);
             else email = askString("Introduce el email: ", 50);
             if (checkEmail(email)) return email;
             else {
@@ -99,7 +99,7 @@ public class VistaClientes extends VistaBase {
     public int askCategoriaCliente() {
         while (true) {
             showCategorias();
-            int categoria = askInt("Seleccione la categoría del cliente", 0, listCategorias.size(), true, false);
+            int categoria = askInt("Seleccione la categoría del cliente", 0, listCategorias.size(), false, false);
             if (categoria > 0 && categoria <= listCategorias.size()) return categoria;
             else if (categoria == 0) {
                 showMensaje("Volviendo atrás...", true);
@@ -136,7 +136,7 @@ public class VistaClientes extends VistaBase {
      * Muestra las modificaciones disponibles.
      */
     public void showMods() {
-        showOptions(listMods,2, false, true);
+        showOptions(listMods,2, false, true, false);
     }
 
     /**
@@ -144,7 +144,7 @@ public class VistaClientes extends VistaBase {
      */
     public void showCategorias() {
         showMensaje("******** TIPOS DE CATEGORÍA ********", true);
-        showOptions(listCategorias, 3,false, true);
+        showOptions(listCategorias, 3,false, true, false);
     }
 
     /**
@@ -152,7 +152,7 @@ public class VistaClientes extends VistaBase {
      */
     public void showMetodosEliminar() {
         showMensaje("******** METODOS DE ELIMINACIÓN DE USUARIO ********", true);
-        showOptions(listMetodos, 3,false, true);
+        showOptions(listMetodos, 3,false, true, false);
     }
 
     /**

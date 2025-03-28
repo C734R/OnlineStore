@@ -22,13 +22,16 @@ public class ModeloClientes {
 
     /**
      * Devuelve lista con todos los clientes
-     *
      * @return Lista con los clientes
      */
     public List<Cliente> getClientes() {
         return clientes;
     }
 
+    /**
+     * Establece la lista de clientes.
+     * @param clientes Lista de clientes.
+     */
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
@@ -37,7 +40,6 @@ public class ModeloClientes {
 
     /**
      * Añadir un cliente a la lista de todos los clientes
-     *
      * @param cliente El cliente a añadir
      */
     public void addCliente(Cliente cliente) {
@@ -46,7 +48,6 @@ public class ModeloClientes {
 
     /**
      * Elimianr un cliente
-     *
      * @param cliente El cliente a eliminar
      */
     public void removeCliente(Cliente cliente) {
@@ -55,20 +56,18 @@ public class ModeloClientes {
 
     /**
      * Obtener el cliente de una lista
-     *
-     * @param index El cliente seleccionado de una lista numerica
-     * @return El cliente deseado
+     * @param index El cliente seleccionado de una lista numérica
+     * @return Cliente - El cliente deseado
      */
     public Cliente getClienteIndex(int index) {
         if (index >= 0 && index < clientes.size()) {
             return clientes.get(index);
         }
-        return null; // Retorna null si el índice está fuera de rango
+        return null;
     }
 
     /**
      * Modificar a un cliente
-     *
      * @param clienteOld Cliente antiguo
      * @param clienteNew Nuevo cliente
      */
@@ -83,7 +82,6 @@ public class ModeloClientes {
 
     /**
      * Obtener cantidad de clientes
-     *
      * @return Int con el numero de clientes
      */
     public int sizeClientes() {
@@ -92,7 +90,6 @@ public class ModeloClientes {
 
     /**
      * Obtener Cliente a partir del NIF
-     *
      * @param nif NIF del cliente deseado
      * @return Cliente con ese NIF
      */
@@ -102,12 +99,11 @@ public class ModeloClientes {
                 return cliente;
             }
         }
-        return null; // No encontrado
+        return null;
     }
 
     /**
      * Obtener Cliente a partir del correo
-     *
      * @param email Email del cliente deseado
      * @return El cliente con ese correo
      */
@@ -117,12 +113,11 @@ public class ModeloClientes {
                 return cliente;
             }
         }
-        return null; // No encontrado
+        return null;
     }
 
     /**
      * Obtener la lista de clientes según la categoria
-     *
      * @param categoria La categoria de la que se quiere obtener la lista
      * @return Lista con los clientes de esa categoria
      */
@@ -144,14 +139,11 @@ public class ModeloClientes {
      * @return Categoria deseada
      */
     public Categoria getCategoria(int opcion) {
-        switch (opcion) {
-            case 1:
-                return Categoria.ESTANDAR;
-            case 2:
-                return Categoria.PREMIUM;
-            default:
-                return null; // Opción no válida
-        }
+        return switch (opcion) {
+            case 1 -> Categoria.ESTANDAR;
+            case 2 -> Categoria.PREMIUM;
+            default -> null;
+        };
     }
 
     /**
@@ -176,7 +168,6 @@ public class ModeloClientes {
 
     /**
      * Crear cliente
-     *
      * @param nombre Nombre del cliente
      * @param domicilio Domicilio del cliente
      * @param nif NIF del cliente
@@ -190,8 +181,7 @@ public class ModeloClientes {
 
     /**
      * Cargar los clientes existentes
-     *
-     * @param configuracion
+     * @param configuracion define la configuración seleccionada.
      * @return Boolean si se han cargado bien o no
      */
     public boolean loadClientes(int configuracion) {

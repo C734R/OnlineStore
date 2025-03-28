@@ -10,8 +10,7 @@ import javalinos.onlinestore.modelo.primitivos.Pedido;
 import javalinos.onlinestore.vista.VistaPedidos;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static javalinos.onlinestore.OnlineStore.cClientes;
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
@@ -22,12 +21,11 @@ public class ControlPedidos extends ControlBase{
     private ModeloArticulos mArticulos;
     private ModeloClientes mClientes;
     private ModeloPedidos mPedidos;
+    private float precioEnvio = 5f;
 
     /**
      * Constructor de ControlPedidos
-     *
      * @param mStore el ModeloStore que se va a utilizar
-     *
      * @param vPedidos la vista que se va a utilizar
      */
     public ControlPedidos(ModeloStore mStore, VistaPedidos vPedidos) {
@@ -53,6 +51,13 @@ public class ControlPedidos extends ControlBase{
         this.vPedidos = vPedidos;
     }
 
+    public float getPrecioEnvio() {
+        return precioEnvio;
+    }
+
+    public void setPrecioEnvio(float precioEnvio) {
+        this.precioEnvio = precioEnvio;
+    }
     //*************************** Menu gestión pedidos ***************************//
 
     /**
@@ -63,7 +68,7 @@ public class ControlPedidos extends ControlBase{
         while(true) {
             vPedidos.showCabecera();
             vPedidos.showMenu(2);
-            opcion = vPedidos.askInt("Introduce una opción", 0, 5,false, false);
+            opcion = vPedidos.askInt("Introduce una opción", 0, 6,false, false);
             switch (opcion) {
                 case 1:
                     addPedidos();
@@ -72,13 +77,19 @@ public class ControlPedidos extends ControlBase{
                     removePedidos();
                     break;
                 case 3:
-                    showListPedidos(askFiltrarCliente());
+                    updatePedido();
                     break;
                 case 4:
-                    showListPedidosPendientes(askFiltrarCliente());
+                    showListPedidos(askFiltrarCliente(0));
+                    vPedidos.showMensajePausa("", true);
                     break;
                 case 5:
-                    showListPedidosEnviados(askFiltrarCliente());
+                    showListPedidosPendientesEnviados(askFiltrarCliente(2), false);
+                    vPedidos.showMensajePausa("", true);
+                    break;
+                case 6:
+                    showListPedidosPendientesEnviados(askFiltrarCliente(1), true);
+                    vPedidos.showMensajePausa("", true);
                     break;
                 case 0:
                     vPedidos.showMensaje("Volviendo al menú principal...", true);
@@ -98,40 +109,32 @@ public class ControlPedidos extends ControlBase{
         vPedidos.showMensaje("******** Añadir Pedido ********", true);
         List<Articulo> articulosDisponibles = new ArrayList<>();
         Cliente cliente = askCliente(true);
-
+        if(cliente == null) return;
         for (Articulo articulo : mArticulos.getArticulos()){
-            if (articulo.getStock() > 0){
+            if (mArticulos.getStockArticulos().get(articulo) > 0){
                 articulosDisponibles.add(articulo);
             }
         }
-
         if (!articulosDisponibles.isEmpty()) {
-            vPedidos.showOptions(listToStr(articulosDisponibles), 3, true, true);
-            int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 0, articulosDisponibles.size(), true, true);
-            if (indexArticulo == 0) return;
+            vPedidos.showOptions(listToStr(articulosDisponibles), 0, true, true, true);
+            int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 1, articulosDisponibles.size(), true, true);
+            if (indexArticulo == -99999) return;
             indexArticulo = indexArticulo - 1;
-            Articulo articulo = mArticulos.getArticulos().get(indexArticulo);
+            Articulo articulo = mArticulos.getArticuloIndex(indexArticulo);
 
-            Integer stockComprado = vPedidos.askInt("Ingresa la cantidad que quiere comprar", 1, articulo.getStock(), true, true);
+            int stockComprado = vPedidos.askInt("Ingresa la cantidad que quiere comprar", 1, mArticulos.getStockArticulo(articulo), true, true);
+            if (stockComprado == -99999) return;
 
-            LocalDate fechaPedido = vPedidos.askFecha("del pedido");
-
-            float precioEnvio = 5f;
-
-            float precioFinal = calcPedido(articulo, stockComprado, precioEnvio);
-
-            Pedido pedido = mPedidos.makePedido(cliente, articulo, stockComprado, fechaPedido, precioEnvio, precioFinal);
-
-            if (mPedidos.makePedido(cliente, articulo, stockComprado, fechaPedido, precioEnvio, precioFinal) != null) {
-                vPedidos.showMensaje("Pedido añadido correctamente", true);
-                mPedidos.addPedido(pedido);
-            } else {
-                vPedidos.showMensaje("Error al añadir el pedido.. Saliendo", true);
+            Pedido pedido = mPedidos.makePedido(cliente, articulo, stockComprado, LocalDate.now(), precioEnvio);
+            if(pedido == null) {
+                vPedidos.showMensajePausa("Error. No se ha podido crear el pedido.", true);
+                return;
             }
+            mPedidos.addPedido(pedido);
+            mArticulos.updateStockArticulo(articulo, mArticulos.getStockArticulo(articulo) - stockComprado);
+            vPedidos.showMensajePausa("Pedido añadido correctamente", true);
         }
-        else{
-            vPedidos.showMensaje("No hay articulos disponibles para comprar en este momento", true);
-        }
+        else vPedidos.showMensaje("No hay articulos disponibles para comprar en este momento", true);
     }
 
     /**
@@ -139,204 +142,103 @@ public class ControlPedidos extends ControlBase{
      */
     public void removePedidos() {
         List<Pedido> pedidos = mPedidos.getPedidos();
-        if (!pedidos.isEmpty()) {
+        Map<Articulo,Integer> stockArticulos = mArticulos.getStockArticulos();
+        if (pedidos.isEmpty()) {
             vPedidos.showMensajePausa("Error. No existen pedidos a eliminar.", true);
+            return;
         }
         showPedidos( null);
-        // Pedimos al usuario que introduzca el número del pedido que desea borrar.
         int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, mPedidos.getLastNumPedido(), true, true);
-
-        // Creamos un booleano por si no se encuentra el número de pedido escrito por el usuario.
-        boolean pedidoEncontrado = false;
-
-        // Obtener pedido a eliminar
-        mPedidos.removePedido(mPedidos.getPedidoNumero(numPedidoBorrar));
-        vPedidos.showMensaje("El pedido ha sido eliminado correctamente.", true);
-    }
-
-    //*************************** Obtener listas ***************************//
-
-    /**
-     * Metodo para listar pedidos filtrando o no por cliente
-     *
-     * @param cliente El cliente por el que se quiere filtrar
-     * @return Lista con los pedidos deseados
-     */
-    public List<Pedido> listPedidos(Cliente cliente) {
-        List<Pedido> pedidos = listPedidosCheck();
-        if (cliente == null) return pedidos;
-        List<Pedido> pedidosCliente = new ArrayList<>();
-        for (Pedido pedido : pedidos){
-            if (pedido.getCliente().equals(cliente)) pedidosCliente.add(pedido);
-        }
-        return pedidosCliente;
+        if(numPedidoBorrar == -99999) return;
+        Pedido pedido = mPedidos.getPedido(numPedidoBorrar);
+        Articulo articulo = pedido.getArticulo();
+        mPedidos.removePedido(pedido);
+        mArticulos.updateStockArticulo(articulo, stockArticulos.get(articulo) - pedido.getCantidad());
+        vPedidos.showMensajePausa("El pedido ha sido eliminado correctamente.", true);
     }
 
     /**
-     * Listar los pedidos pendientes de envio
-     *
-     * @param cliente Si se quiere filtrar por cliente
-     * @return Lista con los pedidos deseados
+     * Modificar un pedido
      */
-    public List<Pedido> listPedidosPendientes(Cliente cliente) {
-        List<Pedido> pedidos = listPedidos(cliente);
-        if (pedidos.isEmpty()) return pedidos;
-        List<Pedido> pedidosPendientesCliente = new ArrayList<>();
-        for(Pedido pedido : pedidos){
-            if (!checkEnviado(pedido)) pedidosPendientesCliente.add(pedido);
-        }
-        return pedidosPendientesCliente;
-    }
-
-    /**
-     * Listar los pedidos enviados
-     *
-     * @param cliente Si se quiere filtrar por cliente
-     * @return Lista con los pedidos deseados
-     */
-    public List<Pedido> listPedidosEnviados(Cliente cliente) {
-        List<Pedido> pedidos = listPedidosCheck();
-        if (pedidos == null) return pedidos;
-        List<Pedido> pedidosEnviadosCliente = new ArrayList<>();
-        for(Pedido pedido : pedidos){
-            if (checkEnviado(pedido)) pedidosEnviadosCliente.add(pedido);
-        }
-        return pedidosEnviadosCliente;
-    }
-
-    /**
-     * Comprobar si existen pedidos
-     *
-     * @return Lista con los pedidos existentes
-     */
-    public List<Pedido> listPedidosCheck() {
+    public void updatePedido() {
+        vPedidos.showMensaje("******** Modificar Pedido ********", true);
         List<Pedido> pedidos = mPedidos.getPedidos();
-        if (pedidos.isEmpty()){
-            vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
-            return null;
+        Map<Articulo,Integer> stockArticulos= mArticulos.getStockArticulos();
+        if (pedidos.isEmpty()) {
+            vPedidos.showMensajePausa("No hay pedidos disponibles para modificar.", true);
+            return;
         }
-        return pedidos;
+
+        vPedidos.showListPedidos(pedidos, null);
+        int seleccion = vPedidos.askInt("Selecciona el número del pedido a modificar", 1, pedidos.size(), true, true);
+        if (seleccion == -99999) return;
+
+        Pedido pedidoOld = pedidos.get(seleccion - 1);
+
+        Cliente nuevoCliente = vPedidos.askClienteOpcional(mClientes.getClientes(), pedidoOld.getCliente());
+        if (nuevoCliente == null) nuevoCliente = pedidoOld.getCliente();
+
+        int maxStock = stockArticulos.get(pedidoOld.getArticulo()) + pedidoOld.getCantidad();
+        Integer nuevaCantidad = vPedidos.askIntOpcional("Cantidad actual: " + pedidoOld.getCantidad(), 1, maxStock);
+        if (nuevaCantidad == null) nuevaCantidad = pedidoOld.getCantidad();
+
+        Pedido pedidoNew = mPedidos.makePedido(nuevoCliente, pedidoOld.getArticulo(), nuevaCantidad, LocalDate.now(), precioEnvio);
+        mPedidos.updatePedido(pedidoOld, pedidoNew);
+
+        int stockNew = maxStock - nuevaCantidad;
+        mArticulos.updateStockArticulo(pedidoOld.getArticulo(), stockNew);
+        vPedidos.showMensajePausa("Pedido actualizado correctamente.", true);
     }
 
     //*************************** Mostrar datos ***************************//
 
     /**
      * Muestra por pantalla los pedidos por cliente
-     *
      * @param cliente El cliente por el que se filtran
      */
     public void showListPedidos(Cliente cliente) {
         if (mPedidos.getPedidos().isEmpty()) {
-            vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
+            vPedidos.showMensajePausa("Aún no existen pedidos registrados.", true);
             return;
         }
-        List<Pedido> pedidos = null;
+        List<Pedido> pedidos;
         if(cliente != null) {
-            if (!mClientes.getClientes().isEmpty()) {
-                vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
-                int indexCliente = vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 0, mClientes.sizeClientes(), true, true);
-                if (indexCliente == 0) return;
-                indexCliente = indexCliente - 1;
-                Cliente ncliente = mClientes.getClientes().get(indexCliente);
-                pedidos = mPedidos.getPedidosCliente(ncliente);
-                if (pedidos.isEmpty()) {
-                    vPedidos.showMensaje("No hay pedidos registrados para este cliente.", true);
-                }
+            pedidos = mPedidos.getPedidosCliente(cliente);
+            if (pedidos.isEmpty()) {
+                vPedidos.showMensajePausa("No hay pedidos registrados para este cliente.", true);
+                return;
             }
-            else vPedidos.showMensajePausa("Error. No existen clientes registrados.", true);
         }
-        else {
-            pedidos = mPedidos.getPedidos();
-        }
-        vPedidos.showListPedidos(pedidos,cliente);
-        vPedidos.showMensajePausa("", true);
+        else pedidos = mPedidos.getPedidos();
+        vPedidos.showListPedidos(pedidos, cliente);
     }
 
     /**
      * Muestra por pantalla los pedidos pendientes de enviar
-     *
      * @param cliente El cliente por el que se quiere filtrar
      */
-    public void showListPedidosPendientes(Cliente cliente) {
+    public void showListPedidosPendientesEnviados(Cliente cliente, boolean enviado) {
+        List<Pedido> pedidos = new ArrayList<>();
         if (mPedidos.getPedidos().isEmpty()) {
             vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
             return;
         }
-        List<Pedido> pedidos = null;
         if(cliente != null) {
-            if (!mClientes.getClientes().isEmpty()) {
-                vPedidos.showOptions(listToStr(this.mClientes.getClientes()),3 , true, true);
-                int indexCliente = vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 0, mClientes.sizeClientes(), true, true);
-                if (indexCliente == 0) return;
-                indexCliente = indexCliente - 1;
-                Cliente ncliente = mClientes.getClientes().get(indexCliente);
-                pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), false, ncliente);
-                if (pedidos.isEmpty()) {
-                    vPedidos.showMensaje("No hay pedidos pendientes registrados para este cliente.", true);
-                }
-            }
-            else vPedidos.showMensajePausa("Error. No existen clientes registrados.", true);
-        }
-        else {
-            pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), false, null);
-        }
-        vPedidos.showListPedidos(pedidos,cliente);
-        vPedidos.showMensajePausa("", true);
-    }
-
-    /**
-     * Muestra por pantalla los pedidos enviados
-     *
-     * @param cliente El cliente por el que se quiere filtrar
-     */
-    public void showListPedidosEnviados(Cliente cliente) {
-        if (mPedidos.getPedidos().isEmpty()) {
-            vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
-            return;
-        }
-        List<Pedido> pedidos = null;
-        if(cliente != null) {
-            if (!mClientes.getClientes().isEmpty()) {
-                vPedidos.showOptions(listToStr(this.mClientes.getClientes()), 3, true, true);
-                int indexCliente = vPedidos.askInt("Selecciona el cliente del que deseas mostrar los pedidos", 0, mClientes.sizeClientes(), true, true);
-                if (indexCliente == 0) return;
-                indexCliente = indexCliente - 1;
-                Cliente ncliente = mClientes.getClientes().get(indexCliente);
-                pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), true, ncliente);
-                if (pedidos.isEmpty()) {
+            pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), enviado, cliente);
+            if (pedidos.isEmpty()) {
+                if (enviado) {
                     vPedidos.showMensaje("No hay pedidos enviados registrados para este cliente.", true);
                 }
+                else vPedidos.showMensaje("No hay pedidos pendientes registrados para este cliente.", true);
+                return;
             }
-            else vPedidos.showMensajePausa("Error. No existen clientes registrados.", true);
         }
-        else {
-            pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), true, null);
-        }
+        if(cliente == null) pedidos = mPedidos.getPedidosPendientesEnviados(LocalDate.now(), enviado, null);
         vPedidos.showListPedidos(pedidos,cliente);
-        vPedidos.showMensajePausa("", true);
-    }
-
-    public void showPedidosEnviados(Cliente cliente) {
-        List<Pedido> pedidos = listPedidosEnviados(cliente);
-        if (listPedidosEnviados(cliente).isEmpty()) {
-            vPedidos.showMensajePausa(("No hay pedidos enviados registrados."), true);
-            return;
-        }
-        vPedidos.showPedidosEnviados(pedidos, cliente);
-    }
-
-    public void showPedidosPendientes(Cliente cliente) {
-        List<Pedido> pedidos = listPedidosPendientes(cliente);
-        if (listPedidosPendientes(cliente).isEmpty()) {
-            vPedidos.showMensajePausa(("No hay pedidos enviados registrados."), true);
-            return;
-        }
-        vPedidos.showPedidosPendientes(pedidos,cliente);
     }
 
     /**
      * Muestra todos los pedidos
-     *
      * @param cliente El cliente por el que se quiere filtrar
      */
     public void showPedidos(Cliente cliente) {
@@ -347,21 +249,23 @@ public class ControlPedidos extends ControlBase{
 
     /**
      * Pide al usuario que introduzca un cliente
-     *
      * @param crear Si se quiere crear un cliente nuevo
      * @return Cliente seleccionado
      */
     public Cliente askCliente (boolean crear) {
-        int numSocio;
+        int indexCliente;
         List<Cliente> clientes = cClientes.getListaClientes();
         vPedidos.showListClientes(clientes);
-        if(crear) numSocio = vPedidos.askInt("Selecciona un cliente existente o crea uno eligiendo " + (cClientes.getIndexCliente(true)+1), cClientes.getIndexCliente(false), (cClientes.getIndexCliente(true)+1), true, true);
-        else numSocio = vPedidos.askInt("Selecciona un cliente", cClientes.getIndexCliente(false), cClientes.getIndexCliente(true), true, true);
-        if (numSocio == -99999) return null;
-        if (numSocio == (cClientes.getIndexCliente(true)+1)) {
+        if(crear) indexCliente = vPedidos.askInt("Selecciona un cliente existente o crea uno eligiendo " + (cClientes.getIndexCliente(true)+2), (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+2), true, true);
+        else indexCliente = vPedidos.askInt("Selecciona un cliente", (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+1), true, true);
+        if (indexCliente == -99999) return null;
+
+        if (crear && indexCliente == (cClientes.getIndexCliente(true)+2)) {
             cClientes.addCliente();
+            return cClientes.getCliente(cClientes.getIndexCliente(true));
         }
-        Cliente cliente = cClientes.getCliente(numSocio);
+
+        Cliente cliente = cClientes.getCliente(indexCliente-1);
         if (cliente == null) {
             vPedidos.showMensajePausa("Error. El cliente no existe. Volviendo...", true);
             return null;
@@ -371,32 +275,65 @@ public class ControlPedidos extends ControlBase{
 
     /**
      * Metodo para filtrar por cliente
-     *
      * @return Cliente por el que se quiere filtrar o null
      */
-    public Cliente askFiltrarCliente() {
+    public Cliente askFiltrarCliente(int tipoFiltro) {
         boolean filtrar = vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true);
-        if (filtrar) return askCliente(false);
+        if (filtrar) return askClienteFiltro(tipoFiltro);
         return null;
+    }
+
+    public Cliente askClienteFiltro(int tipoFiltrado) {
+        int indexCliente;
+        List<Pedido> pedidos = mPedidos.getPedidos();
+        List<Cliente> clientesPedidos = new ArrayList<>();
+        if (tipoFiltrado == 0) {
+            for (Pedido pedido : pedidos) {
+                if (clientesPedidos.contains(pedido.getCliente())) continue;
+                clientesPedidos.add(pedido.getCliente());
+            }
+            if (clientesPedidos.isEmpty()) {
+                vPedidos.showMensajePausa(("No hay pedidos registrados para ningún cliente."), true);
+                return null;
+            }
+        }
+        else if (tipoFiltrado == 1) {
+            for (Pedido pedido : pedidos) {
+                if (checkEnviado(pedido)) continue;
+                if (clientesPedidos.contains(pedido.getCliente())) continue;
+                clientesPedidos.add(pedido.getCliente());
+            }
+            if (clientesPedidos.isEmpty()) {
+                vPedidos.showMensajePausa(("No hay pedidos enviados registrados para ningún cliente."), true);
+                return null;
+            }
+        }
+        else if (tipoFiltrado == 2) {
+            for (Pedido pedido : pedidos) {
+                if (!checkEnviado(pedido)) continue;
+                if (clientesPedidos.contains(pedido.getCliente())) continue;
+                clientesPedidos.add(pedido.getCliente());
+            }
+            if (clientesPedidos.isEmpty()) {
+                vPedidos.showMensajePausa(("No hay pedidos pendientes registrados para ningún cliente."), true);
+                return null;
+            }
+        }
+        vPedidos.showListClientesPedidos(clientesPedidos);
+        indexCliente = vPedidos.askInt("Selecciona un cliente", 1, clientesPedidos.size(), true, true);
+        if (indexCliente == -99999) return null;
+        Cliente cliente = clientesPedidos.get(indexCliente-1);
+        if (cliente == null) {
+            vPedidos.showMensajePausa("Error. El cliente no existe. Volviendo...", true);
+            return null;
+        }
+        return cliente;
     }
 
     //*************************** Creación y cálculo de datos ***************************//
 
     /**
-     * Calcular precio del pedido
-     *
-     * @param articulo artículo comprado
-     * @param stockComprado Stock comprado
-     * @param precioEnvio Precio del envio del pedido
-     * @return Float con el precio del pedido
-     */
-    private float calcPedido(Articulo articulo, int stockComprado, float precioEnvio) {
-        return articulo.getPrecio() * stockComprado + (precioEnvio * (float) Math.pow(1.1f, stockComprado));
-    }
-
-    /**
      * Comprueba si se ha enviado un pedido
-     *
      * @param pedido el pedido que se va a comprobar
      * @return Boolean con si se ha enviado o no
      */
@@ -408,8 +345,7 @@ public class ControlPedidos extends ControlBase{
 
     /**
      * Carga los pedidos en el programa
-     *
-     * @param configuracion
+     * @param configuracion define la configuración seleccionada.
      * @return Boolean con si se cargan bien o no
      */
     public boolean loadPedidos(int configuracion) {
@@ -420,4 +356,5 @@ public class ControlPedidos extends ControlBase{
             return false;
         }
     }
+
 }

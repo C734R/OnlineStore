@@ -2,10 +2,7 @@ package javalinos.onlinestore.vista;
 
 import javalinos.onlinestore.modelo.primitivos.Articulo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class VistaArticulos extends VistaBase {
 
@@ -15,7 +12,7 @@ public class VistaArticulos extends VistaBase {
                 **           Gestión de Artículos          **
                 *********************************************""";
         super.setCabecera(cabecera);
-        List<String> listaMenu = new ArrayList<>(Arrays.asList("Añadir artículo", "Eliminar artículo", "Listar artículos"));
+        List<String> listaMenu = new ArrayList<>(Arrays.asList("Añadir artículo", "Eliminar artículo", "Listar artículos", "Modificar artículo", "Mostrar stock artículos"));
         super.setListaMenu(listaMenu);
     }
 
@@ -42,5 +39,42 @@ public class VistaArticulos extends VistaBase {
         }
         showMensajePausa("Demasiados intentos fallidos. Volviendo...", true);
         return -1;
+    }
+
+    public void showListArticulos(List<Articulo> articulos) {
+        showListGenerica(articulos,"ARTÍCULOS", true, false);
+    }
+
+
+    public void showListArticulosStock(Map<Articulo, Integer> articulos) {
+        showMensaje("******** ARTÍCULOS CON STOCK ********", true);
+        int i = 1;
+        for (Map.Entry<Articulo, Integer> stockArticulo : articulos.entrySet()) {
+            showMensaje("****************************************", true);
+            Articulo articulo = stockArticulo.getKey();
+            showMensaje(i++ + ". " +articulo.toString(), true);
+            showMensaje(stockArticulo.getValue() + " Unidades", true);
+            showMensaje("****************************************", true);
+        }
+        showMensaje("****************************************", true);
+    }
+
+    public void showListArticulosNumerada(List<Articulo> articulos) {
+        showListGenerica(articulos,"ARTÍCULOS NUMERADOS", true, true);
+    }
+
+    public void showArticulo(Articulo articulo) {
+        showMensaje("******** DATOS DEL ARTICULO " + articulo.getCodigo() +" ********", true);
+        showMensaje(articulo.toString(), true);
+        showMensaje("*****************************************", true);
+    }
+
+    public void showStockArticulos(Map<Articulo, Integer> articulos) {
+        showMensaje("******** STOCK DE ARTÍCULOS ********", true);
+        for (Map.Entry<Articulo, Integer> stockArticulo : articulos.entrySet()) {
+            Articulo articulo = stockArticulo.getKey();
+            showMensaje(articulo.getCodigo() + " - " + articulo.getDescripcion() + " - " + stockArticulo.getValue() + " Unidades", true);
+        }
+        showMensaje("****************************************", true);
     }
 }

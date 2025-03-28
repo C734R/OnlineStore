@@ -3,8 +3,6 @@ package javalinos.onlinestore.controlador;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
 
-import static javalinos.onlinestore.OnlineStore.vMenuPrincipal;
-
 public class ControlMenuPrincipal extends ControlBase {
 
     private VistaMenuPrincipal vMenuPrincipal;

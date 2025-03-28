@@ -8,6 +8,7 @@ import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,25 +19,23 @@ class ModeloPedidosTest {
     ModeloClientes mClientes;
     List<Cliente> clientes;
     List<Articulo> articulos;
+    Map<Articulo, Integer> stock;
 
-    /**
-     * Acciones antes de cada test
-     */
     @BeforeEach
     void setUp() {
         mArticulos = new ModeloArticulos();
-        loadArticulosTest();
+        assertTrue(mArticulos.loadArticulos(0));
         articulos = mArticulos.getArticulos();
+        stock = mArticulos.getStockArticulos();
+
         mClientes = new ModeloClientes();
-        loadClientesTest();
+        assertTrue(mClientes.loadClientes(0));
         clientes = mClientes.getClientes();
+
         mPedidos = new ModeloPedidos();
-        mPedidos.loadPedidos(1, clientes, articulos);
+        assertTrue(mPedidos.loadPedidos(0, clientes, articulos));
     }
 
-    /**
-     * Acciones después de cada test
-     */
     @AfterEach
     void tearDown() {
         mClientes = null;
@@ -44,132 +43,152 @@ class ModeloPedidosTest {
         mPedidos = null;
         clientes = null;
         articulos = null;
+        stock = null;
     }
 
-    /**
-     * Precarga de artículos
-     */
     @Test
-    void loadArticulosTest() {
-        assertTrue(mArticulos.loadArticulos(0));
+    void loadPedidosTest() {
+        assertEquals(18, mPedidos.getPedidos().size());
     }
 
-    /**
-     * Precarga de clientes
-     */
-    @Test
-    void loadClientesTest() {
-        assertTrue(mClientes.loadClientes(0));
-    }
-
-    /**
-     * Obtención de artículos
-     */
     @Test
     void getArticulosTest() {
-        assertFalse(mArticulos.getArticulos().isEmpty());
+        assertFalse(articulos.isEmpty());
     }
 
-    /**
-     * Obtención de clientes
-     */
     @Test
     void getClientesTest() {
-        assertFalse(mClientes.getClientes().isEmpty());
+        assertFalse(clientes.isEmpty());
     }
 
-    /**
-     * Adición de pedido
-     */
     @Test
     void addPedidoTest() {
-        int cantidad = mPedidos.getPedidos().size();
-        Pedido p = mPedidos.makePedido(clientes.get(0), articulos.get(0), 1, LocalDate.now(), 5f, 10f);
+        int sizeAnterior = mPedidos.getPedidos().size();
+        Articulo articulo = articulos.get(0);
+        Cliente cliente = clientes.get(0);
+        int cantidad = 2;
+
+        Pedido p = mPedidos.makePedido(cliente, articulo, cantidad, LocalDate.now(), 5f);
         mPedidos.addPedido(p);
-        assertEquals(cantidad + 1, mPedidos.getPedidos().size());
+
+        assertEquals(sizeAnterior + 1, mPedidos.getPedidos().size());
     }
 
-    /**
-     * Eliminación de pedido
-     */
     @Test
     void removePedidoTest() {
-        Pedido p = mPedidos.makePedido(clientes.get(0), articulos.get(0), 1, LocalDate.now(), 5f, 10f);
+        Articulo articulo = articulos.get(1);
+        Cliente cliente = clientes.get(1);
+
+        Pedido p = mPedidos.makePedido(cliente, articulo, 1, LocalDate.now(), 5f);
         mPedidos.addPedido(p);
+        assertTrue(mPedidos.getPedidos().contains(p));
+
         mPedidos.removePedido(p);
         assertFalse(mPedidos.getPedidos().contains(p));
     }
 
-    /**
-     * Obtención de número de pedido
-     */
     @Test
     void getPedidoNumeroTest() {
-        Pedido pedido = mPedidos.getPedidos().get(0);
-        assertEquals(pedido, mPedidos.getPedidoNumero(0));
+        Pedido pedido = mPedidos.getPedidos().getFirst();
+        Pedido obtenido = mPedidos.getPedidoNumero(pedido.getNumero());
+        assertNotNull(obtenido);
+        assertEquals(pedido.getNumero(), obtenido.getNumero());
     }
 
-    /**
-     * Obtención de pedidos de un cliente
-     */
     @Test
     void getPedidosClienteTest() {
-        Cliente cliente = mPedidos.getPedidos().get(0).getCliente();
+        Cliente cliente = mPedidos.getPedidos().getFirst().getCliente();
         List<Pedido> pedidosCliente = mPedidos.getPedidosCliente(cliente);
+        assertFalse(pedidosCliente.isEmpty());
         for (Pedido p : pedidosCliente) {
             assertEquals(cliente, p.getCliente());
         }
     }
 
-    /**
-     * Obtención de pedidos pendientes y enviados
-     */
     @Test
     void getPedidosPendientesEnviadosTest() {
-        LocalDate fechaPendientes = LocalDate.now().plusDays(10);
-        LocalDate fechaEnviados = LocalDate.now().plusDays(10);
-        List<Pedido> pendientes = mPedidos.getPedidosPendientesEnviados(fechaPendientes, false, null);
-        List<Pedido> enviados = mPedidos.getPedidosPendientesEnviados(fechaEnviados, true, null);
+        LocalDate fechaReferencia = LocalDate.now().plusDays(10);
+        List<Pedido> pendientes = mPedidos.getPedidosPendientesEnviados(fechaReferencia, false, null);
+        List<Pedido> enviados = mPedidos.getPedidosPendientesEnviados(fechaReferencia, true, null);
 
         assertNotNull(pendientes);
         assertNotNull(enviados);
 
         for (Pedido p : pendientes) {
-            float dias = p.getArticulo().getPreparacion() * p.getCantidad();
-            assertTrue(fechaPendientes.isBefore(p.getFechahora().plusDays((int) Math.ceil(dias))));
+            LocalDate fechaEnvio = p.getFechahora().plusDays(p.getDiasPreparacion());
+            assertTrue(fechaReferencia.isBefore(fechaEnvio) || fechaReferencia.isEqual(fechaEnvio));
         }
 
         for (Pedido p : enviados) {
-            float dias = p.getArticulo().getPreparacion() * p.getCantidad();
-            assertTrue(fechaPendientes.isAfter(p.getFechahora().plusDays((int) Math.ceil(dias))));
+            LocalDate fechaEnvio = p.getFechahora().plusDays(p.getDiasPreparacion());
+            assertTrue(fechaReferencia.isAfter(fechaEnvio));
         }
     }
 
-    /**
-     * Obtención del último número de pedido
-     */
     @Test
     void getLastNumPedidoTest() {
         int lastNum = mPedidos.getLastNumPedido();
         assertEquals(mPedidos.getPedidos().getLast().getNumero(), lastNum);
     }
 
-    /**
-     * Obtención del primer número de pedido
-     */
     @Test
     void getFirstNumPedidoTest() {
         int firstNum = mPedidos.getFirstNumPedido();
         assertEquals(mPedidos.getPedidos().getFirst().getNumero(), firstNum);
     }
 
-    /**
-     * Precarga de pedidos
-     */
     @Test
-    void loadPedidosTest() {
-        boolean cargado = mPedidos.loadPedidos(1, clientes, articulos);
-        assertTrue(cargado);
-        assertEquals(9, mPedidos.getPedidos().size());
+    void updatePedidoTest() {
+        Pedido pedidoOld = mPedidos.getPedidos().getFirst();
+        Pedido pedidoNew = new Pedido(pedidoOld); // Copia del pedido original
+
+        int nuevaCantidad = pedidoOld.getCantidad() + 1;
+        float nuevoPrecio = pedidoOld.getPrecio() + 10f;
+
+        pedidoNew.setCantidad(nuevaCantidad);
+        pedidoNew.setPrecio(nuevoPrecio);
+
+        mPedidos.updatePedido(pedidoOld, pedidoNew);
+
+        Pedido actualizado = mPedidos.getPedidoNumero(pedidoOld.getNumero());
+
+        assertEquals(pedidoOld.getNumero(), actualizado.getNumero(), "El número de pedido debe mantenerse igual");
+        assertEquals(nuevaCantidad, actualizado.getCantidad(), "La cantidad debe actualizarse");
+        assertEquals(nuevoPrecio, actualizado.getPrecio(), 0.01f, "El precio debe actualizarse");
+    }
+
+    @Test
+    void checkStockAddPedido() {
+        Articulo articulo = articulos.getFirst();
+        Cliente cliente = clientes.getFirst();
+        int stockInicial = stock.get(articulo);
+        int cantidadPedido = 3;
+
+        Pedido pedido = mPedidos.makePedido(cliente, articulo, cantidadPedido, LocalDate.now(), 5f);
+        mPedidos.addPedido(pedido);
+
+        mArticulos.updateStockArticulo(articulo, stockInicial - cantidadPedido);
+
+        int stockActual = mArticulos.getStockArticulos().get(articulo);
+        assertEquals(stockInicial - cantidadPedido, stockActual);
+    }
+
+    @Test
+    void checkStockRemovePedidoTest() {
+        Articulo articulo = articulos.get(1);
+        Cliente cliente = clientes.get(1);
+        int cantidadPedido = 2;
+        int stockInicial = stock.get(articulo);
+
+        Pedido pedido = mPedidos.makePedido(cliente, articulo, cantidadPedido, LocalDate.now(), 5f);
+        mPedidos.addPedido(pedido);
+
+        mArticulos.updateStockArticulo(articulo, stockInicial - cantidadPedido);
+
+        mPedidos.removePedido(pedido);
+        mArticulos.updateStockArticulo(articulo, mArticulos.getStockArticulos().get(articulo) + cantidadPedido);
+
+        int stockFinal = mArticulos.getStockArticulos().get(articulo);
+        assertEquals(stockInicial, stockFinal);
     }
 }

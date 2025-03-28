@@ -13,8 +13,8 @@ import java.util.List;
  */
 public class ControlClientes extends ControlBase {
 
-    private VistaClientes vClientes;
-    private ModeloClientes mClientes;
+    private final VistaClientes vClientes;
+    private final ModeloClientes mClientes;
 
     /**
      * Constructor del controlador de clientes.
@@ -47,15 +47,18 @@ public class ControlClientes extends ControlBase {
                     break;
                 case 3:
                     showCliente();
+                    vClientes.showMensajePausa("", true);
                     break;
                 case 4:
                     modCliente();
                     break;
                 case 5:
                     showListClientes();
+                    vClientes.showMensajePausa("", true);
                     break;
                 case 6:
                     showListClientesCategoria();
+                    vClientes.showMensajePausa("", true);
                     break;
                 case 0:
                     vClientes.showMensaje("Volviendo al menú principal...", true);
@@ -77,9 +80,9 @@ public class ControlClientes extends ControlBase {
         if (nombre == null ) return;
         String domicilio = vClientes.askString("Ingrese el domicilio del cliente:", 250);
         if (domicilio == null ) return;
-        String nif = vClientes.askString("Ingrese el NIF del cliente:", 15);
+        String nif = vClientes.askNIF();
         if (nif == null ) return;
-        String email = vClientes.askString("Ingrese el email del cliente:", 250);
+        String email = vClientes.askEmail(false);
         if (email == null ) return;
         Categoria categoria = getCategoria(vClientes.askCategoriaCliente());
         if (categoria == null) return;
@@ -188,9 +191,10 @@ public class ControlClientes extends ControlBase {
     public void modClienteNombre(Cliente clienteOld) {
         String oldNameCliente,newNameCliente;
         Cliente clienteNew;
-        clienteNew = clienteOld;
+        clienteNew = new Cliente(clienteOld);
         oldNameCliente = clienteOld.getNombre();
         newNameCliente = vClientes.askString("Introduce el nuevo nombre del usuario: ", 250);
+        if (newNameCliente == null) return;
         clienteNew.setNombre(newNameCliente);
         setCliente(clienteOld, clienteNew);
         showExitoMod("nombre",oldNameCliente,clienteNew.getNombre());
@@ -202,9 +206,10 @@ public class ControlClientes extends ControlBase {
     public void modClienteDomicilio(Cliente clienteOld){
         String oldDomicilio,newDomicilio;
         Cliente clienteNew;
-        clienteNew = clienteOld;
+        clienteNew = new Cliente(clienteOld);
         oldDomicilio = clienteOld.getDomicilio();
         newDomicilio = vClientes.askString("Introduce el nuevo domicilio: ", 250);
+        if(newDomicilio == null) return;
         clienteNew.setDomicilio(newDomicilio);
         setCliente(clienteOld, clienteNew);
         showExitoMod("domicilio",oldDomicilio,clienteNew.getDomicilio());
@@ -219,6 +224,7 @@ public class ControlClientes extends ControlBase {
         clienteNew = clienteOld;
         oldNIF = clienteOld.getNif();
         newNIF = vClientes.askNIF();
+        if(newNIF == null) return;
         clienteNew.setNif(newNIF);
         setCliente(clienteOld, clienteNew);
         showExitoMod("NIF",oldNIF,clienteNew.getNif());
@@ -230,9 +236,10 @@ public class ControlClientes extends ControlBase {
     public void modClienteEmail(Cliente clienteOld){
         String oldEmail,newEmail;
         Cliente clienteNew;
-        clienteNew = clienteOld;
+        clienteNew = new Cliente(clienteOld);
         oldEmail = clienteOld.getEmail();
         newEmail = vClientes.askEmail(true);
+        if(newEmail == null) return;
         clienteNew.setEmail(newEmail);
         setCliente(clienteOld, clienteNew);
         showExitoMod("email",oldEmail,clienteNew.getEmail());
@@ -244,9 +251,10 @@ public class ControlClientes extends ControlBase {
     public void modClienteCategoria(Cliente clienteOld){
         Categoria oldCategoria,newCategoria;
         Cliente clienteNew;
-        clienteNew = clienteOld;
+        clienteNew = new Cliente(clienteOld);
         oldCategoria = clienteOld.getCategoria();
         newCategoria = mClientes.getCategoria(vClientes.askCategoriaCliente());
+        if(newCategoria == null) return;
         clienteNew.setCategoria(newCategoria);
         setCliente(clienteOld, clienteNew);
         showExitoMod("categoria",oldCategoria.getNombre(),clienteNew.getCategoria().getNombre());
@@ -310,6 +318,10 @@ public class ControlClientes extends ControlBase {
      */
     public Cliente getCliente(int indexCliente) { return mClientes.getClienteIndex(indexCliente); }
 
+    public Cliente getClienteEmail(String email){
+        return mClientes.getClienteEmail(email);
+    }
+
     //*************************** Mostrar mensajes vista ***************************//
 
     /**
@@ -356,7 +368,6 @@ public class ControlClientes extends ControlBase {
     public void showListClientesCategoria() {
         Categoria categoria = getCategoria(vClientes.askCategoriaCliente());
         vClientes.showListClientesCategoria(getListClientesCategoria(categoria), categoria);
-        vClientes.showMensajePausa("", true);
     }
 
     //*************************** Obtener listas ***************************//
