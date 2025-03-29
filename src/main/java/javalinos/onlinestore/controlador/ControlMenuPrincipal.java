@@ -2,31 +2,41 @@ package javalinos.onlinestore.controlador;
 
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
-
+/**
+ * Controlador del menú principal de la aplicación.
+ */
 public class ControlMenuPrincipal extends ControlBase {
 
     private VistaMenuPrincipal vMenuPrincipal;
 
     /**
-     * Constructor de ControlMenuPrincipal
+     * Constructor principal de ControlMenuPrincipal.
      * @param mStore el ModelStore que va a utilizar
-     * @param vMenuPrincipal La vista que va a utilizar
+     * @param vMenuPrincipal la vista que va a utilizar
      */
     public ControlMenuPrincipal(ModeloStore mStore, VistaMenuPrincipal vMenuPrincipal) {
         super(mStore);
         this.vMenuPrincipal = vMenuPrincipal;
     }
-
+    /**
+     * Constructor vacío.
+     */
     public ControlMenuPrincipal() {
         super();
     }
 
     //*************************** Getters & Setters ***************************//
-
+    /**
+     * Devuelve la vista del menú principal.
+     * @return Vista del menú principal
+     */
     public VistaMenuPrincipal getVistaMenuPrincipal() {
         return vMenuPrincipal;
     }
-
+    /**
+     * Asigna una nueva vista para el menú principal.
+     * @param vistaMenuPrincipal vista a asignar
+     */
     public void setVistaMenuPrincipal(VistaMenuPrincipal vistaMenuPrincipal) {
         this.vMenuPrincipal = vMenuPrincipal;
     }
@@ -34,9 +44,8 @@ public class ControlMenuPrincipal extends ControlBase {
     //*************************** Menu principal ***************************//
 
     /**
-     * Inicia el menú prinicpal
-     *
-     * @return Int en función de la opción seleccionada
+     * Inicia el menú principal y permite seleccionar una opción.
+     * @return número entero según la opción seleccionada
      */
     public int iniciar() {
         int opcion;
@@ -66,9 +75,8 @@ public class ControlMenuPrincipal extends ControlBase {
     //*************************** Error precarga ***************************//
 
     /**
-     * Error en la carga del menú
-     *
-     * @return Boolean en función de si da error
+     * Muestra un mensaje de error al fallar la precarga de datos.
+     * @return true si el usuario desea volver a intentarlo, false en caso contrario
      */
     public boolean errorPrecarga() {
         vMenuPrincipal.showMensajePausa("Error. Se ha producido un error en la precarga de datos.", true);
@@ -76,7 +84,7 @@ public class ControlMenuPrincipal extends ControlBase {
     }
 
     /**
-     * Salir del programa
+     * Muestra un mensaje de salida del programa.
      */
     public void salir() {
         vMenuPrincipal.showMensaje("********* ¡¡Hasta pronto!! *********",true);

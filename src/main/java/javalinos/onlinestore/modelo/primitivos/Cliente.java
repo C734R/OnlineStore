@@ -13,12 +13,11 @@ public class Cliente {
 
     /**
      * Constructor de un cliente.
-     *
-     * @param nombre String con Nombre del cliente
-     * @param domicilio String con Domicilio del cliente
-     * @param nif String con NIF del cliente
-     * @param email String con Email del cliente
-     * @param categoria enumCategoría del cliente
+     * @param nombre nombre del cliente.
+     * @param domicilio domicilio del cliente.
+     * @param nif NIF del cliente.
+     * @param email email del cliente.
+     * @param categoria categoría asociada al cliente.
      */
     public Cliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
         this.nombre = nombre;
@@ -29,7 +28,7 @@ public class Cliente {
     }
 
     /**
-     * Constructor de sobrecarga
+     * Constructor vacío. Inicializa con valores por defecto.
      */
     public Cliente() {
         this.nombre = "";
@@ -40,8 +39,8 @@ public class Cliente {
     }
 
     /**
-     * Constructor de copia
-     * @param clienteOld se le pasa otro cliente
+     * Constructor de copia.
+     * @param clienteOld cliente a copiar.
      */
     public Cliente(Cliente clienteOld) {
         this.nombre = clienteOld.getNombre();
@@ -52,117 +51,104 @@ public class Cliente {
     }
 
     /**
-     * Cambiar nombre de un cliente
-     *
-     * @param nombre El nuevo nombre del cliente
+     * Cambia el nombre del cliente.
+     * @param nombre nuevo nombre.
      */
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
     /**
-     * Cambiar el domicilio del cliente
-     *
-     * @param domicilio El nuevo domicilio del cliente
+     * Cambia el domicilio del cliente.
+     * @param domicilio nuevo domicilio.
      */
     public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
     }
 
     /**
-     * Cambiar NIF del cliente
-     *
-     * @param nif Nuevo NIF del cliente
+     * Cambia el NIF del cliente.
+     * @param nif nuevo NIF.
      */
     public void setNif(String nif) {
         this.nif = nif;
     }
 
     /**
-     * Cambiar Email del cliente
-     *
-     * @param email Nuevo Email del cliente
+     * Cambia el email del cliente.
+     * @param email nuevo email.
      */
     public void setEmail(String email) {
         this.email = email;
     }
 
     /**
-     * Cambiar categoría del cliente
-     *
-     * @param categoria Nueva categoría del cliente
+     * Cambia la categoría del cliente.
+     * @param categoria nueva categoría.
      */
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
     /**
-     * Obtener el nombre del cliente.
-     *
-     * @return String con el nombre del cliente
+     * Obtiene el nombre del cliente.
+     * @return nombre del cliente.
      */
     public String getNombre() {
         return nombre;
     }
 
     /**
-     * Devuelve el domicilio del cliente
-     *
-     * @return String con el domicilio del cliente
+     * Obtiene el domicilio del cliente.
+     * @return domicilio del cliente.
      */
     public String getDomicilio() {
         return domicilio;
     }
 
     /**
-     * Devuelve el NIF del cliente
-     *
-     * @return String con el NIF del cliente
+     * Obtiene el NIF del cliente.
+     * @return NIF del cliente.
      */
     public String getNif() {
         return nif;
     }
 
     /**
-     * Devuelve le Email del cliente
-     *
-     * @return String con el email del cliente
+     * Obtiene el email del cliente.
+     * @return email del cliente.
      */
     public String getEmail() {
         return email;
     }
 
     /**
-     * Devuelve la categoría del cliente
-     *
-     * @return Enumeración con la categoría del cliente
+     * Obtiene la categoría del cliente.
+     * @return categoría del cliente.
      */
     public Categoria getCategoria() {
         return categoria;
     }
 
     /**
-     * Devuelve la Cuota que tiene que pagar el cliente
-     *
-     * @return Float con la cuota a pagar del cliente
+     * Obtiene la cuota a pagar del cliente, según su categoría.
+     * @return cuota en euros.
      */
     public Float getCuota() {
         return this.categoria.getCuota();
     }
 
     /**
-     * Devuelve el descuento del cliente
-     *
-     * @return Float con el descuento del cliente
+     * Obtiene el descuento disponible para el cliente.
+     * @return porcentaje de descuento.
      */
     public Float getDescuento() {
         return this.categoria.getDescuento();
     }
 
     /**
-     * Devuelve un cliente completo
-     *
-     * @return String con un cliente completo.
+     * Devuelve los datos del cliente en formato texto.
+     * @return cadena con los datos del cliente.
      */
     @Override
     public String toString() {

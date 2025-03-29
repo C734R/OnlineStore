@@ -3,9 +3,16 @@ package javalinos.onlinestore.vista;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+/**
+ * Vista principal del sistema.
+ * - Muestra el menú inicial con opciones de gestión de clientes, artículos y pedidos.
+ * - Entidad relacionada: VistaBase
+ */
 public class VistaMenuPrincipal extends VistaBase {
-
+    /**
+     * Constructor por defecto.
+     * Establece la cabecera con arte ASCII y el menú principal del sistema.
+     */
     public VistaMenuPrincipal() {
         String cabecera = """
                 ******** Ejecutando aplicación Online Store ********
@@ -43,7 +50,11 @@ public class VistaMenuPrincipal extends VistaBase {
         List<String> listaMenu = new ArrayList<>(Arrays.asList("Gestión Clientes", "Gestión Artículos", "Gestión Pedidos"));
         super.setListaMenu(listaMenu);
     }
-
+    /**
+     * Constructor alternativo para personalizar cabecera y menú.
+     * @param cabecera Título que se mostrará al usuario.
+     * @param listMenu Opciones disponibles en el menú.
+     */
     public VistaMenuPrincipal(String cabecera, List<String> listMenu) {
         super(cabecera, listMenu);
     }

@@ -2,6 +2,7 @@ package javalinos.onlinestore.modelo.primitivos;
 
 /**
  * Representa los artículos incluidos en nuestro programa.
+ * Contiene datos como código, descripción, precio y tiempo de preparación.
  */
 public class Articulo {
     private String codigo;
@@ -11,11 +12,10 @@ public class Articulo {
 
     /**
      * Constructor de un artículo.
-     *
-     * @param codigo Codigo de artículo
-     * @param descripcion Descripción de un artículo
-     * @param precio Precio del artículo
-     * @param minutosPreparacion Tiempo de preparación de un artículo
+     * @param codigo código identificador del artículo.
+     * @param descripcion descripción del artículo.
+     * @param precio precio del artículo.
+     * @param minutosPreparacion tiempo de preparación en minutos.
      */
     public Articulo(String codigo, String descripcion, Float precio, Integer minutosPreparacion) {
         this.codigo = codigo;
@@ -25,7 +25,7 @@ public class Articulo {
     }
 
     /**
-     * Constructor con sobre carga
+     * Constructor vacío. Inicializa con valores por defecto.
      */
     public Articulo() {
         this.codigo = "";
@@ -35,7 +35,8 @@ public class Articulo {
     }
 
     /**
-     * Constructor de copia
+     * Constructor de copia.
+     * @param articulo artículo a copiar.
      */
     public Articulo(Articulo articulo) {
         this.codigo = articulo.getCodigo();
@@ -45,18 +46,16 @@ public class Articulo {
     }
 
     /**
-     * Devuelve el codigo de artículo
-     *
-     * @return El código de artículo deseado.
+     * Devuelve el código del artículo.
+     * @return código del artículo.
      */
     public String getCodigo() {
         return codigo;
     }
 
     /**
-     * Configura un código de artículo
-     *
-     * @param codigo El nuevo código de artículo
+     * Establece un nuevo código para el artículo.
+     * @param codigo nuevo código.
      */
     public void setCodigo(String codigo) {
         this.codigo = codigo;
@@ -64,62 +63,55 @@ public class Articulo {
 
     /**
      * Devuelve la descripción del artículo.
-     *
-     * @return String con la descripción
+     * @return descripción textual del artículo.
      */
     public String getDescripcion() {
         return descripcion;
     }
 
     /**
-     * Cambia la descripción de un artículo.
-     *
-     * @param descripcion La nueva descripción del artículo.
+     * Establece la descripción del artículo.
+     * @param descripcion nueva descripción.
      */
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
 
     /**
-     * Devuelve el precio de un artículo
-     *
-     * @return Float con el precio de artículo
+     * Devuelve el precio del artículo.
+     * @return precio del artículo.
      */
     public Float getPrecio() {
         return precio;
     }
 
     /**
-     * Configurar nuevo precio de artículo
-     *
-     * @param precio El nuevo precio
+     * Establece un nuevo precio para el artículo.
+     * @param precio nuevo precio.
      */
     public void setPrecio(Float precio) {
         this.precio = precio;
     }
 
     /**
-     * Devuelve el tiempo de preparación del artículo
-     *
-     * @return Float con el tiempo de preparación del artículo
+     * Devuelve el tiempo de preparación en minutos.
+     * @return tiempo en minutos.
      */
     public Integer getMinutosPreparacion() {
         return minutosPreparacion;
     }
 
     /**
-     * Cambia el tiempo de preparación del artículo
-     *
-     * @param minutosPreparacion El nuevo tiempo de preparación
+     * Establece el tiempo de preparación del artículo.
+     * @param minutosPreparacion minutos requeridos para preparar el artículo.
      */
     public void setMinutosPreparacion(Integer minutosPreparacion) {
         this.minutosPreparacion = minutosPreparacion;
     }
 
     /**
-     * Devuelve el string completo de un artículo
-     *
-     * @return String con todos los componentes de un artículo
+     * Devuelve la representación textual del artículo.
+     * @return string con los datos del artículo.
      */
     @Override
     public String toString() {

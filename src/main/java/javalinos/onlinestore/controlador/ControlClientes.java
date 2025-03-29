@@ -9,7 +9,7 @@ import javalinos.onlinestore.vista.VistaClientes;
 import java.util.List;
 
 /**
- * Clase control Clientes
+ * Controlador para gestionar la lógica del módulo de clientes.
  */
 public class ControlClientes extends ControlBase {
 
@@ -18,8 +18,8 @@ public class ControlClientes extends ControlBase {
 
     /**
      * Constructor del controlador de clientes.
-     * @param mStore recibe el modelo de la tienda.
-     * @param vClientes recibe la vista de clientes.
+     * @param mStore modelo principal de la tienda
+     * @param vClientes vista asociada a los clientes
      */
     public ControlClientes(ModeloStore mStore, VistaClientes vClientes) {
         super(mStore);
@@ -30,7 +30,7 @@ public class ControlClientes extends ControlBase {
     //*************************** Menu gestión clientes ***************************//
 
     /**
-     * Inicia el menú de clientes.
+     * Inicia el menú de gestión de clientes.
      */
     public void iniciar() {
         int opcion;
@@ -72,7 +72,7 @@ public class ControlClientes extends ControlBase {
     //*************************** CRUD Clientes ***************************//
 
     /**
-     * Añadir un cliente.
+     * Añade un nuevo cliente a la colección.
      */
     public void addCliente() {
         vClientes.showMensaje("******** Añadir Cliente ********", true);
@@ -92,16 +92,16 @@ public class ControlClientes extends ControlBase {
     }
 
     /**
-     * Sustituye los datos de un cliente por los nuevos.
-     * @param clienteOld se le pasan los datos del cliente a modificar.
-     * @param clienteNew se le pasan los nuevos datos.
+     * Reemplaza los datos de un cliente antiguo por uno nuevo.
+     * @param clienteOld cliente original
+     * @param clienteNew cliente actualizado
      */
     public void setCliente (Cliente clienteOld, Cliente clienteNew){
         mClientes.updateCliente(clienteOld, clienteNew);
     }
 
     /**
-     * Elimina un cliente.
+     * Inicia el proceso de eliminación de un cliente según el modo elegido.
      */
     public void removeCliente() {
         int opcion = vClientes.askMetodoEliminar();
@@ -117,7 +117,7 @@ public class ControlClientes extends ControlBase {
     }
 
     /**
-     * Eliminar un cliente por NIF.
+     * Elimina un cliente introduciendo su NIF.
      */
     public void removeClienteNif() {
         String nif = vClientes.askString("Ingrese el NIF del cliente a eliminar:", 15);
@@ -132,7 +132,7 @@ public class ControlClientes extends ControlBase {
     }
 
     /**
-     * Eliminar un cliente por Email.
+     * Elimina un cliente introduciendo su email.
      */
     public void removeClienteEmail() {
         String email = vClientes.askString("Ingrese el Email del cliente a eliminar:", 250);
@@ -149,7 +149,7 @@ public class ControlClientes extends ControlBase {
     //*************************** Modificar datos cliente ***************************//
 
     /**
-     * Muestra menú de modificaciones.
+     * Inicia el menú de modificación de datos del cliente.
      */
     public void modCliente() {
         int opcion ;
@@ -185,8 +185,8 @@ public class ControlClientes extends ControlBase {
     }
 
     /**
-     * Modificar nombre de cliente.
-     * @param clienteOld se le pasa el cliente a modificar.
+     * Modifica el nombre del cliente.
+     * @param clienteOld cliente a modificar
      */
     public void modClienteNombre(Cliente clienteOld) {
         String oldNameCliente,newNameCliente;
@@ -200,8 +200,8 @@ public class ControlClientes extends ControlBase {
         showExitoMod("nombre",oldNameCliente,clienteNew.getNombre());
     }
     /**
-     * Modificar domicilio de cliente.
-     * @param clienteOld se le pasa el cliente a modificar.
+     * Modifica el domicilio del cliente.
+     * @param clienteOld cliente a modificar
      */
     public void modClienteDomicilio(Cliente clienteOld){
         String oldDomicilio,newDomicilio;
@@ -215,8 +215,8 @@ public class ControlClientes extends ControlBase {
         showExitoMod("domicilio",oldDomicilio,clienteNew.getDomicilio());
     }
     /**
-     * Modificar NIF de cliente.
-     * @param clienteOld se le pasa el cliente a modificar.
+     * Modifica el NIF del cliente.
+     * @param clienteOld cliente a modificar
      */
     public void modClienteNIF(Cliente clienteOld){
         String oldNIF,newNIF;
@@ -230,8 +230,8 @@ public class ControlClientes extends ControlBase {
         showExitoMod("NIF",oldNIF,clienteNew.getNif());
     }
     /**
-     * Modificar Email de cliente.
-     * @param clienteOld se le pasa el cliente a modificar.
+     * Modifica el email del cliente.
+     * @param clienteOld cliente a modificar
      */
     public void modClienteEmail(Cliente clienteOld){
         String oldEmail,newEmail;
@@ -245,8 +245,8 @@ public class ControlClientes extends ControlBase {
         showExitoMod("email",oldEmail,clienteNew.getEmail());
     }
     /**
-     * Modificar categoría de cliente.
-     * @param clienteOld se le pasa el cliente a modificar.
+     * Modifica la categoría del cliente.
+     * @param clienteOld cliente a modificar
      */
     public void modClienteCategoria(Cliente clienteOld){
         Categoria oldCategoria,newCategoria;
@@ -263,8 +263,8 @@ public class ControlClientes extends ControlBase {
     //*************************** Peticiones especializadas ***************************//
 
     /**
-     * Preguntar el cliente a modificar y mostrar datos.
-     * @return Cliente devolver cliente a modificar.
+     * Pide al usuario seleccionar un cliente a modificar.
+     * @return cliente seleccionado o null si se canceló
      */
     public Cliente askClienteModificar(){
         String datoCliente;
@@ -294,30 +294,35 @@ public class ControlClientes extends ControlBase {
     //*************************** Obtener datos singulares ***************************//
 
     /**
-     * Obtener índice inicial o final de la lista de clientes.
-     * @param last se le pasa la opción de inicial o final.
-     * @return devuelve el índice del primer o último del cliente.
+     * Devuelve el índice del primer o último cliente registrado.
+     * @param last true para último, false para primero
+     * @return índice correspondiente
      */
     public int getIndexCliente(Boolean last) {
         if (last) return mClientes.getLastIndexCliente();
         else return mClientes.getFirstIndexCliente();
     }
     /**
-     * Obtiene una categoría en función de la opción seleccionada.
-     * @param opcion se le pasa la opción seleccionada.
-     * @return Categoria devuelve la categoría correspondiente a la opción seleccionada.
+     * Obtiene una categoría según la opción seleccionada.
+     * @param opcion número de opción seleccionada
+     * @return categoría correspondiente
      */
     public Categoria getCategoria (int opcion){
         return mClientes.getCategoria(opcion);
     }
 
     /**
-     * Obtiene un cliente a través de su índice en la colección.
-     * @param indexCliente se le pasa el índice del cliente en la colección.
-     * @return Cliente devuelve el cliente que corresponde al índice pasado.
+     * Obtiene un cliente según su índice en la lista.
+     * @param indexCliente índice del cliente
+     * @return cliente correspondiente
      */
     public Cliente getCliente(int indexCliente) { return mClientes.getClienteIndex(indexCliente); }
 
+    /**
+     * Obtiene un cliente según su email.
+     * @param email email del cliente
+     * @return cliente correspondiente
+     */
     public Cliente getClienteEmail(String email){
         return mClientes.getClienteEmail(email);
     }
@@ -325,19 +330,19 @@ public class ControlClientes extends ControlBase {
     //*************************** Mostrar mensajes vista ***************************//
 
     /**
-     * Mostrar éxito en la modificación.
-     * @param datoModificar se le pasa el dato a modificar.
-     * @param valorOld se le pasa el dato antigüo.
-     * @param valorNew se le pasa el dato nuevo.
-     * @param <VO> tipo de dato antigüo.
-     * @param <VN> tipo de dato nuevo.
+     * Muestra un mensaje informativo al modificar correctamente un campo.
+     * @param datoModificar nombre del campo
+     * @param valorOld valor anterior
+     * @param valorNew nuevo valor
+     * @param <VO> tipo del valor antiguo
+     * @param <VN> tipo del valor nuevo
      */
     public <VO,VN> void showExitoMod (String datoModificar, VO valorOld, VN valorNew ){
         vClientes.showMensaje("El " + datoModificar + " del cliente se ha cambiado de forma exitosa de " + valorOld + " a " + valorNew + ".",true);
         vClientes.showMensajePausa("",true);
     }
     /**
-     * Muestra un cliente a través de su NIF o Email.
+     * Muestra los datos de un cliente introduciendo su NIF o email.
      */
     public void showCliente() {
         Cliente cliente;
@@ -352,18 +357,20 @@ public class ControlClientes extends ControlBase {
     }
 
     /**
-     * Mostrar listado de clientes sin filtrar.
+     * Muestra la lista completa de clientes sin filtros.
      */
     public void showListClientes() {
         vClientes.showListClientes(getListaClientes());
     }
-
+    /**
+     * Muestra la lista de clientes numerada.
+     */
     public void showListClientesNumerada() {
         vClientes.showListClientesNumerada( getListaClientes());
     }
 
     /**
-     * Mostrar listado de clientes por categoría.
+     * Muestra la lista de clientes filtrada por categoría.
      */
     public void showListClientesCategoria() {
         Categoria categoria = getCategoria(vClientes.askCategoriaCliente());
@@ -373,17 +380,17 @@ public class ControlClientes extends ControlBase {
     //*************************** Obtener listas ***************************//
 
     /**
-     * Obtener lista de clientes.
-     * @return List<Cliente> devuelve colección clientes.
+     * Devuelve la lista de todos los clientes registrados.
+     * @return lista de clientes
      */
     public List<Cliente> getListaClientes() {
         return mClientes.getClientes();
     }
 
     /**
-     * Obtener listado de clientes por categoría.
-     * @param categoria se le pasa la categoría por la que filtrar los clientes.
-     * @return List<Cliente> devuelve colección de clientes filtrada por categoría.
+     * Devuelve la lista de clientes que pertenecen a una categoría.
+     * @param categoria categoría a filtrar
+     * @return lista de clientes
      */
     public List<Cliente> getListClientesCategoria(Categoria categoria) {
         return mClientes.getClientesCategoria(categoria);
@@ -392,9 +399,9 @@ public class ControlClientes extends ControlBase {
     //*************************** Carga de datos ***************************//
 
     /**
-     * Reaplizar precarga de colección de clientes.
-     * @param configuracion se le pasa la configuración establecida por argumento.
-     * @return boolean devuelve resultado de la operación.
+     * Carga la colección de clientes en memoria desde configuración.
+     * @param configuracion valor de configuración para carga
+     * @return true si la carga fue exitosa, false si no
      */
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {

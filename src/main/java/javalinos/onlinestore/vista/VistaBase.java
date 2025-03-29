@@ -7,14 +7,21 @@ import java.util.List;
 import java.util.Scanner;
 
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
-
+/**
+ * Clase base abstracta para las vistas de consola del sistema.
+ * - Proporciona utilidades comunes para interacción con el usuario.
+ * - Métodos para mostrar menús, mensajes, solicitar datos y validar entrada.
+ * - Utiliza genéricos para mostrar listas de cualquier tipo.
+ */
 public abstract class VistaBase {
 
     private String cabecera;
     private List<String> listaMenu;
 
     /**
-     * Constructor de una vista.
+     * Constructor principal de la vista.
+     * @param cabecera texto de cabecera a mostrar.
+     * @param listaMenu opciones del menú.
      */
     public VistaBase(String cabecera, List<String> listaMenu) {
         this.cabecera = cabecera;
@@ -22,7 +29,7 @@ public abstract class VistaBase {
     }
 
     /**
-     * Constructor de una vista vacío.
+     * Constructor vacío (por defecto).
      */
     public VistaBase() {
         cabecera = "";
@@ -30,8 +37,8 @@ public abstract class VistaBase {
     }
 
     /**
-     * Establece la cabecera.
-     * @param cabecera recibe la cabecera.
+     * Establece la cabecera que se mostrará.
+     * @param cabecera texto de cabecera.
      */
     public void setCabecera(String cabecera) {
         this.cabecera = cabecera;
@@ -45,29 +52,29 @@ public abstract class VistaBase {
     }
 
     /**
-     * Muestra el menú.
-     * @param retorno recibe el retorno.
+     * Muestra el menú de opciones con un tipo de retorno.
+     * @param retorno tipo de opción final (0 = nada, 1 = Salir, 2 = Volver, 3 = Cancelar).
      */
     public void showMenu (int retorno){
         showOptions(listaMenu,retorno, false, true, false);
     }
 
     /**
-     * Establece la lista de menú.
-     * @param listaMenu recibe la lista de menú.
+     * Establece la lista de opciones del menú.
+     * @param listaMenu lista de opciones del menú.
      */
     public void setListaMenu(List<String> listaMenu) {
         this.listaMenu = listaMenu;
     }
 
     /**
-     * Pide un entero.
-     * @param mensaje recibe el mensaje.
-     * @param min recibe el mínimo.
-     * @param max recibe el máximo.
-     * @param reintentar recibe si se reintentará.
-     * @param sumIntentos recibe si hay máximo de intentos.
-     * @return int devuelve el entero.
+     * Solicita un número entero dentro de un rango.
+     * @param mensaje mensaje mostrado al usuario.
+     * @param min valor mínimo aceptado.
+     * @param max valor máximo aceptado.
+     * @param reintentar true para mostrar mensajes de error y permitir reintentos.
+     * @param sumIntentos true para limitar a 3 intentos como máximo.
+     * @return número entero ingresado o -99999 si se superan los intentos.
      */
     public int askInt(String mensaje, int min, int max, boolean reintentar, boolean sumIntentos) {
         Scanner scanner = new Scanner(System.in);
@@ -92,13 +99,13 @@ public abstract class VistaBase {
     }
 
     /**
-     * Pide un flaot
-     * @param mensaje recibe el mensaje.
-     * @param min recibe el mínimo.
-     * @param max recibe el máximo.
-     * @param reintentar recibe si se reintentará.
-     * @param sumIntentos recibe si hay máximo de intentos.
-     * @return float devuelve el float.
+     * Solicita un número decimal dentro de un rango.
+     * @param mensaje mensaje mostrado al usuario.
+     * @param min valor mínimo aceptado.
+     * @param max valor máximo aceptado.
+     * @param reintentar true para mostrar mensajes de error y permitir reintentos.
+     * @param sumIntentos true para limitar a 3 intentos como máximo.
+     * @return número float ingresado o -99999f si se superan los intentos.
      */
     public Float askFloat(String mensaje, float min, float max, boolean reintentar, boolean sumIntentos) {
         Scanner scanner = new Scanner(System.in);
@@ -124,10 +131,10 @@ public abstract class VistaBase {
     }
 
     /**
-     * Pide una cadena.
-     * @param mensaje recibe el mensaje.
-     * @param longitud recibe la longitud.
-     * @return String devuelve la cadena.
+     * Solicita una cadena de texto con longitud máxima.
+     * @param mensaje mensaje mostrado al usuario.
+     * @param longitud número máximo de caracteres.
+     * @return texto ingresado o null si se superan los intentos.
      */
     public String askString(String mensaje, int longitud) {
         int intentos = 0;
@@ -152,11 +159,11 @@ public abstract class VistaBase {
     }
 
     /**
-     * Pide una respuesta sí o no y devuelve true o false
-     * @param mensaje se le pasa el mensaje a mostrar
-     * @param reintentar se indica si se desea que haya reintentos
-     * @param maxIntentos se indica si se desea que haya un máximo de intentos
-     * @return devuelve el valor de la respuesta.
+     * Solicita al usuario una opción tipo sí/no.
+     * @param mensaje mensaje mostrado al usuario.
+     * @param reintentar true para permitir reintentos.
+     * @param maxIntentos true para limitar a 3 intentos.
+     * @return true si elige "sí", false si elige "no".
      */
     public Boolean askBoolean(String mensaje, boolean reintentar, boolean maxIntentos) {
         showMensaje(mensaje,true);
@@ -168,8 +175,8 @@ public abstract class VistaBase {
 
     /**
      * Muestra un mensaje.
-     * @param mensaje recibe el mensaje.
-     * @param salto recibe si hay salto.
+     * @param mensaje texto a mostrar.
+     * @param salto true para salto de línea, false para línea continua.
      */
     public void showMensaje(String mensaje, boolean salto){
         if (salto) {
@@ -181,11 +188,12 @@ public abstract class VistaBase {
     }
 
     /**
-     * Muestra un listado con opciones.
-     * @param lista recibe la lista.
-     * @param tipoRetorno recibe el tipo de retorno.
-     * @param encuadre recibe si hay encuadre.
-     * @param numeracion recibe si hay numeración.
+     * Muestra una lista de opciones.
+     * @param lista lista de texto.
+     * @param tipoRetorno tipo de salida (0-3).
+     * @param encuadre true para mostrar separadores.
+     * @param numeracion true para numerar.
+     * @param opcion true para mostrar "Opción X".
      */
     public void showOptions(List<String> lista, int tipoRetorno, Boolean encuadre, Boolean numeracion, Boolean opcion){
         int i = 1;
@@ -214,12 +222,12 @@ public abstract class VistaBase {
     }
 
     /**
-     * Muestra una lista genérica.
-     * @param lista recibe la lista.
-     * @param titulo recibe el título.
-     * @param <T> recibe el tipo genérico.
-     * @param encuadre recibe si hay encuadre.
-     * @param numeracion recibe si hay numeración.
+     * Muestra una lista genérica con título.
+     * @param lista lista a mostrar.
+     * @param titulo título a mostrar.
+     * @param <T> tipo genérico.
+     * @param encuadre si se muestra encuadre.
+     * @param numeracion si se numera.
      */
     public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) {
         showMensaje("******** " + titulo + " ********", true);
@@ -228,9 +236,9 @@ public abstract class VistaBase {
     }
 
     /**
-     * Pide una fecha.
-     * @param mensaje recibe el mensaje.
-     * @return LocalDate devuelve la fecha.
+     * Solicita una fecha en formato dd-MM-yyyy.
+     * @param mensaje mensaje a mostrar.
+     * @return fecha introducida o null si falla.
      */
     public LocalDate askFecha(String mensaje) {
         int intentos = 0;
@@ -247,9 +255,9 @@ public abstract class VistaBase {
     }
 
     /**
-     * Muestra un mensaje de pausa y espera a que se pulse enter.
-     * @param mensaje recibe el mensaje.
-     * @param salto recibe si hay salto.
+     * Muestra un mensaje y pausa hasta que el usuario presione ENTER.
+     * @param mensaje texto a mostrar.
+     * @param salto si se debe usar salto de línea.
      */
     public void showMensajePausa(String mensaje, boolean salto) {
         if(mensaje.isEmpty()) showMensaje("Pulsa enter para continuar.", salto);
@@ -263,10 +271,10 @@ public abstract class VistaBase {
     }
 
     /**
-     * Pide una cadena opcional (ENTER para mantener valor actual).
+     * Solicita una cadena de texto opcional (ENTER para mantener valor actual).
      * @param mensaje mensaje mostrado al usuario.
-     * @param maxLongitud longitud máxima permitida.
-     * @return String nueva entrada o null si se mantiene el valor actual.
+     * @param maxLongitud longitud máxima aceptada.
+     * @return nueva cadena o null si se mantiene actual.
      */
     public String askStringOpcional(String mensaje, int maxLongitud) {
         Scanner scanner = new Scanner(System.in);
@@ -294,11 +302,11 @@ public abstract class VistaBase {
     }
 
     /**
-     * Pide un float opcional (ENTER para mantener valor actual).
+     * Solicita un número decimal opcional (ENTER para mantener valor actual).
      * @param mensaje mensaje mostrado al usuario.
-     * @param min mínimo permitido.
-     * @param max máximo permitido.
-     * @return Float nueva entrada o null si se mantiene el valor actual.
+     * @param min valor mínimo.
+     * @param max valor máximo.
+     * @return valor introducido o null.
      */
     public Float askFloatOpcional(String mensaje, float min, float max) {
         Scanner scanner = new Scanner(System.in);
@@ -325,22 +333,22 @@ public abstract class VistaBase {
     }
 
     /**
-     * Pide un precio opcional (ENTER para mantener valor actual).
+     * Solicita un precio decimal opcional.
      * @param mensaje mensaje mostrado al usuario.
-     * @param min mínimo permitido.
-     * @param max máximo permitido.
-     * @return Float nueva entrada o null si se mantiene el valor actual.
+     * @param min valor mínimo.
+     * @param max valor máximo.
+     * @return valor introducido o null.
      */
     public Float askPrecioOpcional(String mensaje, float min, float max) {
         return askFloatOpcional(mensaje, min, max);
     }
 
     /**
-     * Pide un entero opcional (ENTER para mantener valor actual).
+     * Solicita un número entero opcional (ENTER para mantener actual).
      * @param mensaje mensaje mostrado al usuario.
-     * @param min mínimo permitido.
-     * @param max máximo permitido.
-     * @return Integer nueva entrada o null si se mantiene el valor actual.
+     * @param min valor mínimo permitido.
+     * @param max valor máximo permitido.
+     * @return valor entero o null si se mantiene actual.
      */
     public Integer askIntOpcional(String mensaje, int min, int max) {
         Scanner scanner = new Scanner(System.in);
@@ -361,7 +369,6 @@ public abstract class VistaBase {
 
             intentos++;
         }
-
         showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
         return null;
     }

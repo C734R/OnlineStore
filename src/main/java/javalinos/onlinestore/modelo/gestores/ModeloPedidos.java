@@ -7,15 +7,22 @@ import javalinos.onlinestore.modelo.primitivos.Pedido;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Modelo encargado de gestionar las operaciones relacionadas con los pedidos.
+ */
 public class ModeloPedidos {
 
     private List<Pedido> pedidos;
-
+    /**
+     * Constructor por defecto. Inicializa una lista vacía de pedidos.
+     */
     public ModeloPedidos() {
         this.pedidos = new ArrayList<Pedido>();
     }
-
+    /**
+     * Constructor alternativo que recibe una lista de pedidos ya existente.
+     * @param pedidos lista de pedidos precargada.
+     */
     public ModeloPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
@@ -23,8 +30,8 @@ public class ModeloPedidos {
     //*************************** Getters & Setters ***************************//
 
     /**
-     * Devuelve todos los pedidos
-     * @return List<Pedido> - Lista con todos los pedidos
+     * Devuelve todos los pedidos.
+     * @return lista de todos los pedidos.
      */
     public List<Pedido> getPedidos() {
         return pedidos;
@@ -32,7 +39,7 @@ public class ModeloPedidos {
 
     /**
      * Establece la lista de pedidos.
-     * @param pedidos Lista de pedidos.
+     * @param pedidos lista de pedidos a establecer.
      */
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
@@ -42,30 +49,34 @@ public class ModeloPedidos {
     //*************************** CRUD ***************************//
 
     /**
-     * Añadir pedido a la lista de pedidos
-     * @param pedido El pedido que se quiere añadir
+     * Añade un pedido a la lista.
+     * @param pedido pedido a añadir.
      */
     public void addPedido(Pedido pedido) {
         pedidos.add(pedido);
     }
 
     /**
-     * Eliminar pedido
-     * @param pedido El pedido que se quiere eliminar
+     * Elimina un pedido de la lista.
+     * @param pedido pedido a eliminar.
      */
     public void removePedido(Pedido pedido) {
         pedidos.remove(pedido);
     }
 
-
+    /**
+     * Obtiene un pedido por su índice en la lista.
+     * @param id índice del pedido.
+     * @return pedido en la posición indicada.
+     */
     public Pedido getPedido(int id) {
         return pedidos.get(id);
     }
 
     /**
-     * Actualizar pedido
-     * @param pedidoOld se le pasa el pedido old
-     * @param pedidoNew se le pasa el pedido new
+     * Actualiza un pedido existente con nueva información.
+     * @param pedidoOld pedido original.
+     * @param pedidoNew nuevo pedido con datos actualizados.
      */
     public void updatePedido(Pedido pedidoOld, Pedido pedidoNew) {
         int index = pedidos.indexOf(pedidoOld);
@@ -78,9 +89,9 @@ public class ModeloPedidos {
     //*************************** Obtener datos ***************************//
 
     /**
-     * Obtener un pedido por número de pedido
-     * @param numero El número de pedido del pedido que se quiere obtener
-     * @return Pedido deseado
+     * Obtiene un pedido según su número identificador.
+     * @param numero número del pedido.
+     * @return el pedido con ese número o null si no existe.
      */
     public Pedido getPedidoNumero(int numero) {
         for (Pedido pedido : pedidos) {
@@ -92,9 +103,9 @@ public class ModeloPedidos {
     }
 
     /**
-     * Obtener pedidos de un cliente
-     * @param cliente El cliente del que se quieren ver los pedidos
-     * @return Lista con los pedidos del cliente
+     * Obtiene todos los pedidos realizados por un cliente.
+     * @param cliente cliente a consultar.
+     * @return lista de pedidos realizados por ese cliente.
      */
     public List<Pedido> getPedidosCliente(Cliente cliente) {
 
@@ -112,10 +123,10 @@ public class ModeloPedidos {
     }
 
     /**
-     * Lista con pedidos enviados o pendientes de envío.
-     * @param enviado true para pedidos enviados, false para pendientes
-     * @param cliente Cliente que realiza los pedidos
-     * @return Lista de pedidos filtrados por estado y cliente
+     * Obtiene pedidos enviados o pendientes, con opción de filtrar por cliente.
+     * @param enviado true para enviados, false para pendientes.
+     * @param cliente cliente a filtrar (puede ser null).
+     * @return lista de pedidos según los filtros.
      */
     public List<Pedido> getPedidosPendientesEnviados(Boolean enviado, Cliente cliente) {
         List<Pedido> listaFiltrada = new ArrayList<>();
@@ -146,9 +157,9 @@ public class ModeloPedidos {
     }
 
     /**
-     * Comprueba si se ha enviado un pedido
-     * @param pedido el pedido que se va a comprobar
-     * @return Boolean con si se ha enviado o no
+     * Comprueba si un pedido ya ha sido enviado.
+     * @param pedido pedido a comprobar.
+     * @return true si ya ha pasado su fecha de preparación.
      */
     public boolean checkEnviado(Pedido pedido) {
         LocalDate hoy = LocalDate.now();
@@ -157,29 +168,29 @@ public class ModeloPedidos {
     }
 
     /**
-     * Obtener úlitmo número de pedido
-     * @return Int con el último número de pedido
+     * Devuelve el número del último pedido registrado.
+     * @return número del último pedido.
      */
     public int getLastNumPedido() {
         return pedidos.getLast().getNumero();
     }
 
     /**
-     * Obtener primer número de pedido
-     * @return Int con el primer número de pedido
+     * Devuelve el número del primer pedido registrado.
+     * @return número del primer pedido.
      */
     public int getFirstNumPedido() {
         return pedidos.getFirst().getNumero();
     }
 
     /**
-     * Crear nuevo pedido
-     * @param cliente Cliente que realiza el pedido
-     * @param articulo Artículo comprado en el pedido
-     * @param cantidad Cantidad comprada
-     * @param fechahora Fecha y hora del pedido
-     * @param envio Coste de envío del pedido
-     * @return El nuevo pedido
+     * Crea un nuevo pedido.
+     * @param cliente cliente que realiza el pedido.
+     * @param articulo artículo solicitado.
+     * @param cantidad unidades pedidas.
+     * @param fechahora fecha del pedido.
+     * @param envio coste de envío.
+     * @return el nuevo pedido creado.
      */
     public Pedido makePedido(Cliente cliente, Articulo articulo, Integer cantidad, LocalDate fechahora, Float envio) {
         int numPedido;
@@ -187,21 +198,33 @@ public class ModeloPedidos {
         else numPedido = pedidos.getLast().getNumero() + 1;
         return new Pedido(numPedido, cliente, articulo, cantidad, fechahora, calcEnvioTotal(cantidad, envio), calcPrecioTotal(articulo, cantidad, envio, cliente));
     }
-
+    /**
+     * Calcula el precio total de un pedido.
+     * @param articulo artículo pedido.
+     * @param stockComprado cantidad.
+     * @param precioEnvio precio base del envío.
+     * @param cliente cliente que realiza el pedido.
+     * @return precio total tras aplicar descuentos.
+     */
     private float calcPrecioTotal(Articulo articulo, int stockComprado, float precioEnvio, Cliente cliente) {
         return (((articulo.getPrecio() * stockComprado) + calcEnvioTotal(stockComprado, precioEnvio))) * (((100f - (100f * cliente.getDescuento())) / 100f));
     }
-
+    /**
+     * Calcula el precio final del envío con recargo por unidad.
+     * @param cantidad número de artículos.
+     * @param precioEnvio precio base del envío.
+     * @return coste total del envío.
+     */
     public Float calcEnvioTotal(Integer cantidad, Float precioEnvio) {
         return precioEnvio + (1.05f * cantidad);
     }
 
     /**
-     * Cargar los pedidos en el programa
-     * @param configuracion define la configuración seleccionada.
-     * @param clientes Cliente que realiza el pedido
-     * @param articulos Artículo comprado
-     * @return Boolean si ha cargado bien o no los pedidos
+     * Carga pedidos de prueba en función de la configuración.
+     * @param configuracion define si se carga el modo por defecto.
+     * @param clientes lista de clientes disponibles.
+     * @param articulos lista de artículos disponibles.
+     * @return true si se cargaron correctamente, false si hubo error.
      */
     public boolean loadPedidos(int configuracion, List<Cliente> clientes, List<Articulo> articulos) {
         if (configuracion == 0) {

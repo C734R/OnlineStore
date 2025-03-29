@@ -8,7 +8,7 @@ import javalinos.onlinestore.modelo.primitivos.Articulo;
 import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 
 /**
- * Clase ControlArticulos
+ * Controlador para gestionar la lógica del módulo de artículos.
  */
 public class ControlArticulos extends ControlBase {
 
@@ -16,16 +16,18 @@ public class ControlArticulos extends ControlBase {
     private ModeloArticulos mArticulos;
 
     /**
-     * Constructor ControlAtículos
-     * @param mStore ModeloStore para comunicación
-     * @param vistaArticulos VistaArtículos para comunicación
+     * Constructor principal de ControlArticulos.
+     * @param mStore modelo principal de la tienda
+     * @param vistaArticulos vista de artículos asociada
      */
     public ControlArticulos(ModeloStore mStore, VistaArticulos vistaArticulos) {
         super(mStore);
         this.vArticulos = vistaArticulos;
         this.mArticulos = mStore.getModeloArticulos();
     }
-
+    /**
+     * Constructor por defecto de ControlArticulos.
+     */
     public ControlArticulos() {
         super();
     }
@@ -33,16 +35,16 @@ public class ControlArticulos extends ControlBase {
     //*************************** Getters & Setters ***************************//
 
     /**
-     * Devolver la vista artículos
-     * @return VistaArtículos
+     * Devuelve la vista de artículos.
+     * @return vista actual de artículos
      */
     public VistaArticulos getVistaArticulos() {
         return vArticulos;
     }
 
     /**
-     * Cambiar vista artículos
-     * @param vistaArticulos La nueva vista artículos
+     * Asigna una nueva vista de artículos.
+     * @param vistaArticulos vista a asignar
      */
     public void setVistaArticulos(VistaArticulos vistaArticulos) {
         this.vArticulos = vistaArticulos;
@@ -50,8 +52,9 @@ public class ControlArticulos extends ControlBase {
 
 
     //*************************** Menu gestión artículos ***************************//
+
     /**
-     * Inicia el menú de gestión de artículos
+     * Inicia el menú de gestión de artículos.
      */
     public void iniciar() {
         int opcion;
@@ -86,8 +89,9 @@ public class ControlArticulos extends ControlBase {
     }
 
     //*************************** CRUD ***************************//
+
     /**
-     * Añadir un artículo
+     * Añade un nuevo artículo al sistema.
      */
     public void addArticulo() {
         vArticulos.showMensaje("******** Añadir Artículo ********", true);
@@ -115,7 +119,7 @@ public class ControlArticulos extends ControlBase {
     }
 
     /**
-     * Eliminar un artículo
+     * Elimina un artículo seleccionado por el usuario.
      */
     public void removeArticulo() {
         vArticulos.showMensaje("******** Eliminar Artículo ********", true);
@@ -139,7 +143,7 @@ public class ControlArticulos extends ControlBase {
     }
 
     /**
-     * Actualizar un artículo
+     * Modifica los datos de un artículo existente.
      */
     public void updateArticulo() {
         vArticulos.showMensaje("******** Modificar Artículo ********", true);
@@ -184,7 +188,7 @@ public class ControlArticulos extends ControlBase {
 
 
     /**
-     * Mostrar listado de artículos.
+     * Muestra la lista completa de artículos.
      */
     public void showListArticulos() {
         vArticulos.showMensaje("******** Listar Artículos ********", true);
@@ -200,17 +204,17 @@ public class ControlArticulos extends ControlBase {
     }
 
     /**
-     * Mostrar stock disponible
-     * @param stockArticulos mapeado de artículo - stock.
+     * Muestra el stock de todos los artículos.
+     * @param stockArticulos mapa con artículo y cantidad disponible
      */
     private void showStockArticulos(Map<Articulo, Integer> stockArticulos) {
         vArticulos.showStockArticulos(stockArticulos);
     }
 
     /**
-     * Cargar los artículos del sistema
-     * @param configuracion determina la configuración seleccionada
-     * @return Si se cargan bien o no
+     * Carga los artículos desde el sistema según la configuración.
+     * @param configuracion código de configuración
+     * @return true si se cargaron correctamente, false si hubo error
      */
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {

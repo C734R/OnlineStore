@@ -5,15 +5,22 @@ import javalinos.onlinestore.modelo.primitivos.Cliente;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Modelo encargado de gestionar las operaciones relacionadas con los clientes.
+ */
 public class ModeloClientes {
 
     private List<Cliente> clientes;
-
+    /**
+     * Constructor por defecto. Inicializa la lista de clientes.
+     */
     public ModeloClientes() {
         clientes = new ArrayList<>();
     }
-
+    /**
+     * Constructor con clientes iniciales.
+     * @param clientes lista de clientes precargada.
+     */
     public ModeloClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
@@ -21,8 +28,8 @@ public class ModeloClientes {
     //*************************** Getters & Setters ***************************//
 
     /**
-     * Devuelve lista con todos los clientes
-     * @return Lista con los clientes
+     * Devuelve lista con todos los clientes.
+     * @return lista de clientes.
      */
     public List<Cliente> getClientes() {
         return clientes;
@@ -30,7 +37,7 @@ public class ModeloClientes {
 
     /**
      * Establece la lista de clientes.
-     * @param clientes Lista de clientes.
+     * @param clientes nueva lista de clientes.
      */
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
@@ -39,25 +46,25 @@ public class ModeloClientes {
     //*************************** CRUD ***************************//
 
     /**
-     * Añadir un cliente a la lista de todos los clientes
-     * @param cliente El cliente a añadir
+     * Añade un cliente a la lista.
+     * @param cliente cliente a añadir.
      */
     public void addCliente(Cliente cliente) {
         clientes.add(cliente);
     }
 
     /**
-     * Elimianr un cliente
-     * @param cliente El cliente a eliminar
+     * Elimina un cliente de la lista.
+     * @param cliente cliente a eliminar.
      */
     public void removeCliente(Cliente cliente) {
         clientes.remove(cliente);
     }
 
     /**
-     * Obtener el cliente de una lista
-     * @param index El cliente seleccionado de una lista numérica
-     * @return Cliente - El cliente deseado
+     * Obtiene un cliente según su posición en la lista.
+     * @param index índice del cliente.
+     * @return cliente en la posición dada o null si está fuera de rango.
      */
     public Cliente getClienteIndex(int index) {
         if (index >= 0 && index < clientes.size()) {
@@ -67,9 +74,9 @@ public class ModeloClientes {
     }
 
     /**
-     * Modificar a un cliente
-     * @param clienteOld Cliente antiguo
-     * @param clienteNew Nuevo cliente
+     * Modifica un cliente reemplazándolo por uno nuevo.
+     * @param clienteOld cliente original.
+     * @param clienteNew cliente actualizado.
      */
     public void updateCliente(Cliente clienteOld, Cliente clienteNew) {
         int index = this.clientes.indexOf(clienteOld);
@@ -81,17 +88,17 @@ public class ModeloClientes {
     //*************************** Obtener datos ***************************//
 
     /**
-     * Obtener cantidad de clientes
-     * @return Int con el numero de clientes
+     * Devuelve la cantidad de clientes registrados.
+     * @return número total de clientes.
      */
     public int sizeClientes() {
         return clientes.size();
     }
 
     /**
-     * Obtener Cliente a partir del NIF
-     * @param nif NIF del cliente deseado
-     * @return Cliente con ese NIF
+     * Busca un cliente por su NIF.
+     * @param nif NIF del cliente.
+     * @return cliente correspondiente o null si no se encuentra.
      */
     public Cliente getClienteNif(String nif) {
         for (Cliente cliente : clientes) {
@@ -103,9 +110,9 @@ public class ModeloClientes {
     }
 
     /**
-     * Obtener Cliente a partir del correo
-     * @param email Email del cliente deseado
-     * @return El cliente con ese correo
+     * Busca un cliente por su correo electrónico.
+     * @param email correo del cliente.
+     * @return cliente correspondiente o null si no se encuentra.
      */
     public Cliente getClienteEmail(String email) {
         for (Cliente cliente : clientes) {
@@ -117,9 +124,9 @@ public class ModeloClientes {
     }
 
     /**
-     * Obtener la lista de clientes según la categoria
-     * @param categoria La categoria de la que se quiere obtener la lista
-     * @return Lista con los clientes de esa categoria
+     * Devuelve los clientes de una categoría determinada.
+     * @param categoria categoría deseada.
+     * @return lista de clientes de esa categoría o null si está vacía.
      */
     public List<Cliente> getClientesCategoria(Categoria categoria) {
         if (clientes.isEmpty()) return null;
@@ -133,10 +140,9 @@ public class ModeloClientes {
     }
 
     /**
-     * Obtener categoria por Int
-     *
-     * @param opcion La categoria que se quiere ver según un Int
-     * @return Categoria deseada
+     * Obtiene la categoría en base a un número entero.
+     * @param opcion 1 para estándar, 2 para premium.
+     * @return categoría correspondiente o null si no válida.
      */
     public Categoria getCategoria(int opcion) {
         return switch (opcion) {
@@ -147,8 +153,8 @@ public class ModeloClientes {
     }
 
     /**
-     * Devuelve el número del último cliente.
-     * @return int devuelve el número del último cliente, o -1 si la lista está vacía.
+     * Devuelve el índice del último cliente.
+     * @return índice del último cliente o -1 si no hay clientes.
      */
     public int getLastIndexCliente() {
         if (clientes.isEmpty()) return -1;
@@ -156,8 +162,8 @@ public class ModeloClientes {
     }
 
     /**
-     * Devuelve el número del primer cliente.
-     * @return int devuelve el número del primer cliente, o -1 si la lista está vacía.
+     * Devuelve el índice del primer cliente.
+     * @return índice del primer cliente o -1 si no hay clientes.
      */
     public int getFirstIndexCliente() {
         if (clientes.isEmpty()) return -1;
@@ -167,22 +173,22 @@ public class ModeloClientes {
     //*************************** Crear datos ***************************//
 
     /**
-     * Crear cliente
-     * @param nombre Nombre del cliente
-     * @param domicilio Domicilio del cliente
-     * @param nif NIF del cliente
-     * @param email Email del cliente
-     * @param categoria Categoria del cliente
-     * @return Cliente nuevo
+     * Crea un nuevo cliente.
+     * @param nombre nombre del cliente.
+     * @param domicilio domicilio del cliente.
+     * @param nif NIF del cliente.
+     * @param email correo del cliente.
+     * @param categoria categoría del cliente.
+     * @return instancia del cliente creado.
      */
     public Cliente makeCliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
         return new Cliente(nombre, domicilio, nif, email, categoria);
     }
 
     /**
-     * Cargar los clientes existentes
-     * @param configuracion define la configuración seleccionada.
-     * @return Boolean si se han cargado bien o no
+     * Precarga una lista de clientes de ejemplo.
+     * @param configuracion determina si se debe precargar.
+     * @return true si se cargó correctamente, false si ocurrió un error.
      */
     public boolean loadClientes(int configuracion) {
         if (configuracion == 0) {

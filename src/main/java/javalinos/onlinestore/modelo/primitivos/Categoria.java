@@ -1,7 +1,8 @@
 package javalinos.onlinestore.modelo.primitivos;
 
 /**
- * Contiene una enumeración con el tipo de categoría de clientes
+ * Contiene una enumeración con el tipo de categoría de clientes.
+ * Cada categoría tiene un nombre, una cuota asociada y un porcentaje de descuento.
  */
 public enum Categoria {
 
@@ -12,11 +13,10 @@ public enum Categoria {
     private final Float descuento;
 
     /**
-     * Constructor de categoría
-     *
-     * @param nombre Nombre de la categoría
-     * @param cuota Cuota a pagar
-     * @param descuento Descuento aplicado a los pedidos
+     * Constructor de categoría.
+     * @param nombre nombre de la categoría.
+     * @param cuota cuota mensual a pagar.
+     * @param descuento porcentaje de descuento aplicado a los pedidos.
      */
     Categoria(String nombre, Float cuota, Float descuento) {
         this.nombre = nombre;
@@ -25,36 +25,32 @@ public enum Categoria {
     }
 
     /**
-     * Devuelve el nombre de la categoría
-     *
-     * @return String con el nombre de la categría
+     * Devuelve el nombre de la categoría.
+     * @return nombre de la categoría.
      */
     public String getNombre() {
         return nombre;
     }
 
     /**
-     * Devuelve la cuota de la categría
-     *
-     * @return Float con la cuota de la categría
+     * Devuelve la cuota mensual de la categoría.
+     * @return cuota en euros.
      */
     public Float getCuota() {
         return cuota;
     }
 
     /**
-     * Devuelve el descuento aplicado a la categría
-     *
-     * @return Float con el descuento de la categría
+     * Devuelve el descuento aplicado a los pedidos.
+     * @return porcentaje de descuento.
      */
     public Float getDescuento() {
         return descuento;
     }
 
     /**
-     * Metodo para devolver una categoría completa
-     *
-     * @return String con una categoría completa
+     * Devuelve una representación textual de la categoría.
+     * @return cadena con nombre, cuota y descuento.
      */
     @Override
     public String toString() {

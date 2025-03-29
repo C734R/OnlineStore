@@ -9,13 +9,19 @@ import java.util.List;
 
 import static javalinos.onlinestore.utils.Utilidades.checkEmail;
 import static javalinos.onlinestore.utils.Utilidades.checkNIF;
-
+/**
+ * Vista encargada de la gestión e interacción con los clientes.
+ * - Permite mostrar, solicitar y modificar datos de clientes.
+ * - Entidades relacionadas: Cliente, Categoria
+ */
 public class VistaClientes extends VistaBase {
 
     private final List<String> listMods = new ArrayList<>(Arrays.asList("Modificar nombre", "Modificar domicilio", "Modificar NIF", "Modificar email", "Modificar categoría"));
     private final List<String> listCategorias = new ArrayList<>(Arrays.asList("Estándar", "Premium"));
     private final List<String> listMetodos = new ArrayList<>(Arrays.asList("Por NIF", "Por Email"));
-
+    /**
+     * Constructor por defecto. Inicializa cabecera y menú principal de clientes.
+     */
     public VistaClientes() {
         String cabecera = """
                 *********************************************
@@ -29,6 +35,11 @@ public class VistaClientes extends VistaBase {
         super.setListaMenu(listaMenu);
     }
 
+    /**
+     * Constructor alternativo con cabecera y menú personalizados.
+     * @param cabecera texto de cabecera.
+     * @param listMenu opciones del menú.
+     */
     public VistaClientes(String cabecera, List<String> listMenu) {
         super(cabecera, listMenu);
     }
@@ -36,8 +47,8 @@ public class VistaClientes extends VistaBase {
     //*************************** Pedir datos ***************************//
 
     /**
-     * Pide un NIF.
-     * @return String devuelve el NIF.
+     * Solicita al usuario un NIF válido (3 intentos).
+     * @return NIF introducido o null si se supera el límite de intentos.
      */
     public String askNIF() {
         String nif;
@@ -55,8 +66,9 @@ public class VistaClientes extends VistaBase {
     }
 
     /**
-     * Pide un Email
-     * @return String devuelve el Email.
+     * Solicita al usuario un email válido (3 intentos).
+     * @param modificar indica si es parte de una modificación.
+     * @return Email introducido o null si se supera el límite de intentos.
      */
     public String askEmail(boolean modificar) {
         String email;
@@ -75,9 +87,8 @@ public class VistaClientes extends VistaBase {
     }
 
     /**
-     * Pide como eliminar un cliente.
-     *
-     * @return Int con el metodo de eliminación
+     * Solicita el modo para eliminar un cliente.
+     * @return opción seleccionada (0 = salir).
      */
     public int askMetodoEliminar() {
         while (true) {
@@ -93,8 +104,8 @@ public class VistaClientes extends VistaBase {
     }
 
     /**
-     * Pide seleccionar una categoría de cliente.
-     * @return int devuelve opción seleccionada.
+     * Solicita al usuario que seleccione una categoría de cliente.
+     * @return índice de categoría seleccionada o 0 para volver atrás.
      */
     public int askCategoriaCliente() {
         while (true) {
@@ -112,35 +123,39 @@ public class VistaClientes extends VistaBase {
     //*************************** Mostrar datos ***************************//
 
     /**
-     * Muestra la lista de clientes pasada por parámetro.
-     * @param clientes Lista de clientes.
+     * Muestra una lista simple de clientes.
+     * @param clientes lista de clientes.
      */
     public void showListClientes(List<Cliente> clientes) {
         showListGenerica(clientes,"CLIENTES", true, false);
     }
 
+    /**
+     * Muestra una lista numerada de clientes.
+     * @param clientes lista de clientes.
+     */
     public void showListClientesNumerada(List<Cliente> clientes) {
         showListGenerica(clientes,"CLIENTES NUMERADOS", true, true);
     }
 
     /**
-     * Mostrar listado de clientes por categoría.
-     * @param clientes se le pasa el listado de clientes filtrados a mostrar.
-     * @param categoria se le pasa la opción de categoría seleccionada.
+     * Muestra un listado de clientes filtrado por categoría.
+     * @param clientes lista de clientes filtrados.
+     * @param categoria categoría seleccionada.
      */
     public void showListClientesCategoria(List<Cliente> clientes, Categoria categoria) {
         showListGenerica(clientes, "LISTA DE CLIENTES DE CATEGORÍA "+ categoria.getNombre(), true, false);
     }
 
     /**
-     * Muestra las modificaciones disponibles.
+     * Muestra las opciones de modificación de datos del cliente.
      */
     public void showMods() {
         showOptions(listMods,2, false, true, false);
     }
 
     /**
-     * Muestra las categorías de cliente.
+     * Muestra las categorías de cliente disponibles.
      */
     public void showCategorias() {
         showMensaje("******** TIPOS DE CATEGORÍA ********", true);
@@ -148,7 +163,7 @@ public class VistaClientes extends VistaBase {
     }
 
     /**
-     * Mostrar métodos de eliminación.
+     * Muestra los métodos de eliminación disponibles.
      */
     public void showMetodosEliminar() {
         showMensaje("******** METODOS DE ELIMINACIÓN DE USUARIO ********", true);
@@ -156,8 +171,8 @@ public class VistaClientes extends VistaBase {
     }
 
     /**
-     * Mostrar datos de cliente.
-     * @param cliente se le pasa el cliente a mostrar.
+     * Muestra los datos completos de un cliente.
+     * @param cliente cliente a mostrar.
      */
     public void showCliente(Cliente cliente) {
         showMensaje("******** DATOS DEL CLIENTE " + cliente.getNombre() +" ********", true);

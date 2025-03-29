@@ -14,7 +14,9 @@ import java.util.*;
 
 import static javalinos.onlinestore.OnlineStore.cClientes;
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
-
+/**
+ * Controlador para gestionar la lógica relacionada con los pedidos.
+ */
 public class ControlPedidos extends ControlBase{
 
     private VistaPedidos vPedidos;
@@ -24,9 +26,9 @@ public class ControlPedidos extends ControlBase{
     private float precioEnvio = 5f;
 
     /**
-     * Constructor de ControlPedidos
-     * @param mStore el ModeloStore que se va a utilizar
-     * @param vPedidos la vista que se va a utilizar
+     * Constructor principal de ControlPedidos.
+     * @param mStore el ModeloStore que contiene todos los modelos
+     * @param vPedidos la vista de pedidos asociada
      */
     public ControlPedidos(ModeloStore mStore, VistaPedidos vPedidos) {
         super.setModeloStore(mStore);
@@ -35,26 +37,40 @@ public class ControlPedidos extends ControlBase{
         this.mPedidos = mStore.getModeloPedidos();
         this.vPedidos = vPedidos;
     }
-
+    /**
+     * Constructor vacío para ControlPedidos (sin vista asociada).
+     */
     public ControlPedidos() {
         super();
         vPedidos = null;
     }
 
     //*************************** Getters & Setters ***************************//
-
+    /**
+     * Devuelve la vista de pedidos.
+     * @return VistaPedidos asociada
+     */
     public VistaPedidos getVistaPedidos() {
         return vPedidos;
     }
-
+    /**
+     * Asigna la vista de pedidos.
+     * @param vPedidos vista a asignar
+     */
     public void setVistaPedidos(VistaPedidos vPedidos) {
         this.vPedidos = vPedidos;
     }
-
+    /**
+     * Devuelve el precio de envío actual.
+     * @return precio de envío en euros
+     */
     public float getPrecioEnvio() {
         return precioEnvio;
     }
-
+    /**
+     * Establece el precio de envío.
+     * @param precioEnvio nuevo precio de envío
+     */
     public void setPrecioEnvio(float precioEnvio) {
         this.precioEnvio = precioEnvio;
     }
@@ -62,7 +78,7 @@ public class ControlPedidos extends ControlBase{
     //*************************** Menu gestión pedidos ***************************//
 
     /**
-     * Inicia el menú de gestión de pedidos
+     * Inicia el menú de gestión de pedidos desde la vista.
      */
     public void iniciar() {
         int opcion;
@@ -101,7 +117,7 @@ public class ControlPedidos extends ControlBase{
     //*************************** CRUD ***************************//
 
     /**
-     * Metodo para añadir pedidos
+     * Añade un nuevo pedido al sistema.
      */
     public void addPedidos() {
         vPedidos.showMensaje("******** Añadir Pedido ********", true);
@@ -136,7 +152,7 @@ public class ControlPedidos extends ControlBase{
     }
 
     /**
-     * Metodo para eliminar pedidos
+     * Elimina un pedido pendiente seleccionado por el usuario.
      */
     public void removePedidos() {
         List<Pedido> pedidos = mPedidos.getPedidosPendientesEnviados(false, null);
@@ -157,7 +173,7 @@ public class ControlPedidos extends ControlBase{
     }
 
     /**
-     * Modificar un pedido
+     * Modifica un pedido pendiente cambiando cliente y/o cantidad.
      */
     public void updatePedido() {
         vPedidos.showMensaje("******** Modificar Pedido ********", true);
@@ -192,8 +208,8 @@ public class ControlPedidos extends ControlBase{
     //*************************** Mostrar datos ***************************//
 
     /**
-     * Muestra por pantalla los pedidos por cliente
-     * @param cliente El cliente por el que se filtran
+     * Muestra todos los pedidos o filtra por cliente si se proporciona.
+     * @param cliente Cliente por el que se quiere filtrar
      */
     public void showListPedidos(Cliente cliente) {
         if (mPedidos.getPedidos().isEmpty()) {
@@ -213,9 +229,9 @@ public class ControlPedidos extends ControlBase{
     }
 
     /**
-     * Muestra por pantalla los pedidos pendientes o enviados.
-     * @param cliente Cliente por el que se quiere filtrar (puede ser null)
-     * @param enviado true si se buscan pedidos enviados, false si pendientes
+     * Muestra pedidos pendientes o enviados según se indique.
+     * @param cliente Cliente por el que se quiere filtrar
+     * @param enviado true para pedidos enviados, false para pendientes
      */
     public void showListPedidosPendientesEnviados(Cliente cliente, boolean enviado) {
         if (mPedidos.getPedidos().isEmpty()) {
@@ -240,8 +256,8 @@ public class ControlPedidos extends ControlBase{
     }
 
     /**
-     * Muestra todos los pedidos
-     * @param cliente El cliente por el que se quiere filtrar
+     * Muestra todos los pedidos en la vista.
+     * @param cliente Cliente por el que se filtran los pedidos
      */
     public void showPedidos(Cliente cliente) {
         vPedidos.showPedidos(mPedidos.getPedidos(), cliente);
@@ -250,9 +266,9 @@ public class ControlPedidos extends ControlBase{
     //*************************** Pedir datos ***************************//
 
     /**
-     * Pide al usuario que introduzca un cliente
-     * @param crear Si se quiere crear un cliente nuevo
-     * @return Cliente seleccionado
+     * Pide al usuario que seleccione o cree un cliente.
+     * @param crear true si se permite crear un nuevo cliente
+     * @return Cliente seleccionado o creado
      */
     public Cliente askCliente (boolean crear) {
         int indexCliente;
@@ -276,8 +292,9 @@ public class ControlPedidos extends ControlBase{
     }
 
     /**
-     * Metodo para filtrar por cliente
-     * @return Cliente por el que se quiere filtrar o null
+     * Pregunta si se desea filtrar por cliente y devuelve el seleccionado.
+     * @param tipoFiltro tipo de filtrado: 0=todos, 1=enviados, 2=pendientes
+     * @return Cliente seleccionado o null
      */
     public Cliente askFiltrarCliente(int tipoFiltro) {
         boolean filtrar = vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true);
@@ -285,6 +302,11 @@ public class ControlPedidos extends ControlBase{
         return null;
     }
 
+    /**
+     * Solicita al usuario seleccionar un cliente filtrado por tipo.
+     * @param tipoFiltrado 0=todos, 1=enviados, 2=pendientes
+     * @return Cliente seleccionado o null
+     */
     public Cliente askClienteFiltro(int tipoFiltrado) {
         int indexCliente;
         List<Pedido> pedidos = mPedidos.getPedidos();
@@ -335,18 +357,18 @@ public class ControlPedidos extends ControlBase{
     //*************************** Creación y cálculo de datos ***************************//
 
     /**
-     * Comprueba si se ha enviado un pedido
-     * @param pedido el pedido que se va a comprobar
-     * @return Boolean con si se ha enviado o no
+     * Verifica si un pedido ha sido enviado.
+     * @param pedido el pedido a verificar
+     * @return true si ha sido enviado, false en caso contrario
      */
     private boolean checkEnviado(Pedido pedido) {
         return mPedidos.checkEnviado(pedido);
     }
 
     /**
-     * Carga los pedidos en el programa
-     * @param configuracion define la configuración seleccionada.
-     * @return Boolean con si se cargan bien o no
+     * Carga los pedidos desde un archivo o fuente externa.
+     * @param configuracion configuración de carga
+     * @return true si se cargaron correctamente, false si falló
      */
     public boolean loadPedidos(int configuracion) {
         if (configuracion == 0) {

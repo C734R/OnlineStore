@@ -12,6 +12,10 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Clase de pruebas para el modelo de gestión de pedidos.
+ * - Entidades relacionadas: Pedido, Cliente, Articulo
+ */
 class ModeloPedidosTest {
 
     ModeloPedidos mPedidos;
@@ -20,7 +24,9 @@ class ModeloPedidosTest {
     List<Cliente> clientes;
     List<Articulo> articulos;
     Map<Articulo, Integer> stock;
-
+    /**
+     * Inicializa los modelos y carga datos de prueba antes de cada test.
+     */
     @BeforeEach
     void setUp() {
         mArticulos = new ModeloArticulos();
@@ -35,7 +41,9 @@ class ModeloPedidosTest {
         mPedidos = new ModeloPedidos();
         assertTrue(mPedidos.loadPedidos(0, clientes, articulos));
     }
-
+    /**
+     * Libera recursos después de cada test.
+     */
     @AfterEach
     void tearDown() {
         mClientes = null;
@@ -45,22 +53,30 @@ class ModeloPedidosTest {
         articulos = null;
         stock = null;
     }
-
+    /**
+     * Verifica que se cargan correctamente los pedidos.
+     */
     @Test
     void loadPedidosTest() {
         assertEquals(18, mPedidos.getPedidos().size());
     }
-
+    /**
+     * Verifica que la lista de artículos no esté vacía.
+     */
     @Test
     void getArticulosTest() {
         assertFalse(articulos.isEmpty());
     }
-
+    /**
+     * Verifica que la lista de clientes no esté vacía.
+     */
     @Test
     void getClientesTest() {
         assertFalse(clientes.isEmpty());
     }
-
+    /**
+     * Verifica que se pueda añadir un pedido correctamente.
+     */
     @Test
     void addPedidoTest() {
         int sizeAnterior = mPedidos.getPedidos().size();
@@ -73,7 +89,9 @@ class ModeloPedidosTest {
 
         assertEquals(sizeAnterior + 1, mPedidos.getPedidos().size());
     }
-
+    /**
+     * Verifica que se pueda eliminar un pedido correctamente.
+     */
     @Test
     void removePedidoTest() {
         Articulo articulo = articulos.get(1);
@@ -86,7 +104,9 @@ class ModeloPedidosTest {
         mPedidos.removePedido(p);
         assertFalse(mPedidos.getPedidos().contains(p));
     }
-
+    /**
+     * Verifica la obtención de un pedido por número.
+     */
     @Test
     void getPedidoNumeroTest() {
         Pedido pedido = mPedidos.getPedidos().getFirst();
@@ -94,7 +114,9 @@ class ModeloPedidosTest {
         assertNotNull(obtenido);
         assertEquals(pedido.getNumero(), obtenido.getNumero());
     }
-
+    /**
+     * Verifica que se obtienen los pedidos de un cliente específico.
+     */
     @Test
     void getPedidosClienteTest() {
         Cliente cliente = mPedidos.getPedidos().getFirst().getCliente();
@@ -104,7 +126,9 @@ class ModeloPedidosTest {
             assertEquals(cliente, p.getCliente());
         }
     }
-
+    /**
+     * Verifica la separación correcta entre pedidos pendientes y enviados.
+     */
     @Test
     void getPedidosPendientesEnviadosTest() {
         LocalDate hoy = LocalDate.now();
@@ -127,19 +151,25 @@ class ModeloPedidosTest {
                     "Pedido enviado aún no ha superado su fecha de envío");
         }
     }
-
+    /**
+     * Verifica que se obtiene correctamente el número del último pedido.
+     */
     @Test
     void getLastNumPedidoTest() {
         int lastNum = mPedidos.getLastNumPedido();
         assertEquals(mPedidos.getPedidos().getLast().getNumero(), lastNum);
     }
-
+    /**
+     * Verifica que se obtiene correctamente el número del primer pedido.
+     */
     @Test
     void getFirstNumPedidoTest() {
         int firstNum = mPedidos.getFirstNumPedido();
         assertEquals(mPedidos.getPedidos().getFirst().getNumero(), firstNum);
     }
-
+    /**
+     * Verifica la actualización de un pedido manteniendo su número.
+     */
     @Test
     void updatePedidoTest() {
         Pedido pedidoOld = mPedidos.getPedidos().getFirst();
@@ -159,7 +189,9 @@ class ModeloPedidosTest {
         assertEquals(nuevaCantidad, actualizado.getCantidad(), "La cantidad debe actualizarse");
         assertEquals(nuevoPrecio, actualizado.getPrecio(), 0.01f, "El precio debe actualizarse");
     }
-
+    /**
+     * Verifica que al añadir un pedido se actualiza correctamente el stock.
+     */
     @Test
     void checkStockAddPedido() {
         Articulo articulo = articulos.getFirst();
@@ -175,7 +207,9 @@ class ModeloPedidosTest {
         int stockActual = mArticulos.getStockArticulos().get(articulo);
         assertEquals(stockInicial - cantidadPedido, stockActual);
     }
-
+    /**
+     * Verifica que al eliminar un pedido se restaura correctamente el stock.
+     */
     @Test
     void checkStockRemovePedidoTest() {
         Articulo articulo = articulos.get(1);

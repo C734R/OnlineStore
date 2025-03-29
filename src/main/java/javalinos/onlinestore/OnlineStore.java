@@ -15,27 +15,37 @@ import javalinos.onlinestore.vista.VistaMenuPrincipal;
 import javalinos.onlinestore.vista.VistaPedidos;
 
 /**
- * Clase principal de la aplicación.
+ * Clase principal de la aplicación OnlineStore.
+ * - Inicializa modelos, vistas y controladores (patrón MVC)
+ * - Carga los datos iniciales
+ * - Gestiona el flujo principal de ejecución
  */
 public class OnlineStore {
 
+    /** Valor de configuración para carga de datos. */
     public static int configuracion = 0;
+
+    /** Modelo general de la tienda (agrega clientes, artículos y pedidos). */
     public static ModeloStore mStore;
     public static ModeloClientes mClientes;
     public static ModeloArticulos mArticulos;
     public static ModeloPedidos mPedidos;
+
+    /** Vistas principales del sistema. */
     public static VistaMenuPrincipal vMenuPrincipal;
     public static VistaArticulos vArticulos;
     public static VistaClientes vClientes;
     public static VistaPedidos vPedidos;
+
+    /** Controladores que gestionan la lógica de las vistas. */
     public static ControlMenuPrincipal cMenuPrincipal;
     public static ControlClientes cClientes;
     public static ControlArticulos cArticulos;
     public static ControlPedidos cPedidos;
 
     /**
-     * Main de la aplicación.
-     * @param args recibe los argumentos.
+     * Punto de entrada de la aplicación.
+     * @param args argumentos opcionales (modo de configuración).
      */
     public static void main(String[] args) {
         if (args.length != 0) configuracion = Integer.parseInt(args[1]);
@@ -45,7 +55,9 @@ public class OnlineStore {
     }
 
     /**
-     * Precarga los datos.
+     * Precarga los datos necesarios para la aplicación según la configuración.
+     * Reintenta en caso de error hasta que el usuario decida salir.
+     * @param configuracion tipo de carga (0 = base, 1 = ORM, etc.).
      */
     private static void precargaDatos(int configuracion) {
         loadMVC(configuracion);
@@ -59,9 +71,8 @@ public class OnlineStore {
     }
 
     /**
-     * Inicia el programa, cargando el menú principal.
+     * Inicia el menú principal y controla el flujo del programa.
      */
-
     private static void iniciarPrograma(){
         int opcion;
         while(true) {
@@ -83,7 +94,8 @@ public class OnlineStore {
         }
     }
     /**
-     * Carga el MVC.
+     * Carga el modelo-vista-controlador (MVC) según el modo de configuración.
+     * @param configuracion modo de carga (0 = sin ORM, 1 = con ORM, etc.).
      */
     private static void loadMVC(int configuracion){
 
