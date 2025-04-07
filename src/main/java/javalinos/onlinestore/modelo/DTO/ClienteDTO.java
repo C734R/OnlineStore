@@ -1,15 +1,15 @@
-package javalinos.onlinestore.modelo.primitivos;
+package javalinos.onlinestore.modelo.DTO;
 
 /**
  * Contiene todos los datos de un cliente.
  */
-public class Cliente {
+public class ClienteDTO {
 
     private String nombre;
     private String domicilio;
     private String nif;
     private String email;
-    private Categoria categoria;
+    private CategoriaDTO categoriaDTO;
 
     /**
      * Constructor de un cliente.
@@ -17,37 +17,37 @@ public class Cliente {
      * @param domicilio domicilio del cliente.
      * @param nif NIF del cliente.
      * @param email email del cliente.
-     * @param categoria categoría asociada al cliente.
+     * @param categoriaDTO categoría asociada al cliente.
      */
-    public Cliente(String nombre, String domicilio, String nif, String email, Categoria categoria) {
+    public ClienteDTO(String nombre, String domicilio, String nif, String email, CategoriaDTO categoriaDTO) {
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.nif = nif;
         this.email = email;
-        this.categoria = categoria;
+        this.categoriaDTO = categoriaDTO;
     }
 
     /**
      * Constructor vacío. Inicializa con valores por defecto.
      */
-    public Cliente() {
+    public ClienteDTO() {
         this.nombre = "";
         this.domicilio = "";
         this.nif = "";
         this.email = "";
-        this.categoria = null;
+        this.categoriaDTO = null;
     }
 
     /**
      * Constructor de copia.
-     * @param clienteOld cliente a copiar.
+     * @param ClienteDTOOld cliente a copiar.
      */
-    public Cliente(Cliente clienteOld) {
-        this.nombre = clienteOld.getNombre();
-        this.domicilio = clienteOld.getDomicilio();
-        this.nif = clienteOld.getNif();
-        this.email = clienteOld.getEmail();
-        this.categoria = clienteOld.getCategoria();
+    public ClienteDTO(ClienteDTO ClienteDTOOld) {
+        this.nombre = ClienteDTOOld.getNombre();
+        this.domicilio = ClienteDTOOld.getDomicilio();
+        this.nif = ClienteDTOOld.getNif();
+        this.email = ClienteDTOOld.getEmail();
+        this.categoriaDTO = ClienteDTOOld.getCategoria();
     }
 
     /**
@@ -84,10 +84,10 @@ public class Cliente {
 
     /**
      * Cambia la categoría del cliente.
-     * @param categoria nueva categoría.
+     * @param categoriaDTO nueva categoría.
      */
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
+    public void setCategoria(CategoriaDTO categoriaDTO) {
+        this.categoriaDTO = categoriaDTO;
     }
 
     /**
@@ -126,8 +126,8 @@ public class Cliente {
      * Obtiene la categoría del cliente.
      * @return categoría del cliente.
      */
-    public Categoria getCategoria() {
-        return categoria;
+    public CategoriaDTO getCategoria() {
+        return categoriaDTO;
     }
 
     /**
@@ -135,7 +135,7 @@ public class Cliente {
      * @return cuota en euros.
      */
     public Float getCuota() {
-        return this.categoria.getCuota();
+        return this.categoriaDTO.getCuota();
     }
 
     /**
@@ -143,7 +143,7 @@ public class Cliente {
      * @return porcentaje de descuento.
      */
     public Float getDescuento() {
-        return this.categoria.getDescuento();
+        return this.categoriaDTO.getDescuento();
     }
 
     /**
@@ -156,6 +156,6 @@ public class Cliente {
                 "Domicilio: " + domicilio + "\n" +
                 "NIF: " + nif + "\n" +
                 "Email: " + email + "\n" +
-                categoria.toString();
+                categoriaDTO.toString();
     }
 }

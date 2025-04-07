@@ -1,10 +1,10 @@
-package javalinos.onlinestore.modelo.primitivos;
+package javalinos.onlinestore.modelo.DTO;
 
 /**
  * Representa los artículos incluidos en nuestro programa.
  * Contiene datos como código, descripción, precio y tiempo de preparación.
  */
-public class Articulo {
+public class ArticuloDTO {
     private String codigo;
     private String descripcion;
     private Float precio;
@@ -17,7 +17,7 @@ public class Articulo {
      * @param precio precio del artículo.
      * @param minutosPreparacion tiempo de preparación en minutos.
      */
-    public Articulo(String codigo, String descripcion, Float precio, Integer minutosPreparacion) {
+    public ArticuloDTO(String codigo, String descripcion, Float precio, Integer minutosPreparacion) {
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
@@ -27,7 +27,7 @@ public class Articulo {
     /**
      * Constructor vacío. Inicializa con valores por defecto.
      */
-    public Articulo() {
+    public ArticuloDTO() {
         this.codigo = "";
         this.descripcion = "";
         this.precio = 0.0f;
@@ -36,13 +36,13 @@ public class Articulo {
 
     /**
      * Constructor de copia.
-     * @param articulo artículo a copiar.
+     * @param ArticuloDTO artículo a copiar.
      */
-    public Articulo(Articulo articulo) {
-        this.codigo = articulo.getCodigo();
-        this.descripcion = articulo.getDescripcion();
-        this.precio = articulo.getPrecio();
-        this.minutosPreparacion = articulo.getMinutosPreparacion();
+    public ArticuloDTO(ArticuloDTO ArticuloDTO) {
+        this.codigo = ArticuloDTO.getCodigo();
+        this.descripcion = ArticuloDTO.getDescripcion();
+        this.precio = ArticuloDTO.getPrecio();
+        this.minutosPreparacion = ArticuloDTO.getMinutosPreparacion();
     }
 
     /**
@@ -118,6 +118,6 @@ public class Articulo {
         return  "Código: " + codigo + "\n" +
                 "Descripción: " + descripcion + "\n" +
                 "Precio " + precio + " €\n" +
-                "Tiempo de preparacion: " + minutosPreparacion + " minutos";
+                "Tiempo de minutosPreparacion: " + minutosPreparacion + " minutos";
     }
 }

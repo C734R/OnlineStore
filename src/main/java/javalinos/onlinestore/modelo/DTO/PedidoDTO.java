@@ -1,15 +1,15 @@
-package javalinos.onlinestore.modelo.primitivos;
+package javalinos.onlinestore.modelo.DTO;
 
 import java.time.LocalDate;
 /**
- * Clase que representa un pedido realizado por un cliente.
+ * Clase que representa un pedido realizado por un clienteDTO.
  * Contiene información sobre el artículo, cantidades, fechas y coste.
  */
-public class Pedido {
+public class PedidoDTO {
 
     private Integer numero;
-    private Cliente cliente;
-    private Articulo articulo;
+    private ClienteDTO ClienteDTO;
+    private ArticuloDTO ArticuloDTO;
     private Integer cantidad;
     private LocalDate fechahora;
     private Float envio;
@@ -19,30 +19,30 @@ public class Pedido {
     /**
      * Constructor principal de pedido.
      * @param numero número de pedido.
-     * @param cliente cliente que realiza el pedido.
-     * @param articulo artículo comprado.
+     * @param ClienteDTO clienteDTO que realiza el pedido.
+     * @param ArticuloDTO artículo comprado.
      * @param cantidad unidades compradas.
      * @param fechahora fecha y hora del pedido.
      * @param envio coste de envío.
      * @param precio precio total del pedido.
      */
-    public Pedido(Integer numero, Cliente cliente, Articulo articulo, Integer cantidad, LocalDate fechahora, Float envio, Float precio) {
+    public PedidoDTO(Integer numero, ClienteDTO ClienteDTO, ArticuloDTO ArticuloDTO, Integer cantidad, LocalDate fechahora, Float envio, Float precio) {
         this.numero = numero;
-        this.cliente = cliente;
-        this.articulo = articulo;
+        this.ClienteDTO = ClienteDTO;
+        this.ArticuloDTO = ArticuloDTO;
         this.cantidad = cantidad;
         this.fechahora = fechahora;
         this.envio = envio;
         this.precio = precio;
-        this.diasPreparacion = calcTotalPreparacion(articulo.getMinutosPreparacion(), cantidad);
+        this.diasPreparacion = calcTotalPreparacion(ArticuloDTO.getMinutosPreparacion(), cantidad);
     }
     /**
      * Constructor vacío.
      */
-    public Pedido() {
+    public PedidoDTO() {
         this.numero = null;
-        this.cliente = null;
-        this.articulo = null;
+        this.ClienteDTO = null;
+        this.ArticuloDTO = null;
         this.cantidad = null;
         this.fechahora = null;
         this.envio = null;
@@ -52,17 +52,17 @@ public class Pedido {
 
     /**
      * Constructor de copia.
-     * @param pedido objeto Pedido a copiar.
+     * @param pedidoDTO objeto PedidoDTO a copiar.
      */
-    public Pedido(Pedido pedido) {
-        this.numero = pedido.numero;
-        this.cliente = pedido.cliente;
-        this.articulo = pedido.articulo;
-        this.cantidad = pedido.cantidad;
-        this.fechahora = pedido.fechahora;
-        this.envio = pedido.envio;
-        this.precio = pedido.precio;
-        this.diasPreparacion = pedido.diasPreparacion;
+    public PedidoDTO(PedidoDTO pedidoDTO) {
+        this.numero = pedidoDTO.numero;
+        this.ClienteDTO = pedidoDTO.ClienteDTO;
+        this.ArticuloDTO = pedidoDTO.ArticuloDTO;
+        this.cantidad = pedidoDTO.cantidad;
+        this.fechahora = pedidoDTO.fechahora;
+        this.envio = pedidoDTO.envio;
+        this.precio = pedidoDTO.precio;
+        this.diasPreparacion = pedidoDTO.diasPreparacion;
     }
 
     /**
@@ -82,35 +82,35 @@ public class Pedido {
     }
 
     /**
-     * Devuelve el cliente asociado al pedido.
-     * @return cliente del pedido.
+     * Devuelve el clienteDTO asociado al pedido.
+     * @return clienteDTO del pedido.
      */
-    public Cliente getCliente() {
-        return cliente;
+    public ClienteDTO getCliente() {
+        return ClienteDTO;
     }
 
     /**
-     * Establece el cliente asociado al pedido.
-     * @param cliente nuevo cliente.
+     * Establece el clienteDTO asociado al pedido.
+     * @param ClienteDTO nuevo clienteDTO.
      */
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
+    public void setCliente(ClienteDTO ClienteDTO) {
+        this.ClienteDTO = ClienteDTO;
     }
 
     /**
      * Devuelve el artículo del pedido.
      * @return artículo solicitado.
      */
-    public Articulo getArticulo() {
-        return articulo;
+    public ArticuloDTO getArticulo() {
+        return ArticuloDTO;
     }
 
     /**
      * Establece el artículo del pedido.
-     * @param articulo nuevo artículo.
+     * @param ArticuloDTO nuevo artículo.
      */
-    public void setArticulo(Articulo articulo) {
-        this.articulo = articulo;
+    public void setArticulo(ArticuloDTO ArticuloDTO) {
+        this.ArticuloDTO = ArticuloDTO;
     }
 
     /**
@@ -212,8 +212,8 @@ public class Pedido {
     @Override
     public String toString() {
         return  "Número de pedido: " + numero + "\n" +
-                "Cliente: " + cliente + "\n" +
-                "Articulo: " + articulo + "\n" +
+                "ClienteDTO: " + ClienteDTO + "\n" +
+                "ArticuloDTO: " + ArticuloDTO + "\n" +
                 "Cantidad: " + cantidad + "\n" +
                 "Fecha de creación: " + fechahora + "\n" +
                 "Coste del envío: " + String.format("%.2f",envio) + " €\n" +

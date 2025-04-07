@@ -1,39 +1,39 @@
 package javalinos.onlinestore.modelo.gestores;
 
-import javalinos.onlinestore.modelo.primitivos.Articulo;
-import javalinos.onlinestore.modelo.primitivos.Cliente;
-import javalinos.onlinestore.modelo.primitivos.Pedido;
+import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+import javalinos.onlinestore.modelo.DTO.ClienteDTO;
+import javalinos.onlinestore.modelo.DTO.PedidoDTO;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 /**
- * Modelo encargado de gestionar las operaciones relacionadas con los pedidos.
+ * Modelo encargado de gestionar las operaciones relacionadas con los pedidoDTOS.
  */
 public class ModeloPedidos {
 
-    private List<Pedido> pedidos;
+    private List<PedidoDTO> pedidos;
     /**
-     * Constructor por defecto. Inicializa una lista vacía de pedidos.
+     * Constructor por defecto. Inicializa una lista vacía de pedidoDTOS.
      */
     public ModeloPedidos() {
-        this.pedidos = new ArrayList<Pedido>();
+        this.pedidos = new ArrayList<PedidoDTO>();
     }
     /**
      * Constructor alternativo que recibe una lista de pedidos ya existente.
      * @param pedidos lista de pedidos precargada.
      */
-    public ModeloPedidos(List<Pedido> pedidos) {
+    public ModeloPedidos(List<PedidoDTO> pedidos) {
         this.pedidos = pedidos;
     }
 
     //*************************** Getters & Setters ***************************//
 
     /**
-     * Devuelve todos los pedidos.
-     * @return lista de todos los pedidos.
+     * Devuelve todos los pedidoDTOS.
+     * @return lista de todos los pedidoDTOS.
      */
-    public List<Pedido> getPedidos() {
+    public List<PedidoDTO> getPedidos() {
         return pedidos;
     }
 
@@ -41,7 +41,7 @@ public class ModeloPedidos {
      * Establece la lista de pedidos.
      * @param pedidos lista de pedidos a establecer.
      */
-    public void setPedidos(List<Pedido> pedidos) {
+    public void setPedidos(List<PedidoDTO> pedidos) {
         this.pedidos = pedidos;
     }
 
@@ -49,19 +49,19 @@ public class ModeloPedidos {
     //*************************** CRUD ***************************//
 
     /**
-     * Añade un pedido a la lista.
-     * @param pedido pedido a añadir.
+     * Añade un pedidos a la lista.
+     * @param pedidos pedidos a añadir.
      */
-    public void addPedido(Pedido pedido) {
-        pedidos.add(pedido);
+    public void addPedido(PedidoDTO pedidos) {
+        this.pedidos.add(pedidos);
     }
 
     /**
-     * Elimina un pedido de la lista.
-     * @param pedido pedido a eliminar.
+     * Elimina un pedidos de la lista.
+     * @param pedidos pedidos a eliminar.
      */
-    public void removePedido(Pedido pedido) {
-        pedidos.remove(pedido);
+    public void removePedido(PedidoDTO pedidos) {
+        this.pedidos.remove(pedidos);
     }
 
     /**
@@ -69,19 +69,19 @@ public class ModeloPedidos {
      * @param id índice del pedido.
      * @return pedido en la posición indicada.
      */
-    public Pedido getPedido(int id) {
+    public PedidoDTO getPedido(int id) {
         return pedidos.get(id);
     }
 
     /**
      * Actualiza un pedido existente con nueva información.
-     * @param pedidoOld pedido original.
-     * @param pedidoNew nuevo pedido con datos actualizados.
+     * @param pedidoDTOOld pedido original.
+     * @param pedidoDTONew nuevo pedido con datos actualizados.
      */
-    public void updatePedido(Pedido pedidoOld, Pedido pedidoNew) {
-        int index = pedidos.indexOf(pedidoOld);
+    public void updatePedido(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) {
+        int index = pedidos.indexOf(pedidoDTOOld);
         if (index != -1) {
-            pedidos.set(index, pedidoNew);
+            pedidos.set(index, pedidoDTONew);
         }
 
     }
@@ -93,28 +93,28 @@ public class ModeloPedidos {
      * @param numero número del pedido.
      * @return el pedido con ese número o null si no existe.
      */
-    public Pedido getPedidoNumero(int numero) {
-        for (Pedido pedido : pedidos) {
-            if (pedido.getNumero() == numero) {
-                return pedido;
+    public PedidoDTO getPedidoNumero(int numero) {
+        for (PedidoDTO pedidoDTO : pedidos) {
+            if (pedidoDTO.getNumero() == numero) {
+                return pedidoDTO;
             }
         }
         return null;
     }
 
     /**
-     * Obtiene todos los pedidos realizados por un cliente.
-     * @param cliente cliente a consultar.
-     * @return lista de pedidos realizados por ese cliente.
+     * Obtiene todos los pedidoDTOS realizados por un clienteDTO.
+     * @param ClienteDTO clienteDTO a consultar.
+     * @return lista de pedidoDTOS realizados por ese clienteDTO.
      */
-    public List<Pedido> getPedidosCliente(Cliente cliente) {
+    public List<PedidoDTO> getPedidosCliente(ClienteDTO ClienteDTO) {
 
         if (pedidos.isEmpty()) return null;
-        if (cliente != null) {
-            List<Pedido> pedidosCliente = new ArrayList<Pedido>();
-            for (Pedido pedido : pedidos) {
-                if (pedido.getCliente().equals(cliente)) {
-                    pedidosCliente.add(pedido);
+        if (ClienteDTO != null) {
+            List<PedidoDTO> pedidosCliente = new ArrayList<PedidoDTO>();
+            for (PedidoDTO pedidoDTO : pedidos) {
+                if (pedidoDTO.getCliente().equals(ClienteDTO)) {
+                    pedidosCliente.add(pedidoDTO);
                 }
             }
             return pedidosCliente;
@@ -123,33 +123,33 @@ public class ModeloPedidos {
     }
 
     /**
-     * Obtiene pedidos enviados o pendientes, con opción de filtrar por cliente.
+     * Obtiene pedidoDTOS enviados o pendientes, con opción de filtrar por clienteDTO.
      * @param enviado true para enviados, false para pendientes.
-     * @param cliente cliente a filtrar (puede ser null).
-     * @return lista de pedidos según los filtros.
+     * @param ClienteDTO clienteDTO a filtrar (puede ser null).
+     * @return lista de pedidoDTOS según los filtros.
      */
-    public List<Pedido> getPedidosPendientesEnviados(Boolean enviado, Cliente cliente) {
-        List<Pedido> listaFiltrada = new ArrayList<>();
+    public List<PedidoDTO> getPedidosPendientesEnviados(Boolean enviado, ClienteDTO ClienteDTO) {
+        List<PedidoDTO> listaFiltrada = new ArrayList<>();
 
-        if (cliente != null) {
-            for (Pedido pedido : pedidos) {
-                if (pedido.getCliente().equals(cliente)) {
-                    listaFiltrada.add(pedido);
+        if (ClienteDTO != null) {
+            for (PedidoDTO pedidoDTO : pedidos) {
+                if (pedidoDTO.getCliente().equals(ClienteDTO)) {
+                    listaFiltrada.add(pedidoDTO);
                 }
             }
         } else {
             listaFiltrada = pedidos;
         }
 
-        List<Pedido> resultado = new ArrayList<>();
+        List<PedidoDTO> resultado = new ArrayList<>();
 
-        for (Pedido pedido : listaFiltrada) {
-            boolean estaEnviado = checkEnviado(pedido);
+        for (PedidoDTO pedidoDTO : listaFiltrada) {
+            boolean estaEnviado = checkEnviado(pedidoDTO);
 
             if (enviado && estaEnviado) {
-                resultado.add(pedido);
+                resultado.add(pedidoDTO);
             } else if (!enviado && !estaEnviado) {
-                resultado.add(pedido);
+                resultado.add(pedidoDTO);
             }
         }
 
@@ -157,13 +157,13 @@ public class ModeloPedidos {
     }
 
     /**
-     * Comprueba si un pedido ya ha sido enviado.
-     * @param pedido pedido a comprobar.
+     * Comprueba si un pedidoDTO ya ha sido enviado.
+     * @param pedidoDTO pedidoDTO a comprobar.
      * @return true si ya ha pasado su fecha de preparación.
      */
-    public boolean checkEnviado(Pedido pedido) {
+    public boolean checkEnviado(PedidoDTO pedidoDTO) {
         LocalDate hoy = LocalDate.now();
-        LocalDate finPreparacion = pedido.getFechahora().plusDays(pedido.getDiasPreparacion());
+        LocalDate finPreparacion = pedidoDTO.getFechahora().plusDays(pedidoDTO.getDiasPreparacion());
         return hoy.isAfter(finPreparacion);
     }
 
@@ -185,29 +185,29 @@ public class ModeloPedidos {
 
     /**
      * Crea un nuevo pedido.
-     * @param cliente cliente que realiza el pedido.
-     * @param articulo artículo solicitado.
+     * @param ClienteDTO clienteDTO que realiza el pedido.
+     * @param ArticuloDTO artículo solicitado.
      * @param cantidad unidades pedidas.
      * @param fechahora fecha del pedido.
      * @param envio coste de envío.
      * @return el nuevo pedido creado.
      */
-    public Pedido makePedido(Cliente cliente, Articulo articulo, Integer cantidad, LocalDate fechahora, Float envio) {
+    public PedidoDTO makePedido(ClienteDTO ClienteDTO, ArticuloDTO ArticuloDTO, Integer cantidad, LocalDate fechahora, Float envio) {
         int numPedido;
         if (pedidos.isEmpty()) numPedido = 1;
         else numPedido = pedidos.getLast().getNumero() + 1;
-        return new Pedido(numPedido, cliente, articulo, cantidad, fechahora, calcEnvioTotal(cantidad, envio), calcPrecioTotal(articulo, cantidad, envio, cliente));
+        return new PedidoDTO(numPedido, ClienteDTO, ArticuloDTO, cantidad, fechahora, calcEnvioTotal(cantidad, envio), calcPrecioTotal(ArticuloDTO, cantidad, envio, ClienteDTO));
     }
     /**
      * Calcula el precio total de un pedido.
-     * @param articulo artículo pedido.
+     * @param ArticuloDTO artículo pedido.
      * @param stockComprado cantidad.
      * @param precioEnvio precio base del envío.
-     * @param cliente cliente que realiza el pedido.
+     * @param ClienteDTO clienteDTO que realiza el pedido.
      * @return precio total tras aplicar descuentos.
      */
-    private float calcPrecioTotal(Articulo articulo, int stockComprado, float precioEnvio, Cliente cliente) {
-        return (((articulo.getPrecio() * stockComprado) + calcEnvioTotal(stockComprado, precioEnvio))) * (((100f - (100f * cliente.getDescuento())) / 100f));
+    private float calcPrecioTotal(ArticuloDTO ArticuloDTO, int stockComprado, float precioEnvio, ClienteDTO ClienteDTO) {
+        return (((ArticuloDTO.getPrecio() * stockComprado) + calcEnvioTotal(stockComprado, precioEnvio))) * (((100f - (100f * ClienteDTO.getDescuento())) / 100f));
     }
     /**
      * Calcula el precio final del envío con recargo por unidad.
@@ -220,35 +220,35 @@ public class ModeloPedidos {
     }
 
     /**
-     * Carga pedidos de prueba en función de la configuración.
+     * Carga pedidoDTOS de prueba en función de la configuración.
      * @param configuracion define si se carga el modo por defecto.
-     * @param clientes lista de clientes disponibles.
-     * @param articulos lista de artículos disponibles.
+     * @param ClienteDTOS lista de clienteDTOS disponibles.
+     * @param ArticuloDTOS lista de artículos disponibles.
      * @return true si se cargaron correctamente, false si hubo error.
      */
-    public boolean loadPedidos(int configuracion, List<Cliente> clientes, List<Articulo> articulos) {
+    public boolean loadPedidos(int configuracion, List<ClienteDTO> ClienteDTOS, List<ArticuloDTO> ArticuloDTOS) {
         if (configuracion == 0) {
         try {
             pedidos.clear();
 
-            pedidos.add(makePedido(clientes.get(0), articulos.get(0), 2, LocalDate.now().minusDays(3), 5f));
-            pedidos.add(makePedido(clientes.get(4), articulos.get(1), 1, LocalDate.now().minusDays(1), 5f));
-            pedidos.add(makePedido(clientes.get(7), articulos.get(2), 5, LocalDate.now().minusDays(3), 5f));
-            pedidos.add(makePedido(clientes.get(1), articulos.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
-            pedidos.add(makePedido(clientes.get(5), articulos.get(4), 4, LocalDate.now().minusMonths(1), 5f));
-            pedidos.add(makePedido(clientes.get(8), articulos.get(5), 2, LocalDate.now().minusDays(2), 5f));
-            pedidos.add(makePedido(clientes.get(2), articulos.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
-            pedidos.add(makePedido(clientes.get(6), articulos.get(7), 6, LocalDate.now().minusMonths(2), 5f));
-            pedidos.add(makePedido(clientes.get(3), articulos.get(8), 3, LocalDate.now().minusDays(5), 5f));
-            pedidos.add(makePedido(clientes.get(0), articulos.get(1), 10, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(4), articulos.get(2), 7, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(7), articulos.get(3), 12, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(1), articulos.get(4), 6, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(5), articulos.get(5), 15, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(8), articulos.get(6), 9, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(2), articulos.get(7), 11, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(6), articulos.get(0), 8, LocalDate.now(), 5f));
-            pedidos.add(makePedido(clientes.get(3), articulos.get(1), 13, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(0), 2, LocalDate.now().minusDays(3), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(1), 1, LocalDate.now().minusDays(1), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(2), 5, LocalDate.now().minusDays(3), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(4), 4, LocalDate.now().minusMonths(1), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(5), 2, LocalDate.now().minusDays(2), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(7), 6, LocalDate.now().minusMonths(2), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(8), 3, LocalDate.now().minusDays(5), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(1), 10, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(2), 7, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(3), 12, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(4), 6, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(5), 15, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(6), 9, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(7), 11, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(0), 8, LocalDate.now(), 5f));
+            pedidos.add(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(1), 13, LocalDate.now(), 5f));
 
             return true;
         } catch (Exception e) {

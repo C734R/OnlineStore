@@ -16,12 +16,13 @@ module javalinos.onlinestore {
     opens javalinos.onlinestore to javafx.fxml;
     opens javalinos.onlinestore.controlador to javafx.fxml;
     opens javalinos.onlinestore.modelo.gestores to javafx.fxml;
-    opens javalinos.onlinestore.modelo.primitivos to javafx.fxml;
+    opens javalinos.onlinestore.modelo.DTO to javafx.fxml;
 
     exports javalinos.onlinestore;
     exports javalinos.onlinestore.controlador;
     exports javalinos.onlinestore.modelo.gestores;
-    exports javalinos.onlinestore.modelo.primitivos;
+    exports javalinos.onlinestore.modelo.DTO;
     exports javalinos.onlinestore.utils;
     exports javalinos.onlinestore.vista;
+    exports javalinos.onlinestore.modelo.Entidades;
 }

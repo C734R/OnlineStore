@@ -1,5 +1,5 @@
+import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
-import javalinos.onlinestore.modelo.primitivos.Articulo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 /**
  * Clase de pruebas para el modelo de gestión de artículos.
- * - Entidades relacionadas: Articulo
+ * - Entidades relacionadas: ArticuloDTO
  */
 public class ModeloArticulosTest {
 
@@ -35,33 +35,33 @@ public class ModeloArticulosTest {
      */
     @Test
     void testLoadArticulos() {
-        List<Articulo> articulos = mArticulos.getArticulos();
-        assertEquals(9, articulos.size(), "Debe haber 9 artículos cargados");
+        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulos();
+        assertEquals(9, ArticuloDTOS.size(), "Debe haber 9 artículos cargados");
     }
     /**
      * Verifica la creación de un artículo con valores válidos.
      */
     @Test
     void testMakeArticulo() {
-        Articulo articulo = mArticulos.makeArticulo("Prueba", 15.45f, 300);
-        assertEquals("Prueba", articulo.getDescripcion());
-        assertEquals(15.45f, articulo.getPrecio());
-        assertEquals(300, articulo.getMinutosPreparacion());
-        assertTrue(articulo.getCodigo().startsWith("ART"));
+        ArticuloDTO ArticuloDTO = mArticulos.makeArticulo("Prueba", 15.45f, 300);
+        assertEquals("Prueba", ArticuloDTO.getDescripcion());
+        assertEquals(15.45f, ArticuloDTO.getPrecio());
+        assertEquals(300, ArticuloDTO.getMinutosPreparacion());
+        assertTrue(ArticuloDTO.getCodigo().startsWith("ART"));
     }
     /**
      * Verifica que se puede añadir un artículo y asignarle stock.
      */
     @Test
     void testAddArticuloAndStock() {
-        Articulo nuevo = mArticulos.makeArticulo("Prueba", 12.5f, 50);
+        ArticuloDTO nuevo = mArticulos.makeArticulo("Prueba", 12.5f, 50);
         mArticulos.addArticulo(nuevo);
         mArticulos.addStockArticulo(nuevo, 7);
 
-        List<Articulo> articulos = mArticulos.getArticulos();
-        Map<Articulo, Integer> stock = mArticulos.getStockArticulos();
+        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulos();
+        Map<ArticuloDTO, Integer> stock = mArticulos.getStockArticulos();
 
-        assertTrue(articulos.contains(nuevo));
+        assertTrue(ArticuloDTOS.contains(nuevo));
         assertEquals(7, stock.get(nuevo));
     }
     /**
@@ -69,23 +69,23 @@ public class ModeloArticulosTest {
      */
     @Test
     void testRemoveArticuloAndStock() {
-        Articulo articulo = mArticulos.getArticulos().getFirst();
-        mArticulos.removeArticulo(articulo);
-        mArticulos.removeStockArticulo(articulo);
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().getFirst();
+        mArticulos.removeArticulo(ArticuloDTO);
+        mArticulos.removeStockArticulo(ArticuloDTO);
 
-        assertFalse(mArticulos.getArticulos().contains(articulo));
-        assertFalse(mArticulos.getStockArticulos().containsKey(articulo));
+        assertFalse(mArticulos.getArticulos().contains(ArticuloDTO));
+        assertFalse(mArticulos.getStockArticulos().containsKey(ArticuloDTO));
     }
     /**
      * Verifica que se actualiza correctamente un artículo.
      */
     @Test
     void testUpdateArticulo() {
-        Articulo articuloOld = mArticulos.getArticulos().getFirst();
-        Articulo articuloNew = new Articulo(articuloOld.getCodigo(), "Nuevo nombre", 99.99f, 60);
-        mArticulos.updateArticulo(articuloOld, articuloNew);
+        ArticuloDTO ArticuloDTOOld = mArticulos.getArticulos().getFirst();
+        ArticuloDTO ArticuloDTONew = new ArticuloDTO(ArticuloDTOOld.getCodigo(), "Nuevo nombre", 99.99f, 60);
+        mArticulos.updateArticulo(ArticuloDTOOld, ArticuloDTONew);
 
-        Articulo obtenido = mArticulos.getArticuloIndex(0);
+        ArticuloDTO obtenido = mArticulos.getArticuloIndex(0);
         assertEquals("Nuevo nombre", obtenido.getDescripcion());
         assertEquals(99.99f, obtenido.getPrecio(), 0.001);
     }
@@ -94,17 +94,17 @@ public class ModeloArticulosTest {
      */
     @Test
     void testUpdateStock() {
-        Articulo articulo = mArticulos.getArticulos().getFirst();
-        mArticulos.updateStockArticulo(articulo, 42);
-        assertEquals(42, mArticulos.getStockArticulos().get(articulo));
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().getFirst();
+        mArticulos.updateStockArticulo(ArticuloDTO, 42);
+        assertEquals(42, mArticulos.getStockArticulos().get(ArticuloDTO));
     }
     /**
      * Verifica la obtención de un artículo por índice válido e inválido.
      */
     @Test
     void testGetArticuloIndex() {
-        Articulo articulo = mArticulos.getArticulos().get(1);
-        assertEquals(articulo, mArticulos.getArticuloIndex(1));
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().get(1);
+        assertEquals(ArticuloDTO, mArticulos.getArticuloIndex(1));
         assertNull(mArticulos.getArticuloIndex(-1));
         assertNull(mArticulos.getArticuloIndex(100));
     }
@@ -113,8 +113,8 @@ public class ModeloArticulosTest {
      */
     @Test
     void testCheckArticulo() {
-        Articulo articulo = mArticulos.getArticulos().getFirst();
-        assertTrue(mArticulos.checkArticulo(articulo.getCodigo()));
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().getFirst();
+        assertTrue(mArticulos.checkArticulo(ArticuloDTO.getCodigo()));
         assertFalse(mArticulos.checkArticulo("ART999"));
     }
     /**
@@ -122,8 +122,8 @@ public class ModeloArticulosTest {
      */
     @Test
     void testSetArticulosAndStock() {
-        List<Articulo> copia = List.copyOf(mArticulos.getArticulos());
-        Map<Articulo, Integer> stockCopia = Map.copyOf(mArticulos.getStockArticulos());
+        List<ArticuloDTO> copia = List.copyOf(mArticulos.getArticulos());
+        Map<ArticuloDTO, Integer> stockCopia = Map.copyOf(mArticulos.getStockArticulos());
 
         mArticulos.setArticulos(copia);
         mArticulos.setStockArticulos(stockCopia);

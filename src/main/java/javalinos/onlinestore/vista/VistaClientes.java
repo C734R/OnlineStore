@@ -1,7 +1,7 @@
 package javalinos.onlinestore.vista;
 
-import javalinos.onlinestore.modelo.primitivos.Categoria;
-import javalinos.onlinestore.modelo.primitivos.Cliente;
+import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
+import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,9 +10,9 @@ import java.util.List;
 import static javalinos.onlinestore.utils.Utilidades.checkEmail;
 import static javalinos.onlinestore.utils.Utilidades.checkNIF;
 /**
- * Vista encargada de la gestión e interacción con los clientes.
- * - Permite mostrar, solicitar y modificar datos de clientes.
- * - Entidades relacionadas: Cliente, Categoria
+ * Vista encargada de la gestión e interacción con los clienteDTOS.
+ * - Permite mostrar, solicitar y modificar datos de clienteDTOS.
+ * - Entidades relacionadas: ClienteDTO, CategoriaDTO
  */
 public class VistaClientes extends VistaBase {
 
@@ -20,7 +20,7 @@ public class VistaClientes extends VistaBase {
     private final List<String> listCategorias = new ArrayList<>(Arrays.asList("Estándar", "Premium"));
     private final List<String> listMetodos = new ArrayList<>(Arrays.asList("Por NIF", "Por Email"));
     /**
-     * Constructor por defecto. Inicializa cabecera y menú principal de clientes.
+     * Constructor por defecto. Inicializa cabecera y menú principal de clienteDTOS.
      */
     public VistaClientes() {
         String cabecera = """
@@ -31,7 +31,7 @@ public class VistaClientes extends VistaBase {
         List<String> listaMenu = new ArrayList<>(Arrays.asList(
                 "Añadir cliente", "Eliminar cliente",
                 "Mostrar cliente", "Modificar cliente",
-                "Listar clientes", "Listar cliente por tipo"));
+                "Listar clienteDTOS", "Listar cliente por tipo"));
         super.setListaMenu(listaMenu);
     }
 
@@ -123,28 +123,28 @@ public class VistaClientes extends VistaBase {
     //*************************** Mostrar datos ***************************//
 
     /**
-     * Muestra una lista simple de clientes.
-     * @param clientes lista de clientes.
+     * Muestra una lista simple de clienteDTOS.
+     * @param ClienteDTOS lista de clienteDTOS.
      */
-    public void showListClientes(List<Cliente> clientes) {
-        showListGenerica(clientes,"CLIENTES", true, false);
+    public void showListClientes(List<ClienteDTO> ClienteDTOS) {
+        showListGenerica(ClienteDTOS,"CLIENTES", true, false);
     }
 
     /**
-     * Muestra una lista numerada de clientes.
-     * @param clientes lista de clientes.
+     * Muestra una lista numerada de clienteDTOS.
+     * @param ClienteDTOS lista de clienteDTOS.
      */
-    public void showListClientesNumerada(List<Cliente> clientes) {
-        showListGenerica(clientes,"CLIENTES NUMERADOS", true, true);
+    public void showListClientesNumerada(List<ClienteDTO> ClienteDTOS) {
+        showListGenerica(ClienteDTOS,"CLIENTES NUMERADOS", true, true);
     }
 
     /**
-     * Muestra un listado de clientes filtrado por categoría.
-     * @param clientes lista de clientes filtrados.
-     * @param categoria categoría seleccionada.
+     * Muestra un listado de clienteDTOS filtrado por categoría.
+     * @param ClienteDTOS lista de clienteDTOS filtrados.
+     * @param categoriaDTO categoría seleccionada.
      */
-    public void showListClientesCategoria(List<Cliente> clientes, Categoria categoria) {
-        showListGenerica(clientes, "LISTA DE CLIENTES DE CATEGORÍA "+ categoria.getNombre(), true, false);
+    public void showListClientesCategoria(List<ClienteDTO> ClienteDTOS, CategoriaDTO categoriaDTO) {
+        showListGenerica(ClienteDTOS, "LISTA DE CLIENTES DE CATEGORÍA "+ categoriaDTO.getNombre(), true, false);
     }
 
     /**
@@ -171,12 +171,12 @@ public class VistaClientes extends VistaBase {
     }
 
     /**
-     * Muestra los datos completos de un cliente.
-     * @param cliente cliente a mostrar.
+     * Muestra los datos completos de un clienteDTO.
+     * @param ClienteDTO clienteDTO a mostrar.
      */
-    public void showCliente(Cliente cliente) {
-        showMensaje("******** DATOS DEL CLIENTE " + cliente.getNombre() +" ********", true);
-        showMensaje(cliente.toString(), true);
+    public void showCliente(ClienteDTO ClienteDTO) {
+        showMensaje("******** DATOS DEL CLIENTE " + ClienteDTO.getNombre() +" ********", true);
+        showMensaje(ClienteDTO.toString(), true);
         showMensaje("*****************************************", true);
     }
 }

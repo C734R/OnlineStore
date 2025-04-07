@@ -1,6 +1,6 @@
+import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.gestores.ModeloClientes;
-import javalinos.onlinestore.modelo.primitivos.Categoria;
-import javalinos.onlinestore.modelo.primitivos.Cliente;
+import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,14 +9,14 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 /**
- * Clase de pruebas para el modelo de gestión de clientes.
- * - Entidades relacionadas: Cliente, Categoria
+ * Clase de pruebas para el modelo de gestión de clienteDTOS.
+ * - Entidades relacionadas: ClienteDTO, CategoriaDTO
  */
 public class ModeloClientesTest {
 
     ModeloClientes mClientes;
     /**
-     * Inicializa el modelo de clientes y carga datos de prueba antes de cada test.
+     * Inicializa el modelo de clienteDTOS y carga datos de prueba antes de cada test.
      */
     @BeforeEach
     void setUp() {
@@ -31,20 +31,20 @@ public class ModeloClientesTest {
         mClientes = null;
     }
     /**
-     * Verifica que se cargan correctamente los clientes.
+     * Verifica que se cargan correctamente los clienteDTOS.
      */
     @Test
     void testLoadClientes() {
-        List<Cliente> clientes = mClientes.getClientes();
-        assertEquals(10, clientes.size(), "Debe haber 10 clientes precargados");
+        List<ClienteDTO> ClienteDTOS = mClientes.getClientes();
+        assertEquals(10, ClienteDTOS.size(), "Debe haber 10 clienteDTOS precargados");
     }
     /**
      * Verifica la búsqueda de un cliente por NIF.
      */
     @Test
     void testBuscarPorNif() {
-        Cliente primero = mClientes.getClientes().get(0);
-        Cliente encontrado = mClientes.getClienteNif(primero.getNif());
+        ClienteDTO primero = mClientes.getClientes().get(0);
+        ClienteDTO encontrado = mClientes.getClienteNif(primero.getNif());
         assertNotNull(encontrado);
         assertEquals(primero.getNif(), encontrado.getNif());
     }
@@ -53,8 +53,8 @@ public class ModeloClientesTest {
      */
     @Test
     void testBuscarPorEmail() {
-        Cliente primero = mClientes.getClientes().get(0);
-        Cliente encontrado = mClientes.getClienteEmail(primero.getEmail());
+        ClienteDTO primero = mClientes.getClientes().get(0);
+        ClienteDTO encontrado = mClientes.getClienteEmail(primero.getEmail());
         assertNotNull(encontrado);
         assertEquals(primero.getEmail(), encontrado.getEmail());
     }
@@ -63,10 +63,10 @@ public class ModeloClientesTest {
      */
     @Test
     void testAddCliente() {
-        Cliente nuevo = mClientes.makeCliente("Ana", "Calle Nueva", "11111111H", "ana@email.com", mClientes.getCategoria(1));
+        ClienteDTO nuevo = mClientes.makeCliente("Ana", "Calle Nueva", "11111111H", "ana@email.com", mClientes.getCategoria(1));
         mClientes.addCliente(nuevo);
 
-        Cliente buscado = mClientes.getClienteNif("11111111H");
+        ClienteDTO buscado = mClientes.getClienteNif("11111111H");
         assertNotNull(buscado);
         assertEquals("Ana", buscado.getNombre());
     }
@@ -75,10 +75,10 @@ public class ModeloClientesTest {
      */
     @Test
     void testDeleteCliente() {
-        Cliente cliente = mClientes.getClientes().get(0);
-        mClientes.removeCliente(cliente);
+        ClienteDTO ClienteDTO = mClientes.getClientes().get(0);
+        mClientes.removeCliente(ClienteDTO);
 
-        Cliente eliminado = mClientes.getClienteNif(cliente.getNif());
+        ClienteDTO eliminado = mClientes.getClienteNif(ClienteDTO.getNif());
         assertNull(eliminado);
     }
     /**
@@ -86,35 +86,35 @@ public class ModeloClientesTest {
      */
     @Test
     void testModNombreCliente() {
-        Cliente cliente = mClientes.getClientes().get(0);
-        String nombreOriginal = cliente.getNombre();
+        ClienteDTO ClienteDTO = mClientes.getClientes().get(0);
+        String nombreOriginal = ClienteDTO.getNombre();
 
-        cliente.setNombre("NuevoNombre");
-        mClientes.updateCliente(cliente, cliente);
+        ClienteDTO.setNombre("NuevoNombre");
+        mClientes.updateCliente(ClienteDTO, ClienteDTO);
 
-        Cliente modificado = mClientes.getClienteNif(cliente.getNif());
+        ClienteDTO modificado = mClientes.getClienteNif(ClienteDTO.getNif());
         assertEquals("NuevoNombre", modificado.getNombre());
         assertNotEquals(nombreOriginal, modificado.getNombre());
     }
     /**
-     * Verifica que se obtienen correctamente los clientes por categoría.
+     * Verifica que se obtienen correctamente los clienteDTOS por categoría.
      */
     @Test
     void testClientesPorCategoria() {
-        Cliente cliente = mClientes.getClientes().get(0);
-        Categoria categoria = cliente.getCategoria();
+        ClienteDTO ClienteDTO = mClientes.getClientes().get(0);
+        CategoriaDTO categoriaDTO = ClienteDTO.getCategoria();
 
-        List<Cliente> mismos = mClientes.getClientesCategoria(categoria);
+        List<ClienteDTO> mismos = mClientes.getClientesCategoria(categoriaDTO);
         assertFalse(mismos.isEmpty());
-        assertTrue(mismos.stream().allMatch(c -> c.getCategoria().equals(categoria)));
+        assertTrue(mismos.stream().allMatch(c -> c.getCategoria().equals(categoriaDTO)));
     }
     /**
      * Verifica que se puede obtener un cliente por su índice.
      */
     @Test
     void testObtenerPorIndice() {
-        Cliente cliente = mClientes.getClienteIndex(0);
-        assertNotNull(cliente);
+        ClienteDTO ClienteDTO = mClientes.getClienteIndex(0);
+        assertNotNull(ClienteDTO);
     }
     /**
      * Verifica los valores del primer y último índice de cliente.
@@ -133,7 +133,7 @@ public class ModeloClientesTest {
      */
     @Test
     void testObtenerCategoria() {
-        Categoria categoria = mClientes.getCategoria(1);
-        assertNotNull(categoria);
+        CategoriaDTO categoriaDTO = mClientes.getCategoria(1);
+        assertNotNull(categoriaDTO);
     }
 }

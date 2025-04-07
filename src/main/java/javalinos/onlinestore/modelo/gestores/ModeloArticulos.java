@@ -1,7 +1,6 @@
 package javalinos.onlinestore.modelo.gestores;
 
-import javalinos.onlinestore.modelo.primitivos.Articulo;
-import javalinos.onlinestore.modelo.primitivos.Cliente;
+import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 
 import java.util.*;
 /**
@@ -9,13 +8,13 @@ import java.util.*;
  */
 public class ModeloArticulos {
 
-    private List<Articulo> articulos;
-    private Map<Articulo, Integer> stockArticulos;
+    private List<ArticuloDTO> ArticuloDTOS;
+    private Map<ArticuloDTO, Integer> stockArticulos;
     /**
      * Constructor por defecto. Inicializa las listas de artículos y su stock.
      */
     public ModeloArticulos() {
-        this.articulos = new ArrayList<>();
+        this.ArticuloDTOS = new ArrayList<>();
         this.stockArticulos = new LinkedHashMap<>();
     }
 
@@ -25,109 +24,109 @@ public class ModeloArticulos {
      * Devuelve una lista con todos los artículos registrados.
      * @return lista de artículos.
      */
-    public List<Articulo> getArticulos() {
-        return articulos;
+    public List<ArticuloDTO> getArticulos() {
+        return ArticuloDTOS;
     }
     /**
      * Devuelve un artículo según su posición en la lista.
      * @param index posición en la lista.
      * @return artículo encontrado o null si está fuera de rango.
      */
-    public Articulo getArticuloIndex(int index) {
-        if (index < 0 || index >= articulos.size()) return null;
-        return articulos.get(index);
+    public ArticuloDTO getArticuloIndex(int index) {
+        if (index < 0 || index >= ArticuloDTOS.size()) return null;
+        return ArticuloDTOS.get(index);
     }
     /**
      * Devuelve el mapa de stock de todos los artículos.
      * @return mapa con artículos y cantidades disponibles.
      */
-    public Map<Articulo, Integer> getStockArticulos() {
+    public Map<ArticuloDTO, Integer> getStockArticulos() {
         return stockArticulos;
     }
     /**
      * Devuelve el stock de un artículo concreto.
-     * @param articulo artículo a consultar.
+     * @param ArticuloDTO artículo a consultar.
      * @return unidades disponibles o null si no está en el mapa.
      */
-    public Integer getStockArticulo(Articulo articulo) {
+    public Integer getStockArticulo(ArticuloDTO ArticuloDTO) {
         if (stockArticulos.isEmpty()) return null;
-        return stockArticulos.get(articulo);
+        return stockArticulos.get(ArticuloDTO);
     }
 
     /**
      * Establece una nueva lista de artículos.
-     * @param articulos nueva lista de artículos.
+     * @param ArticuloDTOS nueva lista de artículos.
      */
-    public void setArticulos(List<Articulo> articulos) {
-        this.articulos = articulos;
+    public void setArticulos(List<ArticuloDTO> ArticuloDTOS) {
+        this.ArticuloDTOS = ArticuloDTOS;
     }
     /**
      * Establece un nuevo mapa de stock.
      * @param stockArticulos mapa de artículos con su stock.
      */
-    public void setStockArticulos(Map<Articulo, Integer> stockArticulos) {
+    public void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) {
         this.stockArticulos = stockArticulos;
     }
     /**
      * Establece el stock de un artículo específico.
-     * @param articulo artículo a actualizar.
+     * @param ArticuloDTO artículo a actualizar.
      * @param stock nueva cantidad disponible.
      */
-    public void setStockArticulo(Articulo articulo, Integer stock) {
-        this.stockArticulos.put(articulo, stock);
+    public void setStockArticulo(ArticuloDTO ArticuloDTO, Integer stock) {
+        this.stockArticulos.put(ArticuloDTO, stock);
     }
 
     //*************************** CRUD ***************************//
 
     /**
      * Añade un artículo a la lista de artículos.
-     * @param articulo artículo a añadir.
+     * @param ArticuloDTO artículo a añadir.
      */
-    public void addArticulo(Articulo articulo) {
-        articulos.add(articulo);
+    public void addArticulo(ArticuloDTO ArticuloDTO) {
+        ArticuloDTOS.add(ArticuloDTO);
     }
     /**
      * Añade stock para un artículo determinado.
-     * @param articulo artículo a actualizar.
+     * @param ArticuloDTO artículo a actualizar.
      * @param stock cantidad a añadir.
      */
-    public void addStockArticulo(Articulo articulo, int stock) {
-        stockArticulos.put(articulo, stock);
+    public void addStockArticulo(ArticuloDTO ArticuloDTO, int stock) {
+        stockArticulos.put(ArticuloDTO, stock);
     }
 
     /**
      * Elimina un artículo de la lista.
-     * @param articulo artículo a eliminar.
+     * @param ArticuloDTO artículo a eliminar.
      */
-    public void removeArticulo(Articulo articulo) {
-        articulos.remove(articulo);
+    public void removeArticulo(ArticuloDTO ArticuloDTO) {
+        ArticuloDTOS.remove(ArticuloDTO);
     }
     /**
      * Elimina el stock de un artículo.
-     * @param articulo artículo del cual eliminar el stock.
+     * @param ArticuloDTO artículo del cual eliminar el stock.
      */
-    public void removeStockArticulo(Articulo articulo) {
-        stockArticulos.remove(articulo);
+    public void removeStockArticulo(ArticuloDTO ArticuloDTO) {
+        stockArticulos.remove(ArticuloDTO);
     }
 
     /**
      * Reemplaza un artículo por uno nuevo.
-     * @param articuloOld artículo original.
-     * @param articuloNew nuevo artículo.
+     * @param ArticuloDTOOld artículo original.
+     * @param ArticuloDTONew nuevo artículo.
      */
-    public void updateArticulo(Articulo articuloOld, Articulo articuloNew) {
-        int index = articulos.indexOf(articuloOld);
+    public void updateArticulo(ArticuloDTO ArticuloDTOOld, ArticuloDTO ArticuloDTONew) {
+        int index = ArticuloDTOS.indexOf(ArticuloDTOOld);
         if (index != -1) {
-            articulos.set(index, articuloNew);
+            ArticuloDTOS.set(index, ArticuloDTONew);
         }
     }
     /**
      * Actualiza el stock de un artículo.
-     * @param articulo artículo a actualizar.
+     * @param ArticuloDTO artículo a actualizar.
      * @param stockNew nueva cantidad de stock.
      */
-    public void updateStockArticulo(Articulo articulo, int stockNew) {
-        stockArticulos.put(articulo, stockNew);
+    public void updateStockArticulo(ArticuloDTO ArticuloDTO, int stockNew) {
+        stockArticulos.put(ArticuloDTO, stockNew);
     }
 
     //*************************** Crear datos ***************************//
@@ -139,14 +138,14 @@ public class ModeloArticulos {
      * @param preparacion tiempo de preparación en minutos.
      * @return instancia del nuevo artículo.
      */
-    public Articulo makeArticulo(String descripcion, Float precio, Integer preparacion) {
+    public ArticuloDTO makeArticulo(String descripcion, Float precio, Integer preparacion) {
         String codigo;
-        if (articulos.isEmpty()) codigo = "ART000";
+        if (ArticuloDTOS.isEmpty()) codigo = "ART000";
         else {
-            String lastCodigo = articulos.getLast().getCodigo();
+            String lastCodigo = ArticuloDTOS.getLast().getCodigo();
             codigo = "ART" + String.format("%03d", Integer.parseInt(lastCodigo.substring(3)) + 1);
         }
-        return new Articulo(codigo, descripcion, precio, preparacion);
+        return new ArticuloDTO(codigo, descripcion, precio, preparacion);
     }
 
     /**
@@ -157,35 +156,35 @@ public class ModeloArticulos {
     public boolean loadArticulos(int configuracion) {
         if (configuracion == 0) {
             try {
-                articulos.clear();
-                Articulo articuloTemp = new Articulo();
-                articuloTemp = makeArticulo("Guitarra española de juguete.", 6f, 50);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 5);
-                articuloTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 100);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 9);
-                articuloTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 70);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 14);
-                articuloTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 30);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 20);
-                articuloTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 200);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 8);
-                articuloTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 25);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 10);
-                articuloTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 1000);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 12);
-                articuloTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 450);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 14);
-                articuloTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 245);
-                addArticulo(articuloTemp);
-                addStockArticulo(articuloTemp, 20);
+                ArticuloDTOS.clear();
+                ArticuloDTO ArticuloDTOTemp = new ArticuloDTO();
+                ArticuloDTOTemp = makeArticulo("Guitarra española de juguete.", 6f, 50);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 5);
+                ArticuloDTOTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 100);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 9);
+                ArticuloDTOTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 70);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 14);
+                ArticuloDTOTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 30);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 20);
+                ArticuloDTOTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 200);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 8);
+                ArticuloDTOTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 25);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 10);
+                ArticuloDTOTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 1000);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 12);
+                ArticuloDTOTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 450);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 14);
+                ArticuloDTOTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 245);
+                addArticulo(ArticuloDTOTemp);
+                addStockArticulo(ArticuloDTOTemp, 20);
                 return true;
             }
             catch (Exception e) {
@@ -203,8 +202,8 @@ public class ModeloArticulos {
      * @return true si existe un artículo con ese código, false en caso contrario.
      */
     public boolean checkArticulo(String codigo) {
-        for (Articulo articulo : articulos) {
-            if (articulo.getCodigo().equals(codigo)) {
+        for (ArticuloDTO ArticuloDTO : ArticuloDTOS) {
+            if (ArticuloDTO.getCodigo().equals(codigo)) {
                 return true;
             }
         }
