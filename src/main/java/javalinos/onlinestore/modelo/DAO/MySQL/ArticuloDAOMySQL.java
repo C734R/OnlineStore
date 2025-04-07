@@ -8,9 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ArticuloDAOMySQLMySQL extends BaseDAOMySQL<Articulo, Integer> implements IArticuloDAO {
+public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements IArticuloDAO {
 
-    public ArticuloDAOMySQLMySQL(Connection conexion) throws SQLException {
+    public ArticuloDAOMySQL(Connection conexion) throws SQLException {
         super(conexion);
         super.tabla = "Articulo";
     }

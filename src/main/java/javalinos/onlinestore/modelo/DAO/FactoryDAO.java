@@ -1,6 +1,6 @@
 package javalinos.onlinestore.modelo.DAO;
 
-import javalinos.onlinestore.modelo.DAO.MySQL.ArticuloDAOMySQLMySQL;
+import javalinos.onlinestore.modelo.DAO.MySQL.ArticuloDAOMySQL;
 import javalinos.onlinestore.modelo.DAO.MySQL.ClienteDAOMySQL;
 import javalinos.onlinestore.modelo.DAO.MySQL.PedidoDAOMySQL;
 
@@ -28,10 +28,10 @@ public class FactoryDAO {
         }
     }
 
-    public ArticuloDAOMySQLMySQL getDAOArticulo() throws SQLException {
+    public ArticuloDAOMySQL getDAOArticulo() throws SQLException {
         switch (configuracion) {
             case 1:
-                return new ArticuloDAOMySQLMySQL(conexion);
+                return new ArticuloDAOMySQL(conexion);
             case 2:
                 return null;
             default:
