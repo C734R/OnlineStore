@@ -3,9 +3,12 @@ package javalinos.onlinestore.controlador;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
-import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
-import javalinos.onlinestore.modelo.gestores.ModeloClientes;
-import javalinos.onlinestore.modelo.gestores.ModeloPedidos;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloClientesLocal;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloPedidosLocal;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaPedidos;
 
@@ -20,9 +23,9 @@ import static javalinos.onlinestore.utils.Utilidades.listToStr;
 public class ControlPedidos extends ControlBase{
 
     private VistaPedidos vPedidos;
-    private ModeloArticulos mArticulos;
-    private ModeloClientes mClientes;
-    private ModeloPedidos mPedidos;
+    private IModeloArticulos mArticulos;
+    private IModeloClientes mClientes;
+    private IModeloPedidos mPedidos;
     private float precioEnvio = 5f;
 
     /**
@@ -82,35 +85,40 @@ public class ControlPedidos extends ControlBase{
      */
     public void iniciar() {
         int opcion;
-        while(true) {
-            vPedidos.showCabecera();
-            vPedidos.showMenu(2);
-            opcion = vPedidos.askInt("Introduce una opción", 0, 6,false, false);
-            switch (opcion) {
-                case 1:
-                    addPedidos();
-                    break;
-                case 2:
-                    removePedidos();
-                    break;
-                case 3:
-                    updatePedido();
-                    break;
-                case 4:
-                    showListPedidos(askFiltrarCliente(0));
-                    break;
-                case 5:
-                    showListPedidosPendientesEnviados(askFiltrarCliente(2), false);
-                    break;
-                case 6:
-                    showListPedidosPendientesEnviados(askFiltrarCliente(1), true);
-                    break;
-                case 0:
-                    vPedidos.showMensaje("Volviendo al menú principal...", true);
-                    return;
-                default:
-                    vPedidos.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
+        try {
+            while (true) {
+                vPedidos.showCabecera();
+                vPedidos.showMenu(2);
+                opcion = vPedidos.askInt("Introduce una opción", 0, 6, false, false);
+                switch (opcion) {
+                    case 1:
+                        addPedidos();
+                        break;
+                    case 2:
+                        removePedidos();
+                        break;
+                    case 3:
+                        updatePedido();
+                        break;
+                    case 4:
+                        showListPedidos(askFiltrarCliente(0));
+                        break;
+                    case 5:
+                        showListPedidosPendientesEnviados(askFiltrarCliente(2), false);
+                        break;
+                    case 6:
+                        showListPedidosPendientesEnviados(askFiltrarCliente(1), true);
+                        break;
+                    case 0:
+                        vPedidos.showMensaje("Volviendo al menú principal...", true);
+                        return;
+                    default:
+                        vPedidos.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
+                }
             }
+        }
+        catch (Exception e) {
+            vPedidos.showMensaje("Error al realizar la operación: " + e.getMessage(), true);
         }
     }
 
@@ -119,7 +127,7 @@ public class ControlPedidos extends ControlBase{
     /**
      * Añade un nuevo pedido al sistema.
      */
-    public void addPedidos() {
+    public void addPedidos() throws Exception {
         vPedidos.showMensaje("******** Añadir PedidoDTO ********", true);
         List<ArticuloDTO> articulosDisponibles = new ArrayList<>();
         ClienteDTO ClienteDTO = askCliente(true);
@@ -175,7 +183,7 @@ public class ControlPedidos extends ControlBase{
     /**
      * Modifica un pedido pendiente cambiando cliente y/o cantidad.
      */
-    public void updatePedido() {
+    public void updatePedido() throws Exception {
         vPedidos.showMensaje("******** Modificar PedidoDTO ********", true);
         List<PedidoDTO> pedidoDTOS = mPedidos.getPedidosPendientesEnviados(false, null);
         Map<ArticuloDTO,Integer> stockArticulos= mArticulos.getStockArticulos();
@@ -270,7 +278,7 @@ public class ControlPedidos extends ControlBase{
      * @param crear true si se permite crear un nuevo cliente
      * @return ClienteDTO seleccionado o creado
      */
-    public ClienteDTO askCliente (boolean crear) {
+    public ClienteDTO askCliente (boolean crear) throws Exception {
         int indexCliente;
         List<ClienteDTO> ClienteDTOS = cClientes.getListaClientes();
         vPedidos.showListClientes(ClienteDTOS);
@@ -367,16 +375,9 @@ public class ControlPedidos extends ControlBase{
 
     /**
      * Carga los pedidos desde un archivo o fuente externa.
-     * @param configuracion configuración de carga
-     * @return true si se cargaron correctamente, false si falló
      */
-    public boolean loadPedidos(int configuracion) {
-        if (configuracion == 0) {
-            return this.getModeloStore().getModeloPedidos().loadPedidos(configuracion, mClientes.getClientes(), mArticulos.getArticulos());
-        }
-        else {
-            return false;
-        }
+    public void loadPedidos() throws Exception {
+            getModeloStore().getModeloPedidos().loadPedidos(mClientes.getClientes(), mArticulos.getArticulos());
     }
 
 }

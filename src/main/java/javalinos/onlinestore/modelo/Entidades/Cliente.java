@@ -1,5 +1,8 @@
 package javalinos.onlinestore.modelo.Entidades;
 
+import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
+import javalinos.onlinestore.modelo.DTO.ClienteDTO;
+
 public class Cliente {
     private Integer id;
     private String nombre;
@@ -7,8 +10,6 @@ public class Cliente {
     private String email;
     private String nif;
     private Integer categoria;
-    private Float cuota;
-    private Float descuento;
 
     public Cliente(Integer id, String nombre, String domicilio, String email, String nif, Integer categoria, Float cuota, Float descuento) {
         this.id = id;
@@ -17,9 +18,17 @@ public class Cliente {
         this.email = email;
         this.nif = nif;
         this.categoria = categoria;
-        this.cuota = cuota;
-        this.descuento = descuento;
     }
+
+    public Cliente(ClienteDTO clienteDTO, Categoria categoria) {
+        this.id = null;
+        this.nombre = clienteDTO.getNombre();
+        this.domicilio = clienteDTO.getDomicilio();
+        this.email = clienteDTO.getEmail();
+        this.nif = clienteDTO.getNif();
+        this.categoria = categoria.getId();
+    }
+
     public Integer getId() {
         return id;
     }
@@ -68,19 +77,4 @@ public class Cliente {
         this.categoria = categoria;
     }
 
-    public Float getCuota() {
-        return cuota;
-    }
-
-    public void setCuota(Float cuota) {
-        this.cuota = cuota;
-    }
-
-    public Float getDescuento() {
-        return descuento;
-    }
-
-    public void setDescuento(Float descuento) {
-        this.descuento = descuento;
-    }
 }

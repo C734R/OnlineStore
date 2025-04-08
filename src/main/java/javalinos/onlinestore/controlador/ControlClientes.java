@@ -1,7 +1,8 @@
 package javalinos.onlinestore.controlador;
 
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
-import javalinos.onlinestore.modelo.gestores.ModeloClientes;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloClientesLocal;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.vista.VistaClientes;
@@ -14,7 +15,7 @@ import java.util.List;
 public class ControlClientes extends ControlBase {
 
     private final VistaClientes vClientes;
-    private final ModeloClientes mClientes;
+    private final IModeloClientes mClientes;
 
     /**
      * Constructor del controlador de clientes.
@@ -34,38 +35,43 @@ public class ControlClientes extends ControlBase {
      */
     public void iniciar() {
         int opcion;
-        while (true) {
-            vClientes.showCabecera();
-            vClientes.showMenu(2);
-            opcion = vClientes.askInt("Seleccione una opción", 0, 6, false, false);
-            switch (opcion) {
-                case 1:
-                    addCliente();
-                    break;
-                case 2:
-                    removeCliente();
-                    break;
-                case 3:
-                    showCliente();
-                    vClientes.showMensajePausa("", true);
-                    break;
-                case 4:
-                    modCliente();
-                    break;
-                case 5:
-                    showListClientes();
-                    vClientes.showMensajePausa("", true);
-                    break;
-                case 6:
-                    showListClientesCategoria();
-                    vClientes.showMensajePausa("", true);
-                    break;
-                case 0:
-                    vClientes.showMensaje("Volviendo al menú principal...", true);
-                    return;
-                default:
-                    vClientes.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
+        try {
+            while (true) {
+                vClientes.showCabecera();
+                vClientes.showMenu(2);
+                opcion = vClientes.askInt("Seleccione una opción", 0, 6, false, false);
+                switch (opcion) {
+                    case 1:
+                        addCliente();
+                        break;
+                    case 2:
+                        removeCliente();
+                        break;
+                    case 3:
+                        showCliente();
+                        vClientes.showMensajePausa("", true);
+                        break;
+                    case 4:
+                        modCliente();
+                        break;
+                    case 5:
+                        showListClientes();
+                        vClientes.showMensajePausa("", true);
+                        break;
+                    case 6:
+                        showListClientesCategoria();
+                        vClientes.showMensajePausa("", true);
+                        break;
+                    case 0:
+                        vClientes.showMensaje("Volviendo al menú principal...", true);
+                        return;
+                    default:
+                        vClientes.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
+                }
             }
+        }
+        catch (Exception e) {
+            vClientes.showMensajePausa("Error al ejecutar la operación: \n"+ e.getMessage(), true);
         }
     }
 
@@ -151,7 +157,7 @@ public class ControlClientes extends ControlBase {
     /**
      * Inicia el menú de modificación de datos del cliente.
      */
-    public void modCliente() {
+    public void modCliente() throws Exception {
         int opcion ;
         while (true){
             ClienteDTO ClienteDTO = null;
@@ -266,7 +272,7 @@ public class ControlClientes extends ControlBase {
      * Pide al usuario seleccionar un cliente a modificar.
      * @return cliente seleccionado o null si se canceló
      */
-    public ClienteDTO askClienteModificar(){
+    public ClienteDTO askClienteModificar() throws Exception {
         String datoCliente;
         int intentos = 0;
         ClienteDTO ClienteDTO = null;
@@ -359,13 +365,13 @@ public class ControlClientes extends ControlBase {
     /**
      * Muestra la lista completa de clientes sin filtros.
      */
-    public void showListClientes() {
+    public void showListClientes() throws Exception {
         vClientes.showListClientes(getListaClientes());
     }
     /**
      * Muestra la lista de clientes numerada.
      */
-    public void showListClientesNumerada() {
+    public void showListClientesNumerada() throws Exception {
         vClientes.showListClientesNumerada( getListaClientes());
     }
 
@@ -383,7 +389,7 @@ public class ControlClientes extends ControlBase {
      * Devuelve la lista de todos los clientes registrados.
      * @return lista de clientes
      */
-    public List<ClienteDTO> getListaClientes() {
+    public List<ClienteDTO> getListaClientes() throws Exception {
         return mClientes.getClientes();
     }
 
@@ -400,12 +406,11 @@ public class ControlClientes extends ControlBase {
 
     /**
      * Carga la colección de clientes en memoria desde configuración.
-     * @param configuracion valor de configuración para carga
      * @return true si la carga fue exitosa, false si no
      */
-    public boolean loadClientes(int configuracion) {
+    public boolean loadClientes() {
         if (configuracion == 0) {
-            return mClientes.loadClientes(configuracion);
+            return mClientes.loadClientes();
         }
         else {
             return false;

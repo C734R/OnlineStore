@@ -1,5 +1,5 @@
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
-import javalinos.onlinestore.modelo.gestores.ModeloClientes;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloClientesLocal;
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ModeloClientesTest {
 
-    ModeloClientes mClientes;
+    ModeloClientesLocal mClientes;
     /**
      * Inicializa el modelo de clienteDTOS y carga datos de prueba antes de cada test.
      */
     @BeforeEach
     void setUp() {
-        mClientes = new ModeloClientes();
-        mClientes.loadClientes(0); // Cargar datos de prueba
+        mClientes = new ModeloClientesLocal(0, null);
+        mClientes.loadClientes();
     }
     /**
      * Libera recursos después de cada test.
@@ -34,7 +34,7 @@ public class ModeloClientesTest {
      * Verifica que se cargan correctamente los clienteDTOS.
      */
     @Test
-    void testLoadClientes() {
+    void testLoadClientes() throws Exception {
         List<ClienteDTO> ClienteDTOS = mClientes.getClientes();
         assertEquals(10, ClienteDTOS.size(), "Debe haber 10 clienteDTOS precargados");
     }
@@ -42,7 +42,7 @@ public class ModeloClientesTest {
      * Verifica la búsqueda de un cliente por NIF.
      */
     @Test
-    void testBuscarPorNif() {
+    void testBuscarPorNif() throws Exception {
         ClienteDTO primero = mClientes.getClientes().get(0);
         ClienteDTO encontrado = mClientes.getClienteNif(primero.getNif());
         assertNotNull(encontrado);
@@ -52,8 +52,8 @@ public class ModeloClientesTest {
      * Verifica la búsqueda de un cliente por email.
      */
     @Test
-    void testBuscarPorEmail() {
-        ClienteDTO primero = mClientes.getClientes().get(0);
+    void testBuscarPorEmail() throws Exception {
+        ClienteDTO primero = mClientes.getClientes().getFirst();
         ClienteDTO encontrado = mClientes.getClienteEmail(primero.getEmail());
         assertNotNull(encontrado);
         assertEquals(primero.getEmail(), encontrado.getEmail());
@@ -74,8 +74,8 @@ public class ModeloClientesTest {
      * Verifica que se puede eliminar un cliente existente.
      */
     @Test
-    void testDeleteCliente() {
-        ClienteDTO ClienteDTO = mClientes.getClientes().get(0);
+    void testDeleteCliente() throws Exception {
+        ClienteDTO ClienteDTO = mClientes.getClientes().getFirst();
         mClientes.removeCliente(ClienteDTO);
 
         ClienteDTO eliminado = mClientes.getClienteNif(ClienteDTO.getNif());
@@ -85,8 +85,8 @@ public class ModeloClientesTest {
      * Verifica que se puede modificar el nombre de un cliente.
      */
     @Test
-    void testModNombreCliente() {
-        ClienteDTO ClienteDTO = mClientes.getClientes().get(0);
+    void testModNombreCliente() throws Exception {
+        ClienteDTO ClienteDTO = mClientes.getClientes().getFirst();
         String nombreOriginal = ClienteDTO.getNombre();
 
         ClienteDTO.setNombre("NuevoNombre");
@@ -100,8 +100,8 @@ public class ModeloClientesTest {
      * Verifica que se obtienen correctamente los clienteDTOS por categoría.
      */
     @Test
-    void testClientesPorCategoria() {
-        ClienteDTO ClienteDTO = mClientes.getClientes().get(0);
+    void testClientesPorCategoria() throws Exception {
+        ClienteDTO ClienteDTO = mClientes.getClientes().getFirst();
         CategoriaDTO categoriaDTO = ClienteDTO.getCategoria();
 
         List<ClienteDTO> mismos = mClientes.getClientesCategoria(categoriaDTO);
@@ -120,7 +120,7 @@ public class ModeloClientesTest {
      * Verifica los valores del primer y último índice de cliente.
      */
     @Test
-    void testPrimerYUltimoIndice() {
+    void testPrimerYUltimoIndice() throws Exception {
         int primero = mClientes.getFirstIndexCliente();
         int ultimo = mClientes.getLastIndexCliente();
         int total = mClientes.getClientes().size();

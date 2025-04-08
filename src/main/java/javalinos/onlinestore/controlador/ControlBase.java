@@ -1,5 +1,4 @@
 package javalinos.onlinestore.controlador;
-import javalinos.onlinestore.controlador.ControlBase;
 
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 /**

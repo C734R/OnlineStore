@@ -1,5 +1,7 @@
 package javalinos.onlinestore.modelo.DTO;
 
+import javalinos.onlinestore.modelo.Entidades.Categoria;
+
 /**
  * Contiene una enumeración con el tipo de categoría de clientes.
  * Cada categoría tiene un nombre, una cuota asociada y un porcentaje de descuento.
@@ -20,6 +22,12 @@ public class CategoriaDTO {
         this.nombre = nombre;
         this.cuota = cuota;
         this.descuento = descuento;
+    }
+
+    public CategoriaDTO(Categoria categoria) {
+        this.nombre = categoria.getNombre();
+        this.cuota = categoria.getCuota();
+        this.descuento = categoria.getDescuento();
     }
 
     /**

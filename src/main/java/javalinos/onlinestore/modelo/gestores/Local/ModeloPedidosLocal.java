@@ -1,8 +1,9 @@
-package javalinos.onlinestore.modelo.gestores;
+package javalinos.onlinestore.modelo.gestores.Local;
 
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,20 +11,21 @@ import java.util.List;
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los pedidoDTOS.
  */
-public class ModeloPedidos {
+public class ModeloPedidosLocal implements IModeloPedidos {
 
     private List<PedidoDTO> pedidos;
+
     /**
      * Constructor por defecto. Inicializa una lista vacía de pedidoDTOS.
      */
-    public ModeloPedidos() {
+    public ModeloPedidosLocal() {
         this.pedidos = new ArrayList<PedidoDTO>();
     }
     /**
      * Constructor alternativo que recibe una lista de pedidos ya existente.
      * @param pedidos lista de pedidos precargada.
      */
-    public ModeloPedidos(List<PedidoDTO> pedidos) {
+    public ModeloPedidosLocal(List<PedidoDTO> pedidos) {
         this.pedidos = pedidos;
     }
 
@@ -221,40 +223,30 @@ public class ModeloPedidos {
 
     /**
      * Carga pedidoDTOS de prueba en función de la configuración.
-     * @param configuracion define si se carga el modo por defecto.
-     * @param ClienteDTOS lista de clienteDTOS disponibles.
-     * @param ArticuloDTOS lista de artículos disponibles.
-     * @return true si se cargaron correctamente, false si hubo error.
+     *
+     * @param clientesDTO  lista de clienteDTOS disponibles.
+     * @param articulosDTO lista de artículos disponibles.
      */
-    public boolean loadPedidos(int configuracion, List<ClienteDTO> ClienteDTOS, List<ArticuloDTO> ArticuloDTOS) {
-        if (configuracion == 0) {
-        try {
-            pedidos.clear();
+    public void loadPedidos(List<ClienteDTO> clientesDTO, List<ArticuloDTO> articulosDTO) {
+        pedidos.clear();
 
-            pedidos.add(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(0), 2, LocalDate.now().minusDays(3), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(1), 1, LocalDate.now().minusDays(1), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(2), 5, LocalDate.now().minusDays(3), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(4), 4, LocalDate.now().minusMonths(1), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(5), 2, LocalDate.now().minusDays(2), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(7), 6, LocalDate.now().minusMonths(2), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(8), 3, LocalDate.now().minusDays(5), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(1), 10, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(2), 7, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(3), 12, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(4), 6, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(5), 15, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(6), 9, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(7), 11, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(0), 8, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(1), 13, LocalDate.now(), 5f));
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-        }
-        return false;
+        pedidos.add(makePedido(clientesDTO.get(0), articulosDTO.get(0), 2, LocalDate.now().minusDays(3), 5f));
+        pedidos.add(makePedido(clientesDTO.get(4), articulosDTO.get(1), 1, LocalDate.now().minusDays(1), 5f));
+        pedidos.add(makePedido(clientesDTO.get(7), articulosDTO.get(2), 5, LocalDate.now().minusDays(3), 5f));
+        pedidos.add(makePedido(clientesDTO.get(1), articulosDTO.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
+        pedidos.add(makePedido(clientesDTO.get(5), articulosDTO.get(4), 4, LocalDate.now().minusMonths(1), 5f));
+        pedidos.add(makePedido(clientesDTO.get(8), articulosDTO.get(5), 2, LocalDate.now().minusDays(2), 5f));
+        pedidos.add(makePedido(clientesDTO.get(2), articulosDTO.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
+        pedidos.add(makePedido(clientesDTO.get(6), articulosDTO.get(7), 6, LocalDate.now().minusMonths(2), 5f));
+        pedidos.add(makePedido(clientesDTO.get(3), articulosDTO.get(8), 3, LocalDate.now().minusDays(5), 5f));
+        pedidos.add(makePedido(clientesDTO.get(0), articulosDTO.get(1), 10, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(4), articulosDTO.get(2), 7, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(7), articulosDTO.get(3), 12, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(1), articulosDTO.get(4), 6, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(5), articulosDTO.get(5), 15, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(8), articulosDTO.get(6), 9, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(2), articulosDTO.get(7), 11, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(6), articulosDTO.get(0), 8, LocalDate.now(), 5f));
+        pedidos.add(makePedido(clientesDTO.get(3), articulosDTO.get(1), 13, LocalDate.now(), 5f));
     }
 }

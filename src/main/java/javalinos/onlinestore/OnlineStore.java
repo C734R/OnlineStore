@@ -5,14 +5,21 @@ import javalinos.onlinestore.controlador.ControlArticulos;
 import javalinos.onlinestore.controlador.ControlClientes;
 import javalinos.onlinestore.controlador.ControlMenuPrincipal;
 import javalinos.onlinestore.controlador.ControlPedidos;
-import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
-import javalinos.onlinestore.modelo.gestores.ModeloClientes;
-import javalinos.onlinestore.modelo.gestores.ModeloPedidos;
+import javalinos.onlinestore.modelo.DAO.ConexionBBDD;
+import javalinos.onlinestore.modelo.DAO.FactoryDAO;
+import javalinos.onlinestore.modelo.gestores.BBDD.ModeloArticulosBBDD;
+import javalinos.onlinestore.modelo.gestores.BBDD.ModeloPedidosBBDD;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
+import javalinos.onlinestore.modelo.gestores.ModeloFactory;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaArticulos;
 import javalinos.onlinestore.vista.VistaClientes;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
 import javalinos.onlinestore.vista.VistaPedidos;
+
+import java.sql.SQLException;
 
 /**
  * Clase principal de la aplicación OnlineStore.
@@ -27,9 +34,10 @@ public class OnlineStore {
 
     /** Modelo general de la tienda (agrega clientes, artículos y pedidos). */
     public static ModeloStore mStore;
-    public static ModeloClientes mClientes;
-    public static ModeloArticulos mArticulos;
-    public static ModeloPedidos mPedidos;
+    public static IModeloClientes mClientes;
+    public static IModeloArticulos mArticulos;
+    public static IModeloPedidos mPedidos;
+    public static ModeloFactory mFactory;
 
     /** Vistas principales del sistema. */
     public static VistaMenuPrincipal vMenuPrincipal;
@@ -47,10 +55,10 @@ public class OnlineStore {
      * Punto de entrada de la aplicación.
      * @param args argumentos opcionales (modo de configuración).
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
         if (args.length != 0) configuracion = Integer.parseInt(args[1]);
         else configuracion = 0;
-        precargaDatos(configuracion);
+        if(!precargaDatos(configuracion)) return;
         iniciarPrograma();
     }
 
@@ -59,15 +67,27 @@ public class OnlineStore {
      * Reintenta en caso de error hasta que el usuario decida salir.
      * @param configuracion tipo de carga (0 = base, 1 = ORM, etc.).
      */
-    private static void precargaDatos(int configuracion) {
-        loadMVC(configuracion);
-        while (true) {
-            if (    !cClientes.loadClientes(configuracion)||!cArticulos.loadArticulos(configuracion)||!cPedidos.loadPedidos(configuracion)) {
-                if (!cMenuPrincipal.errorPrecarga()) break;
-            }
-            else break;
+    private static boolean precargaDatos(int configuracion)  {
+        try
+        {
+            loadMVC(configuracion);
         }
-
+        catch (Exception e) {
+            // Mensaje de error por consola en carga MVC antes de inicializar ventanas
+            System.out.println(e.getMessage());
+            return false;
+        }
+        while(true) {
+            try
+            {
+                cClientes.loadClientes();
+                cArticulos.loadArticulos();
+                cPedidos.loadPedidos();
+            }
+            catch (Exception e){
+                if(!cMenuPrincipal.errorPrecarga()) return false;
+            }
+        }
     }
 
     /**
@@ -95,14 +115,15 @@ public class OnlineStore {
     }
     /**
      * Carga el modelo-vista-controlador (MVC) según el modo de configuración.
-     * @param configuracion modo de carga (0 = sin ORM, 1 = con ORM, etc.).
+     * @param configuracion modo de carga (0 = Local, 1 = con BBDD, 2 = con ORM, etc.).
      */
-    private static void loadMVC(int configuracion){
+    private static void loadMVC(int configuracion) throws SQLException {
 
-        if (configuracion == 0) {
-            mClientes = new ModeloClientes();
-            mArticulos = new ModeloArticulos();
-            mPedidos = new ModeloPedidos();
+            mFactory = new ModeloFactory(configuracion);
+
+            mClientes = mFactory.getModeloClientes();
+            mArticulos = mFactory.getModeloArticulos();
+            mPedidos = mFactory.getModeloPedidos();
             mStore = new ModeloStore(mClientes, mArticulos, mPedidos);
 
             vMenuPrincipal = new VistaMenuPrincipal();
@@ -116,13 +137,7 @@ public class OnlineStore {
 
             vPedidos = new VistaPedidos();
             cPedidos = new ControlPedidos(mStore, vPedidos);
-        }
-        else if (configuracion == 1) {
-            //TODO Implementar ORM
-        }
-        else {
-            //TODO necesario?
-        }
+
     }
 
 }

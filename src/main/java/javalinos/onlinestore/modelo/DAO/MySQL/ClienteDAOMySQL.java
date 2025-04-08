@@ -32,7 +32,7 @@ public class ClienteDAOMySQL extends BaseDAOMySQL<Cliente, Integer> implements I
 
     @Override
     public String definirSet() {
-        return "nombre = ?, domicilio = ?, email = ?, nif = ?, categoria = ?, cuota = ?, descuento = ?";
+        return "nombre = ?, domicilio = ?, email = ?, nif = ?, categoria = ?";
     }
 
     @Override
@@ -47,8 +47,6 @@ public class ClienteDAOMySQL extends BaseDAOMySQL<Cliente, Integer> implements I
         stmt.setString(3, cliente.getEmail());
         stmt.setString(4, cliente.getNif());
         stmt.setInt(5, cliente.getCategoria());
-        stmt.setFloat(6, cliente.getCuota());
-        stmt.setFloat(7, cliente.getDescuento());
     }
 
 }
