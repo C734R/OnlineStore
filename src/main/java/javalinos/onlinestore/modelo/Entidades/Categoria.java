@@ -14,6 +14,13 @@ public class Categoria {
         this.descuento = descuento;
     }
 
+    public Categoria(Categoria categoria) {
+        this.id = categoria.getId();
+        this.nombre = categoria.getNombre();
+        this.cuota = categoria.getCuota();
+        this.descuento = categoria.getDescuento();
+    }
+
     public Integer getId() {
         return id;
     }

@@ -5,7 +5,7 @@ import java.util.Map;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaArticulos;
-import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
 
 /**
  * Controlador para gestionar la lógica del módulo de artículos.
@@ -13,7 +13,7 @@ import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
 public class ControlArticulos extends ControlBase {
 
     private VistaArticulos vArticulos;
-    private ModeloArticulos mArticulos;
+    private ModeloArticulosLocal mArticulos;
 
     /**
      * Constructor principal de ControlArticulos.
@@ -213,14 +213,8 @@ public class ControlArticulos extends ControlBase {
 
     /**
      * Carga los artículos desde el sistema según la configuración.
-     * @param configuracion código de configuración
-     * @return true si se cargaron correctamente, false si hubo error
      */
-    public boolean loadArticulos(int configuracion) {
-        if (configuracion == 0) {
-            return this.getModeloStore().getModeloArticulos().loadArticulos(configuracion);
-        } else {
-            return false;
-        }
+    public void loadArticulos() throws Exception {
+            getModeloStore().getModeloArticulos().loadArticulos();
     }
 }

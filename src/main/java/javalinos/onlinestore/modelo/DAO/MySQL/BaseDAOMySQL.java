@@ -36,43 +36,40 @@ public class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
     public void mapearUpdate(PreparedStatement stmt, T entidad) throws SQLException {}
 
     @Override
-    public Map<Map<Boolean, String>, T> getPorId(K id) throws SQLException {
-        Map<Map<Boolean, String>, T> resultado = new LinkedHashMap<>();
-
+    public T getPorId(K id) throws Exception {
+        T entidad = null;
+        // Crear query
         String query = "SELECT * FROM " + tabla + " WHERE id = ?";
         try
         {
+            // Detener autocommit
             conexion.setAutoCommit(false);
+            // Crear prepared statement
             PreparedStatement stmt1 = conexion.prepareStatement(query);
+            // Definir
             stmt1.setObject(1, id);
             ResultSet rs = stmt1.executeQuery();
-            if (rs.next()) {
-                T entidad = objetoResulset(rs);
-                resultado.put(Map.of(true, "Entidad recuperada con éxito."), entidad);
-            }
-            else {
-                resultado.put(Map.of(false, "No se encontró la entidad con ID: " + id), null);
+            while (rs.next()) {
+                entidad = objetoResulset(rs);
             }
             rs.close();
             stmt1.close();
             conexion.commit();
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             conexion.rollback();
-            resultado.put(Map.of(false, "Error al buscar la entidad: " + e.getMessage()), null);
-        } finally
+            throw new Exception(e.getMessage());
+        }
+        finally
         {
             conexion.setAutoCommit(true);
         }
-        return resultado;
+        return entidad;
     }
 
-
-
     @Override
-    public Map<Map<Boolean, String>, List<T>> buscarTodos() throws SQLException {
-        Map<Map<Boolean, String>, List<T>> resultado = new LinkedHashMap<>();
+    public List<T> getTodos() throws Exception {
         List<T> entidades = new ArrayList<>();
         String query = "SELECT * FROM " + tabla;
         try
@@ -87,24 +84,21 @@ public class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
             rs.close();
             stmt1.close();
             conexion.commit();
-            resultado.put(Map.of(true, "Entidades recuperadas con éxito."), entidades);
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             conexion.rollback();
-            resultado = new HashMap<>();
-            resultado.put(Map.of(false, "Error al recuperar las entidades: " + e.getMessage()), null);
+            throw new Exception(e.getMessage());
         }
         finally
         {
             conexion.setAutoCommit(true);
         }
-        return resultado;
+        return entidades;
     }
 
     @Override
-    public HashMap<Boolean, String> insertar(T entidad) throws SQLException {
-        HashMap<Boolean, String> resultado = new LinkedHashMap<>();
+    public void insertar(T entidad) throws Exception {
         String query = "INSERT INTO " + tabla + " VALUES (?)";
         try
         {
@@ -114,24 +108,20 @@ public class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
             stmt1.executeUpdate();
             stmt1.close();
             conexion.commit();
-            resultado.put(true,"Entidad insertada con éxito.");
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             conexion.rollback();
-            resultado = new HashMap<>();
-            resultado.put(false, "Error al insertar la entidad: " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
         finally
         {
             conexion.setAutoCommit(true);
         }
-        return resultado;
     }
 
     @Override
-    public HashMap<Boolean, String> actualizar(T entidad) throws SQLException {
-        HashMap<Boolean, String> resultado = new LinkedHashMap<>();
+    public void actualizar(T entidad) throws Exception {
         String query = "UPDATE " + tabla + " SET " + definirSet() + " WHERE id = ?";
         try
         {
@@ -145,30 +135,25 @@ public class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
 
             int filas = stmt.executeUpdate();
 
-            if (filas > 0) {
-                resultado.put(true, "Entidad actualizada con éxito.");
-            } else {
-                resultado.put(false, "No se ha encontrado la entidad con ID: " + id);
+            if (filas <= 0) {
+                throw new Exception("No se ha encontrado la entidad con ID: " + id);
             }
             stmt.close();
             conexion.commit();
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             conexion.rollback();
-            resultado = new HashMap<>();
-            resultado.put(false, "Error al actualizar la entidad: " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
         finally
         {
             conexion.setAutoCommit(true);
         }
-        return resultado;
     }
 
     @Override
-    public HashMap<Boolean, String> eliminar(K id) throws SQLException {
-        HashMap<Boolean, String> resultado = new LinkedHashMap<>();
+    public void eliminar(K id) throws Exception {
         String query = "DELETE FROM " + tabla + " WHERE id = ?";
         try
         {
@@ -176,23 +161,42 @@ public class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
             PreparedStatement stmt = conexion.prepareStatement(query);
             stmt.setObject(1, id);
             int filas = stmt.executeUpdate();
-            if (filas > 0) {
-                resultado.put(true, "Entidad eliminada con éxito.");
+            if (filas <= 0) {
+                throw new Exception("No se ha encontrado la entidad con ID: " + id);
             }
-            else resultado.put(false, "No se ha encontrado la entidad con ID: " + id);
             stmt.close();
             conexion.commit();
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             conexion.rollback();
-            resultado = new HashMap<>();
-            resultado.put(false, "Error al eliminar la entidad: " + e.getMessage());
+            throw new Exception(e.getMessage());
         }
         finally
         {
             conexion.setAutoCommit(true);
         }
-        return resultado;
+    }
+
+    @Override
+    public void eliminarTodos() throws Exception {
+        String query = "DELETE FROM " + tabla;
+        try
+        {
+            conexion.setAutoCommit(false);
+            PreparedStatement stmt = conexion.prepareStatement(query);
+            stmt.executeUpdate();
+            stmt.close();
+            conexion.commit();
+        }
+        catch (Exception e)
+        {
+            conexion.rollback();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            conexion.setAutoCommit(true);
+        }
     }
 }

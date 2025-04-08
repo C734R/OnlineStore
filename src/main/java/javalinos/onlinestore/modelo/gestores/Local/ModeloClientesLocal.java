@@ -1,29 +1,26 @@
-package javalinos.onlinestore.modelo.gestores;
+package javalinos.onlinestore.modelo.gestores.Local;
 
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los clienteDTOS.
  */
-public class ModeloClientes {
+public class ModeloClientesLocal implements IModeloClientes {
 
     private List<ClienteDTO> clientes;
     private List<CategoriaDTO> categorias;
+
+
     /**
      * Constructor por defecto. Inicializa la lista de clienteDTOS.
      */
-    public ModeloClientes() {
+    public ModeloClientesLocal() {
         clientes = new ArrayList<>();
-    }
-    /**
-     * Constructor con clienteDTOS iniciales.
-     * @param clientes lista de clienteDTOS precargada.
-     */
-    public ModeloClientes(List<ClienteDTO> clientes) {
-        this.clientes = clientes;
     }
 
     //*************************** Getters & Setters ***************************//
@@ -56,18 +53,18 @@ public class ModeloClientes {
 
     /**
      * Añade un clienteDTO a la lista.
-     * @param ClienteDTO clienteDTO a añadir.
+     * @param clienteDTO clienteDTO a añadir.
      */
-    public void addCliente(ClienteDTO ClienteDTO) {
-        clientes.add(ClienteDTO);
+    public void addCliente(ClienteDTO clienteDTO) {
+        clientes.add(clienteDTO);
     }
 
     /**
      * Elimina un clienteDTO de la lista.
-     * @param ClienteDTO clienteDTO a eliminar.
+     * @param clienteDTO clienteDTO a eliminar.
      */
-    public void removeCliente(ClienteDTO ClienteDTO) {
-        clientes.remove(ClienteDTO);
+    public void removeCliente(ClienteDTO clienteDTO) {
+        clientes.remove(clienteDTO);
     }
 
     /**
@@ -84,13 +81,13 @@ public class ModeloClientes {
 
     /**
      * Modifica un cliente reemplazándolo por uno nuevo.
-     * @param ClienteDTOOld cliente original.
-     * @param ClienteDTONew cliente actualizado.
+     * @param clienteDTOOld cliente original.
+     * @param clienteDTONew cliente actualizado.
      */
-    public void updateCliente(ClienteDTO ClienteDTOOld, ClienteDTO ClienteDTONew) {
-        int index = this.clientes.indexOf(ClienteDTOOld);
+    public void updateCliente(ClienteDTO clienteDTOOld, ClienteDTO clienteDTONew) {
+        int index = this.clientes.indexOf(clienteDTOOld);
         if (index != -1) {
-            clientes.set(index, ClienteDTONew);
+            clientes.set(index, clienteDTONew);
         }
     }
 
@@ -148,7 +145,7 @@ public class ModeloClientes {
         return clientesCategoria;
     }
 
-    public CategoriaDTO getCategoria(int opcion) {
+    public CategoriaDTO getCategoriaOpcion(int opcion) {
         return categorias.get(opcion-1);
     }
 
@@ -216,34 +213,23 @@ public class ModeloClientes {
 
     /**
      * Precarga una lista de clienteDTOS de ejemplo.
-     * @param configuracion determina si se debe precargar.
-     * @return true si se cargó correctamente, false si ocurrió un error.
      */
-    public boolean loadClientes(int configuracion) {
-        if (configuracion == 0) {
-            try {
-                this.clientes.clear();
-                this.categorias.clear();
+    public void loadClientes() {
+        this.clientes.clear();
+        this.categorias.clear();
 
-                addCategoria(makeCategoria("Estándar", 0f, 0f));
-                addCategoria(makeCategoria("Premium", 30f, 0.20f));
+        addCategoria(makeCategoria("Estándar", 0f, 0f));
+        addCategoria(makeCategoria("Premium", 30f, 0.20f));
 
-                addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", getCategoria(2)));
-                addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", getCategoria(1)));
-                addCliente(makeCliente("José Martínez", "Paseo de Gracia, 15, Barcelona", "34567890C", "jose.martinez@email.com", getCategoria(1)));
-                addCliente(makeCliente("Isabel Fernández", "Calle Larios, 5, Málaga", "45678901D", "isabel.fernandez@email.com", getCategoria(2)));
-                addCliente(makeCliente("Manuel Sánchez", "Plaza del Pilar, 20, Zaragoza", "56789012E", "manuel.sanchez@email.com", getCategoria(1)));
-                addCliente(makeCliente("Carmen Rodríguez", "Gran Vía, 30, Bilbao", "67890123F", "carmen.rodriguez@email.com", getCategoria(1)));
-                addCliente(makeCliente("Francisco Pérez", "Calle Serrano, 45, Madrid", "78901234G", "francisco.perez@email.com", getCategoria(2)));
-                addCliente(makeCliente("Ana Torres", "Rambla de Cataluña, 12, Barcelona", "89012345H", "ana.torres@email.com", getCategoria(1)));
-                addCliente(makeCliente("Luis Ramírez", "Avenida Constitución, 8, Valencia", "90123456I", "luis.ramirez@email.com", getCategoria(1)));
-                addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", getCategoria(2)));
-
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-        return false;
+        addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", getCategoriaOpcion(2)));
+        addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", getCategoriaOpcion(1)));
+        addCliente(makeCliente("José Martínez", "Paseo de Gracia, 15, Barcelona", "34567890C", "jose.martinez@email.com", getCategoriaOpcion(1)));
+        addCliente(makeCliente("Isabel Fernández", "Calle Larios, 5, Málaga", "45678901D", "isabel.fernandez@email.com", getCategoriaOpcion(2)));
+        addCliente(makeCliente("Manuel Sánchez", "Plaza del Pilar, 20, Zaragoza", "56789012E", "manuel.sanchez@email.com", getCategoriaOpcion(1)));
+        addCliente(makeCliente("Carmen Rodríguez", "Gran Vía, 30, Bilbao", "67890123F", "carmen.rodriguez@email.com", getCategoriaOpcion(1)));
+        addCliente(makeCliente("Francisco Pérez", "Calle Serrano, 45, Madrid", "78901234G", "francisco.perez@email.com", getCategoriaOpcion(2)));
+        addCliente(makeCliente("Ana Torres", "Rambla de Cataluña, 12, Barcelona", "89012345H", "ana.torres@email.com", getCategoriaOpcion(1)));
+        addCliente(makeCliente("Luis Ramírez", "Avenida Constitución, 8, Valencia", "90123456I", "luis.ramirez@email.com", getCategoriaOpcion(1)));
+        addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", getCategoriaOpcion(2)));
     }
 }

@@ -1,5 +1,7 @@
 package javalinos.onlinestore.modelo.DTO;
 
+import javalinos.onlinestore.modelo.Entidades.Cliente;
+
 /**
  * Contiene todos los datos de un cliente.
  */
@@ -27,6 +29,14 @@ public class ClienteDTO {
         this.categoriaDTO = categoriaDTO;
     }
 
+    public ClienteDTO(Cliente cliente) {
+        this.nombre = cliente.getNombre();
+        this.domicilio = cliente.getDomicilio();
+        this.nif = cliente.getNif();
+        this.email = cliente.getEmail();
+        this.categoriaDTO = null;
+    }
+
     /**
      * Constructor vacío. Inicializa con valores por defecto.
      */
@@ -40,14 +50,14 @@ public class ClienteDTO {
 
     /**
      * Constructor de copia.
-     * @param ClienteDTOOld cliente a copiar.
+     * @param clienteDTO cliente a copiar.
      */
-    public ClienteDTO(ClienteDTO ClienteDTOOld) {
-        this.nombre = ClienteDTOOld.getNombre();
-        this.domicilio = ClienteDTOOld.getDomicilio();
-        this.nif = ClienteDTOOld.getNif();
-        this.email = ClienteDTOOld.getEmail();
-        this.categoriaDTO = ClienteDTOOld.getCategoria();
+    public ClienteDTO(ClienteDTO clienteDTO) {
+        this.nombre = clienteDTO.getNombre();
+        this.domicilio = clienteDTO.getDomicilio();
+        this.nif = clienteDTO.getNif();
+        this.email = clienteDTO.getEmail();
+        this.categoriaDTO = clienteDTO.getCategoria();
     }
 
     /**

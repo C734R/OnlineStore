@@ -1,21 +1,28 @@
-package javalinos.onlinestore.modelo.gestores;
+package javalinos.onlinestore.modelo.gestores.BBDD;
 
+import javalinos.onlinestore.modelo.DAO.FactoryDAO;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los artículos y su stock.
  */
-public class ModeloArticulos {
+public class ModeloArticulosBBDD implements IModeloArticulos {
 
     private List<ArticuloDTO> ArticuloDTOS;
     private Map<ArticuloDTO, Integer> stockArticulos;
+    private FactoryDAO factoryDAO;
     /**
      * Constructor por defecto. Inicializa las listas de artículos y su stock.
      */
-    public ModeloArticulos() {
+    public ModeloArticulosBBDD(FactoryDAO factoryDAO) {
         this.ArticuloDTOS = new ArrayList<>();
         this.stockArticulos = new LinkedHashMap<>();
+        this.factoryDAO = factoryDAO;
     }
 
     //*************************** Getters & Setters ***************************//
@@ -150,10 +157,8 @@ public class ModeloArticulos {
 
     /**
      * Precarga una lista de artículos con stock para pruebas.
-     * @param configuracion define si se carga el modo por defecto.
-     * @return true si se cargó correctamente, false si hubo error.
      */
-    public boolean loadArticulos(int configuracion) {
+    public void loadArticulos() {
         if (configuracion == 0) {
             try {
                 ArticuloDTOS.clear();

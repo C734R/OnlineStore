@@ -25,4 +25,10 @@ module javalinos.onlinestore {
     exports javalinos.onlinestore.utils;
     exports javalinos.onlinestore.vista;
     exports javalinos.onlinestore.modelo.Entidades;
+    exports javalinos.onlinestore.modelo.DAO;
+    exports javalinos.onlinestore.modelo.DAO.Interfaces;
+    exports javalinos.onlinestore.modelo.gestores.Local;
+    opens javalinos.onlinestore.modelo.gestores.Local to javafx.fxml;
+    exports javalinos.onlinestore.modelo.gestores.Interfaces;
+    opens javalinos.onlinestore.modelo.gestores.Interfaces to javafx.fxml;
 }

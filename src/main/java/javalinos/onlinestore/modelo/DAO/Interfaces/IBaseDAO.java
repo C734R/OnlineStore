@@ -17,14 +17,15 @@ public interface IBaseDAO<T, K> {
 
     void mapearUpdate(PreparedStatement stmt, T entidad) throws SQLException;
 
-    Map<Map<Boolean, String> ,T> getPorId(K id) throws SQLException;
+    T getPorId(K id) throws Exception;
 
-    Map<Map<Boolean, String>, List<T>> buscarTodos() throws SQLException;
+    List<T> getTodos() throws Exception;
 
-    HashMap<Boolean, String> insertar(T entidad) throws SQLException;
+    void insertar(T entidad) throws Exception;
 
-    HashMap<Boolean, String> actualizar(T entidad) throws SQLException;
+    void actualizar(T entidad) throws Exception;
 
-    HashMap<Boolean, String> eliminar(K id) throws SQLException;
+    void eliminar(K id) throws Exception;
 
+    void eliminarTodos() throws Exception;
 }

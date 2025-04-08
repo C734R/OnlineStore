@@ -1,21 +1,25 @@
 package javalinos.onlinestore.modelo.gestores;
 
+import javalinos.onlinestore.modelo.gestores.Interfaces.*;
+import javalinos.onlinestore.modelo.gestores.Local.*;
+
+
 /**
  * Clase contenedora del modelo general de la tienda.
  * Agrupa los modelos de clientes, artículos y pedidos.
  */
 public class ModeloStore {
 
-    private ModeloClientes mClientes;
-    private ModeloPedidos mPedidos;
-    private ModeloArticulos mArticulos;
+    private IModeloClientes mClientes;
+    private IModeloArticulos mArticulos;
+    private IModeloPedidos mPedidos;
     /**
      * Constructor principal.
      * @param mClientes modelo de gestión de clientes.
      * @param mArticulos modelo de gestión de artículos.
      * @param mPedidos modelo de gestión de pedidos.
      */
-    public ModeloStore(ModeloClientes mClientes, ModeloArticulos mArticulos, ModeloPedidos mPedidos) {
+    public ModeloStore(IModeloClientes mClientes, IModeloArticulos mArticulos, IModeloPedidos mPedidos) {
 
         this.mClientes = mClientes;
         this.mArticulos = mArticulos;
@@ -33,42 +37,42 @@ public class ModeloStore {
      * Devuelve el modelo de clientes.
      * @return instancia de ModeloClientes.
      */
-    public ModeloClientes getModeloClientes() {
+    public IModeloClientes getModeloClientes() {
         return mClientes;
     }
     /**
      * Establece el modelo de clientes.
      * @param mClientes modelo de clientes.
      */
-    public void setModeloClientes(ModeloClientes mClientes) {
+    public void setModeloClientes(IModeloClientes mClientes) {
         this.mClientes = mClientes;
     }
     /**
      * Devuelve el modelo de pedidos.
      * @return instancia de ModeloPedidos.
      */
-    public ModeloPedidos getModeloPedidos() {
+    public IModeloPedidos getModeloPedidos() {
         return mPedidos;
     }
     /**
      * Establece el modelo de pedidos.
      * @param mPedidos modelo de pedidos.
      */
-    public void setModeloPedidos(ModeloPedidos mPedidos) {
+    public void setModeloPedidos(IModeloPedidos mPedidos) {
         this.mPedidos = mPedidos;
     }
     /**
      * Establece el modelo de artículos.
      * @param mArticulos modelo de artículos.
      */
-    public void setModeloArticulos(ModeloArticulos mArticulos) {
+    public void setModeloArticulos(IModeloArticulos mArticulos) {
         this.mArticulos = mArticulos;
     }
     /**
      * Devuelve el modelo de artículos.
      * @return instancia de ModeloArticulos.
      */
-    public ModeloArticulos getModeloArticulos() {
+    public IModeloArticulos getModeloArticulos() {
         return mArticulos;
     }
 

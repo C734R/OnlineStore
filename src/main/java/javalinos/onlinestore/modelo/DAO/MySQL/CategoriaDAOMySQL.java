@@ -42,4 +42,39 @@ public class CategoriaDAOMySQL extends BaseDAOMySQL<Categoria, Integer> implemen
         stmt.setFloat(3, categoria.getDescuento());
     }
 
+    @Override
+    public Categoria getPorNombre(String nombre) throws Exception {
+
+        Categoria entidad = null;
+        // Crear query
+        String query = "SELECT * FROM " + tabla + " WHERE nombre = ?";
+        try
+        {
+            // Detener autocommit
+            conexion.setAutoCommit(false);
+            // Crear prepared statement
+            PreparedStatement stmt1 = conexion.prepareStatement(query);
+            // Definir
+            stmt1.setObject(1, nombre);
+            ResultSet rs = stmt1.executeQuery();
+            while (rs.next()) {
+                entidad = objetoResulset(rs);
+            }
+            rs.close();
+            stmt1.close();
+            conexion.commit();
+        }
+        catch (Exception e)
+        {
+            conexion.rollback();
+            throw new Exception(e.getMessage());
+        }
+        finally
+        {
+            conexion.setAutoCommit(true);
+        }
+        return entidad;
+
+    }
+
 }

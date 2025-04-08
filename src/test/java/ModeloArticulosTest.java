@@ -1,5 +1,5 @@
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
-import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ModeloArticulosTest {
 
-    ModeloArticulos mArticulos;
+    ModeloArticulosLocal mArticulos;
     /**
      * Inicializa el modelo de artículos y carga datos de prueba antes de cada test.
      */
     @BeforeEach
     void setUp() {
-        mArticulos = new ModeloArticulos();
-        mArticulos.loadArticulos(0);
+        mArticulos = new ModeloArticulosLocal();
+        mArticulos.loadArticulos();
     }
     /**
      * Libera recursos después de cada test.

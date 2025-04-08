@@ -1,9 +1,9 @@
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
-import javalinos.onlinestore.modelo.gestores.ModeloArticulos;
-import javalinos.onlinestore.modelo.gestores.ModeloClientes;
-import javalinos.onlinestore.modelo.gestores.ModeloPedidos;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloClientesLocal;
+import javalinos.onlinestore.modelo.gestores.Local.ModeloPedidosLocal;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ModeloPedidosTest {
 
-    ModeloPedidos mPedidos;
-    ModeloArticulos mArticulos;
-    ModeloClientes mClientes;
+    ModeloPedidosLocal mPedidos;
+    ModeloArticulosLocal mArticulos;
+    ModeloClientesLocal mClientes;
     List<ClienteDTO> ClienteDTOS;
     List<ArticuloDTO> ArticuloDTOS;
     Map<ArticuloDTO, Integer> stock;
@@ -28,18 +28,18 @@ class ModeloPedidosTest {
      * Inicializa los modelos y carga datos de prueba antes de cada test.
      */
     @BeforeEach
-    void setUp() {
-        mArticulos = new ModeloArticulos();
-        assertTrue(mArticulos.loadArticulos(0));
+    void setUp() throws Exception {
+        mArticulos = new ModeloArticulosLocal();
+        mArticulos.loadArticulos();
         ArticuloDTOS = mArticulos.getArticulos();
         stock = mArticulos.getStockArticulos();
 
-        mClientes = new ModeloClientes();
-        assertTrue(mClientes.loadClientes(0));
+        mClientes = new ModeloClientesLocal();
+        mClientes.loadClientes();
         ClienteDTOS = mClientes.getClientes();
 
-        mPedidos = new ModeloPedidos();
-        assertTrue(mPedidos.loadPedidos(0, ClienteDTOS, ArticuloDTOS));
+        mPedidos = new ModeloPedidosLocal();
+        mPedidos.loadPedidos( ClienteDTOS, ArticuloDTOS);
     }
     /**
      * Libera recursos después de cada test.
