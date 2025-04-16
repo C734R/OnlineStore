@@ -25,7 +25,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * Devuelve una lista con todos los artículos registrados.
      * @return lista de artículos.
      */
-    public List<ArticuloDTO> getArticulos() {
+    public List<ArticuloDTO> getArticulosDTO() {
         return articulosDTO;
     }
     /**
@@ -33,15 +33,26 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * @param index posición en la lista.
      * @return artículo encontrado o null si está fuera de rango.
      */
-    public ArticuloDTO getArticuloIndex(int index) {
+    public ArticuloDTO getArticuloIndex(int index) throws Exception {
         if (index < 0 || index >= articulosDTO.size()) return null;
         return articulosDTO.get(index);
     }
+
+    @Override
+    public ArticuloDTO getArticuloDTOId(Integer id) throws Exception {
+        return null;
+    }
+
+    @Override
+    public ArticuloDTO getArticuloDTOCodigo(String codigo) throws Exception {
+        return null;
+    }
+
     /**
      * Devuelve el mapa de stock de todos los artículos.
      * @return mapa con artículos y cantidades disponibles.
      */
-    public Map<ArticuloDTO, Integer> getStockArticulos() {
+    public Map<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception {
         return stockArticulos;
     }
     /**
@@ -49,7 +60,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * @param articuloDTO artículo a consultar.
      * @return unidades disponibles o null si no está en el mapa.
      */
-    public Integer getStockArticulo(ArticuloDTO articuloDTO) {
+    public Integer getStockArticulo(ArticuloDTO articuloDTO) throws Exception {
         if (stockArticulos.isEmpty()) return null;
         return stockArticulos.get(articuloDTO);
     }
@@ -58,14 +69,14 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * Establece una nueva lista de artículos.
      * @param articulosDTO nueva lista de artículos.
      */
-    public void setArticulos(List<ArticuloDTO> articulosDTO) {
+    public void setArticulos(List<ArticuloDTO> articulosDTO) throws Exception {
         this.articulosDTO = articulosDTO;
     }
     /**
      * Establece un nuevo mapa de stock.
      * @param stockArticulos mapa de artículos con su stock.
      */
-    public void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) {
+    public void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) throws Exception {
         this.stockArticulos = stockArticulos;
     }
     /**
@@ -73,7 +84,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * @param articuloDTO artículo a actualizar.
      * @param stock nueva cantidad disponible.
      */
-    public void setStockArticulo(ArticuloDTO articuloDTO, Integer stock) {
+    public void updateStockArticulo(ArticuloDTO articuloDTO, Integer stock) throws Exception {
         this.stockArticulos.put(articuloDTO, stock);
     }
 
@@ -91,7 +102,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * @param articuloDTO artículo a actualizar.
      * @param stock cantidad a añadir.
      */
-    public void addStockArticulo(ArticuloDTO articuloDTO, int stock) {
+    public void addArticuloStock(ArticuloDTO articuloDTO, int stock) throws Exception {
         stockArticulos.put(articuloDTO, stock);
     }
 
@@ -99,15 +110,26 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * Elimina un artículo de la lista.
      * @param articuloDTO artículo a eliminar.
      */
-    public void removeArticulo(ArticuloDTO articuloDTO) {
+    public void removeArticulo(ArticuloDTO articuloDTO) throws Exception {
         articulosDTO.remove(articuloDTO);
     }
+
+    @Override
+    public void removeArticulosAll() throws Exception {
+
+    }
+
     /**
      * Elimina el stock de un artículo.
      * @param articuloDTO artículo del cual eliminar el stock.
      */
-    public void removeStockArticulo(ArticuloDTO articuloDTO) {
+    public void removeArticuloStock(ArticuloDTO articuloDTO) throws Exception {
         stockArticulos.remove(articuloDTO);
+    }
+
+    @Override
+    public void removeArticulosStockAll() throws Exception {
+        stockArticulos.clear();
     }
 
     /**
@@ -115,7 +137,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * @param articuloDTOOld artículo original.
      * @param articuloDTONew nuevo artículo.
      */
-    public void updateArticulo(ArticuloDTO articuloDTOOld, ArticuloDTO articuloDTONew) {
+    public void updateArticulo(ArticuloDTO articuloDTOOld, ArticuloDTO articuloDTONew) throws Exception {
         int index = articulosDTO.indexOf(articuloDTOOld);
         if (index != -1) {
             articulosDTO.set(index, articuloDTONew);
@@ -126,7 +148,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * @param articuloDTO artículo a actualizar.
      * @param stockNew nueva cantidad de stock.
      */
-    public void updateStockArticulo(ArticuloDTO articuloDTO, int stockNew) {
+    public void updateStockArticulo(ArticuloDTO articuloDTO, int stockNew) throws Exception {
         stockArticulos.put(articuloDTO, stockNew);
     }
 
@@ -153,46 +175,46 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * Precarga una lista de artículos con stock para pruebas.
      */
     public void loadArticulos() {
-        if (configuracion == 0) {
             try {
                 articulosDTO.clear();
+                stockArticulos.clear();
                 ArticuloDTO articuloDTOTemp = new ArticuloDTO();
                 articuloDTOTemp = makeArticulo("Guitarra española de juguete.", 6f, 50);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 5);
+                addArticuloStock(articuloDTOTemp, 5);
                 articuloDTOTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 100);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 9);
+                addArticuloStock(articuloDTOTemp, 9);
                 articuloDTOTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 70);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 14);
+                addArticuloStock(articuloDTOTemp, 14);
                 articuloDTOTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 30);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 20);
+                addArticuloStock(articuloDTOTemp, 20);
                 articuloDTOTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 200);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 8);
+                addArticuloStock(articuloDTOTemp, 8);
                 articuloDTOTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 25);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 10);
+                addArticuloStock(articuloDTOTemp, 10);
                 articuloDTOTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 1000);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 12);
+                addArticuloStock(articuloDTOTemp, 12);
                 articuloDTOTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 450);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 14);
+                addArticuloStock(articuloDTOTemp, 14);
                 articuloDTOTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 245);
                 addArticulo(articuloDTOTemp);
-                addStockArticulo(articuloDTOTemp, 20);
-                return true;
+                addArticuloStock(articuloDTOTemp, 20);
             }
             catch (Exception e) {
-                return false;
+                return;
             }
-        }
-        else {
-            return false;
-        }
+    }
+
+    @Override
+    public int getIdArticuloDTO(ArticuloDTO articuloDTO) throws Exception {
+        return 0;
     }
 
     /**

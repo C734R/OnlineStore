@@ -6,9 +6,6 @@ import javalinos.onlinestore.modelo.DTO.PedidoDTO;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
-import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
-import javalinos.onlinestore.modelo.gestores.Local.ModeloClientesLocal;
-import javalinos.onlinestore.modelo.gestores.Local.ModeloPedidosLocal;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaPedidos;
 
@@ -83,42 +80,40 @@ public class ControlPedidos extends ControlBase{
     /**
      * Inicia el menú de gestión de pedidos desde la vista.
      */
-    public void iniciar() {
+    public void iniciar()
+    {
         int opcion;
-        try {
-            while (true) {
-                vPedidos.showCabecera();
-                vPedidos.showMenu(2);
-                opcion = vPedidos.askInt("Introduce una opción", 0, 6, false, false);
-                switch (opcion) {
-                    case 1:
-                        addPedidos();
-                        break;
-                    case 2:
-                        removePedidos();
-                        break;
-                    case 3:
-                        updatePedido();
-                        break;
-                    case 4:
-                        showListPedidos(askFiltrarCliente(0));
-                        break;
-                    case 5:
-                        showListPedidosPendientesEnviados(askFiltrarCliente(2), false);
-                        break;
-                    case 6:
-                        showListPedidosPendientesEnviados(askFiltrarCliente(1), true);
-                        break;
-                    case 0:
-                        vPedidos.showMensaje("Volviendo al menú principal...", true);
-                        return;
-                    default:
-                        vPedidos.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
-                }
+        while (true)
+        {
+            vPedidos.showCabecera();
+            vPedidos.showMenu(2);
+            opcion = vPedidos.askInt("Introduce una opción", 0, 6, false, false);
+            switch (opcion)
+            {
+                case 1:
+                    addPedidos();
+                    break;
+                case 2:
+                    removePedidos();
+                    break;
+                case 3:
+                    updatePedido();
+                    break;
+                case 4:
+                    showListPedidos(askFiltrarCliente(0));
+                    break;
+                case 5:
+                    showListPedidosPendientesEnviados(askFiltrarCliente(2), false);
+                    break;
+                case 6:
+                    showListPedidosPendientesEnviados(askFiltrarCliente(1), true);
+                    break;
+                case 0:
+                    vPedidos.showMensaje("Volviendo al menú principal...", true);
+                    return;
+                default:
+                    vPedidos.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
             }
-        }
-        catch (Exception e) {
-            vPedidos.showMensaje("Error al realizar la operación: " + e.getMessage(), true);
         }
     }
 
@@ -127,148 +122,202 @@ public class ControlPedidos extends ControlBase{
     /**
      * Añade un nuevo pedido al sistema.
      */
-    public void addPedidos() throws Exception {
-        vPedidos.showMensaje("******** Añadir PedidoDTO ********", true);
+    public void addPedidos()
+    {
+        vPedidos.showMensaje("******** Añadir Pedido ********", true);
         List<ArticuloDTO> articulosDisponibles = new ArrayList<>();
-        ClienteDTO ClienteDTO = askCliente(true);
-        if(ClienteDTO == null) return;
-        for (ArticuloDTO ArticuloDTO : mArticulos.getArticulos()){
-            if (mArticulos.getStockArticulos().get(ArticuloDTO) > 0){
-                articulosDisponibles.add(ArticuloDTO);
+        ClienteDTO clienteDTO = askCliente(true);
+        if(clienteDTO == null) return;
+        try
+        {
+            for (ArticuloDTO ArticuloDTO : mArticulos.getArticulosDTO())
+            {
+                if (mArticulos.getArticuloStocksDTO().get(ArticuloDTO) > 0)
+                {
+                    articulosDisponibles.add(ArticuloDTO);
+                }
             }
-        }
-        if (!articulosDisponibles.isEmpty()) {
-            vPedidos.showOptions(listToStr(articulosDisponibles), 0, true, true, true);
-            int indexArticulo = vPedidos.askInt("Selecciona el articuloDTO que quiere comprar entre los disponibles", 1, articulosDisponibles.size(), true, true);
-            if (indexArticulo == -99999) return;
-            indexArticulo = indexArticulo - 1;
-            ArticuloDTO ArticuloDTO = mArticulos.getArticuloIndex(indexArticulo);
+            if (!articulosDisponibles.isEmpty())
+            {
+                vPedidos.showOptions(listToStr(articulosDisponibles), 0, true, true, true);
+                int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 1, articulosDisponibles.size(), true, true);
+                if (indexArticulo == -99999) return;
+                indexArticulo = indexArticulo - 1;
+                ArticuloDTO articuloDTO = mArticulos.getArticuloIndex(indexArticulo);
 
-            int stockComprado = vPedidos.askInt("Ingresa la cantidad que quiere comprar", 1, mArticulos.getStockArticulo(ArticuloDTO), true, true);
-            if (stockComprado == -99999) return;
+                int stockComprado = vPedidos.askInt("Ingresa la cantidad que quiere comprar", 1, mArticulos.getStockArticulo(articuloDTO), true, true);
+                if (stockComprado == -99999) return;
 
-            PedidoDTO pedidoDTO = mPedidos.makePedido(ClienteDTO, ArticuloDTO, stockComprado, LocalDate.now(), precioEnvio);
-            if(pedidoDTO == null) {
-                vPedidos.showMensajePausa("Error. No se ha podido crear el pedidoDTO.", true);
-                return;
+                PedidoDTO pedido = mPedidos.makePedido(clienteDTO, articuloDTO, stockComprado, LocalDate.now(), precioEnvio);
+                if (pedido == null)
+                {
+                    vPedidos.showMensajePausa("Error. No se ha podido crear el pedido.", true);
+                    return;
+                }
+                mPedidos.addPedido(pedido);
+                mArticulos.updateStockArticulo(articuloDTO, mArticulos.getStockArticulo(articuloDTO) - stockComprado);
+                vPedidos.showMensajePausa("Pedido añadido correctamente", true);
             }
-            mPedidos.addPedido(pedidoDTO);
-            mArticulos.updateStockArticulo(ArticuloDTO, mArticulos.getStockArticulo(ArticuloDTO) - stockComprado);
-            vPedidos.showMensajePausa("PedidoDTO añadido correctamente", true);
+            else vPedidos.showMensaje("No hay artículos disponibles para comprar en este momento", true);
         }
-        else vPedidos.showMensaje("No hay articulos disponibles para comprar en este momento", true);
+        catch (Exception e)
+        {
+            vPedidos.showMensajePausa("Error al añadir pedido." + e, true);
+        }
     }
 
     /**
      * Elimina un pedido pendiente seleccionado por el usuario.
      */
-    public void removePedidos() {
-        List<PedidoDTO> pedidoDTOS = mPedidos.getPedidosPendientesEnviados(false, null);
-        Map<ArticuloDTO,Integer> stockArticulos = mArticulos.getStockArticulos();
-        if (pedidoDTOS.isEmpty()) {
-            vPedidos.showMensajePausa("Error. No existen pedidoDTOS a eliminar.", true);
+    public void removePedidos()
+    {
+        List<PedidoDTO> pedidos;
+        try
+        {
+            pedidos = mPedidos.getPedidosPendientesEnviados(false, null);
+            Map<ArticuloDTO,Integer> stockArticulos;
+
+            stockArticulos = mArticulos.getArticuloStocksDTO();
+
+            if (pedidos.isEmpty()) {
+                vPedidos.showMensajePausa("Error. No existen pedidos a eliminar.", true);
+                return;
+            }
+            vPedidos.showListPedidos(pedidos,null, true);
+            int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true);
+            if(numPedidoBorrar == -99999) return;
+            PedidoDTO pedidoDTO = pedidos.get(numPedidoBorrar-1);
+
+            ArticuloDTO ArticuloDTO = pedidoDTO.getArticulo();
+            mPedidos.removePedido(pedidoDTO);
+            mArticulos.updateStockArticulo(ArticuloDTO, stockArticulos.get(ArticuloDTO) + pedidoDTO.getCantidad());
+        }
+        catch (Exception e)
+        {
+            vPedidos.showMensajePausa("Error al borrar pedido." + e, true);
             return;
         }
-        vPedidos.showListPedidos(pedidoDTOS,null, true);
-        int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedidoDTO que quieres borrar: ", 1, pedidoDTOS.size(), true, true);
-        if(numPedidoBorrar == -99999) return;
-        PedidoDTO pedidoDTO = pedidoDTOS.get(numPedidoBorrar-1);
-
-        ArticuloDTO ArticuloDTO = pedidoDTO.getArticulo();
-        mPedidos.removePedido(pedidoDTO);
-        mArticulos.updateStockArticulo(ArticuloDTO, stockArticulos.get(ArticuloDTO) + pedidoDTO.getCantidad());
-        vPedidos.showMensajePausa("El pedidoDTO ha sido eliminado correctamente.", true);
+        vPedidos.showMensajePausa("El pedido ha sido eliminado correctamente.", true);
     }
 
     /**
      * Modifica un pedido pendiente cambiando cliente y/o cantidad.
      */
-    public void updatePedido() throws Exception {
+    public void updatePedido()
+    {
         vPedidos.showMensaje("******** Modificar PedidoDTO ********", true);
-        List<PedidoDTO> pedidoDTOS = mPedidos.getPedidosPendientesEnviados(false, null);
-        Map<ArticuloDTO,Integer> stockArticulos= mArticulos.getStockArticulos();
-        if (pedidoDTOS.isEmpty()) {
-            vPedidos.showMensajePausa("No hay pedidoDTOS disponibles para modificar.", true);
-            return;
+        try {
+            List<PedidoDTO> pedidoDTOS = mPedidos.getPedidosPendientesEnviados(false, null);
+            Map<ArticuloDTO, Integer> stockArticulos = mArticulos.getArticuloStocksDTO();
+            if (pedidoDTOS.isEmpty()) {
+                vPedidos.showMensajePausa("No hay pedidos disponibles para modificar.", true);
+                return;
+            }
+
+            vPedidos.showListPedidos(pedidoDTOS, null, true);
+            int seleccion = vPedidos.askInt("Selecciona el número del pedido a modificar", 1, pedidoDTOS.size(), true, true);
+            if (seleccion == -99999) return;
+
+            PedidoDTO pedidoDTOOld = pedidoDTOS.get(seleccion - 1);
+
+            ClienteDTO nuevoClienteDTO = vPedidos.askClienteOpcional(mClientes.getClientesDTO(), pedidoDTOOld.getCliente());
+            if (nuevoClienteDTO == null) nuevoClienteDTO = pedidoDTOOld.getCliente();
+
+            int maxStock = stockArticulos.get(pedidoDTOOld.getArticulo()) + pedidoDTOOld.getCantidad();
+            Integer nuevaCantidad = vPedidos.askIntOpcional("Cantidad actual: " + pedidoDTOOld.getCantidad(), 1, maxStock);
+            if (nuevaCantidad == null) nuevaCantidad = pedidoDTOOld.getCantidad();
+
+            PedidoDTO pedidoDTONew = mPedidos.makePedido(nuevoClienteDTO, pedidoDTOOld.getArticulo(), nuevaCantidad, LocalDate.now(), precioEnvio);
+            mPedidos.updatePedido(pedidoDTOOld, pedidoDTONew);
+
+            int stockNew = maxStock - nuevaCantidad;
+            mArticulos.updateStockArticulo(pedidoDTOOld.getArticulo(), stockNew);
+            vPedidos.showMensajePausa("PedidoDTO actualizado correctamente.", true);
         }
-
-        vPedidos.showListPedidos(pedidoDTOS, null, true);
-        int seleccion = vPedidos.askInt("Selecciona el número del pedido a modificar", 1, pedidoDTOS.size(), true, true);
-        if (seleccion == -99999) return;
-
-        PedidoDTO pedidoDTOOld = pedidoDTOS.get(seleccion - 1);
-
-        ClienteDTO nuevoClienteDTO = vPedidos.askClienteOpcional(mClientes.getClientes(), pedidoDTOOld.getCliente());
-        if (nuevoClienteDTO == null) nuevoClienteDTO = pedidoDTOOld.getCliente();
-
-        int maxStock = stockArticulos.get(pedidoDTOOld.getArticulo()) + pedidoDTOOld.getCantidad();
-        Integer nuevaCantidad = vPedidos.askIntOpcional("Cantidad actual: " + pedidoDTOOld.getCantidad(), 1, maxStock);
-        if (nuevaCantidad == null) nuevaCantidad = pedidoDTOOld.getCantidad();
-
-        PedidoDTO pedidoDTONew = mPedidos.makePedido(nuevoClienteDTO, pedidoDTOOld.getArticulo(), nuevaCantidad, LocalDate.now(), precioEnvio);
-        mPedidos.updatePedido(pedidoDTOOld, pedidoDTONew);
-
-        int stockNew = maxStock - nuevaCantidad;
-        mArticulos.updateStockArticulo(pedidoDTOOld.getArticulo(), stockNew);
-        vPedidos.showMensajePausa("PedidoDTO actualizado correctamente.", true);
+        catch (Exception e)
+        {
+            vPedidos.showMensajePausa("Error al modificar pedido." + e, true);
+        }
     }
 
     //*************************** Mostrar datos ***************************//
 
     /**
      * Muestra todos los pedidos o filtra por clienteDTO si se proporciona.
-     * @param ClienteDTO ClienteDTO por el que se quiere filtrar
+     * @param clienteDTO clienteDTO por el que se quiere filtrar
      */
-    public void showListPedidos(ClienteDTO ClienteDTO) {
-        if (mPedidos.getPedidos().isEmpty()) {
-            vPedidos.showMensajePausa("Aún no existen pedidoDTOS registrados.", true);
-            return;
-        }
-        List<PedidoDTO> pedidoDTOS;
-        if(ClienteDTO != null) {
-            pedidoDTOS = mPedidos.getPedidosCliente(ClienteDTO);
-            if (pedidoDTOS.isEmpty()) {
-                vPedidos.showMensajePausa("No hay pedidoDTOS registrados para este clienteDTO.", true);
+    public void showListPedidos(ClienteDTO clienteDTO)
+    {
+        try
+        {
+            if (mPedidos.getPedidosDTO().isEmpty()) {
+                vPedidos.showMensajePausa("Aún no existen pedidos registrados.", true);
                 return;
             }
+            List<PedidoDTO> pedidoDTOS;
+            if(clienteDTO != null) {
+                pedidoDTOS = mPedidos.getPedidosDTOCliente(clienteDTO);
+                if (pedidoDTOS.isEmpty()) {
+                    vPedidos.showMensajePausa("No hay pedidos registrados para este clienteDTO.", true);
+                    return;
+                }
+            }
+            else pedidoDTOS = mPedidos.getPedidosDTO();
+            vPedidos.showListPedidos(pedidoDTOS, clienteDTO, false);
         }
-        else pedidoDTOS = mPedidos.getPedidos();
-        vPedidos.showListPedidos(pedidoDTOS, ClienteDTO, false);
+        catch (Exception e)
+        {
+            vPedidos.showMensajePausa("Error al mostrar pedidos." + e, true);
+        }
+
     }
 
     /**
      * Muestra pedidos pendientes o enviados según se indique.
-     * @param ClienteDTO ClienteDTO por el que se quiere filtrar
+     * @param clienteDTO clienteDTO por el que se quiere filtrar
      * @param enviado true para pedidos enviados, false para pendientes
      */
-    public void showListPedidosPendientesEnviados(ClienteDTO ClienteDTO, boolean enviado) {
-        if (mPedidos.getPedidos().isEmpty()) {
-            vPedidos.showMensaje("Aún no existen pedidoDTOS registrados.", true);
-            return;
-        }
-
-        List<PedidoDTO> pedidoDTOS = mPedidos.getPedidosPendientesEnviados(enviado, ClienteDTO);
-
-        if (pedidoDTOS.isEmpty()) {
-            if (enviado) {
-                vPedidos.showMensaje("No hay pedidoDTOS enviados registrados" +
-                        (ClienteDTO != null ? " para este clienteDTO." : "."), true);
-            } else {
-                vPedidos.showMensaje("No hay pedidoDTOS pendientes registrados" +
-                        (ClienteDTO != null ? " para este clienteDTO." : "."), true);
+    public void showListPedidosPendientesEnviados(ClienteDTO clienteDTO, boolean enviado)
+    {
+        try
+        {
+            if (mPedidos.getPedidosDTO().isEmpty()) {
+                vPedidos.showMensaje("Aún no existen pedidos registrados.", true);
+                return;
             }
-            return;
+            List<PedidoDTO> pedidoDTOS = mPedidos.getPedidosPendientesEnviados(enviado, clienteDTO);
+            if (pedidoDTOS.isEmpty()) {
+                if (enviado) {
+                    vPedidos.showMensaje("No hay pedidos enviados registrados" +
+                            (clienteDTO != null ? " para este clienteDTO." : "."), true);
+                } else {
+                    vPedidos.showMensaje("No hay pedidos pendientes registrados" +
+                            (clienteDTO != null ? " para este clienteDTO." : "."), true);
+                }
+                return;
+            }
+            vPedidos.showListPedidos(pedidoDTOS, clienteDTO, false);
+        }
+        catch (Exception e)
+        {
+            if(!enviado)vPedidos.showMensajePausa("Error al mostrar pedidos pendientes." + e, true);
+            else vPedidos.showMensajePausa("Error al mostrar pedidos enviados." + e, true);
         }
 
-        vPedidos.showListPedidos(pedidoDTOS, ClienteDTO, false);
     }
 
     /**
      * Muestra todos los pedidos en la vista.
-     * @param ClienteDTO ClienteDTO por el que se filtran los pedidos
+     * @param clienteDTO cliente por el que se filtran los pedidos
      */
-    public void showPedidos(ClienteDTO ClienteDTO) {
-        vPedidos.showPedidos(mPedidos.getPedidos(), ClienteDTO);
+    public void showPedidosCliente(ClienteDTO clienteDTO)
+    {
+        try
+        {
+            vPedidos.showPedidos(mPedidos.getPedidosDTO(), clienteDTO);
+        } catch (Exception e) {
+            vPedidos.showMensajePausa("Error al mostrar pedidos." + e, true);
+        }
     }
 
     //*************************** Pedir datos ***************************//
@@ -276,14 +325,15 @@ public class ControlPedidos extends ControlBase{
     /**
      * Pide al usuario que seleccione o cree un cliente.
      * @param crear true si se permite crear un nuevo cliente
-     * @return ClienteDTO seleccionado o creado
+     * @return cliente seleccionado o creado
      */
-    public ClienteDTO askCliente (boolean crear) throws Exception {
+    public ClienteDTO askCliente (boolean crear)
+    {
         int indexCliente;
-        List<ClienteDTO> ClienteDTOS = cClientes.getListaClientes();
-        vPedidos.showListClientes(ClienteDTOS);
-        if(crear) indexCliente = vPedidos.askInt("Selecciona un clienteDTO existente o crea uno eligiendo " + (cClientes.getIndexCliente(true)+2), (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+2), true, true);
-        else indexCliente = vPedidos.askInt("Selecciona un clienteDTO", (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+1), true, true);
+        List<ClienteDTO> clientesDTO = cClientes.getListaClientes();
+        vPedidos.showListClientes(clientesDTO);
+        if(crear) indexCliente = vPedidos.askInt("Selecciona un cliente existente o crea uno eligiendo " + (cClientes.getIndexCliente(true)+2), (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+2), true, true);
+        else indexCliente = vPedidos.askInt("Selecciona un cliente", (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+1), true, true);
         if (indexCliente == -99999) return null;
 
         if (crear && indexCliente == (cClientes.getIndexCliente(true)+2)) {
@@ -293,7 +343,7 @@ public class ControlPedidos extends ControlBase{
 
         ClienteDTO ClienteDTO = cClientes.getCliente(indexCliente-1);
         if (ClienteDTO == null) {
-            vPedidos.showMensajePausa("Error. El clienteDTO no existe. Volviendo...", true);
+            vPedidos.showMensajePausa("Error. El cliente no existe. Volviendo...", true);
             return null;
         }
         return ClienteDTO;
@@ -302,9 +352,10 @@ public class ControlPedidos extends ControlBase{
     /**
      * Pregunta si se desea filtrar por cliente y devuelve el seleccionado.
      * @param tipoFiltro tipo de filtrado: 0=todos, 1=enviados, 2=pendientes
-     * @return ClienteDTO seleccionado o null
+     * @return cliente seleccionado o null
      */
-    public ClienteDTO askFiltrarCliente(int tipoFiltro) {
+    public ClienteDTO askFiltrarCliente(int tipoFiltro)
+    {
         boolean filtrar = vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true);
         if (filtrar) return askClienteFiltro(tipoFiltro);
         return null;
@@ -315,51 +366,57 @@ public class ControlPedidos extends ControlBase{
      * @param tipoFiltrado 0=todos, 1=enviados, 2=pendientes
      * @return ClienteDTO seleccionado o null
      */
-    public ClienteDTO askClienteFiltro(int tipoFiltrado) {
+    public ClienteDTO askClienteFiltro(int tipoFiltrado)
+    {
         int indexCliente;
-        List<PedidoDTO> pedidoDTOS = mPedidos.getPedidos();
-        List<ClienteDTO> clientesPedidos = new ArrayList<>();
-        if (tipoFiltrado == 0) {
-            for (PedidoDTO pedidoDTO : pedidoDTOS) {
-                if (clientesPedidos.contains(pedidoDTO.getCliente())) continue;
-                clientesPedidos.add(pedidoDTO.getCliente());
+        try {
+            List<PedidoDTO> pedidoDTOS = mPedidos.getPedidosDTO();
+            List<ClienteDTO> clientesPedidos = new ArrayList<>();
+            if (tipoFiltrado == 0) {
+                for (PedidoDTO pedidoDTO : pedidoDTOS) {
+                    if (clientesPedidos.contains(pedidoDTO.getCliente())) continue;
+                    clientesPedidos.add(pedidoDTO.getCliente());
+                }
+                if (clientesPedidos.isEmpty()) {
+                    vPedidos.showMensajePausa(("No hay pedidos registrados para ningún cliente."), true);
+                    return null;
+                }
+            } else if (tipoFiltrado == 1) {
+                for (PedidoDTO pedidoDTO : pedidoDTOS) {
+                    if (checkEnviado(pedidoDTO)) continue;
+                    if (clientesPedidos.contains(pedidoDTO.getCliente())) continue;
+                    clientesPedidos.add(pedidoDTO.getCliente());
+                }
+                if (clientesPedidos.isEmpty()) {
+                    vPedidos.showMensajePausa(("No hay pedidos enviados registrados para ningún cliente."), true);
+                    return null;
+                }
+            } else if (tipoFiltrado == 2) {
+                for (PedidoDTO pedidoDTO : pedidoDTOS) {
+                    if (!checkEnviado(pedidoDTO)) continue;
+                    if (clientesPedidos.contains(pedidoDTO.getCliente())) continue;
+                    clientesPedidos.add(pedidoDTO.getCliente());
+                }
+                if (clientesPedidos.isEmpty()) {
+                    vPedidos.showMensajePausa(("No hay pedidos pendientes registrados para ningún cliente."), true);
+                    return null;
+                }
             }
-            if (clientesPedidos.isEmpty()) {
-                vPedidos.showMensajePausa(("No hay pedidoDTOS registrados para ningún clienteDTO."), true);
+            vPedidos.showListClientesPedidos(clientesPedidos);
+            indexCliente = vPedidos.askInt("Selecciona un clienteDTO", 1, clientesPedidos.size(), true, true);
+            if (indexCliente == -99999) return null;
+            ClienteDTO ClienteDTO = clientesPedidos.get(indexCliente - 1);
+            if (ClienteDTO == null) {
+                vPedidos.showMensajePausa("Error. El cliente no existe. Volviendo...", true);
                 return null;
             }
+            return ClienteDTO;
         }
-        else if (tipoFiltrado == 1) {
-            for (PedidoDTO pedidoDTO : pedidoDTOS) {
-                if (checkEnviado(pedidoDTO)) continue;
-                if (clientesPedidos.contains(pedidoDTO.getCliente())) continue;
-                clientesPedidos.add(pedidoDTO.getCliente());
-            }
-            if (clientesPedidos.isEmpty()) {
-                vPedidos.showMensajePausa(("No hay pedidoDTOS enviados registrados para ningún clienteDTO."), true);
-                return null;
-            }
-        }
-        else if (tipoFiltrado == 2) {
-            for (PedidoDTO pedidoDTO : pedidoDTOS) {
-                if (!checkEnviado(pedidoDTO)) continue;
-                if (clientesPedidos.contains(pedidoDTO.getCliente())) continue;
-                clientesPedidos.add(pedidoDTO.getCliente());
-            }
-            if (clientesPedidos.isEmpty()) {
-                vPedidos.showMensajePausa(("No hay pedidoDTOS pendientes registrados para ningún clienteDTO."), true);
-                return null;
-            }
-        }
-        vPedidos.showListClientesPedidos(clientesPedidos);
-        indexCliente = vPedidos.askInt("Selecciona un clienteDTO", 1, clientesPedidos.size(), true, true);
-        if (indexCliente == -99999) return null;
-        ClienteDTO ClienteDTO = clientesPedidos.get(indexCliente-1);
-        if (ClienteDTO == null) {
-            vPedidos.showMensajePausa("Error. El clienteDTO no existe. Volviendo...", true);
+        catch (Exception e)
+        {
+            vPedidos.showMensajePausa("Error al mostrar pedidos filtrados." + e, true);
             return null;
         }
-        return ClienteDTO;
     }
 
     //*************************** Creación y cálculo de datos ***************************//
@@ -369,15 +426,17 @@ public class ControlPedidos extends ControlBase{
      * @param pedidoDTO el pedidoDTO a verificar
      * @return true si ha sido enviado, false en caso contrario
      */
-    private boolean checkEnviado(PedidoDTO pedidoDTO) {
+    private boolean checkEnviado(PedidoDTO pedidoDTO)
+    {
         return mPedidos.checkEnviado(pedidoDTO);
     }
 
     /**
      * Carga los pedidos desde un archivo o fuente externa.
      */
-    public void loadPedidos() throws Exception {
-            getModeloStore().getModeloPedidos().loadPedidos(mClientes.getClientes(), mArticulos.getArticulos());
+    public void loadPedidos() throws Exception
+    {
+            getModeloStore().getModeloPedidos().loadPedidos(mClientes.getClientesDTO(), mArticulos.getArticulosDTO());
     }
 
 }

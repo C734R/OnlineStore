@@ -2,141 +2,251 @@ package javalinos.onlinestore.modelo.gestores.BBDD;
 
 import javalinos.onlinestore.modelo.DAO.FactoryDAO;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+import javalinos.onlinestore.modelo.Entidades.Articulo;
+import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los artículos y su stock.
  */
-public class ModeloArticulosBBDD implements IModeloArticulos {
-
-    private List<ArticuloDTO> ArticuloDTOS;
-    private Map<ArticuloDTO, Integer> stockArticulos;
+public class ModeloArticulosBBDD implements IModeloArticulos
+{
     private FactoryDAO factoryDAO;
     /**
      * Constructor por defecto. Inicializa las listas de artículos y su stock.
      */
-    public ModeloArticulosBBDD(FactoryDAO factoryDAO) {
-        this.ArticuloDTOS = new ArrayList<>();
-        this.stockArticulos = new LinkedHashMap<>();
+    public ModeloArticulosBBDD(FactoryDAO factoryDAO)
+    {
         this.factoryDAO = factoryDAO;
     }
 
-    //*************************** Getters & Setters ***************************//
+    //*************************** CRUD ARTÍCULOS ***************************//
+
+    /**
+     * Añade un artículo a la lista de artículos.
+     * @param articuloDTO artículo a añadir.
+     */
+    public void addArticulo(ArticuloDTO articuloDTO) throws Exception
+    {
+        Articulo articulo = new Articulo(articuloDTO);
+        factoryDAO.getDAOArticulo().insertar(articulo);
+    }
+
+
+    /**
+     * Elimina un artículo de la lista.
+     * @param articuloDTO artículo a eliminar.
+     */
+    public void removeArticulo(ArticuloDTO articuloDTO) throws Exception
+    {
+        Articulo articulo = getArticuloEntidadCodigo(articuloDTO.getCodigo());
+        factoryDAO.getDAOArticulo().eliminar(articulo.getId());
+    }
+
+    public void removeArticulosAll() throws Exception
+    {
+        factoryDAO.getDAOArticulo().eliminarTodos();
+    }
+
+    /**
+     * Reemplaza un artículo por uno nuevo.
+     * @param articuloDTOOld artículo original.
+     * @param articuloDTONew nuevo artículo.
+     */
+    public void updateArticulo(ArticuloDTO articuloDTOOld, ArticuloDTO articuloDTONew) throws Exception
+    {
+        Articulo articuloOld = getArticuloEntidadCodigo(articuloDTOOld.getCodigo());
+        Articulo articuloNew = new Articulo(articuloDTOOld);
+        articuloNew.setId(articuloOld.getId());
+        factoryDAO.getDAOArticulo().actualizar(articuloNew);
+    }
+
+    //*************************** GETTERS & SETTERS ARTÍCULOS ***************************//
 
     /**
      * Devuelve una lista con todos los artículos registrados.
      * @return lista de artículos.
      */
-    public List<ArticuloDTO> getArticulos() {
-        return ArticuloDTOS;
+    private List<Articulo> getArticulos() throws Exception
+    {
+        return factoryDAO.getDAOArticulo().getTodos();
+    }
+
+    public List<ArticuloDTO> getArticulosDTO() throws Exception
+    {
+        return articulosEntidadesToDTO(getArticulos());
+    }
+
+    private List<Articulo> articulosDTOToEntidade(List<ArticuloDTO> articulosDTO)
+    {
+        List<Articulo> articulos = new ArrayList<>();
+        for (ArticuloDTO articuloDTO : articulosDTO) {
+            Articulo articulo = new Articulo(articuloDTO);
+            articulos.add(articulo);
+        }
+        return articulos;
+    }
+
+    private List<ArticuloDTO> articulosEntidadesToDTO(List<Articulo> articulos)
+    {
+        List<ArticuloDTO> articulosDTO = new ArrayList<>();
+        for (Articulo articulo : articulos) {
+            ArticuloDTO articuloDTO = new ArticuloDTO(articulo);
+            articulosDTO.add(articuloDTO);
+        }
+        return articulosDTO;
     }
     /**
      * Devuelve un artículo según su posición en la lista.
      * @param index posición en la lista.
      * @return artículo encontrado o null si está fuera de rango.
      */
-    public ArticuloDTO getArticuloIndex(int index) {
-        if (index < 0 || index >= ArticuloDTOS.size()) return null;
-        return ArticuloDTOS.get(index);
+    public ArticuloDTO getArticuloIndex(int index) throws Exception
+    {
+        List<ArticuloDTO> articulosDTO = getArticulosDTO();
+        if (index < 0 || index >= articulosDTO.size()) return null;
+        return articulosDTO.get(index);
     }
-    /**
-     * Devuelve el mapa de stock de todos los artículos.
-     * @return mapa con artículos y cantidades disponibles.
-     */
-    public Map<ArticuloDTO, Integer> getStockArticulos() {
-        return stockArticulos;
+
+    public int getIdArticuloDTO(ArticuloDTO articuloDTO) throws Exception
+    {
+        return factoryDAO.getDAOArticulo().getArticuloCodigo(articuloDTO.getCodigo()).getId();
     }
-    /**
-     * Devuelve el stock de un artículo concreto.
-     * @param ArticuloDTO artículo a consultar.
-     * @return unidades disponibles o null si no está en el mapa.
-     */
-    public Integer getStockArticulo(ArticuloDTO ArticuloDTO) {
-        if (stockArticulos.isEmpty()) return null;
-        return stockArticulos.get(ArticuloDTO);
+
+    private Articulo getArticuloEntidadCodigo(String codigo) throws Exception
+    {
+        return factoryDAO.getDAOArticulo().getArticuloCodigo(codigo);
+    }
+
+    public ArticuloDTO getArticuloDTOId(Integer id) throws Exception
+    {
+        return new ArticuloDTO(getArticuloId(id));
+    }
+
+    public ArticuloDTO getArticuloDTOCodigo(String codigo) throws Exception
+    {
+        return new ArticuloDTO(getArticuloEntidadCodigo(codigo));
+    }
+
+    private Articulo getArticuloId(Integer id) throws Exception
+    {
+        return factoryDAO.getDAOArticulo().getPorId(id);
     }
 
     /**
      * Establece una nueva lista de artículos.
-     * @param ArticuloDTOS nueva lista de artículos.
+     * @param articulosDTO nueva lista de artículos.
      */
-    public void setArticulos(List<ArticuloDTO> ArticuloDTOS) {
-        this.ArticuloDTOS = ArticuloDTOS;
+    public void setArticulos(List<ArticuloDTO> articulosDTO) throws Exception
+    {
+        removeArticulosAll();
+        factoryDAO.getDAOArticulo().insertarTodos(articulosDTOToEntidade(articulosDTO));
     }
+
+    //*************************** CRUD STOCKARTÍCULOS ***************************//
+
+    /**
+     * Añade stock para un artículo determinado.
+     * @param articuloDTO artículo a actualizar.
+     * @param stock cantidad a añadir.
+     */
+    public void addArticuloStock(ArticuloDTO articuloDTO, int stock) throws Exception
+    {
+        Articulo articulo = getArticuloEntidadCodigo(articuloDTO.getCodigo());
+        ArticuloStock articuloStock = new ArticuloStock(articulo.getId(), stock);
+        factoryDAO.getDAOArticuloStock().insertar(articuloStock);
+    }
+
+    /**
+     * Elimina el stock de un artículo.
+     * @param articuloDTO artículo del cual eliminar el stock.
+     */
+    public void removeArticuloStock(ArticuloDTO articuloDTO) throws Exception
+    {
+        Articulo articulo = getArticuloEntidadCodigo(articuloDTO.getCodigo());
+        factoryDAO.getDAOArticuloStock().eliminar(articulo.getId());
+    }
+
+    public void removeArticulosStockAll() throws Exception
+    {
+        factoryDAO.getDAOArticuloStock().eliminarTodos();
+    }
+
+    /**
+     * Devuelve el mapa de stock de todos los artículos.
+     * @return mapa con artículos y cantidades disponibles.
+     */
+    public Map<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception {
+        List<ArticuloStock> articuloStocks = getArticuloStocksEntidades();
+        return mapearArticuloStocks(articuloStocks);
+    }
+
+    private List<ArticuloStock> getArticuloStocksEntidades() throws Exception {
+        return factoryDAO.getDAOArticuloStock().getTodos();
+    }
+
+    private Map<ArticuloDTO, Integer> mapearArticuloStocks (List<ArticuloStock> articuloStocks) throws Exception {
+        Map<ArticuloDTO, Integer> articuloStocksDTO = new HashMap<>();
+        for (ArticuloStock articuloStock : articuloStocks) {
+            ArticuloDTO articuloDTO = getArticuloDTOId(articuloStock.getArticulo());
+            articuloStocksDTO.put(articuloDTO, articuloStock.getStock());
+        }
+        return articuloStocksDTO;
+    }
+
+    /**
+     * Actualiza el stock de un artículo.
+     * @param articuloDTO artículo a actualizar.
+     * @param stockNew nueva cantidad de stock.
+     */
+    public void updateStockArticulo(ArticuloDTO articuloDTO, int stockNew) throws Exception
+    {
+        Articulo articulo = new Articulo(articuloDTO);
+        factoryDAO.getDAOArticuloStock().insertar(new ArticuloStock(articulo.getId(), stockNew));
+    }
+
     /**
      * Establece un nuevo mapa de stock.
      * @param stockArticulos mapa de artículos con su stock.
      */
-    public void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) {
-        this.stockArticulos = stockArticulos;
+    public void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) throws Exception
+    {
+        List<ArticuloStock> articuloStocks = new ArrayList<>();
+        for (ArticuloDTO articuloDTO : stockArticulos.keySet()) {
+            Articulo articulo = getArticuloEntidadCodigo(articuloDTO.getCodigo());
+            ArticuloStock articuloStock = new ArticuloStock(articulo.getId(), stockArticulos.get(articuloDTO));
+            articuloStocks.add(articuloStock);
+        }
+        factoryDAO.getDAOArticuloStock().insertarTodos(articuloStocks);
     }
+
+    /**
+     * Devuelve el stock de un artículo concreto.
+     * @param articuloDTO artículo a consultar.
+     * @return unidades disponibles o null si no está en el mapa.
+     */
+    public Integer getStockArticulo(ArticuloDTO articuloDTO) throws Exception
+    {
+        Articulo articulo = getArticuloEntidadCodigo(articuloDTO.getCodigo());
+        return factoryDAO.getDAOArticuloStock().getPorId(articulo.getId()).getStock();
+    }
+
     /**
      * Establece el stock de un artículo específico.
-     * @param ArticuloDTO artículo a actualizar.
+     * @param articuloDTO artículo a actualizar.
      * @param stock nueva cantidad disponible.
      */
-    public void setStockArticulo(ArticuloDTO ArticuloDTO, Integer stock) {
-        this.stockArticulos.put(ArticuloDTO, stock);
+    public void updateStockArticulo(ArticuloDTO articuloDTO, Integer stock) throws Exception {
+        Articulo articulo = getArticuloEntidadCodigo(articuloDTO.getCodigo());
+        ArticuloStock articuloStock = new ArticuloStock(articulo.getId(), stock);
+        factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
     }
 
-    //*************************** CRUD ***************************//
-
-    /**
-     * Añade un artículo a la lista de artículos.
-     * @param ArticuloDTO artículo a añadir.
-     */
-    public void addArticulo(ArticuloDTO ArticuloDTO) {
-        ArticuloDTOS.add(ArticuloDTO);
-    }
-    /**
-     * Añade stock para un artículo determinado.
-     * @param ArticuloDTO artículo a actualizar.
-     * @param stock cantidad a añadir.
-     */
-    public void addStockArticulo(ArticuloDTO ArticuloDTO, int stock) {
-        stockArticulos.put(ArticuloDTO, stock);
-    }
-
-    /**
-     * Elimina un artículo de la lista.
-     * @param ArticuloDTO artículo a eliminar.
-     */
-    public void removeArticulo(ArticuloDTO ArticuloDTO) {
-        ArticuloDTOS.remove(ArticuloDTO);
-    }
-    /**
-     * Elimina el stock de un artículo.
-     * @param ArticuloDTO artículo del cual eliminar el stock.
-     */
-    public void removeStockArticulo(ArticuloDTO ArticuloDTO) {
-        stockArticulos.remove(ArticuloDTO);
-    }
-
-    /**
-     * Reemplaza un artículo por uno nuevo.
-     * @param ArticuloDTOOld artículo original.
-     * @param ArticuloDTONew nuevo artículo.
-     */
-    public void updateArticulo(ArticuloDTO ArticuloDTOOld, ArticuloDTO ArticuloDTONew) {
-        int index = ArticuloDTOS.indexOf(ArticuloDTOOld);
-        if (index != -1) {
-            ArticuloDTOS.set(index, ArticuloDTONew);
-        }
-    }
-    /**
-     * Actualiza el stock de un artículo.
-     * @param ArticuloDTO artículo a actualizar.
-     * @param stockNew nueva cantidad de stock.
-     */
-    public void updateStockArticulo(ArticuloDTO ArticuloDTO, int stockNew) {
-        stockArticulos.put(ArticuloDTO, stockNew);
-    }
-
-    //*************************** Crear datos ***************************//
+    //*************************** CREAR DATOS ***************************//
 
     /**
      * Crea un nuevo artículo con un código generado automáticamente.
@@ -145,11 +255,12 @@ public class ModeloArticulosBBDD implements IModeloArticulos {
      * @param preparacion tiempo de preparación en minutos.
      * @return instancia del nuevo artículo.
      */
-    public ArticuloDTO makeArticulo(String descripcion, Float precio, Integer preparacion) {
+    public ArticuloDTO makeArticulo(String descripcion, Float precio, Integer preparacion) throws Exception {
         String codigo;
-        if (ArticuloDTOS.isEmpty()) codigo = "ART000";
+        List<ArticuloDTO> articulosDTO = getArticulosDTO();
+        if (articulosDTO.isEmpty()) codigo = "ART000";
         else {
-            String lastCodigo = ArticuloDTOS.getLast().getCodigo();
+            String lastCodigo = articulosDTO.getLast().getCodigo();
             codigo = "ART" + String.format("%03d", Integer.parseInt(lastCodigo.substring(3)) + 1);
         }
         return new ArticuloDTO(codigo, descripcion, precio, preparacion);
@@ -158,60 +269,43 @@ public class ModeloArticulosBBDD implements IModeloArticulos {
     /**
      * Precarga una lista de artículos con stock para pruebas.
      */
-    public void loadArticulos() {
-        if (configuracion == 0) {
-            try {
-                ArticuloDTOS.clear();
-                ArticuloDTO ArticuloDTOTemp = new ArticuloDTO();
-                ArticuloDTOTemp = makeArticulo("Guitarra española de juguete.", 6f, 50);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 5);
-                ArticuloDTOTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 100);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 9);
-                ArticuloDTOTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 70);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 14);
-                ArticuloDTOTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 30);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 20);
-                ArticuloDTOTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 200);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 8);
-                ArticuloDTOTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 25);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 10);
-                ArticuloDTOTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 1000);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 12);
-                ArticuloDTOTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 450);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 14);
-                ArticuloDTOTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 245);
-                addArticulo(ArticuloDTOTemp);
-                addStockArticulo(ArticuloDTOTemp, 20);
-                return true;
-            }
-            catch (Exception e) {
-                return false;
-            }
-        }
-        else {
-            return false;
-        }
-    }
+    public void loadArticulos() throws Exception {
+        try {
+            removeArticulosAll();
+            removeArticulosStockAll();
 
-    /**
-     * Verifica si existe un artículo con un código dado.
-     * @param codigo código a comprobar.
-     * @return true si existe un artículo con ese código, false en caso contrario.
-     */
-    public boolean checkArticulo(String codigo) {
-        for (ArticuloDTO ArticuloDTO : ArticuloDTOS) {
-            if (ArticuloDTO.getCodigo().equals(codigo)) {
-                return true;
-            }
+            ArticuloDTO articuloDTOTemp;
+            articuloDTOTemp = makeArticulo("Guitarra española de juguete.", 6f, 50);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 5);
+            articuloDTOTemp = makeArticulo("Exin Castillos - Set de construcción.", 12.5f, 100);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 9);
+            articuloDTOTemp = makeArticulo("Scalextric - Circuito de coches eléctricos.", 25f, 70);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 14);
+            articuloDTOTemp = makeArticulo("Cinexin - Proyector de cine infantil.", 18f, 30);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 20);
+            articuloDTOTemp = makeArticulo("Telesketch - Pizarra mágica para dibujar.", 10f, 200);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 8);
+            articuloDTOTemp = makeArticulo("Muñeca Nancy - Famosa.", 20f, 25);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 10);
+            articuloDTOTemp = makeArticulo("Madelman - Figura de acción articulada.", 15f, 1000);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 12);
+            articuloDTOTemp = makeArticulo("Operación - Juego de mesa de precisión.", 8.5f, 450);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 14);
+            articuloDTOTemp = makeArticulo("Simon - Juego electrónico de memoria.", 14f, 245);
+            addArticulo(articuloDTOTemp);
+            addArticuloStock(articuloDTOTemp, 20);
         }
-        return false;
+        catch (Exception e)
+        {
+            throw new Exception("Error al precargar artículos.", e);
+        }
     }
 }

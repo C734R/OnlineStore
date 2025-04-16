@@ -29,7 +29,7 @@ public class ModeloClientesLocal implements IModeloClientes {
      * Devuelve lista con todos los clienteDTOS.
      * @return lista de clienteDTOS.
      */
-    public List<ClienteDTO> getClientes() {
+    public List<ClienteDTO> getClientesDTO() {
         return clientes;
     }
 
@@ -41,7 +41,7 @@ public class ModeloClientesLocal implements IModeloClientes {
         this.clientes = clientes;
     }
 
-    public List<CategoriaDTO> getCategorias() {
+    public List<CategoriaDTO> getCategoriasDTO() {
         return categorias;
     }
 
@@ -67,6 +67,11 @@ public class ModeloClientesLocal implements IModeloClientes {
         clientes.remove(clienteDTO);
     }
 
+    @Override
+    public void removeClientesAll() throws Exception {
+        clientes.clear();
+    }
+
     /**
      * Obtiene un cliente según su posición en la lista.
      * @param index índice del cliente.
@@ -77,6 +82,16 @@ public class ModeloClientesLocal implements IModeloClientes {
             return clientes.get(index);
         }
         return null;
+    }
+
+    @Override
+    public ClienteDTO getClienteDTOId(int id) throws Exception {
+        return null;
+    }
+
+    @Override
+    public int getIdClienteDTO(ClienteDTO clienteDTO) throws Exception {
+        return 0;
     }
 
     /**
@@ -106,7 +121,7 @@ public class ModeloClientesLocal implements IModeloClientes {
      * @param nif NIF del cliente.
      * @return cliente correspondiente o null si no se encuentra.
      */
-    public ClienteDTO getClienteNif(String nif) {
+    public ClienteDTO getClienteDTONif(String nif) {
         for (ClienteDTO ClienteDTO : clientes) {
             if (ClienteDTO.getNif().equalsIgnoreCase(nif)) {
                 return ClienteDTO;
@@ -120,7 +135,7 @@ public class ModeloClientesLocal implements IModeloClientes {
      * @param email correo del cliente.
      * @return cliente correspondiente o null si no se encuentra.
      */
-    public ClienteDTO getClienteEmail(String email) {
+    public ClienteDTO getClienteDTOEmail(String email) {
         for (ClienteDTO ClienteDTO : clientes) {
             if (ClienteDTO.getEmail().equalsIgnoreCase(email)) {
                 return ClienteDTO;
@@ -145,7 +160,7 @@ public class ModeloClientesLocal implements IModeloClientes {
         return clientesCategoria;
     }
 
-    public CategoriaDTO getCategoriaOpcion(int opcion) {
+    public CategoriaDTO getCategoriaDTOOpcion(int opcion) {
         return categorias.get(opcion-1);
     }
 
@@ -185,10 +200,15 @@ public class ModeloClientesLocal implements IModeloClientes {
 
     }
 
-    public CategoriaDTO getCategoriaIndex(int index) {
+    public CategoriaDTO getCategoriaDTOIndex(int index) {
         if (index >= 0 && index < categorias.size()) {
             return categorias.get(index);
         }
+        return null;
+    }
+
+    @Override
+    public CategoriaDTO getCategoriaDTOId(Integer id) throws Exception {
         return null;
     }
 
@@ -221,15 +241,15 @@ public class ModeloClientesLocal implements IModeloClientes {
         addCategoria(makeCategoria("Estándar", 0f, 0f));
         addCategoria(makeCategoria("Premium", 30f, 0.20f));
 
-        addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", getCategoriaOpcion(2)));
-        addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", getCategoriaOpcion(1)));
-        addCliente(makeCliente("José Martínez", "Paseo de Gracia, 15, Barcelona", "34567890C", "jose.martinez@email.com", getCategoriaOpcion(1)));
-        addCliente(makeCliente("Isabel Fernández", "Calle Larios, 5, Málaga", "45678901D", "isabel.fernandez@email.com", getCategoriaOpcion(2)));
-        addCliente(makeCliente("Manuel Sánchez", "Plaza del Pilar, 20, Zaragoza", "56789012E", "manuel.sanchez@email.com", getCategoriaOpcion(1)));
-        addCliente(makeCliente("Carmen Rodríguez", "Gran Vía, 30, Bilbao", "67890123F", "carmen.rodriguez@email.com", getCategoriaOpcion(1)));
-        addCliente(makeCliente("Francisco Pérez", "Calle Serrano, 45, Madrid", "78901234G", "francisco.perez@email.com", getCategoriaOpcion(2)));
-        addCliente(makeCliente("Ana Torres", "Rambla de Cataluña, 12, Barcelona", "89012345H", "ana.torres@email.com", getCategoriaOpcion(1)));
-        addCliente(makeCliente("Luis Ramírez", "Avenida Constitución, 8, Valencia", "90123456I", "luis.ramirez@email.com", getCategoriaOpcion(1)));
-        addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", getCategoriaOpcion(2)));
+        addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", getCategoriaDTOOpcion(2)));
+        addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", getCategoriaDTOOpcion(1)));
+        addCliente(makeCliente("José Martínez", "Paseo de Gracia, 15, Barcelona", "34567890C", "jose.martinez@email.com", getCategoriaDTOOpcion(1)));
+        addCliente(makeCliente("Isabel Fernández", "Calle Larios, 5, Málaga", "45678901D", "isabel.fernandez@email.com", getCategoriaDTOOpcion(2)));
+        addCliente(makeCliente("Manuel Sánchez", "Plaza del Pilar, 20, Zaragoza", "56789012E", "manuel.sanchez@email.com", getCategoriaDTOOpcion(1)));
+        addCliente(makeCliente("Carmen Rodríguez", "Gran Vía, 30, Bilbao", "67890123F", "carmen.rodriguez@email.com", getCategoriaDTOOpcion(1)));
+        addCliente(makeCliente("Francisco Pérez", "Calle Serrano, 45, Madrid", "78901234G", "francisco.perez@email.com", getCategoriaDTOOpcion(2)));
+        addCliente(makeCliente("Ana Torres", "Rambla de Cataluña, 12, Barcelona", "89012345H", "ana.torres@email.com", getCategoriaDTOOpcion(1)));
+        addCliente(makeCliente("Luis Ramírez", "Avenida Constitución, 8, Valencia", "90123456I", "luis.ramirez@email.com", getCategoriaDTOOpcion(1)));
+        addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", getCategoriaDTOOpcion(2)));
     }
 }

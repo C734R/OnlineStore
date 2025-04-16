@@ -1,8 +1,10 @@
 package javalinos.onlinestore.controlador;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaArticulos;
 import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
@@ -13,7 +15,7 @@ import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
 public class ControlArticulos extends ControlBase {
 
     private VistaArticulos vArticulos;
-    private ModeloArticulosLocal mArticulos;
+    private IModeloArticulos mArticulos;
 
     /**
      * Constructor principal de ControlArticulos.
@@ -76,7 +78,11 @@ public class ControlArticulos extends ControlBase {
                     updateArticulo();
                     break;
                 case 5:
-                    showStockArticulos(mArticulos.getStockArticulos());
+                    try {
+                        showStockArticulos(mArticulos.getArticuloStocksDTO());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     vArticulos.showMensajePausa("", true);
                     break;
                 case 0:
@@ -93,12 +99,20 @@ public class ControlArticulos extends ControlBase {
     /**
      * Añade un nuevo artículo al sistema.
      */
-    public void addArticulo() {
+    public void addArticulo()
+    {
+        ArticuloDTO articuloDTO;
         vArticulos.showMensaje("******** Añadir Artículo ********", true);
-
-        int numeroArticulo = mArticulos.getArticulos().size();
-        vArticulos.showMensaje("El siguiente código disponible es: ART00" + numeroArticulo, true);
-
+        try
+        {
+            int numeroArticulo = mArticulos.getArticulosDTO().size();
+            vArticulos.showMensaje("El siguiente código disponible es: ART00" + numeroArticulo, true);
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al obtener el número del último artículo.", true);
+            return;
+        }
         String descripcion = vArticulos.askString("Introduce la descripción del artículo", 250);
         if(descripcion == null) return;
         float precio = vArticulos.askPrecio(0.0f, 9999.0f);
@@ -107,58 +121,104 @@ public class ControlArticulos extends ControlBase {
         if(preparacion == -99999f) return;
         int stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false);
         if(stock == -99999) return;
-
-        ArticuloDTO ArticuloDTO = mArticulos.makeArticulo(descripcion, precio, preparacion);
-        if (ArticuloDTO == null) {
-            vArticulos.showMensajePausa("Error. No se ha podido crear el artículo.", true);
+        try
+        {
+            articuloDTO = mArticulos.makeArticulo(descripcion, precio, preparacion);
+            if (articuloDTO == null) {
+                vArticulos.showMensajePausa("Error. No se ha podido crear el artículo.", true);
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al crear un nuevo artículo." + e, true);
             return;
         }
-        mArticulos.addArticulo(ArticuloDTO);
-        mArticulos.addStockArticulo(ArticuloDTO, stock);
-        vArticulos.showMensajePausa("Artículo añadido correctamente", true);
+        try
+        {
+            mArticulos.addArticulo(articuloDTO);
+            mArticulos.addArticuloStock(articuloDTO, stock);
+            vArticulos.showMensajePausa("Artículo añadido correctamente", true);
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al añadir el artículo y stock." + e, true);
+        }
     }
 
     /**
      * Elimina un artículo seleccionado por el usuario.
      */
-    public void removeArticulo() {
+    public void removeArticulo()
+    {
+        List<ArticuloDTO> articulosDTO;
         vArticulos.showMensaje("******** Eliminar Artículo ********", true);
-
-        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulos();
-        if (ArticuloDTOS.isEmpty()) {
+        try
+        {
+            articulosDTO = mArticulos.getArticulosDTO();
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al obtener la lista de artículos." + e, true);
+            return;
+        }
+        if (articulosDTO.isEmpty())
+        {
             vArticulos.showMensajePausa("No hay artículos para eliminar.", true);
             return;
         }
-
-        vArticulos.showListArticulosNumerada(ArticuloDTOS);
+        vArticulos.showListArticulosNumerada(articulosDTO);
         vArticulos.showMensaje("Selecciona un artículo para eliminar: ", true);
 
-        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, ArticuloDTOS.size(), false, false);
+        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), false, false);
         if(seleccion == -99999) return;
 
-        ArticuloDTO ArticuloDTO = ArticuloDTOS.get(seleccion-1);
-        mArticulos.removeArticulo(ArticuloDTO);
-        mArticulos.removeStockArticulo(ArticuloDTO);
-        vArticulos.showMensajePausa("Artículo y stock eliminados correctamente.", true);
+        ArticuloDTO articuloDTO = articulosDTO.get(seleccion-1);
+        try
+        {
+            mArticulos.removeArticulo(articuloDTO);
+            mArticulos.removeArticuloStock(articuloDTO);
+            vArticulos.showMensajePausa("Artículo y stock eliminados correctamente.", true);
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al eliminar artículo." + e, true);
+        }
     }
 
     /**
      * Modifica los datos de un artículo existente.
      */
-    public void updateArticulo() {
+    public void updateArticulo()
+    {
+        List<ArticuloDTO> articulosDTO;
         vArticulos.showMensaje("******** Modificar Artículo ********", true);
-
-        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulos();
-        if (ArticuloDTOS.isEmpty()) {
-            vArticulos.showMensajePausa("No hay artículos disponibles para modificar.", true);
+        try
+        {
+            articulosDTO = mArticulos.getArticulosDTO();
+            if (articulosDTO.isEmpty()) {
+                vArticulos.showMensajePausa("No hay artículos disponibles para modificar.", true);
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al obtener el listado de artículos." + e, true);
             return;
         }
-
-        vArticulos.showListArticulosStock(mArticulos.getStockArticulos());
-        int seleccion = vArticulos.askInt("Selecciona el número del artículo a modificar", 1, ArticuloDTOS.size(), true, true);
+        try
+        {
+            vArticulos.showListArticulosStock(mArticulos.getArticuloStocksDTO());
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al mostrar el listado de stocks." + e, true);
+            return;
+        }
+        int seleccion = vArticulos.askInt("Selecciona el número del artículo a modificar", 1, articulosDTO.size(), true, true);
         if (seleccion == -99999) return;
 
-        ArticuloDTO ArticuloDTOOld = ArticuloDTOS.get(seleccion - 1);
+        ArticuloDTO ArticuloDTOOld = articulosDTO.get(seleccion - 1);
         ArticuloDTO ArticuloDTONew = new ArticuloDTO(ArticuloDTOOld);
 
         vArticulos.showMensaje("Deja un campo vacío para mantener el valor actual", true);
@@ -175,13 +235,31 @@ public class ControlArticulos extends ControlBase {
         if (minutosPreparacion != null) ArticuloDTONew.setMinutosPreparacion(minutosPreparacion);
 
         // Stock
-        Integer stock = vArticulos.askIntOpcional("Stock actual: " + mArticulos.getStockArticulo(ArticuloDTOOld), 0, 999);
-        if (stock == null) stock = mArticulos.getStockArticulo(ArticuloDTOOld);
+        Integer stock;
+        try
+        {
+            stock = vArticulos.askIntOpcional("Stock actual: " + mArticulos.getStockArticulo(ArticuloDTOOld), 0, 999);
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al mostrar el stock actual. " + e, true);
+            return;
+        }
+        if (stock == null) {
+            try
+            {
+                stock = mArticulos.getStockArticulo(ArticuloDTOOld);
+                mArticulos.updateArticulo(ArticuloDTOOld, ArticuloDTONew);
+                mArticulos.removeArticuloStock(ArticuloDTOOld);
+                mArticulos.addArticuloStock(ArticuloDTONew, stock);
+                vArticulos.showMensajePausa("Artículo y stock actualizado correctamente.", true);
+            }
+            catch (Exception e)
+            {
+                vArticulos.showMensajePausa("Error al actualizar el stock. " + e, true);
+            }
+        }
 
-        mArticulos.updateArticulo(ArticuloDTOOld, ArticuloDTONew);
-        mArticulos.removeStockArticulo(ArticuloDTOOld);
-        mArticulos.addStockArticulo(ArticuloDTONew, stock);
-        vArticulos.showMensajePausa("Artículo y stock actualizado correctamente.", true);
     }
 
     //*************************** Mostrar listados ***************************//
@@ -191,16 +269,24 @@ public class ControlArticulos extends ControlBase {
      * Muestra la lista completa de artículos.
      */
     public void showListArticulos() {
+        List<ArticuloDTO> articulosDTO;
         vArticulos.showMensaje("******** Listar Artículos ********", true);
-
-        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulos();
-        if (ArticuloDTOS.isEmpty()) {
+        try
+        {
+            articulosDTO = mArticulos.getArticulosDTO();
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al obtener la lista de artículos. " + e, true);
+            return;
+        }
+        if (articulosDTO.isEmpty()) {
             vArticulos.showMensajePausa("No hay artículos disponibles.", true);
             return;
         }
 
         vArticulos.showMensaje("Lista de artículos disponibles:", true);
-        vArticulos.showListArticulos(ArticuloDTOS);
+        vArticulos.showListArticulos(articulosDTO);
     }
 
     /**

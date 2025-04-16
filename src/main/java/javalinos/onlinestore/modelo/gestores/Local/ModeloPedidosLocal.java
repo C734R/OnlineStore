@@ -35,7 +35,7 @@ public class ModeloPedidosLocal implements IModeloPedidos {
      * Devuelve todos los pedidoDTOS.
      * @return lista de todos los pedidoDTOS.
      */
-    public List<PedidoDTO> getPedidos() {
+    public List<PedidoDTO> getPedidosDTO() {
         return pedidos;
     }
 
@@ -71,7 +71,7 @@ public class ModeloPedidosLocal implements IModeloPedidos {
      * @param id índice del pedido.
      * @return pedido en la posición indicada.
      */
-    public PedidoDTO getPedido(int id) {
+    public PedidoDTO getPedidoDTO(int id) {
         return pedidos.get(id);
     }
 
@@ -95,7 +95,7 @@ public class ModeloPedidosLocal implements IModeloPedidos {
      * @param numero número del pedido.
      * @return el pedido con ese número o null si no existe.
      */
-    public PedidoDTO getPedidoNumero(int numero) {
+    public PedidoDTO getPedidoDTONumero(int numero) {
         for (PedidoDTO pedidoDTO : pedidos) {
             if (pedidoDTO.getNumero() == numero) {
                 return pedidoDTO;
@@ -109,7 +109,7 @@ public class ModeloPedidosLocal implements IModeloPedidos {
      * @param ClienteDTO clienteDTO a consultar.
      * @return lista de pedidoDTOS realizados por ese clienteDTO.
      */
-    public List<PedidoDTO> getPedidosCliente(ClienteDTO ClienteDTO) {
+    public List<PedidoDTO> getPedidosDTOCliente(ClienteDTO ClienteDTO) {
 
         if (pedidos.isEmpty()) return null;
         if (ClienteDTO != null) {

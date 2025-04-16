@@ -35,7 +35,7 @@ public class ModeloArticulosTest {
      */
     @Test
     void testLoadArticulos() {
-        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulos();
+        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulosDTO();
         assertEquals(9, ArticuloDTOS.size(), "Debe haber 9 artículos cargados");
     }
     /**
@@ -56,10 +56,19 @@ public class ModeloArticulosTest {
     void testAddArticuloAndStock() {
         ArticuloDTO nuevo = mArticulos.makeArticulo("Prueba", 12.5f, 50);
         mArticulos.addArticulo(nuevo);
-        mArticulos.addStockArticulo(nuevo, 7);
+        try {
+            mArticulos.addArticuloStock(nuevo, 7);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulos();
-        Map<ArticuloDTO, Integer> stock = mArticulos.getStockArticulos();
+        List<ArticuloDTO> ArticuloDTOS = mArticulos.getArticulosDTO();
+        Map<ArticuloDTO, Integer> stock = null;
+        try {
+            stock = mArticulos.getArticuloStocksDTO();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         assertTrue(ArticuloDTOS.contains(nuevo));
         assertEquals(7, stock.get(nuevo));
@@ -69,23 +78,44 @@ public class ModeloArticulosTest {
      */
     @Test
     void testRemoveArticuloAndStock() {
-        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().getFirst();
-        mArticulos.removeArticulo(ArticuloDTO);
-        mArticulos.removeStockArticulo(ArticuloDTO);
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulosDTO().getFirst();
+        try {
+            mArticulos.removeArticulo(ArticuloDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            mArticulos.removeArticuloStock(ArticuloDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        assertFalse(mArticulos.getArticulos().contains(ArticuloDTO));
-        assertFalse(mArticulos.getStockArticulos().containsKey(ArticuloDTO));
+        assertFalse(mArticulos.getArticulosDTO().contains(ArticuloDTO));
+        try {
+            assertFalse(mArticulos.getArticuloStocksDTO().containsKey(ArticuloDTO));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Verifica que se actualiza correctamente un artículo.
      */
     @Test
     void testUpdateArticulo() {
-        ArticuloDTO ArticuloDTOOld = mArticulos.getArticulos().getFirst();
+        ArticuloDTO ArticuloDTOOld = mArticulos.getArticulosDTO().getFirst();
         ArticuloDTO ArticuloDTONew = new ArticuloDTO(ArticuloDTOOld.getCodigo(), "Nuevo nombre", 99.99f, 60);
-        mArticulos.updateArticulo(ArticuloDTOOld, ArticuloDTONew);
+        try {
+            mArticulos.updateArticulo(ArticuloDTOOld, ArticuloDTONew);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        ArticuloDTO obtenido = mArticulos.getArticuloIndex(0);
+        ArticuloDTO obtenido = null;
+        try {
+            obtenido = mArticulos.getArticuloIndex(0);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         assertEquals("Nuevo nombre", obtenido.getDescripcion());
         assertEquals(99.99f, obtenido.getPrecio(), 0.001);
     }
@@ -94,26 +124,46 @@ public class ModeloArticulosTest {
      */
     @Test
     void testUpdateStock() {
-        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().getFirst();
-        mArticulos.updateStockArticulo(ArticuloDTO, 42);
-        assertEquals(42, mArticulos.getStockArticulos().get(ArticuloDTO));
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulosDTO().getFirst();
+        try {
+            mArticulos.updateStockArticulo(ArticuloDTO, 42);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            assertEquals(42, mArticulos.getArticuloStocksDTO().get(ArticuloDTO));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Verifica la obtención de un artículo por índice válido e inválido.
      */
     @Test
     void testGetArticuloIndex() {
-        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().get(1);
-        assertEquals(ArticuloDTO, mArticulos.getArticuloIndex(1));
-        assertNull(mArticulos.getArticuloIndex(-1));
-        assertNull(mArticulos.getArticuloIndex(100));
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulosDTO().get(1);
+        try {
+            assertEquals(ArticuloDTO, mArticulos.getArticuloIndex(1));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            assertNull(mArticulos.getArticuloIndex(-1));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            assertNull(mArticulos.getArticuloIndex(100));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
     /**
      * Verifica si un código de artículo existe en el sistema.
      */
     @Test
     void testCheckArticulo() {
-        ArticuloDTO ArticuloDTO = mArticulos.getArticulos().getFirst();
+        ArticuloDTO ArticuloDTO = mArticulos.getArticulosDTO().getFirst();
         assertTrue(mArticulos.checkArticulo(ArticuloDTO.getCodigo()));
         assertFalse(mArticulos.checkArticulo("ART999"));
     }
@@ -122,13 +172,30 @@ public class ModeloArticulosTest {
      */
     @Test
     void testSetArticulosAndStock() {
-        List<ArticuloDTO> copia = List.copyOf(mArticulos.getArticulos());
-        Map<ArticuloDTO, Integer> stockCopia = Map.copyOf(mArticulos.getStockArticulos());
+        List<ArticuloDTO> copia = List.copyOf(mArticulos.getArticulosDTO());
+        Map<ArticuloDTO, Integer> stockCopia = null;
+        try {
+            stockCopia = Map.copyOf(mArticulos.getArticuloStocksDTO());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        mArticulos.setArticulos(copia);
-        mArticulos.setStockArticulos(stockCopia);
+        try {
+            mArticulos.setArticulos(copia);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            mArticulos.setStockArticulos(stockCopia);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        assertEquals(9, mArticulos.getArticulos().size());
-        assertEquals(9, mArticulos.getStockArticulos().size());
+        assertEquals(9, mArticulos.getArticulosDTO().size());
+        try {
+            assertEquals(9, mArticulos.getArticuloStocksDTO().size());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -4,5 +4,6 @@ import javalinos.onlinestore.modelo.Entidades.Articulo;
 
 public interface IArticuloDAO extends IBaseDAO<Articulo, Integer> {
 
+    public Articulo getArticuloCodigo(String codigo) throws Exception;
 
 }

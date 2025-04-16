@@ -1,7 +1,6 @@
 package javalinos.onlinestore.modelo.gestores.BBDD;
 
 import javalinos.onlinestore.modelo.DAO.FactoryDAO;
-import javalinos.onlinestore.modelo.DAO.Interfaces.ICategoriaDAO;
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.Entidades.Categoria;
@@ -14,85 +13,44 @@ import java.util.List;
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los clienteDTOS.
  */
-public class ModeloClientesBBDD implements IModeloClientes {
+public class ModeloClientesBBDD implements IModeloClientes
+{
 
-    private FactoryDAO factoryDAO;
+    private final FactoryDAO factoryDAO;
 
     /**
      * Constructor por defecto. Inicializa la lista de clienteDTOS.
      */
-    public ModeloClientesBBDD(FactoryDAO factoryDAO) {
+    public ModeloClientesBBDD(FactoryDAO factoryDAO)
+    {
         this.factoryDAO = factoryDAO;
-    }
-
-    //*************************** Getters & Setters ***************************//
-
-    /**
-     * Devuelve lista con todos los clienteDTOS.
-     * @return lista de clienteDTOS.
-     */
-    public List<ClienteDTO> getClientes() throws Exception {
-        List<Cliente> clientes = factoryDAO.getDAOCliente().getTodos();
-        List<ClienteDTO> clientesDTO = new ArrayList<>();
-        for (Cliente cliente : clientes) {
-            // Obtener categoríaDTO en base a Id categoría
-            CategoriaDTO categoriaDTO = new CategoriaDTO(factoryDAO.getDAOCategoria().getPorId(cliente.getCategoria()));
-
-            clientesDTO.add(new ClienteDTO(
-                    cliente.getNombre(),
-                    cliente.getDomicilio(),
-                    cliente.getNif(),
-                    cliente.getEmail(),
-                    categoriaDTO
-            ));
-        }
-        return clientesDTO;
-    }
-
-    /**
-     * Establece la lista de clientes.
-     * @param clientes nueva lista de clientes.
-     */
-    public void setClientes(List<ClienteDTO> clientes) throws Exception {
-        factoryDAO.getDAOCliente().eliminarTodos();
-        for (ClienteDTO clienteDTO : clientes) {
-            Categoria categoria = factoryDAO.getDAOCategoria().getPorNombre(clienteDTO.getNombre());
-            factoryDAO.getDAOCliente().insertar(new Cliente(clienteDTO, categoria));
-        }
-    }
-
-    public List<CategoriaDTO> getCategorias() throws Exception {
-        List<Categoria> categorias = factoryDAO.getDAOCategoria().getTodos();
-        List<CategoriaDTO> categoriasDTO= new ArrayList<>();
-        for (Categoria categoria : categorias) {
-            categoriasDTO.add(new CategoriaDTO(categoria));
-        }
-        return categoriasDTO;
-    }
-
-    public void setCategorias(List<CategoriaDTO> categorias) throws Exception {
-        for (CategoriaDTO categoriaDTO : categorias) {
-            factoryDAO.
-        }
-        this.categorias = categorias;
     }
 
     //*************************** CRUD CLIENTES ***************************//
 
     /**
      * Añade un clienteDTO a la lista.
-     * @param ClienteDTO clienteDTO a añadir.
+     * @param clienteDTO clienteDTO a añadir.
      */
-    public void addCliente(ClienteDTO ClienteDTO) throws Exception {
-        clientes.add(ClienteDTO);
+    public void addCliente(ClienteDTO clienteDTO) throws Exception
+    {
+        Categoria categoria = getCategoriaEntidadNombre(clienteDTO.getCategoria().getNombre());
+        factoryDAO.getDAOCliente().insertar(new Cliente(clienteDTO, categoria));
     }
 
     /**
      * Elimina un clienteDTO de la lista.
-     * @param ClienteDTO clienteDTO a eliminar.
+     * @param clienteDTO clienteDTO a eliminar.
      */
-    public void removeCliente(ClienteDTO ClienteDTO) throws Exception {
-        clientes.remove(ClienteDTO);
+    public void removeCliente(ClienteDTO clienteDTO) throws Exception
+    {
+        Cliente cliente = getClienteEntidadNIF(clienteDTO);
+        factoryDAO.getDAOCliente().eliminar(cliente.getId());
+    }
+
+    public void removeClientesAll() throws Exception
+    {
+        factoryDAO.getDAOCliente().eliminarTodos();
     }
 
     /**
@@ -100,23 +58,81 @@ public class ModeloClientesBBDD implements IModeloClientes {
      * @param index índice del cliente.
      * @return cliente en la posición dada o null si está fuera de rango.
      */
-    public ClienteDTO getClienteIndex(int index) throws Exception {
-        if (index >= 0 && index < clientes.size()) {
-            return clientes.get(index);
+    public ClienteDTO getClienteIndex(int index) throws Exception
+    {
+        List<ClienteDTO> clientesDTO = getClientesDTO();
+        if (index >= 0 && index < clientesDTO.size()) {
+            return clientesDTO.get(index);
         }
         return null;
     }
 
+    private Cliente getClienteId(int id) throws Exception
+    {
+        return factoryDAO.getDAOCliente().getPorId(id);
+    }
+
+    public int getIdClienteDTO(ClienteDTO clienteDTO) throws Exception
+    {
+        Cliente cliente = getClienteEntidadEmail(clienteDTO.getEmail());
+        return cliente.getId();
+    }
+
+    public ClienteDTO getClienteDTOId(int id) throws Exception
+    {
+        Cliente cliente = getClienteId(id);
+        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        return new ClienteDTO(cliente, categoriaDTO);
+    }
+
+    private Cliente getClienteEntidadNombre(String nombre) throws Exception
+    {
+        return factoryDAO.getDAOCliente().getPorNombreUnico(nombre);
+    }
+
+    private Cliente getClienteEntidadNIF(ClienteDTO clienteDTO) throws Exception
+    {
+        return factoryDAO.getDAOCliente().getClienteNIF(clienteDTO.getNif());
+    }
     /**
      * Modifica un cliente reemplazándolo por uno nuevo.
-     * @param ClienteDTOOld cliente original.
-     * @param ClienteDTONew cliente actualizado.
+     * @param clienteDTOOld cliente original.
+     * @param clienteDTONew cliente actualizado.
      */
-    public void updateCliente(ClienteDTO ClienteDTOOld, ClienteDTO ClienteDTONew) throws Exception {
-        int index = this.clientes.indexOf(ClienteDTOOld);
-        if (index != -1) {
-            clientes.set(index, ClienteDTONew);
-        }
+    public void updateCliente(ClienteDTO clienteDTOOld, ClienteDTO clienteDTONew) throws Exception
+    {
+        Cliente clienteOld = getClienteEntidadNIF(clienteDTOOld);
+        Categoria categoriaNew = getCategoriaEntidadNombre(clienteDTONew.getNombre());
+        Cliente clienteNew = new Cliente(
+                clienteDTONew,
+                categoriaNew);
+        clienteNew.setId(clienteOld.getId());
+        factoryDAO.getDAOCliente().actualizar(clienteNew);
+    }
+
+    //*************************** GETTERS & SETTERS CLIENTES ***************************//
+
+    /**
+     * Devuelve lista con todos los clienteDTOS.
+     * @return lista de clienteDTOS.
+     */
+    public List<ClienteDTO> getClientesDTO() throws Exception
+    {
+        return clientesEntidadToDTO(getClientesEntidad());
+    }
+
+    private List<Cliente> getClientesEntidad() throws Exception
+    {
+        return factoryDAO.getDAOCliente().getTodos();
+    }
+
+    /**
+     * Establece la lista de clientes.
+     * @param clientesDTO nueva lista de clientes.
+     */
+    public void setClientes(List<ClienteDTO> clientesDTO) throws Exception {
+        removeClientesAll();
+        factoryDAO.getDAOCliente().insertarTodos(clientesDTOtoEntidad(clientesDTO));
     }
 
     //*************************** OBTENER DATOS CLIENTES ***************************//
@@ -125,8 +141,10 @@ public class ModeloClientesBBDD implements IModeloClientes {
      * Devuelve la cantidad de clienteDTOS registrados.
      * @return número total de clienteDTOS.
      */
-    public int sizeClientes() throws Exception {
-        return clientes.size();
+    public int sizeClientes() throws Exception
+    {
+        List<ClienteDTO> clientesDTO = getClientesDTO();
+        return clientesDTO.size();
     }
 
     /**
@@ -134,13 +152,16 @@ public class ModeloClientesBBDD implements IModeloClientes {
      * @param nif NIF del cliente.
      * @return cliente correspondiente o null si no se encuentra.
      */
-    public ClienteDTO getClienteNif(String nif) throws Exception {
-        for (ClienteDTO ClienteDTO : clientes) {
-            if (ClienteDTO.getNif().equalsIgnoreCase(nif)) {
-                return ClienteDTO;
-            }
-        }
-        return null;
+    public ClienteDTO getClienteDTONif(String nif) throws Exception
+    {
+        Cliente cliente = getClienteEntidadNif(nif);
+        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        return new ClienteDTO(cliente, categoriaDTO);
+    }
+
+    private Cliente getClienteEntidadNif(String nif) throws Exception
+    {
+        return factoryDAO.getDAOCliente().getClienteNIF(nif);
     }
 
     /**
@@ -148,13 +169,16 @@ public class ModeloClientesBBDD implements IModeloClientes {
      * @param email correo del cliente.
      * @return cliente correspondiente o null si no se encuentra.
      */
-    public ClienteDTO getClienteEmail(String email) throws Exception {
-        for (ClienteDTO ClienteDTO : clientes) {
-            if (ClienteDTO.getEmail().equalsIgnoreCase(email)) {
-                return ClienteDTO;
-            }
-        }
-        return null;
+    public ClienteDTO getClienteDTOEmail(String email) throws Exception
+    {
+        Cliente cliente = getClienteEntidadEmail(email);
+        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        return new ClienteDTO(cliente, categoriaDTO);
+    }
+
+    private Cliente getClienteEntidadEmail(String email) throws  Exception
+    {
+        return factoryDAO.getDAOCliente().getClienteEmail(email);
     }
 
     /**
@@ -162,15 +186,38 @@ public class ModeloClientesBBDD implements IModeloClientes {
      * @param categoriaDTO categoría deseada.
      * @return lista de clienteDTOS de esa categoría o null si está vacía.
      */
-    public List<ClienteDTO> getClientesCategoria(CategoriaDTO categoriaDTO) throws Exception {
-        if (clientes.isEmpty()) return null;
-        List<ClienteDTO> clientesCategoria = new ArrayList<>();
-        for (ClienteDTO ClienteDTO : clientes) {
-            if (ClienteDTO.getCategoria().equals(categoriaDTO)) {
-                clientesCategoria.add(ClienteDTO);
-            }
+    public List<ClienteDTO> getClientesCategoria(CategoriaDTO categoriaDTO) throws Exception
+    {
+        Categoria categoria = getCategoriaEntidadNombre(categoriaDTO.getNombre());
+        List<Cliente> clientes = getClientesEntidadCategoria(categoria);
+        return clientesEntidadToDTO(clientes);
+    }
+
+    private List<Cliente> getClientesEntidadCategoria(Categoria categoria) throws Exception
+    {
+        return factoryDAO.getDAOCliente().getClientesCategoria(categoria);
+    }
+
+    private List<ClienteDTO> clientesEntidadToDTO(List<Cliente> clientes) throws Exception
+    {
+        List<ClienteDTO> clientesDTO = new ArrayList<>();
+        for (Cliente cliente : clientes)
+        {
+            CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+            clientesDTO.add(new ClienteDTO(cliente, categoriaDTO));
         }
-        return clientesCategoria;
+        return clientesDTO;
+    }
+
+    private List<Cliente> clientesDTOtoEntidad(List<ClienteDTO> clientesDTO) throws Exception
+    {
+        List<Cliente> clientes = new ArrayList<>();
+        for (ClienteDTO clienteDTO : clientesDTO)
+        {
+            Categoria categoria = getCategoriaEntidadNombre(clienteDTO.getCategoria().getNombre());
+            clientes.add(new Cliente(clienteDTO, categoria));
+        }
+        return clientes;
     }
 
 
@@ -178,57 +225,114 @@ public class ModeloClientesBBDD implements IModeloClientes {
      * Devuelve el índice del último cliente.
      * @return índice del último cliente o -1 si no hay clienteDTOS.
      */
-    public int getLastIndexCliente() throws Exception {
-        if (clientes.isEmpty()) return -1;
-        return clientes.size() - 1; // Último índice
+    public int getLastIndexCliente() throws Exception
+    {
+        List<ClienteDTO> clientesDTO = getClientesDTO();
+        if (clientesDTO.isEmpty()) return -1;
+        return clientesDTO.size() - 1; // Último índice
     }
 
     /**
      * Devuelve el índice del primer cliente.
      * @return índice del primer cliente o -1 si no hay clienteDTOS.
      */
-    public int getFirstIndexCliente() throws Exception {
-        if (clientes.isEmpty()) return -1;
-        return 0; // Primer índice
+    public int getFirstIndexCliente() throws Exception
+    {
+        List<ClienteDTO> clientesDTO = getClientesDTO();
+        if (clientesDTO.isEmpty()) return -1;
+        return clientesDTO.indexOf(clientesDTO.getFirst()); // Primer índice
     }
 
     //*************************** CRUD CATEGORIAS ***************************//
 
-    public void addCategoria(CategoriaDTO categoriaDTO) throws Exception {
-        categorias.add(categoriaDTO);
+    public void addCategoria(CategoriaDTO categoriaDTO) throws Exception
+    {
+        Categoria categoria = new Categoria(categoriaDTO);
+        factoryDAO.getDAOCategoria().insertar(categoria);
     }
 
-    public void removeCategoria(CategoriaDTO categoriaDTO) throws Exception {
-        categorias.remove(categoriaDTO);
+    public void removeCategoria(CategoriaDTO categoriaDTO) throws Exception
+    {
+        Categoria categoria = getCategoriaEntidadNombre(categoriaDTO.getNombre());
+        factoryDAO.getDAOCliente().eliminar(categoria.getId());
     }
 
-    public void updateCategoria(CategoriaDTO categoriaDTOOld, CategoriaDTO categoriaDTONew) throws Exception {
-        int index = this.categorias.indexOf(categoriaDTOOld);
-        if (index != -1) {
-            categorias.set(index, categoriaDTONew);
-        }
+    public void removeCategoriasAll() throws Exception
+    {
+        factoryDAO.getDAOCategoria().eliminarTodos();
+    }
+
+    public void updateCategoria(CategoriaDTO categoriaDTOOld, CategoriaDTO categoriaDTONew) throws Exception
+    {
+        Categoria categoriaNew = getCategoriaEntidadNombre(categoriaDTOOld.getNombre());
 
     }
 
-    public CategoriaDTO getCategoriaIndex(int index) throws Exception {
-        if (index >= 0 && index < categorias.size()) {
-            return categorias.get(index);
+    public CategoriaDTO getCategoriaDTOId(Integer id) throws Exception
+    {
+        return new CategoriaDTO(factoryDAO.getDAOCategoria().getPorId(id));
+    }
+
+    public CategoriaDTO getCategoriaDTOIndex(int index) throws Exception
+    {
+        List<CategoriaDTO> categoriasDTO = getCategoriasDTO();
+        if (index >= 0 && index < categoriasDTO.size()) {
+            return categoriasDTO.get(index);
         }
         return null;
     }
 
-    //*****************
+    //*************************** GETTERS & SETTERS CATEGORÍAS ***************************//
 
-    public CategoriaDTO getCategoriaOpcion(int opcion) throws Exception {
-        return categorias.get(opcion-1);
+    public List<CategoriaDTO> getCategoriasDTO() throws Exception
+    {
+        List<Categoria> categorias = getCategoriasEntidad();
+        List<CategoriaDTO> categoriasDTO= new ArrayList<>();
+        for (Categoria categoria : categorias) {
+            categoriasDTO.add(new CategoriaDTO(categoria));
+        }
+        return categoriasDTO;
     }
 
-    public CategoriaDTO getCategoriaNombre(String nombre) throws Exception {
-        return new CategoriaDTO(factoryDAO.getDAOCategoria().getPorNombre(nombre));
+    private List<Categoria> getCategoriasEntidad() throws Exception
+    {
+        return factoryDAO.getDAOCategoria().getTodos();
+    }
+
+    public void setCategorias(List<CategoriaDTO> categoriasDTO) throws Exception
+    {
+        removeCategoriasAll();
+        List<Categoria> categorias= new ArrayList<>();
+        for (CategoriaDTO categoriaDTO : categoriasDTO) {
+            categorias.add(getCategoriaEntidadNombre(categoriaDTO.getNombre()));
+        }
+        factoryDAO.getDAOCategoria().insertarTodos(categorias);
+    }
+
+    //*************************** OBTENER DATOS CATEGORIAS ***************************//
+
+    public CategoriaDTO getCategoriaDTOOpcion(int opcion) throws Exception
+    {
+        return getCategoriaDTOIndex(opcion-1);
+    }
+
+    public CategoriaDTO getCategoriaDTOId(int id) throws Exception
+    {
+        return new CategoriaDTO(factoryDAO.getDAOCategoria().getPorId(id));
+    }
+
+    private CategoriaDTO getCategoriaDTONombre(String nombre) throws Exception
+    {
+        return new CategoriaDTO(getCategoriaEntidadNombre(nombre));
+    }
+
+    private Categoria getCategoriaEntidadNombre(String nombre) throws Exception
+    {
+        return factoryDAO.getDAOCategoria().getPorNombreUnico(nombre);
     }
 
 
-    //*************************** Crear datos ***************************//
+    //*************************** CREAR DATOS ***************************//
 
     /**
      * Crea un nuevo cliente.
@@ -251,21 +355,29 @@ public class ModeloClientesBBDD implements IModeloClientes {
      * Precarga una lista de clientesDTO de ejemplo.
      */
     public void loadClientes() throws Exception {
-            this.clientes.clear();
-            this.categorias.clear();
+
+        try{
+            removeClientesAll();
+            removeCategoriasAll();
 
             addCategoria(makeCategoria("Estándar", 0f, 0f));
             addCategoria(makeCategoria("Premium", 30f, 0.20f));
 
-            addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", getCategoriaOpcion(2)));
-            addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", getCategoriaOpcion(1)));
-            addCliente(makeCliente("José Martínez", "Paseo de Gracia, 15, Barcelona", "34567890C", "jose.martinez@email.com", getCategoriaOpcion(1)));
-            addCliente(makeCliente("Isabel Fernández", "Calle Larios, 5, Málaga", "45678901D", "isabel.fernandez@email.com", getCategoriaOpcion(2)));
-            addCliente(makeCliente("Manuel Sánchez", "Plaza del Pilar, 20, Zaragoza", "56789012E", "manuel.sanchez@email.com", getCategoriaOpcion(1)));
-            addCliente(makeCliente("Carmen Rodríguez", "Gran Vía, 30, Bilbao", "67890123F", "carmen.rodriguez@email.com", getCategoriaOpcion(1)));
-            addCliente(makeCliente("Francisco Pérez", "Calle Serrano, 45, Madrid", "78901234G", "francisco.perez@email.com", getCategoriaOpcion(2)));
-            addCliente(makeCliente("Ana Torres", "Rambla de Cataluña, 12, Barcelona", "89012345H", "ana.torres@email.com", getCategoriaOpcion(1)));
-            addCliente(makeCliente("Luis Ramírez", "Avenida Constitución, 8, Valencia", "90123456I", "luis.ramirez@email.com", getCategoriaOpcion(1)));
-            addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", getCategoriaOpcion(2)));
-    }
+            addCliente(makeCliente("Antonio López", "Calle Mayor, 10, Madrid", "12345678A", "antonio.lopez@email.com", getCategoriaDTOOpcion(2)));
+            addCliente(makeCliente("María García", "Avenida Andalucía, 25, Sevilla", "23456789B", "maria.garcia@email.com", getCategoriaDTOOpcion(1)));
+            addCliente(makeCliente("José Martínez", "Paseo de Gracia, 15, Barcelona", "34567890C", "jose.martinez@email.com", getCategoriaDTOOpcion(1)));
+            addCliente(makeCliente("Isabel Fernández", "Calle Larios, 5, Málaga", "45678901D", "isabel.fernandez@email.com", getCategoriaDTOOpcion(2)));
+            addCliente(makeCliente("Manuel Sánchez", "Plaza del Pilar, 20, Zaragoza", "56789012E", "manuel.sanchez@email.com", getCategoriaDTOOpcion(1)));
+            addCliente(makeCliente("Carmen Rodríguez", "Gran Vía, 30, Bilbao", "67890123F", "carmen.rodriguez@email.com", getCategoriaDTOOpcion(1)));
+            addCliente(makeCliente("Francisco Pérez", "Calle Serrano, 45, Madrid", "78901234G", "francisco.perez@email.com", getCategoriaDTOOpcion(2)));
+            addCliente(makeCliente("Ana Torres", "Rambla de Cataluña, 12, Barcelona", "89012345H", "ana.torres@email.com", getCategoriaDTOOpcion(1)));
+            addCliente(makeCliente("Luis Ramírez", "Avenida Constitución, 8, Valencia", "90123456I", "luis.ramirez@email.com", getCategoriaDTOOpcion(1)));
+            addCliente(makeCliente("Teresa Gómez", "Paseo de la Castellana, 50, Madrid", "01234567J", "teresa.gomez@email.com", getCategoriaDTOOpcion(2)));
+
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Error precargar clientes.", e);
+        }
+   }
 }

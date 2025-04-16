@@ -1,5 +1,7 @@
 package javalinos.onlinestore.modelo.Entidades;
 
+import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
+
 public class Categoria {
 
     private Integer id;
@@ -19,6 +21,14 @@ public class Categoria {
         this.nombre = categoria.getNombre();
         this.cuota = categoria.getCuota();
         this.descuento = categoria.getDescuento();
+    }
+
+    public Categoria(CategoriaDTO categoriaDTO)
+    {
+        this.id = null;
+        this.nombre = categoriaDTO.getNombre();
+        this.cuota = categoriaDTO.getCuota();
+        this.descuento = categoriaDTO.getDescuento();
     }
 
     public Integer getId() {

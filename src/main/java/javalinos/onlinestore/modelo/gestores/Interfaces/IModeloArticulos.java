@@ -7,21 +7,24 @@ import java.util.Map;
 
 public interface IModeloArticulos {
 
-
-    List<ArticuloDTO> getArticulos();
-    ArticuloDTO getArticuloIndex(int index);
-    Map<ArticuloDTO, Integer> getStockArticulos();
-    Integer getStockArticulo(ArticuloDTO articuloDTO);
-    void setArticulos(List<ArticuloDTO> articulosDTO);
-    void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos);
-    void setStockArticulo(ArticuloDTO articuloDTO, Integer stock);
-    void addArticulo(ArticuloDTO articuloDTO);
-    void addStockArticulo(ArticuloDTO articuloDTO, int stock);
-    void removeArticulo(ArticuloDTO articuloDTO);
-    void removeStockArticulo(ArticuloDTO articuloDTO);
-    void updateArticulo(ArticuloDTO articuloDTOold, ArticuloDTO articuloDTONew);
-    void updateStockArticulo(ArticuloDTO articuloDTOold, int stock);
-    ArticuloDTO makeArticulo(String descripcion, Float precio, Integer preparacion);
-    void loadArticulos();
-
-    }
+    List<ArticuloDTO> getArticulosDTO() throws Exception;
+    ArticuloDTO getArticuloIndex(int index) throws Exception;
+    ArticuloDTO getArticuloDTOId(Integer id) throws Exception;
+    ArticuloDTO getArticuloDTOCodigo(String codigo) throws Exception;
+    Map<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception;
+    Integer getStockArticulo(ArticuloDTO articuloDTO) throws Exception;
+    void setArticulos(List<ArticuloDTO> articulosDTO) throws Exception;
+    void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) throws Exception;
+    void updateStockArticulo(ArticuloDTO articuloDTO, Integer stock) throws Exception;
+    void addArticulo(ArticuloDTO articuloDTO) throws Exception;
+    void addArticuloStock(ArticuloDTO articuloDTO, int stock) throws Exception;
+    void removeArticulo(ArticuloDTO articuloDTO) throws Exception;
+    void removeArticulosAll() throws Exception;
+    void removeArticuloStock(ArticuloDTO articuloDTO) throws Exception;
+    void removeArticulosStockAll() throws Exception;
+    void updateArticulo(ArticuloDTO articuloDTOold, ArticuloDTO articuloDTONew) throws Exception;
+    void updateStockArticulo(ArticuloDTO articuloDTOold, int stock) throws Exception;
+    ArticuloDTO makeArticulo(String descripcion, Float precio, Integer preparacion) throws Exception;
+    void loadArticulos() throws Exception;
+    int getIdArticuloDTO(ArticuloDTO articuloDTO) throws Exception;
+}

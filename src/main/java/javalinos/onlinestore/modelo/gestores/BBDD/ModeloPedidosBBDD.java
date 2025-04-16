@@ -4,6 +4,11 @@ import javalinos.onlinestore.modelo.DAO.FactoryDAO;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
+import javalinos.onlinestore.modelo.Entidades.Articulo;
+import javalinos.onlinestore.modelo.Entidades.Cliente;
+import javalinos.onlinestore.modelo.Entidades.Pedido;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
+import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
 
 import java.time.LocalDate;
@@ -12,53 +17,47 @@ import java.util.List;
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los pedidoDTOS.
  */
-public class ModeloPedidosBBDD implements IModeloPedidos {
+public class ModeloPedidosBBDD implements IModeloPedidos
+{
 
-    private List<PedidoDTO> pedidos;
     private FactoryDAO factoryDAO;
+    private IModeloArticulos mArticulos;
+    private IModeloClientes mClientes;
     /**
      * Constructor por defecto. Inicializa una lista vacía de pedidoDTOS.
      */
-    public ModeloPedidosBBDD(FactoryDAO factoryDAO) {
-        this.pedidos = new ArrayList<PedidoDTO>();
+    public ModeloPedidosBBDD(FactoryDAO factoryDAO, IModeloArticulos mArticulos, IModeloClientes mClientes)
+    {
         this.factoryDAO = factoryDAO;
+        this.mArticulos = mArticulos;
+        this.mClientes = mClientes;
     }
 
-    //*************************** Getters & Setters ***************************//
+    //*************************** CRUD PEDIDOS ***************************//
 
     /**
-     * Devuelve todos los pedidoDTOS.
-     * @return lista de todos los pedidoDTOS.
+     * Añade un pedidoDTO a la lista.
+     * @param pedidoDTO pedidoDTO a añadir.
      */
-    public List<PedidoDTO> getPedidos() {
-        return pedidos;
-    }
-
-    /**
-     * Establece la lista de pedidos.
-     * @param pedidos lista de pedidos a establecer.
-     */
-    public void setPedidos(List<PedidoDTO> pedidos) {
-        this.pedidos = pedidos;
-    }
-
-
-    //*************************** CRUD ***************************//
-
-    /**
-     * Añade un pedidos a la lista.
-     * @param pedidos pedidos a añadir.
-     */
-    public void addPedido(PedidoDTO pedidos) {
-        this.pedidos.add(pedidos);
+    public void addPedido(PedidoDTO pedidoDTO) throws Exception
+    {
+        Pedido pedido = pedidoDTOtoEntidad(pedidoDTO);
+        factoryDAO.getDAOPedido().insertar(pedido);
     }
 
     /**
-     * Elimina un pedidos de la lista.
-     * @param pedidos pedidos a eliminar.
+     * Elimina un pedidoDTO de la lista.
+     * @param pedidoDTO pedidoDTO a eliminar.
      */
-    public void removePedido(PedidoDTO pedidos) {
-        this.pedidos.remove(pedidos);
+    public void removePedido(PedidoDTO pedidoDTO) throws Exception
+    {
+        Pedido pedido = getPedidoEntidadNumero(pedidoDTO.getNumero());
+        factoryDAO.getDAOPedido().eliminar(pedido.getId());
+    }
+
+    public void removePedidosAll() throws Exception
+    {
+        factoryDAO.getDAOPedido().eliminarTodos();
     }
 
     /**
@@ -66,8 +65,31 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * @param id índice del pedido.
      * @return pedido en la posición indicada.
      */
-    public PedidoDTO getPedido(int id) {
-        return pedidos.get(id);
+    public PedidoDTO getPedidoDTO(int id) throws Exception
+    {
+        Pedido pedido = getPedidoEntidadId(id);
+        return pedidoEntidadToPedidoDTO(pedido);
+    }
+
+    private PedidoDTO pedidoEntidadToPedidoDTO(Pedido pedido) throws Exception
+    {
+        ArticuloDTO articuloDTO = mArticulos.getArticuloDTOId(pedido.getArticulo());
+        ClienteDTO clienteDTO = mClientes.getClienteDTOId(pedido.getCliente());
+        return new PedidoDTO(pedido, clienteDTO, articuloDTO);
+    }
+
+    private Pedido pedidoDTOtoEntidad(PedidoDTO pedidoDTO) throws Exception {
+        return new Pedido(pedidoDTO, mClientes.getIdClienteDTO(pedidoDTO.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTO.getArticulo()));
+    }
+
+    private Pedido getPedidoEntidadNumero(int numero) throws Exception
+    {
+        return factoryDAO.getDAOPedido().getPedidoNumero(numero);
+    }
+
+    private Pedido getPedidoEntidadId(int id) throws Exception
+    {
+        return factoryDAO.getDAOPedido().getPorId(id);
     }
 
     /**
@@ -75,12 +97,80 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * @param pedidoDTOOld pedido original.
      * @param pedidoDTONew nuevo pedido con datos actualizados.
      */
-    public void updatePedido(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) {
-        int index = pedidos.indexOf(pedidoDTOOld);
-        if (index != -1) {
-            pedidos.set(index, pedidoDTONew);
-        }
+    public void updatePedido(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception
+    {
+        Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
+        Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
+        pedidoNew.setId(pedidoOld.getId());
+        factoryDAO.getDAOPedido().insertar(pedidoNew);
+    }
 
+    private Articulo getArticuloPedidoDTO(PedidoDTO pedidoDTO) throws Exception
+    {
+        return factoryDAO.getDAOArticulo().getArticuloCodigo(pedidoDTO.getArticulo().getCodigo());
+    }
+
+    private Cliente getClientePedidoDTO(PedidoDTO pedidoDTO) throws Exception
+    {
+        return factoryDAO.getDAOCliente().getClienteNIF(pedidoDTO.getCliente().getNif());
+    }
+
+    //*************************** Getters & Setters ***************************//
+
+
+    private List<Pedido> getPedidos() throws Exception
+    {
+        return factoryDAO.getDAOPedido().getTodos();
+    }
+
+    /**
+     * Devuelve todos los pedidoDTOS.
+     * @return lista de todos los pedidoDTOS.
+     */
+    public List<PedidoDTO> getPedidosDTO() throws Exception {
+        return pedidosEntidadToDTO(getPedidos());
+    }
+
+    private List<PedidoDTO> pedidosEntidadToDTO(List<Pedido> pedidos) throws Exception {
+        List<PedidoDTO> pedidosDTO = new ArrayList<>();
+        for (Pedido pedido : pedidos) {
+            PedidoDTO pedidoDTO = new PedidoDTO(
+                    pedido,
+                    getClienteDTOPedido(pedido),
+                    getArticuloDTOPedido(pedido)
+            );
+            pedidosDTO.add(pedidoDTO);
+        }
+        return pedidosDTO;
+    }
+
+    private List<Pedido> pedidosDTOtoEntidad(List<PedidoDTO> pedidosDTO) throws Exception {
+        List<Pedido> pedidosEntidad = new ArrayList<>();
+        for (PedidoDTO pedidoDTO : pedidosDTO) {
+            Pedido pedido = getPedidoEntidadNumero(pedidoDTO.getNumero());
+            pedidosEntidad.add(pedido);
+        }
+        return pedidosEntidad;
+    }
+
+    private ArticuloDTO getArticuloDTOPedido (Pedido pedido) throws Exception
+    {
+        return mArticulos.getArticuloDTOId(pedido.getArticulo());
+    }
+
+    private ClienteDTO getClienteDTOPedido(Pedido pedido) throws Exception
+    {
+        return mClientes.getClienteDTOId(pedido.getCliente());
+    }
+
+    /**
+     * Establece la lista de pedidosDTO.
+     * @param pedidosDTO lista de pedidosDTO a establecer.
+     */
+    public void setPedidos(List<PedidoDTO> pedidosDTO) throws Exception
+    {
+        List<Pedido> pedidosEntidad = pedidosDTOtoEntidad(pedidosDTO);
+        factoryDAO.getDAOPedido().insertarTodos(pedidosEntidad);
     }
 
     //*************************** Obtener datos ***************************//
@@ -90,33 +180,26 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * @param numero número del pedido.
      * @return el pedido con ese número o null si no existe.
      */
-    public PedidoDTO getPedidoNumero(int numero) {
-        for (PedidoDTO pedidoDTO : pedidos) {
-            if (pedidoDTO.getNumero() == numero) {
-                return pedidoDTO;
-            }
-        }
-        return null;
+    public PedidoDTO getPedidoDTONumero(int numero) throws Exception
+    {
+        Pedido pedido = getPedidoEntidadNumero(numero);
+        return pedidoEntidadToPedidoDTO(pedido);
     }
 
     /**
      * Obtiene todos los pedidoDTOS realizados por un clienteDTO.
-     * @param ClienteDTO clienteDTO a consultar.
+     * @param clienteDTO clienteDTO a consultar.
      * @return lista de pedidoDTOS realizados por ese clienteDTO.
      */
-    public List<PedidoDTO> getPedidosCliente(ClienteDTO ClienteDTO) {
+    public List<PedidoDTO> getPedidosDTOCliente(ClienteDTO clienteDTO) throws Exception
+    {
+        Cliente cliente = factoryDAO.getDAOCliente().getClienteNIF(clienteDTO.getNif());
+        return pedidosEntidadToDTO(getPedidosEntidadCliente(cliente));
+    }
 
-        if (pedidos.isEmpty()) return null;
-        if (ClienteDTO != null) {
-            List<PedidoDTO> pedidosCliente = new ArrayList<PedidoDTO>();
-            for (PedidoDTO pedidoDTO : pedidos) {
-                if (pedidoDTO.getCliente().equals(ClienteDTO)) {
-                    pedidosCliente.add(pedidoDTO);
-                }
-            }
-            return pedidosCliente;
-        }
-        return null;
+    private List<Pedido> getPedidosEntidadCliente(Cliente cliente) throws Exception
+    {
+        return factoryDAO.getDAOPedido().getPedidosCliente(cliente);
     }
 
     /**
@@ -125,22 +208,23 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * @param ClienteDTO clienteDTO a filtrar (puede ser null).
      * @return lista de pedidoDTOS según los filtros.
      */
-    public List<PedidoDTO> getPedidosPendientesEnviados(Boolean enviado, ClienteDTO ClienteDTO) {
-        List<PedidoDTO> listaFiltrada = new ArrayList<>();
-
+    public List<PedidoDTO> getPedidosPendientesEnviados(Boolean enviado, ClienteDTO ClienteDTO) throws Exception
+    {
+        List<PedidoDTO> listaPedidosPE = new ArrayList<>();
+        List<PedidoDTO> listaPedidosDTO = getPedidosDTO();
         if (ClienteDTO != null) {
-            for (PedidoDTO pedidoDTO : pedidos) {
+            for (PedidoDTO pedidoDTO : listaPedidosDTO) {
                 if (pedidoDTO.getCliente().equals(ClienteDTO)) {
-                    listaFiltrada.add(pedidoDTO);
+                    listaPedidosPE.add(pedidoDTO);
                 }
             }
         } else {
-            listaFiltrada = pedidos;
+            listaPedidosPE = listaPedidosDTO;
         }
 
         List<PedidoDTO> resultado = new ArrayList<>();
 
-        for (PedidoDTO pedidoDTO : listaFiltrada) {
+        for (PedidoDTO pedidoDTO : listaPedidosPE) {
             boolean estaEnviado = checkEnviado(pedidoDTO);
 
             if (enviado && estaEnviado) {
@@ -168,16 +252,20 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * Devuelve el número del último pedido registrado.
      * @return número del último pedido.
      */
-    public int getLastNumPedido() {
-        return pedidos.getLast().getNumero();
+    public int getLastNumPedido() throws Exception
+    {
+        List<PedidoDTO> pedidosDTO = getPedidosDTO();
+        return pedidosDTO.getLast().getNumero();
     }
 
     /**
      * Devuelve el número del primer pedido registrado.
      * @return número del primer pedido.
      */
-    public int getFirstNumPedido() {
-        return pedidos.getFirst().getNumero();
+    public int getFirstNumPedido() throws Exception
+    {
+        List<PedidoDTO> pedidosDTO = getPedidosDTO();
+        return pedidosDTO.getFirst().getNumero();
     }
 
     /**
@@ -189,10 +277,12 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * @param envio coste de envío.
      * @return el nuevo pedido creado.
      */
-    public PedidoDTO makePedido(ClienteDTO ClienteDTO, ArticuloDTO ArticuloDTO, Integer cantidad, LocalDate fechahora, Float envio) {
+    public PedidoDTO makePedido(ClienteDTO ClienteDTO, ArticuloDTO ArticuloDTO, Integer cantidad, LocalDate fechahora, Float envio) throws Exception
+    {
+        List<PedidoDTO> pedidosDTO = getPedidosDTO();
         int numPedido;
-        if (pedidos.isEmpty()) numPedido = 1;
-        else numPedido = pedidos.getLast().getNumero() + 1;
+        if (pedidosDTO.isEmpty()) numPedido = 1;
+        else numPedido = pedidosDTO.getLast().getNumero() + 1;
         return new PedidoDTO(numPedido, ClienteDTO, ArticuloDTO, cantidad, fechahora, calcEnvioTotal(cantidad, envio), calcPrecioTotal(ArticuloDTO, cantidad, envio, ClienteDTO));
     }
     /**
@@ -203,7 +293,8 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * @param ClienteDTO clienteDTO que realiza el pedido.
      * @return precio total tras aplicar descuentos.
      */
-    private float calcPrecioTotal(ArticuloDTO ArticuloDTO, int stockComprado, float precioEnvio, ClienteDTO ClienteDTO) {
+    private float calcPrecioTotal(ArticuloDTO ArticuloDTO, int stockComprado, float precioEnvio, ClienteDTO ClienteDTO)
+    {
         return (((ArticuloDTO.getPrecio() * stockComprado) + calcEnvioTotal(stockComprado, precioEnvio))) * (((100f - (100f * ClienteDTO.getDescuento())) / 100f));
     }
     /**
@@ -212,46 +303,45 @@ public class ModeloPedidosBBDD implements IModeloPedidos {
      * @param precioEnvio precio base del envío.
      * @return coste total del envío.
      */
-    public Float calcEnvioTotal(Integer cantidad, Float precioEnvio) {
+    public Float calcEnvioTotal(Integer cantidad, Float precioEnvio)
+    {
         return precioEnvio + (1.05f * cantidad);
     }
 
     /**
      * Carga pedidoDTOS de prueba en función de la configuración.
-     * @param configuracion define si se carga el modo por defecto.
      * @param ClienteDTOS lista de clienteDTOS disponibles.
      * @param ArticuloDTOS lista de artículos disponibles.
-     * @return true si se cargaron correctamente, false si hubo error.
      */
-    public boolean loadPedidos(int configuracion, List<ClienteDTO> ClienteDTOS, List<ArticuloDTO> ArticuloDTOS) {
-        if (configuracion == 0) {
+    public void loadPedidos(List<ClienteDTO> ClienteDTOS, List<ArticuloDTO> ArticuloDTOS) throws Exception
+    {
         try {
-            pedidos.clear();
+            removePedidosAll();
 
-            pedidos.add(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(0), 2, LocalDate.now().minusDays(3), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(1), 1, LocalDate.now().minusDays(1), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(2), 5, LocalDate.now().minusDays(3), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(4), 4, LocalDate.now().minusMonths(1), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(5), 2, LocalDate.now().minusDays(2), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(7), 6, LocalDate.now().minusMonths(2), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(8), 3, LocalDate.now().minusDays(5), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(1), 10, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(2), 7, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(3), 12, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(4), 6, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(5), 15, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(6), 9, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(7), 11, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(0), 8, LocalDate.now(), 5f));
-            pedidos.add(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(1), 13, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(0), 2, LocalDate.now().minusDays(3), 5f));
+            addPedido(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(1), 1, LocalDate.now().minusDays(1), 5f));
+            addPedido(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(2), 5, LocalDate.now().minusDays(3), 5f));
+            addPedido(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
+            addPedido(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(4), 4, LocalDate.now().minusMonths(1), 5f));
+            addPedido(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(5), 2, LocalDate.now().minusDays(2), 5f));
+            addPedido(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
+            addPedido(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(7), 6, LocalDate.now().minusMonths(2), 5f));
+            addPedido(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(8), 3, LocalDate.now().minusDays(5), 5f));
+            addPedido(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(1), 10, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(2), 7, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(3), 12, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(4), 6, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(5), 15, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(6), 9, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(7), 11, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(0), 8, LocalDate.now(), 5f));
+            addPedido(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(1), 13, LocalDate.now(), 5f));
 
-            return true;
-        } catch (Exception e) {
-            return false;
         }
+        catch (Exception e)
+        {
+            throw new Exception("Error al precargar pedidos.", e);
         }
-        return false;
+
     }
 }

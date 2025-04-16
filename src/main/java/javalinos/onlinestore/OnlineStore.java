@@ -30,7 +30,7 @@ import java.sql.SQLException;
 public class OnlineStore {
 
     /** Valor de configuración para carga de datos. */
-    public static int configuracion = 0;
+    public static int configuracion = 1;
 
     /** Modelo general de la tienda (agrega clientes, artículos y pedidos). */
     public static ModeloStore mStore;
@@ -57,7 +57,7 @@ public class OnlineStore {
      */
     public static void main(String[] args){
         if (args.length != 0) configuracion = Integer.parseInt(args[1]);
-        else configuracion = 0;
+        else configuracion = 1;
         if(!precargaDatos(configuracion)) return;
         iniciarPrograma();
     }
@@ -83,11 +83,13 @@ public class OnlineStore {
                 cClientes.loadClientes();
                 cArticulos.loadArticulos();
                 cPedidos.loadPedidos();
+                break;
             }
             catch (Exception e){
                 if(!cMenuPrincipal.errorPrecarga()) return false;
             }
         }
+        return true;
     }
 
     /**

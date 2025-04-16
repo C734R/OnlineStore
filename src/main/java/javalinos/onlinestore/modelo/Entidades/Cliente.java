@@ -1,6 +1,5 @@
 package javalinos.onlinestore.modelo.Entidades;
 
-import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 
 public class Cliente {
@@ -11,7 +10,7 @@ public class Cliente {
     private String nif;
     private Integer categoria;
 
-    public Cliente(Integer id, String nombre, String domicilio, String email, String nif, Integer categoria, Float cuota, Float descuento) {
+    public Cliente(Integer id, String nombre, String domicilio, String email, String nif, Integer categoria) {
         this.id = id;
         this.nombre = nombre;
         this.domicilio = domicilio;

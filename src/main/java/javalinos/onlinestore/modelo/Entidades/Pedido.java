@@ -1,5 +1,7 @@
 package javalinos.onlinestore.modelo.Entidades;
 
+import javalinos.onlinestore.modelo.DTO.PedidoDTO;
+
 import java.time.LocalDate;
 
 public class Pedido {
@@ -21,6 +23,18 @@ public class Pedido {
         this.fechahora = fechahora;
         this.envio = envio;
         this.precio = precio;
+    }
+
+    public Pedido(PedidoDTO pedidoDTO, int clienteId, int articuloId)
+    {
+        this.id = null;
+        this.numero = pedidoDTO.getNumero();
+        this.cliente = clienteId;
+        this.articulo = articuloId;
+        this.cantidad = pedidoDTO.getCantidad();
+        this.fechahora = pedidoDTO.getFechahora();
+        this.envio = pedidoDTO.getEnvio();
+        this.precio = pedidoDTO.getPrecio();
     }
 
     public Integer getId() {

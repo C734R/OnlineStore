@@ -20,7 +20,7 @@ public class ModeloClientesTest {
      */
     @BeforeEach
     void setUp() {
-        mClientes = new ModeloClientesLocal(0, null);
+        mClientes = new ModeloClientesLocal();
         mClientes.loadClientes();
     }
     /**
@@ -35,7 +35,7 @@ public class ModeloClientesTest {
      */
     @Test
     void testLoadClientes() throws Exception {
-        List<ClienteDTO> ClienteDTOS = mClientes.getClientes();
+        List<ClienteDTO> ClienteDTOS = mClientes.getClientesDTO();
         assertEquals(10, ClienteDTOS.size(), "Debe haber 10 clienteDTOS precargados");
     }
     /**
@@ -43,8 +43,8 @@ public class ModeloClientesTest {
      */
     @Test
     void testBuscarPorNif() throws Exception {
-        ClienteDTO primero = mClientes.getClientes().get(0);
-        ClienteDTO encontrado = mClientes.getClienteNif(primero.getNif());
+        ClienteDTO primero = mClientes.getClientesDTO().get(0);
+        ClienteDTO encontrado = mClientes.getClienteDTONif(primero.getNif());
         assertNotNull(encontrado);
         assertEquals(primero.getNif(), encontrado.getNif());
     }
@@ -53,8 +53,8 @@ public class ModeloClientesTest {
      */
     @Test
     void testBuscarPorEmail() throws Exception {
-        ClienteDTO primero = mClientes.getClientes().getFirst();
-        ClienteDTO encontrado = mClientes.getClienteEmail(primero.getEmail());
+        ClienteDTO primero = mClientes.getClientesDTO().getFirst();
+        ClienteDTO encontrado = mClientes.getClienteDTOEmail(primero.getEmail());
         assertNotNull(encontrado);
         assertEquals(primero.getEmail(), encontrado.getEmail());
     }
@@ -63,10 +63,10 @@ public class ModeloClientesTest {
      */
     @Test
     void testAddCliente() {
-        ClienteDTO nuevo = mClientes.makeCliente("Ana", "Calle Nueva", "11111111H", "ana@email.com", mClientes.getCategoriaOpcion(1));
+        ClienteDTO nuevo = mClientes.makeCliente("Ana", "Calle Nueva", "11111111H", "ana@email.com", mClientes.getCategoriaDTOOpcion(1));
         mClientes.addCliente(nuevo);
 
-        ClienteDTO buscado = mClientes.getClienteNif("11111111H");
+        ClienteDTO buscado = mClientes.getClienteDTONif("11111111H");
         assertNotNull(buscado);
         assertEquals("Ana", buscado.getNombre());
     }
@@ -75,10 +75,10 @@ public class ModeloClientesTest {
      */
     @Test
     void testDeleteCliente() throws Exception {
-        ClienteDTO ClienteDTO = mClientes.getClientes().getFirst();
+        ClienteDTO ClienteDTO = mClientes.getClientesDTO().getFirst();
         mClientes.removeCliente(ClienteDTO);
 
-        ClienteDTO eliminado = mClientes.getClienteNif(ClienteDTO.getNif());
+        ClienteDTO eliminado = mClientes.getClienteDTONif(ClienteDTO.getNif());
         assertNull(eliminado);
     }
     /**
@@ -86,13 +86,13 @@ public class ModeloClientesTest {
      */
     @Test
     void testModNombreCliente() throws Exception {
-        ClienteDTO ClienteDTO = mClientes.getClientes().getFirst();
+        ClienteDTO ClienteDTO = mClientes.getClientesDTO().getFirst();
         String nombreOriginal = ClienteDTO.getNombre();
 
         ClienteDTO.setNombre("NuevoNombre");
         mClientes.updateCliente(ClienteDTO, ClienteDTO);
 
-        ClienteDTO modificado = mClientes.getClienteNif(ClienteDTO.getNif());
+        ClienteDTO modificado = mClientes.getClienteDTONif(ClienteDTO.getNif());
         assertEquals("NuevoNombre", modificado.getNombre());
         assertNotEquals(nombreOriginal, modificado.getNombre());
     }
@@ -101,7 +101,7 @@ public class ModeloClientesTest {
      */
     @Test
     void testClientesPorCategoria() throws Exception {
-        ClienteDTO ClienteDTO = mClientes.getClientes().getFirst();
+        ClienteDTO ClienteDTO = mClientes.getClientesDTO().getFirst();
         CategoriaDTO categoriaDTO = ClienteDTO.getCategoria();
 
         List<ClienteDTO> mismos = mClientes.getClientesCategoria(categoriaDTO);
@@ -123,7 +123,7 @@ public class ModeloClientesTest {
     void testPrimerYUltimoIndice() throws Exception {
         int primero = mClientes.getFirstIndexCliente();
         int ultimo = mClientes.getLastIndexCliente();
-        int total = mClientes.getClientes().size();
+        int total = mClientes.getClientesDTO().size();
 
         assertEquals(0, primero);
         assertEquals(total - 1, ultimo);
@@ -133,7 +133,7 @@ public class ModeloClientesTest {
      */
     @Test
     void testObtenerCategoria() {
-        CategoriaDTO categoriaDTO = mClientes.getCategoriaOpcion(1);
+        CategoriaDTO categoriaDTO = mClientes.getCategoriaDTOOpcion(1);
         assertNotNull(categoriaDTO);
     }
 }

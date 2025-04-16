@@ -1,5 +1,7 @@
 package javalinos.onlinestore.modelo.DTO;
 
+import javalinos.onlinestore.modelo.Entidades.Pedido;
+
 import java.time.LocalDate;
 /**
  * Clase que representa un pedido realizado por un clienteDTO.
@@ -8,8 +10,8 @@ import java.time.LocalDate;
 public class PedidoDTO {
 
     private Integer numero;
-    private ClienteDTO ClienteDTO;
-    private ArticuloDTO ArticuloDTO;
+    private ClienteDTO clienteDTO;
+    private ArticuloDTO articuloDTO;
     private Integer cantidad;
     private LocalDate fechahora;
     private Float envio;
@@ -19,30 +21,30 @@ public class PedidoDTO {
     /**
      * Constructor principal de pedido.
      * @param numero número de pedido.
-     * @param ClienteDTO clienteDTO que realiza el pedido.
-     * @param ArticuloDTO artículo comprado.
+     * @param clienteDTO clienteDTO que realiza el pedido.
+     * @param articuloDTO artículo comprado.
      * @param cantidad unidades compradas.
      * @param fechahora fecha y hora del pedido.
      * @param envio coste de envío.
      * @param precio precio total del pedido.
      */
-    public PedidoDTO(Integer numero, ClienteDTO ClienteDTO, ArticuloDTO ArticuloDTO, Integer cantidad, LocalDate fechahora, Float envio, Float precio) {
+    public PedidoDTO(Integer numero, ClienteDTO clienteDTO, ArticuloDTO articuloDTO, Integer cantidad, LocalDate fechahora, Float envio, Float precio) {
         this.numero = numero;
-        this.ClienteDTO = ClienteDTO;
-        this.ArticuloDTO = ArticuloDTO;
+        this.clienteDTO = clienteDTO;
+        this.articuloDTO = articuloDTO;
         this.cantidad = cantidad;
         this.fechahora = fechahora;
         this.envio = envio;
         this.precio = precio;
-        this.diasPreparacion = calcTotalPreparacion(ArticuloDTO.getMinutosPreparacion(), cantidad);
+        this.diasPreparacion = calcTotalPreparacion(articuloDTO.getMinutosPreparacion(), cantidad);
     }
     /**
      * Constructor vacío.
      */
     public PedidoDTO() {
         this.numero = null;
-        this.ClienteDTO = null;
-        this.ArticuloDTO = null;
+        this.clienteDTO = null;
+        this.articuloDTO = null;
         this.cantidad = null;
         this.fechahora = null;
         this.envio = null;
@@ -56,13 +58,25 @@ public class PedidoDTO {
      */
     public PedidoDTO(PedidoDTO pedidoDTO) {
         this.numero = pedidoDTO.numero;
-        this.ClienteDTO = pedidoDTO.ClienteDTO;
-        this.ArticuloDTO = pedidoDTO.ArticuloDTO;
+        this.clienteDTO = pedidoDTO.clienteDTO;
+        this.articuloDTO = pedidoDTO.articuloDTO;
         this.cantidad = pedidoDTO.cantidad;
         this.fechahora = pedidoDTO.fechahora;
         this.envio = pedidoDTO.envio;
         this.precio = pedidoDTO.precio;
         this.diasPreparacion = pedidoDTO.diasPreparacion;
+    }
+
+    public PedidoDTO(Pedido pedido, ClienteDTO clienteDTO, ArticuloDTO articuloDTO)
+    {
+        this.numero = pedido.getNumero();
+        this.clienteDTO = clienteDTO;
+        this.articuloDTO = articuloDTO;
+        this.cantidad = pedido.getCantidad();
+        this.fechahora = pedido.getFechahora();
+        this.envio = pedido.getEnvio();
+        this.precio = pedido.getPrecio();
+        this.diasPreparacion = calcTotalPreparacion(articuloDTO.getMinutosPreparacion(), pedido.getCantidad());
     }
 
     /**
@@ -86,7 +100,7 @@ public class PedidoDTO {
      * @return clienteDTO del pedido.
      */
     public ClienteDTO getCliente() {
-        return ClienteDTO;
+        return clienteDTO;
     }
 
     /**
@@ -94,7 +108,7 @@ public class PedidoDTO {
      * @param ClienteDTO nuevo clienteDTO.
      */
     public void setCliente(ClienteDTO ClienteDTO) {
-        this.ClienteDTO = ClienteDTO;
+        this.clienteDTO = ClienteDTO;
     }
 
     /**
@@ -102,7 +116,7 @@ public class PedidoDTO {
      * @return artículo solicitado.
      */
     public ArticuloDTO getArticulo() {
-        return ArticuloDTO;
+        return articuloDTO;
     }
 
     /**
@@ -110,7 +124,7 @@ public class PedidoDTO {
      * @param ArticuloDTO nuevo artículo.
      */
     public void setArticulo(ArticuloDTO ArticuloDTO) {
-        this.ArticuloDTO = ArticuloDTO;
+        this.articuloDTO = ArticuloDTO;
     }
 
     /**
@@ -212,8 +226,8 @@ public class PedidoDTO {
     @Override
     public String toString() {
         return  "Número de pedido: " + numero + "\n" +
-                "ClienteDTO: " + ClienteDTO + "\n" +
-                "ArticuloDTO: " + ArticuloDTO + "\n" +
+                "ClienteDTO: " + clienteDTO + "\n" +
+                "ArticuloDTO: " + articuloDTO + "\n" +
                 "Cantidad: " + cantidad + "\n" +
                 "Fecha de creación: " + fechahora + "\n" +
                 "Coste del envío: " + String.format("%.2f",envio) + " €\n" +

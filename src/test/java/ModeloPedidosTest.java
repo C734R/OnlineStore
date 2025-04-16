@@ -31,12 +31,12 @@ class ModeloPedidosTest {
     void setUp() throws Exception {
         mArticulos = new ModeloArticulosLocal();
         mArticulos.loadArticulos();
-        ArticuloDTOS = mArticulos.getArticulos();
-        stock = mArticulos.getStockArticulos();
+        ArticuloDTOS = mArticulos.getArticulosDTO();
+        stock = mArticulos.getArticuloStocksDTO();
 
         mClientes = new ModeloClientesLocal();
         mClientes.loadClientes();
-        ClienteDTOS = mClientes.getClientes();
+        ClienteDTOS = mClientes.getClientesDTO();
 
         mPedidos = new ModeloPedidosLocal();
         mPedidos.loadPedidos( ClienteDTOS, ArticuloDTOS);
@@ -58,7 +58,7 @@ class ModeloPedidosTest {
      */
     @Test
     void loadPedidosTest() {
-        assertEquals(18, mPedidos.getPedidos().size());
+        assertEquals(18, mPedidos.getPedidosDTO().size());
     }
     /**
      * Verifica que la lista de artículos no esté vacía.
@@ -79,7 +79,7 @@ class ModeloPedidosTest {
      */
     @Test
     void addPedidoTest() {
-        int sizeAnterior = mPedidos.getPedidos().size();
+        int sizeAnterior = mPedidos.getPedidosDTO().size();
         ArticuloDTO ArticuloDTO = ArticuloDTOS.get(0);
         ClienteDTO ClienteDTO = ClienteDTOS.get(0);
         int cantidad = 2;
@@ -87,7 +87,7 @@ class ModeloPedidosTest {
         PedidoDTO p = mPedidos.makePedido(ClienteDTO, ArticuloDTO, cantidad, LocalDate.now(), 5f);
         mPedidos.addPedido(p);
 
-        assertEquals(sizeAnterior + 1, mPedidos.getPedidos().size());
+        assertEquals(sizeAnterior + 1, mPedidos.getPedidosDTO().size());
     }
     /**
      * Verifica que se pueda eliminar un pedido correctamente.
@@ -99,18 +99,18 @@ class ModeloPedidosTest {
 
         PedidoDTO p = mPedidos.makePedido(ClienteDTO, ArticuloDTO, 1, LocalDate.now(), 5f);
         mPedidos.addPedido(p);
-        assertTrue(mPedidos.getPedidos().contains(p));
+        assertTrue(mPedidos.getPedidosDTO().contains(p));
 
         mPedidos.removePedido(p);
-        assertFalse(mPedidos.getPedidos().contains(p));
+        assertFalse(mPedidos.getPedidosDTO().contains(p));
     }
     /**
      * Verifica la obtención de un pedido por número.
      */
     @Test
     void getPedidoNumeroTest() {
-        PedidoDTO pedidoDTO = mPedidos.getPedidos().getFirst();
-        PedidoDTO obtenido = mPedidos.getPedidoNumero(pedidoDTO.getNumero());
+        PedidoDTO pedidoDTO = mPedidos.getPedidosDTO().getFirst();
+        PedidoDTO obtenido = mPedidos.getPedidoDTONumero(pedidoDTO.getNumero());
         assertNotNull(obtenido);
         assertEquals(pedidoDTO.getNumero(), obtenido.getNumero());
     }
@@ -119,8 +119,8 @@ class ModeloPedidosTest {
      */
     @Test
     void getPedidosClienteTest() {
-        ClienteDTO ClienteDTO = mPedidos.getPedidos().getFirst().getCliente();
-        List<PedidoDTO> pedidosCliente = mPedidos.getPedidosCliente(ClienteDTO);
+        ClienteDTO ClienteDTO = mPedidos.getPedidosDTO().getFirst().getCliente();
+        List<PedidoDTO> pedidosCliente = mPedidos.getPedidosDTOCliente(ClienteDTO);
         assertFalse(pedidosCliente.isEmpty());
         for (PedidoDTO p : pedidosCliente) {
             assertEquals(ClienteDTO, p.getCliente());
@@ -157,7 +157,7 @@ class ModeloPedidosTest {
     @Test
     void getLastNumPedidoTest() {
         int lastNum = mPedidos.getLastNumPedido();
-        assertEquals(mPedidos.getPedidos().getLast().getNumero(), lastNum);
+        assertEquals(mPedidos.getPedidosDTO().getLast().getNumero(), lastNum);
     }
     /**
      * Verifica que se obtiene correctamente el número del primer pedido.
@@ -165,14 +165,14 @@ class ModeloPedidosTest {
     @Test
     void getFirstNumPedidoTest() {
         int firstNum = mPedidos.getFirstNumPedido();
-        assertEquals(mPedidos.getPedidos().getFirst().getNumero(), firstNum);
+        assertEquals(mPedidos.getPedidosDTO().getFirst().getNumero(), firstNum);
     }
     /**
      * Verifica la actualización de un pedido manteniendo su número.
      */
     @Test
     void updatePedidoTest() {
-        PedidoDTO pedidoDTOOld = mPedidos.getPedidos().getFirst();
+        PedidoDTO pedidoDTOOld = mPedidos.getPedidosDTO().getFirst();
         PedidoDTO pedidoDTONew = new PedidoDTO(pedidoDTOOld); // Copia del pedido original
 
         int nuevaCantidad = pedidoDTOOld.getCantidad() + 1;
@@ -183,7 +183,7 @@ class ModeloPedidosTest {
 
         mPedidos.updatePedido(pedidoDTOOld, pedidoDTONew);
 
-        PedidoDTO actualizado = mPedidos.getPedidoNumero(pedidoDTOOld.getNumero());
+        PedidoDTO actualizado = mPedidos.getPedidoDTONumero(pedidoDTOOld.getNumero());
 
         assertEquals(pedidoDTOOld.getNumero(), actualizado.getNumero(), "El número de pedido debe mantenerse igual");
         assertEquals(nuevaCantidad, actualizado.getCantidad(), "La cantidad debe actualizarse");
@@ -202,9 +202,18 @@ class ModeloPedidosTest {
         PedidoDTO pedidoDTO = mPedidos.makePedido(ClienteDTO, ArticuloDTO, cantidadPedido, LocalDate.now(), 5f);
         mPedidos.addPedido(pedidoDTO);
 
-        mArticulos.updateStockArticulo(ArticuloDTO, stockInicial - cantidadPedido);
+        try {
+            mArticulos.updateStockArticulo(ArticuloDTO, stockInicial - cantidadPedido);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        int stockActual = mArticulos.getStockArticulos().get(ArticuloDTO);
+        int stockActual = 0;
+        try {
+            stockActual = mArticulos.getArticuloStocksDTO().get(ArticuloDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(stockInicial - cantidadPedido, stockActual);
     }
     /**
@@ -220,12 +229,25 @@ class ModeloPedidosTest {
         PedidoDTO pedidoDTO = mPedidos.makePedido(ClienteDTO, ArticuloDTO, cantidadPedido, LocalDate.now(), 5f);
         mPedidos.addPedido(pedidoDTO);
 
-        mArticulos.updateStockArticulo(ArticuloDTO, stockInicial - cantidadPedido);
+        try {
+            mArticulos.updateStockArticulo(ArticuloDTO, stockInicial - cantidadPedido);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         mPedidos.removePedido(pedidoDTO);
-        mArticulos.updateStockArticulo(ArticuloDTO, mArticulos.getStockArticulos().get(ArticuloDTO) + cantidadPedido);
+        try {
+            mArticulos.updateStockArticulo(ArticuloDTO, mArticulos.getArticuloStocksDTO().get(ArticuloDTO) + cantidadPedido);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-        int stockFinal = mArticulos.getStockArticulos().get(ArticuloDTO);
+        int stockFinal = 0;
+        try {
+            stockFinal = mArticulos.getArticuloStocksDTO().get(ArticuloDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(stockInicial, stockFinal);
     }
 }

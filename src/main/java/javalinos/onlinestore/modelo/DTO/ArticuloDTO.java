@@ -1,5 +1,7 @@
 package javalinos.onlinestore.modelo.DTO;
 
+import javalinos.onlinestore.modelo.Entidades.Articulo;
+
 /**
  * Representa los artículos incluidos en nuestro programa.
  * Contiene datos como código, descripción, precio y tiempo de preparación.
@@ -43,6 +45,13 @@ public class ArticuloDTO {
         this.descripcion = ArticuloDTO.getDescripcion();
         this.precio = ArticuloDTO.getPrecio();
         this.minutosPreparacion = ArticuloDTO.getMinutosPreparacion();
+    }
+
+    public ArticuloDTO(Articulo articulo) {
+        this.codigo = articulo.getCodigo();
+        this.descripcion = articulo.getDescripcion();
+        this.precio = articulo.getPrecio();
+        this.minutosPreparacion = articulo.getMinutosPreparacion();
     }
 
     /**

@@ -2,6 +2,7 @@ package javalinos.onlinestore.modelo.DAO.MySQL;
 
 import javalinos.onlinestore.modelo.DAO.Interfaces.IArticuloStockDAO;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
+import javalinos.onlinestore.modelo.Entidades.Categoria;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +13,7 @@ public class ArticuloStockDAOMySQL extends BaseDAOMySQL<ArticuloStock, Integer> 
 
     public ArticuloStockDAOMySQL(Connection conexion) throws SQLException {
         super(conexion);
-        super.tabla = "ArticuloStock";
+        super.tabla = "articulostock";
     }
 
     @Override
@@ -28,6 +29,17 @@ public class ArticuloStockDAOMySQL extends BaseDAOMySQL<ArticuloStock, Integer> 
         return "articulo = ?, stock = ?";
     }
 
+    @Override
+    public String definirValues() { return  "( ?, ? )"; }
+
+    @Override
+    public String definirColumnas() { return "(articulo, stock)"; }
+
+    @Override
+    public void definirSetInsert(PreparedStatement stmt, ArticuloStock entidad) throws SQLException {
+        stmt.setInt(1, entidad.getArticulo());
+        stmt.setInt(2, entidad.getStock());
+    }
     @Override
     public Integer definirId(ArticuloStock articuloStock) {
         return articuloStock.getArticulo();

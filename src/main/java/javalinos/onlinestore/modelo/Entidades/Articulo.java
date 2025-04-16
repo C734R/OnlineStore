@@ -1,18 +1,31 @@
 package javalinos.onlinestore.modelo.Entidades;
 
-public class Articulo {
+import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+
+public class Articulo
+{
     private Integer id;
     private String codigo;
     private String descripcion;
     private Float precio;
-    private Integer preparacion;
+    private Integer minutosPreparacion;
 
-    public Articulo(Integer id, String codigo, String descripcion, Float precio, Integer preparacion) {
+    public Articulo(Integer id, String codigo, String descripcion, Float precio, Integer minutosPreparacion)
+    {
         this.id = id;
         this.codigo = codigo;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.preparacion = preparacion;
+        this.minutosPreparacion = minutosPreparacion;
+    }
+
+    public Articulo(ArticuloDTO articuloDTO)
+    {
+        this.id = null;
+        this.codigo = articuloDTO.getCodigo();
+        this.descripcion = articuloDTO.getDescripcion();
+        this.precio = articuloDTO.getPrecio();
+        this.minutosPreparacion = articuloDTO.getMinutosPreparacion();
     }
 
     public Integer getId() {
@@ -47,11 +60,11 @@ public class Articulo {
         this.precio = precio;
     }
 
-    public Integer getPreparacion() {
-        return preparacion;
+    public Integer getMinutosPreparacion() {
+        return minutosPreparacion;
     }
 
-    public void setPreparacion(Integer preparacion) {
-        this.preparacion = preparacion;
+    public void setMinutosPreparacion(Integer minutosPreparacion) {
+        this.minutosPreparacion = minutosPreparacion;
     }
 }

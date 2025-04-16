@@ -12,7 +12,7 @@ public class CategoriaDAOMySQL extends BaseDAOMySQL<Categoria, Integer> implemen
 
     public CategoriaDAOMySQL(Connection conexion) throws SQLException {
         super(conexion);
-        this.tabla = "Categoria";
+        this.tabla = "categoria";
     }
 
     @Override
@@ -31,6 +31,20 @@ public class CategoriaDAOMySQL extends BaseDAOMySQL<Categoria, Integer> implemen
     }
 
     @Override
+    public String definirValues() { return  "( ?, ?, ? )"; }
+
+    @Override
+    public String definirColumnas() {
+        return "(nombre, cuota, descuento)";
+    }
+
+    @Override
+    public void definirSetInsert(PreparedStatement stmt, Categoria entidad) throws SQLException {
+        stmt.setString(1, entidad.getNombre());
+        stmt.setFloat(2, entidad.getCuota());
+        stmt.setFloat(3, entidad.getDescuento());
+    }
+    @Override
     public Integer definirId(Categoria categoria) {
         return categoria.getId();
     }
@@ -41,40 +55,4 @@ public class CategoriaDAOMySQL extends BaseDAOMySQL<Categoria, Integer> implemen
         stmt.setFloat(2, categoria.getCuota());
         stmt.setFloat(3, categoria.getDescuento());
     }
-
-    @Override
-    public Categoria getPorNombre(String nombre) throws Exception {
-
-        Categoria entidad = null;
-        // Crear query
-        String query = "SELECT * FROM " + tabla + " WHERE nombre = ?";
-        try
-        {
-            // Detener autocommit
-            conexion.setAutoCommit(false);
-            // Crear prepared statement
-            PreparedStatement stmt1 = conexion.prepareStatement(query);
-            // Definir
-            stmt1.setObject(1, nombre);
-            ResultSet rs = stmt1.executeQuery();
-            while (rs.next()) {
-                entidad = objetoResulset(rs);
-            }
-            rs.close();
-            stmt1.close();
-            conexion.commit();
-        }
-        catch (Exception e)
-        {
-            conexion.rollback();
-            throw new Exception(e.getMessage());
-        }
-        finally
-        {
-            conexion.setAutoCommit(true);
-        }
-        return entidad;
-
-    }
-
 }

@@ -40,21 +40,21 @@ public class ModeloFactory {
         }
     }
 
-    public IModeloPedidos getModeloPedidos() {
-        if (configuracion == 0) {
-            return new ModeloPedidosLocal();
-        }
-        else {
-            return new ModeloPedidosBBDD(factoryDAO);
-        }
-    }
-
     public IModeloArticulos getModeloArticulos() {
         if (configuracion == 0) {
             return new ModeloArticulosLocal();
         }
         else {
             return new ModeloArticulosBBDD(factoryDAO);
+        }
+    }
+
+    public IModeloPedidos getModeloPedidos() {
+        if (configuracion == 0) {
+            return new ModeloPedidosLocal();
+        }
+        else {
+            return new ModeloPedidosBBDD(factoryDAO, getModeloArticulos(), getModeloClientes());
         }
     }
 }

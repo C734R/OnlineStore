@@ -1,5 +1,6 @@
 package javalinos.onlinestore.modelo.DTO;
 
+import javalinos.onlinestore.modelo.Entidades.Categoria;
 import javalinos.onlinestore.modelo.Entidades.Cliente;
 
 /**
@@ -29,12 +30,12 @@ public class ClienteDTO {
         this.categoriaDTO = categoriaDTO;
     }
 
-    public ClienteDTO(Cliente cliente) {
+    public ClienteDTO(Cliente cliente, CategoriaDTO categoriaDTO) {
         this.nombre = cliente.getNombre();
         this.domicilio = cliente.getDomicilio();
         this.nif = cliente.getNif();
         this.email = cliente.getEmail();
-        this.categoriaDTO = null;
+        this.categoriaDTO = categoriaDTO;
     }
 
     /**

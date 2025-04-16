@@ -29,7 +29,7 @@ public class FactoryDTO {
                 articulo.getCodigo(),
                 articulo.getDescripcion(),
                 articulo.getPrecio(),
-                articulo.getPreparacion()
+                articulo.getMinutosPreparacion()
         );
     }
 
