@@ -125,18 +125,25 @@ public class ControlPedidos extends ControlBase{
     public void addPedidos()
     {
         vPedidos.showMensaje("******** Añadir Pedido ********", true);
-        List<ArticuloDTO> articulosDisponibles = new ArrayList<>();
+        List<ArticuloDTO> articulosDisponibles = null;
+        try {
+            articulosDisponibles = mArticulos.getArticulosDTO();
+            for (ArticuloDTO articuloDTO : articulosDisponibles)
+            {
+                if (mArticulos.getStockArticulo(articuloDTO) <= 0)
+                {
+                    articulosDisponibles.remove(articuloDTO);
+                }
+            }
+        } catch (Exception e) {
+            vPedidos.showMensaje("No existen artículos disponibles para su compra.", true);
+            return;
+        }
         ClienteDTO clienteDTO = askCliente(true);
         if(clienteDTO == null) return;
         try
         {
-            for (ArticuloDTO ArticuloDTO : mArticulos.getArticulosDTO())
-            {
-                if (mArticulos.getArticuloStocksDTO().get(ArticuloDTO) > 0)
-                {
-                    articulosDisponibles.add(ArticuloDTO);
-                }
-            }
+
             if (!articulosDisponibles.isEmpty())
             {
                 vPedidos.showOptions(listToStr(articulosDisponibles), 0, true, true, true);
@@ -154,15 +161,15 @@ public class ControlPedidos extends ControlBase{
                     vPedidos.showMensajePausa("Error. No se ha podido crear el pedido.", true);
                     return;
                 }
-                mPedidos.addPedido(pedido);
-                mArticulos.updateStockArticulo(articuloDTO, mArticulos.getStockArticulo(articuloDTO) - stockComprado);
-                vPedidos.showMensajePausa("Pedido añadido correctamente", true);
+                mPedidos.addPedidoStock(pedido);
+                vPedidos.showMensajePausa("Pedido añadido correctamente y actualizado stock.", true);
             }
             else vPedidos.showMensaje("No hay artículos disponibles para comprar en este momento", true);
         }
         catch (Exception e)
         {
             vPedidos.showMensajePausa("Error al añadir pedido." + e, true);
+
         }
     }
 
@@ -187,10 +194,7 @@ public class ControlPedidos extends ControlBase{
             int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true);
             if(numPedidoBorrar == -99999) return;
             PedidoDTO pedidoDTO = pedidos.get(numPedidoBorrar-1);
-
-            ArticuloDTO ArticuloDTO = pedidoDTO.getArticulo();
-            mPedidos.removePedido(pedidoDTO);
-            mArticulos.updateStockArticulo(ArticuloDTO, stockArticulos.get(ArticuloDTO) + pedidoDTO.getCantidad());
+            mPedidos.removePedidoStock(pedidoDTO);
         }
         catch (Exception e)
         {
@@ -228,10 +232,7 @@ public class ControlPedidos extends ControlBase{
             if (nuevaCantidad == null) nuevaCantidad = pedidoDTOOld.getCantidad();
 
             PedidoDTO pedidoDTONew = mPedidos.makePedido(nuevoClienteDTO, pedidoDTOOld.getArticulo(), nuevaCantidad, LocalDate.now(), precioEnvio);
-            mPedidos.updatePedido(pedidoDTOOld, pedidoDTONew);
-
-            int stockNew = maxStock - nuevaCantidad;
-            mArticulos.updateStockArticulo(pedidoDTOOld.getArticulo(), stockNew);
+            mPedidos.updatePedidoStock(pedidoDTOOld,pedidoDTONew);
             vPedidos.showMensajePausa("PedidoDTO actualizado correctamente.", true);
         }
         catch (Exception e)

@@ -1,4 +1,4 @@
-package javalinos.onlinestore.modelo.DAO;
+package javalinos.onlinestore.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

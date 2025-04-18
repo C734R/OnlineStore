@@ -90,7 +90,7 @@ public class ModeloClientesLocal implements IModeloClientes {
     }
 
     @Override
-    public int getIdClienteDTO(ClienteDTO clienteDTO) throws Exception {
+    public Integer getIdClienteDTO(ClienteDTO clienteDTO) throws Exception {
         return 0;
     }
 

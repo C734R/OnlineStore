@@ -17,31 +17,25 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         this.conexion = conexion;
     }
 
-    @Override
     public T objetoResulset(ResultSet rs) throws SQLException {
         return null;
     }
 
-    @Override
     public String definirSet() {
         return null;
     }
 
-    @Override
     public void definirSetInsert(PreparedStatement stmt, T entidad) throws SQLException {}
 
-    @Override
     public String definirColumnas(){
         return null;
     }
 
 
-    @Override
     public java.lang.Integer definirId(T entidad) {
         return null;
     }
 
-    @Override
     public int obtenerUltimoParametro(PreparedStatement stmt) throws SQLException {
         try
         {
@@ -52,9 +46,7 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
     }
 
-    @Override
     public void mapearUpdate(PreparedStatement stmt, T entidad) throws SQLException {}
-
     @Override
     public T getPorId(K id) throws Exception {
         T entidad = null;
@@ -75,7 +67,6 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
         return entidad;
     }
-
     @Override
     public T getPorNombreUnico(String nombre) throws Exception {
 
@@ -100,7 +91,6 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
         return entidad;
     }
-
     @Override
     public List<T> getTodos() throws Exception {
         List<T> entidades = new ArrayList<>();
@@ -120,18 +110,17 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
         return entidades;
     }
-
     @Override
     public void insertar(T entidad) throws Exception
     {
         String query = "INSERT INTO " + tabla + " " + definirColumnas() + " VALUES " + definirValues();
+        boolean autocommitOriginal = conexion.getAutoCommit();
         try(PreparedStatement stmt = conexion.prepareStatement(query))
         {
             conexion.setAutoCommit(false);
             definirSetInsert(stmt, entidad);
             int filas = stmt.executeUpdate();
             if (filas <= 0) throw new Exception("No se pudo insertar la entidad: \n" + entidad.toString());
-            stmt.close();
             conexion.commit();
         }
         catch (Exception e)
@@ -141,10 +130,9 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
         finally
         {
-            conexion.setAutoCommit(true);
+            conexion.setAutoCommit(autocommitOriginal);
         }
     }
-
     @Override
     public void insertarTodos(List<T> entidades) throws Exception
     {
@@ -160,10 +148,10 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
 
     }
-
     @Override
     public void actualizar(T entidad) throws Exception {
         String query = "UPDATE " + tabla + " SET " + definirSet() + " WHERE id = ?";
+        boolean autocommitOriginal = conexion.getAutoCommit();
         try(PreparedStatement stmt = conexion.prepareStatement(query))
         {
             conexion.setAutoCommit(false);
@@ -193,13 +181,13 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
         finally
         {
-            conexion.setAutoCommit(true);
+            conexion.setAutoCommit(autocommitOriginal);
         }
     }
-
     @Override
     public void eliminar(K id) throws Exception {
         String query = "DELETE FROM " + tabla + " WHERE id = ?";
+        boolean autocommitOriginal = conexion.getAutoCommit();
         try (PreparedStatement stmt = conexion.prepareStatement(query))
         {
             conexion.setAutoCommit(false);
@@ -217,13 +205,13 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
         finally
         {
-            conexion.setAutoCommit(true);
+            conexion.setAutoCommit(autocommitOriginal);
         }
     }
-
     @Override
     public void eliminarTodos() throws Exception {
         String query = "DELETE FROM " + tabla;
+        boolean autocommitOriginal = conexion.getAutoCommit();
         try(PreparedStatement stmt = conexion.prepareStatement(query))
         {
             conexion.setAutoCommit(false);
@@ -236,7 +224,7 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         }
         finally
         {
-            conexion.setAutoCommit(true);
+            conexion.setAutoCommit(autocommitOriginal);
         }
     }
 }

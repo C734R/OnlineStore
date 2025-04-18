@@ -15,7 +15,7 @@ public interface IModeloClientes {
     void removeClientesAll() throws Exception;
     ClienteDTO getClienteIndex(int index) throws Exception;
     ClienteDTO getClienteDTOId(int id) throws Exception;
-    int getIdClienteDTO(ClienteDTO clienteDTO) throws Exception;
+    Integer getIdClienteDTO(ClienteDTO clienteDTO) throws Exception;
     void updateCliente(ClienteDTO clienteDTOOld, ClienteDTO clienteDTONew) throws Exception;
     int sizeClientes() throws Exception;
     ClienteDTO getClienteDTONif(String nif) throws Exception;

@@ -8,6 +8,9 @@ import javalinos.onlinestore.vista.VistaClientes;
 
 import java.util.List;
 
+import static javalinos.onlinestore.utils.Utilidades.checkEmail;
+import static javalinos.onlinestore.utils.Utilidades.checkNIF;
+
 /**
  * Controlador para gestionar la lógica del módulo de clientes.
  */
@@ -113,18 +116,17 @@ public class ControlClientes extends ControlBase
 
     /**
      * Reemplaza los datos de un cliente antiguo por uno nuevo.
-     * @param ClienteDTOOld cliente original
-     * @param ClienteDTONew cliente actualizado
+     * @param clienteDTOOld cliente original
+     * @param clienteDTONew cliente actualizado
      */
-    public void setCliente (ClienteDTO ClienteDTOOld, ClienteDTO ClienteDTONew)
-    {
+    public void updateCliente(ClienteDTO clienteDTOOld, ClienteDTO clienteDTONew) throws Exception {
         try
         {
-            mClientes.updateCliente(ClienteDTOOld, ClienteDTONew);
+            mClientes.updateCliente(clienteDTOOld, clienteDTONew);
         }
         catch (Exception e)
         {
-            vClientes.showMensaje("Error al actualizar el cliente: " + e.getMessage(), true);
+            throw new Exception (e);
         }
     }
 
@@ -217,26 +219,26 @@ public class ControlClientes extends ControlBase
     {
         int opcion ;
         while (true){
-            ClienteDTO ClienteDTO = null;
+            ClienteDTO clienteDTO = null;
             vClientes.showMensaje("******** Menú de Modificación de Clientes ********", true);
             vClientes.showMods();
             opcion = vClientes.askInt("Introduce el tipo de modificación que deseas realizar", 0, 5, false, false);
-            if(opcion != 0) ClienteDTO = askClienteModificar();
+            if(opcion != 0) clienteDTO = askClienteModificar();
             switch (opcion) {
                 case 1:
-                    modClienteNombre(ClienteDTO);
+                    modClienteNombre(clienteDTO);
                     break;
                 case 2:
-                    modClienteDomicilio(ClienteDTO);
+                    modClienteDomicilio(clienteDTO);
                     break;
                 case 3:
-                    modClienteNIF(ClienteDTO);
+                    modClienteNIF(clienteDTO);
                     break;
                 case 4:
-                    modClienteEmail(ClienteDTO);
+                    modClienteEmail(clienteDTO);
                     break;
                 case 5:
-                    modClienteCategoria(ClienteDTO);
+                    modClienteCategoria(clienteDTO);
                     break;
                 case 0:
                     vClientes.showMensajePausa("Volviendo al menú de gestión de clientes...", true);
@@ -254,46 +256,58 @@ public class ControlClientes extends ControlBase
     public void modClienteNombre(ClienteDTO clienteDTOOld)
     {
         String oldNameCliente,newNameCliente;
-        ClienteDTO ClienteDTONew;
-        ClienteDTONew = new ClienteDTO(clienteDTOOld);
+        ClienteDTO clienteDTONew;
+        clienteDTONew = new ClienteDTO(clienteDTOOld);
         oldNameCliente = clienteDTOOld.getNombre();
         newNameCliente = vClientes.askString("Introduce el nuevo nombre del usuario: ", 250);
         if (newNameCliente == null) return;
-        ClienteDTONew.setNombre(newNameCliente);
-        setCliente(clienteDTOOld, ClienteDTONew);
-        showExitoMod("nombre",oldNameCliente, ClienteDTONew.getNombre());
+        clienteDTONew.setNombre(newNameCliente);
+        try
+        {
+            updateCliente(clienteDTOOld, clienteDTONew);
+            showExitoMod("nombre",oldNameCliente, clienteDTONew.getNombre());
+        }
+        catch (Exception e) {
+            vClientes.showMensajePausa("Error al actualizar el nombre: " + e, true);
+        }
     }
     /**
      * Modifica el domicilio del cliente.
      * @param clienteDTOOld cliente a modificar
      */
-    public void modClienteDomicilio(ClienteDTO clienteDTOOld)
-    {
-        String oldDomicilio,newDomicilio;
+    public void modClienteDomicilio(ClienteDTO clienteDTOOld) {
+        String oldDomicilio, newDomicilio;
         ClienteDTO ClienteDTONew;
         ClienteDTONew = new ClienteDTO(clienteDTOOld);
         oldDomicilio = clienteDTOOld.getDomicilio();
         newDomicilio = vClientes.askString("Introduce el nuevo domicilio: ", 250);
-        if(newDomicilio == null) return;
+        if (newDomicilio == null) return;
         ClienteDTONew.setDomicilio(newDomicilio);
-        setCliente(clienteDTOOld, ClienteDTONew);
-        showExitoMod("domicilio",oldDomicilio, ClienteDTONew.getDomicilio());
+        try {
+            updateCliente(clienteDTOOld, ClienteDTONew);
+            showExitoMod("domicilio", oldDomicilio, ClienteDTONew.getDomicilio());
+        } catch (Exception e) {
+            vClientes.showMensajePausa("Error al actualizar el domicilio: " + e, true);
+        }
     }
     /**
      * Modifica el NIF del cliente.
      * @param clienteDTOOld cliente a modificar
      */
-    public void modClienteNIF(ClienteDTO clienteDTOOld)
-    {
-        String oldNIF,newNIF;
-        ClienteDTO ClienteDTONew;
-        ClienteDTONew = clienteDTOOld;
+    public void modClienteNIF(ClienteDTO clienteDTOOld) {
+        String oldNIF, newNIF;
+        ClienteDTO clienteDTONew;
+        clienteDTONew = new ClienteDTO(clienteDTOOld);
         oldNIF = clienteDTOOld.getNif();
         newNIF = vClientes.askNIF();
-        if(newNIF == null) return;
-        ClienteDTONew.setNif(newNIF);
-        setCliente(clienteDTOOld, ClienteDTONew);
-        showExitoMod("NIF",oldNIF, ClienteDTONew.getNif());
+        if (newNIF == null) return;
+        clienteDTONew.setNif(newNIF);
+        try {
+            updateCliente(clienteDTOOld, clienteDTONew);
+            showExitoMod("NIF", oldNIF, clienteDTONew.getNif());
+        } catch (Exception e) {
+            vClientes.showMensajePausa("Error al actualizar el nif: " + e, true);
+        }
     }
     /**
      * Modifica el email del cliente.
@@ -302,14 +316,18 @@ public class ControlClientes extends ControlBase
     public void modClienteEmail(ClienteDTO clienteDTOOld)
     {
         String oldEmail,newEmail;
-        ClienteDTO ClienteDTONew;
-        ClienteDTONew = new ClienteDTO(clienteDTOOld);
+        ClienteDTO clienteDTONew;
+        clienteDTONew = new ClienteDTO(clienteDTOOld);
         oldEmail = clienteDTOOld.getEmail();
         newEmail = vClientes.askEmail(true);
         if(newEmail == null) return;
-        ClienteDTONew.setEmail(newEmail);
-        setCliente(clienteDTOOld, ClienteDTONew);
-        showExitoMod("email",oldEmail, ClienteDTONew.getEmail());
+        clienteDTONew.setEmail(newEmail);
+        try {
+            updateCliente(clienteDTOOld, clienteDTONew);
+            showExitoMod("email",oldEmail, clienteDTONew.getEmail());
+        } catch (Exception e) {
+            vClientes.showMensajePausa("Error al actualizar el email: " + e, true);
+        }
     }
     /**
      * Modifica la categoría del cliente.
@@ -332,8 +350,12 @@ public class ControlClientes extends ControlBase
         }
         if(categoridaDTONew == null) return;
         clienteDTONew.setCategoria(categoridaDTONew);
-        setCliente(clienteDTOOld, clienteDTONew);
-        showExitoMod("categoría", categoriaDTOOld.getNombre(), clienteDTONew.getCategoria().getNombre());
+        try {
+            updateCliente(clienteDTOOld, clienteDTONew);
+            showExitoMod("categoría", categoriaDTOOld.getNombre(), clienteDTONew.getCategoria().getNombre());
+        } catch (Exception e) {
+            vClientes.showMensajePausa("Error al actualizar la categoría: " + e, true);
+        }
     }
 
     //*************************** Peticiones especializadas ***************************//
@@ -350,11 +372,12 @@ public class ControlClientes extends ControlBase
         while (true) {
             showListClientes();
             datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 250);
+            if (datoCliente == null) return null;
             try {
-                if (mClientes.getClienteDTONif(datoCliente) == null)
-                    clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
-                else clienteDTO = mClientes.getClienteDTONif(datoCliente);
                 intentos++;
+                if (checkEmail(datoCliente)) clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
+                else if(checkNIF(datoCliente))clienteDTO = mClientes.getClienteDTONif(datoCliente);
+                else continue;
                 if (clienteDTO != null) {
                     vClientes.showMensaje("******** Datos del cliente a modificar ********", true);
                     vClientes.showMensaje(clienteDTO.toString(), true);
@@ -480,7 +503,9 @@ public class ControlClientes extends ControlBase
                 return;
             }
             vClientes.showCliente(clienteDTO);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             vClientes.showMensajePausa("Error al mostrar el cliente: " + e,true);
         }
     }
@@ -550,13 +575,11 @@ public class ControlClientes extends ControlBase
 
     /**
      * Carga la colección de clientes en memoria desde configuración.
-     * @return true si la carga fue exitosa, false si no
      */
-    public boolean loadClientes() throws Exception {
+    public void loadClientes() throws Exception {
         try
         {
             mClientes.loadClientes();
-            return true;
         }
         catch (Exception e)
         {

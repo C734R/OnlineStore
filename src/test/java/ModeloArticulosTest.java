@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -173,9 +174,9 @@ public class ModeloArticulosTest {
     @Test
     void testSetArticulosAndStock() {
         List<ArticuloDTO> copia = List.copyOf(mArticulos.getArticulosDTO());
-        Map<ArticuloDTO, Integer> stockCopia = null;
+        LinkedHashMap<ArticuloDTO, Integer> stockCopia = null;
         try {
-            stockCopia = Map.copyOf(mArticulos.getArticuloStocksDTO());
+            stockCopia = (LinkedHashMap<ArticuloDTO, Integer>) Map.copyOf(mArticulos.getArticuloStocksDTO());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,6 +1,6 @@
 package javalinos.onlinestore.modelo.gestores;
 
-import javalinos.onlinestore.modelo.DAO.ConexionBBDD;
+import javalinos.onlinestore.utils.ConexionBBDD;
 import javalinos.onlinestore.modelo.DAO.FactoryDAO;
 import javalinos.onlinestore.modelo.gestores.BBDD.*;
 import javalinos.onlinestore.modelo.gestores.Interfaces.*;
@@ -8,7 +8,7 @@ import javalinos.onlinestore.modelo.gestores.Local.*;
 
 import java.sql.SQLException;
 
-public class ModeloFactory {
+public class ModeloFactory implements AutoCloseable {
 
     private final int configuracion;
     private final FactoryDAO factoryDAO;
@@ -38,6 +38,7 @@ public class ModeloFactory {
         else {
             return new ModeloClientesBBDD(factoryDAO);
         }
+
     }
 
     public IModeloArticulos getModeloArticulos() {
@@ -55,6 +56,12 @@ public class ModeloFactory {
         }
         else {
             return new ModeloPedidosBBDD(factoryDAO, getModeloArticulos(), getModeloClientes());
+        }
+    }
+
+    public void close() throws SQLException {
+        if (conexion != null) {
+            conexion.cerrar();
         }
     }
 }

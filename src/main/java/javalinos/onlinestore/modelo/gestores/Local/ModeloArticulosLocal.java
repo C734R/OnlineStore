@@ -10,7 +10,7 @@ import java.util.*;
 public class ModeloArticulosLocal implements IModeloArticulos {
 
     private List<ArticuloDTO> articulosDTO;
-    private Map<ArticuloDTO, Integer> stockArticulos;
+    private LinkedHashMap<ArticuloDTO, Integer> stockArticulos;
     /**
      * Constructor por defecto. Inicializa las listas de artículos y su stock.
      */
@@ -50,9 +50,10 @@ public class ModeloArticulosLocal implements IModeloArticulos {
 
     /**
      * Devuelve el mapa de stock de todos los artículos.
+     *
      * @return mapa con artículos y cantidades disponibles.
      */
-    public Map<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception {
+    public LinkedHashMap<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception {
         return stockArticulos;
     }
     /**
@@ -76,7 +77,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * Establece un nuevo mapa de stock.
      * @param stockArticulos mapa de artículos con su stock.
      */
-    public void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) throws Exception {
+    public void setStockArticulos(LinkedHashMap<ArticuloDTO, Integer> stockArticulos) throws Exception {
         this.stockArticulos = stockArticulos;
     }
     /**

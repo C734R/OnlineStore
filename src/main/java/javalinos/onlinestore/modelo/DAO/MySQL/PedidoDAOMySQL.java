@@ -1,6 +1,8 @@
 package javalinos.onlinestore.modelo.DAO.MySQL;
 
+import javalinos.onlinestore.modelo.DAO.FactoryDAO;
 import javalinos.onlinestore.modelo.DAO.Interfaces.IPedidoDAO;
+import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 import javalinos.onlinestore.modelo.Entidades.Cliente;
 import javalinos.onlinestore.modelo.Entidades.Pedido;
@@ -11,9 +13,12 @@ import java.util.List;
 
 public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPedidoDAO {
 
-    public PedidoDAOMySQL(Connection conexion) throws SQLException {
+    private final FactoryDAO factoryDAO;
+
+    public PedidoDAOMySQL(Connection conexion, FactoryDAO factoryDAO) throws SQLException {
         super(conexion);
         this.tabla = "pedido";
+        this.factoryDAO = factoryDAO;
     }
 
     @Override
@@ -66,8 +71,8 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
         stmt.setInt(3, pedido.getArticulo());
         stmt.setInt(4, pedido.getCantidad());
         stmt.setDate(5, Date.valueOf(pedido.getFechahora()));
-        stmt.setFloat(4, pedido.getEnvio());
-        stmt.setFloat(5, pedido.getPrecio());
+        stmt.setFloat(6, pedido.getEnvio());
+        stmt.setFloat(7, pedido.getPrecio());
     }
 
     public Pedido getPedidoNumero(int numero) throws Exception
@@ -110,6 +115,90 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
             throw new Exception("Error al obtener los pedidos del cliente.", e);
         }
         return listaPedidos;
+    }
+    public void insertarConStock(Pedido pedido) throws Exception
+    {
+        String query = "INSERT INTO " + tabla + " " + definirColumnas() + " VALUES " + definirValues();
+        boolean autocommitOriginal = conexion.getAutoCommit();
+        try(PreparedStatement stmt = conexion.prepareStatement(query))
+        {
+            conexion.setAutoCommit(false);
+            definirSetInsert(stmt, pedido);
+            int filas = stmt.executeUpdate();
+            if (filas <= 0) throw new Exception("No se pudo insertar el pedido: \n" + pedido.toString());
+            ActualizarStock(pedido, -pedido.getCantidad());
+            conexion.commit();
+        }
+        catch (Exception e)
+        {
+            conexion.rollback();
+            throw new Exception("Error al insertar pedido y actualizar stock en la base de datos.", e);
+        }
+        finally
+        {
+            conexion.setAutoCommit(autocommitOriginal);
+        }
+    }
+
+    public void eliminarConStock(Pedido pedido) throws Exception {
+        String query = "DELETE FROM " + tabla + " WHERE id = ?";
+        boolean autocommitOriginal = conexion.getAutoCommit();
+        try (PreparedStatement stmt = conexion.prepareStatement(query))
+        {
+            conexion.setAutoCommit(false);
+            stmt.setInt(1, pedido.getId());
+            int filas = stmt.executeUpdate();
+            if (filas <= 0) {
+                throw new Exception("No se ha encontrado el pedido con ID: " + pedido.getId());
+            }
+            ActualizarStock(pedido, +pedido.getCantidad());
+            conexion.commit();
+        }
+        catch (Exception e)
+        {
+            conexion.rollback();
+            throw new Exception("Error al eliminar pedido y actualizar stock en la base de datos.", e);
+        }
+        finally
+        {
+            conexion.setAutoCommit(autocommitOriginal);
+        }
+    }
+
+    public void actualizarConStock(Pedido pedidoNew, Integer diferenciaStock) throws Exception {
+        String query = "UPDATE " + tabla + " SET " + definirSet() + " WHERE id = ?";
+        boolean autocommitOriginal = conexion.getAutoCommit();
+        try(PreparedStatement stmt = conexion.prepareStatement(query))
+        {
+            conexion.setAutoCommit(false);
+            mapearUpdate(stmt, pedidoNew);
+            int ultimoParametro = obtenerUltimoParametro(stmt);
+            Object entidadId = definirId(pedidoNew);
+            if (entidadId == null) throw new Exception("La pedido no tiene un ID definido. No se puede actualizar.");
+            stmt.setInt(ultimoParametro, (int)entidadId);
+            int filas = stmt.executeUpdate();
+            if (filas <= 0) {
+                throw new Exception("No se ha encontrado la pedido con ID: " + entidadId);
+            }
+            ActualizarStock(pedidoNew, diferenciaStock);
+            conexion.commit();
+        }
+        catch (Exception e)
+        {
+            conexion.rollback();
+            throw new Exception("Error al actualizar pedido y stock en la base de datos.", e);
+        }
+        finally
+        {
+            conexion.setAutoCommit(autocommitOriginal);
+        }
+    }
+
+    private void ActualizarStock(Pedido pedido, Integer diferenciaStock) throws Exception {
+        Articulo articulo = factoryDAO.getDAOArticulo().getPorId(pedido.getArticulo());
+        ArticuloStock articuloStock = factoryDAO.getDAOArticuloStock().getPorId(articulo.getId());
+        articuloStock.setStock(articuloStock.getStock() + diferenciaStock);
+        factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
     }
 
 }

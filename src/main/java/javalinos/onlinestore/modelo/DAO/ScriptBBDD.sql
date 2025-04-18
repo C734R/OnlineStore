@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS Categoria;
 -- Tabla para categorías
 CREATE TABLE IF NOT EXISTS Categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(25),
+    nombre VARCHAR(25) NOT NULL UNIQUE,
     cuota DECIMAL(10,2),
     descuento DECIMAL(10,2)
 );
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS Cliente (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     domicilio VARCHAR(250) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    nif VARCHAR(15) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    nif VARCHAR(15) NOT NULL UNIQUE,
     categoria INT NOT NULL,
     FOREIGN KEY FK_cliente_categoria(categoria) REFERENCES Categoria(id)
         ON UPDATE CASCADE
@@ -39,7 +39,7 @@ DROP TABLE IF EXISTS Articulo;
 CREATE TABLE IF NOT EXISTS Articulo (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
-    codigo VARCHAR(10) NOT NULL,
+    codigo VARCHAR(10) NOT NULL UNIQUE,
     descripcion VARCHAR(255) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
     minutosPreparacion INT NOT NULL
@@ -62,7 +62,7 @@ DROP TABLE IF EXISTS Pedido;
 CREATE TABLE IF NOT EXISTS Pedido (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
-    numero INT NOT NULL,
+    numero INT NOT NULL UNIQUE,
     cliente INT NOT NULL,
     articulo INT NOT NULL,
     cantidad INT NOT NULL,

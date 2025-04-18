@@ -57,23 +57,23 @@ public class VistaArticulos extends VistaBase {
     }
     /**
      * Muestra una lista de artículos sin numeración.
-     * @param ArticuloDTOS lista de artículos.
+     * @param articulosDTO lista de artículos.
      */
-    public void showListArticulos(List<ArticuloDTO> ArticuloDTOS) {
-        showListGenerica(ArticuloDTOS,"ARTÍCULOS", true, false);
+    public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+        showListGenerica(articulosDTO,"ARTÍCULOS", true, false);
     }
 
     /**
      * Muestra los artículos con su stock en formato detallado.
-     * @param articulos mapa de artículos con unidades disponibles.
+     * @param articuloStockMap mapa de artículos con unidades disponibles.
      */
-    public void showListArticulosStock(Map<ArticuloDTO, Integer> articulos) {
+    public void showListArticulosStock(Map<ArticuloDTO, Integer> articuloStockMap) {
         showMensaje("******** ARTÍCULOS CON STOCK ********", true);
         int i = 1;
-        for (Map.Entry<ArticuloDTO, Integer> stockArticulo : articulos.entrySet()) {
+        for (Map.Entry<ArticuloDTO, Integer> stockArticulo : articuloStockMap.entrySet()) {
             showMensaje("****************************************", true);
-            ArticuloDTO ArticuloDTO = stockArticulo.getKey();
-            showMensaje(i++ + ". " + ArticuloDTO.toString(), true);
+            ArticuloDTO articuloDTO = stockArticulo.getKey();
+            showMensaje(i++ + ". " + articuloDTO.toString(), true);
             showMensaje(stockArticulo.getValue() + " Unidades", true);
             showMensaje("****************************************", true);
         }
@@ -81,29 +81,29 @@ public class VistaArticulos extends VistaBase {
     }
     /**
      * Muestra una lista numerada de artículos.
-     * @param ArticuloDTOS lista de artículos.
+     * @param articulosDTO lista de artículos.
      */
-    public void showListArticulosNumerada(List<ArticuloDTO> ArticuloDTOS) {
-        showListGenerica(ArticuloDTOS,"ARTÍCULOS NUMERADOS", true, true);
+    public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
+        showListGenerica(articulosDTO,"ARTÍCULOS NUMERADOS", true, true);
     }
     /**
      * Muestra los datos detallados de un artículo.
-     * @param ArticuloDTO artículo a mostrar.
+     * @param articuloDTO artículo a mostrar.
      */
-    public void showArticulo(ArticuloDTO ArticuloDTO) {
-        showMensaje("******** DATOS DEL ARTICULO " + ArticuloDTO.getCodigo() +" ********", true);
-        showMensaje(ArticuloDTO.toString(), true);
+    public void showArticulo(ArticuloDTO articuloDTO) {
+        showMensaje("******** DATOS DEL ARTICULO " + articuloDTO.getCodigo() +" ********", true);
+        showMensaje(articuloDTO.toString(), true);
         showMensaje("*****************************************", true);
     }
     /**
      * Muestra el stock de todos los artículos.
-     * @param articulos mapa de artículos y su cantidad.
+     * @param articuloStockMap mapa de artículos y su cantidad.
      */
-    public void showStockArticulos(Map<ArticuloDTO, Integer> articulos) {
+    public void showStockArticulos(Map<ArticuloDTO, Integer> articuloStockMap) {
         showMensaje("******** STOCK DE ARTÍCULOS ********", true);
-        for (Map.Entry<ArticuloDTO, Integer> stockArticulo : articulos.entrySet()) {
-            ArticuloDTO ArticuloDTO = stockArticulo.getKey();
-            showMensaje(ArticuloDTO.getCodigo() + " - " + ArticuloDTO.getDescripcion() + " - " + stockArticulo.getValue() + " Unidades", true);
+        for (Map.Entry<ArticuloDTO, Integer> stockArticulo : articuloStockMap.entrySet()) {
+            ArticuloDTO articuloDTO = stockArticulo.getKey();
+            showMensaje(articuloDTO.getCodigo() + " - " + articuloDTO.getDescripcion() + " - " + stockArticulo.getValue() + " Unidades", true);
         }
         showMensaje("****************************************", true);
     }

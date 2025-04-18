@@ -35,6 +35,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     public void addCliente(ClienteDTO clienteDTO) throws Exception
     {
         Categoria categoria = getCategoriaEntidadNombre(clienteDTO.getCategoria().getNombre());
+        if (categoria == null) throw new Exception("Categoria no encontrada");
         factoryDAO.getDAOCliente().insertar(new Cliente(clienteDTO, categoria));
     }
 
@@ -45,6 +46,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     public void removeCliente(ClienteDTO clienteDTO) throws Exception
     {
         Cliente cliente = getClienteEntidadNIF(clienteDTO);
+        if (cliente == null) throw new Exception("Cliente no encontrado");
         factoryDAO.getDAOCliente().eliminar(cliente.getId());
     }
 
@@ -72,15 +74,17 @@ public class ModeloClientesBBDD implements IModeloClientes
         return factoryDAO.getDAOCliente().getPorId(id);
     }
 
-    public int getIdClienteDTO(ClienteDTO clienteDTO) throws Exception
+    public Integer getIdClienteDTO(ClienteDTO clienteDTO) throws Exception
     {
         Cliente cliente = getClienteEntidadEmail(clienteDTO.getEmail());
+        if (cliente == null) throw new Exception("Cliente no encontrado");
         return cliente.getId();
     }
 
     public ClienteDTO getClienteDTOId(int id) throws Exception
     {
         Cliente cliente = getClienteId(id);
+        if (cliente == null) throw new Exception("Cliente no encontrado");
         CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
         return new ClienteDTO(cliente, categoriaDTO);
     }
@@ -102,7 +106,9 @@ public class ModeloClientesBBDD implements IModeloClientes
     public void updateCliente(ClienteDTO clienteDTOOld, ClienteDTO clienteDTONew) throws Exception
     {
         Cliente clienteOld = getClienteEntidadNIF(clienteDTOOld);
-        Categoria categoriaNew = getCategoriaEntidadNombre(clienteDTONew.getNombre());
+        if(clienteOld == null) throw new Exception("Cliente antigüo no encontrado");
+        Categoria categoriaNew = getCategoriaEntidadNombre(clienteDTONew.getCategoria().getNombre());
+        if(categoriaNew == null) throw new Exception("Categoria no encontrado");
         Cliente clienteNew = new Cliente(
                 clienteDTONew,
                 categoriaNew);
@@ -155,7 +161,9 @@ public class ModeloClientesBBDD implements IModeloClientes
     public ClienteDTO getClienteDTONif(String nif) throws Exception
     {
         Cliente cliente = getClienteEntidadNif(nif);
+        if (cliente == null) throw new Exception("Cliente no encontrado.");
         CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        if (categoriaDTO == null) throw new Exception("Categoria no encontrado.");
         return new ClienteDTO(cliente, categoriaDTO);
     }
 
@@ -172,7 +180,9 @@ public class ModeloClientesBBDD implements IModeloClientes
     public ClienteDTO getClienteDTOEmail(String email) throws Exception
     {
         Cliente cliente = getClienteEntidadEmail(email);
+        if (cliente == null) throw new Exception("Cliente no encontrado.");
         CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        if (categoriaDTO == null) throw new Exception("Categoria no encontrado.");
         return new ClienteDTO(cliente, categoriaDTO);
     }
 
@@ -189,7 +199,9 @@ public class ModeloClientesBBDD implements IModeloClientes
     public List<ClienteDTO> getClientesCategoria(CategoriaDTO categoriaDTO) throws Exception
     {
         Categoria categoria = getCategoriaEntidadNombre(categoriaDTO.getNombre());
+        if (categoria == null) throw new Exception("Categoria no encontrada.");
         List<Cliente> clientes = getClientesEntidadCategoria(categoria);
+        if (clientes == null) throw new Exception("Cliente no encontrado.");
         return clientesEntidadToDTO(clientes);
     }
 
@@ -228,7 +240,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     public int getLastIndexCliente() throws Exception
     {
         List<ClienteDTO> clientesDTO = getClientesDTO();
-        if (clientesDTO.isEmpty()) return -1;
+        if (clientesDTO.isEmpty()) throw new Exception("No se encontraron clientes.");
         return clientesDTO.size() - 1; // Último índice
     }
 
@@ -239,7 +251,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     public int getFirstIndexCliente() throws Exception
     {
         List<ClienteDTO> clientesDTO = getClientesDTO();
-        if (clientesDTO.isEmpty()) return -1;
+        if (clientesDTO.isEmpty()) throw new Exception("No se encontraron clientes.");
         return clientesDTO.indexOf(clientesDTO.getFirst()); // Primer índice
     }
 
@@ -254,6 +266,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     public void removeCategoria(CategoriaDTO categoriaDTO) throws Exception
     {
         Categoria categoria = getCategoriaEntidadNombre(categoriaDTO.getNombre());
+        if (categoria == null) throw new Exception("Categoria no encontrada");
         factoryDAO.getDAOCliente().eliminar(categoria.getId());
     }
 
@@ -264,8 +277,11 @@ public class ModeloClientesBBDD implements IModeloClientes
 
     public void updateCategoria(CategoriaDTO categoriaDTOOld, CategoriaDTO categoriaDTONew) throws Exception
     {
-        Categoria categoriaNew = getCategoriaEntidadNombre(categoriaDTOOld.getNombre());
-
+        Categoria categoriaOld = getCategoriaEntidadNombre(categoriaDTOOld.getNombre());
+        if (categoriaOld == null) throw new Exception("Categoria no encontrada");
+        Categoria categoriaNew = new Categoria(categoriaDTOOld);
+        categoriaNew.setId(categoriaOld.getId());
+        factoryDAO.getDAOCategoria().actualizar(categoriaNew);
     }
 
     public CategoriaDTO getCategoriaDTOId(Integer id) throws Exception
@@ -287,6 +303,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     public List<CategoriaDTO> getCategoriasDTO() throws Exception
     {
         List<Categoria> categorias = getCategoriasEntidad();
+        if (categorias.isEmpty()) return new ArrayList<>();
         List<CategoriaDTO> categoriasDTO= new ArrayList<>();
         for (Categoria categoria : categorias) {
             categoriasDTO.add(new CategoriaDTO(categoria));

@@ -12,9 +12,12 @@ public interface IModeloPedidos {
     List<PedidoDTO> getPedidosDTO() throws Exception;
     void setPedidos(List<PedidoDTO> pedidos) throws Exception;
     void addPedido(PedidoDTO pedidos) throws Exception;
+    void addPedidoStock(PedidoDTO pedido) throws Exception;
     void removePedido(PedidoDTO pedidos) throws Exception;
+    void removePedidoStock(PedidoDTO pedidos) throws Exception;
     PedidoDTO getPedidoDTO(int id) throws Exception;
     void updatePedido(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception;
+    void updatePedidoStock(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception;
     PedidoDTO getPedidoDTONumero(int numero) throws Exception;
     List<PedidoDTO> getPedidosDTOCliente(ClienteDTO clienteDTO) throws Exception;
     List<PedidoDTO> getPedidosPendientesEnviados(Boolean enviado, ClienteDTO clienteDTO) throws Exception;

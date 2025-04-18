@@ -58,12 +58,22 @@ public class ModeloPedidosLocal implements IModeloPedidos {
         this.pedidos.add(pedidos);
     }
 
+    @Override
+    public void addPedidoStock(PedidoDTO pedido) throws Exception {
+
+    }
+
     /**
      * Elimina un pedidos de la lista.
      * @param pedidos pedidos a eliminar.
      */
     public void removePedido(PedidoDTO pedidos) {
         this.pedidos.remove(pedidos);
+    }
+
+    @Override
+    public void removePedidoStock(PedidoDTO pedidos) throws Exception {
+
     }
 
     /**
@@ -85,6 +95,11 @@ public class ModeloPedidosLocal implements IModeloPedidos {
         if (index != -1) {
             pedidos.set(index, pedidoDTONew);
         }
+
+    }
+
+    @Override
+    public void updatePedidoStock(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
 
     }
 

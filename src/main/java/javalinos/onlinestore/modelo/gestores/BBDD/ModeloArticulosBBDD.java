@@ -6,10 +6,8 @@ import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los artículos y su stock.
  */
@@ -178,9 +176,10 @@ public class ModeloArticulosBBDD implements IModeloArticulos
 
     /**
      * Devuelve el mapa de stock de todos los artículos.
+     *
      * @return mapa con artículos y cantidades disponibles.
      */
-    public Map<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception {
+    public LinkedHashMap<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception {
         List<ArticuloStock> articuloStocks = getArticuloStocksEntidades();
         return mapearArticuloStocks(articuloStocks);
     }
@@ -189,8 +188,8 @@ public class ModeloArticulosBBDD implements IModeloArticulos
         return factoryDAO.getDAOArticuloStock().getTodos();
     }
 
-    private Map<ArticuloDTO, Integer> mapearArticuloStocks (List<ArticuloStock> articuloStocks) throws Exception {
-        Map<ArticuloDTO, Integer> articuloStocksDTO = new HashMap<>();
+    private LinkedHashMap<ArticuloDTO, Integer> mapearArticuloStocks (List<ArticuloStock> articuloStocks) throws Exception {
+        LinkedHashMap<ArticuloDTO, Integer> articuloStocksDTO = new LinkedHashMap<>();
         for (ArticuloStock articuloStock : articuloStocks) {
             ArticuloDTO articuloDTO = getArticuloDTOId(articuloStock.getArticulo());
             articuloStocksDTO.put(articuloDTO, articuloStock.getStock());
@@ -213,7 +212,7 @@ public class ModeloArticulosBBDD implements IModeloArticulos
      * Establece un nuevo mapa de stock.
      * @param stockArticulos mapa de artículos con su stock.
      */
-    public void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) throws Exception
+    public void setStockArticulos(LinkedHashMap<ArticuloDTO, Integer> stockArticulos) throws Exception
     {
         List<ArticuloStock> articuloStocks = new ArrayList<>();
         for (ArticuloDTO articuloDTO : stockArticulos.keySet()) {

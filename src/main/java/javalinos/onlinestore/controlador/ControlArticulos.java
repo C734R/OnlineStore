@@ -78,11 +78,7 @@ public class ControlArticulos extends ControlBase {
                     updateArticulo();
                     break;
                 case 5:
-                    try {
-                        showStockArticulos(mArticulos.getArticuloStocksDTO());
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+                    showStockArticulos();
                     vArticulos.showMensajePausa("", true);
                     break;
                 case 0:
@@ -291,9 +287,15 @@ public class ControlArticulos extends ControlBase {
 
     /**
      * Muestra el stock de todos los artículos.
-     * @param stockArticulos mapa con artículo y cantidad disponible
      */
-    private void showStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) {
+    private void showStockArticulos() {
+        Map<ArticuloDTO, Integer> stockArticulos;
+        try{
+            stockArticulos = mArticulos.getArticuloStocksDTO();
+        } catch (Exception e) {
+            vArticulos.showMensajePausa("Error al obtener los stocks de los articulos", true);
+            return;
+        }
         vArticulos.showStockArticulos(stockArticulos);
     }
 

@@ -11,12 +11,12 @@ import java.util.Scanner;
 
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
 /**
- * Vista encargada de mostrar y gestionar la interacción con el usuario para los pedidoDTOS.
+ * Vista encargada de mostrar y gestionar la interacción con el usuario para los pedidos.
  * - Entidades relacionadas: PedidoDTO, ClienteDTO, ArticuloDTO
  */
 public class VistaPedidos extends VistaBase {
     /**
-     * Constructor por defecto. Inicializa la cabecera y el menú principal de pedidoDTOS.
+     * Constructor por defecto. Inicializa la cabecera y el menú principal de pedidos.
      */
     public VistaPedidos() {
         String cabecera = """
@@ -28,9 +28,9 @@ public class VistaPedidos extends VistaBase {
                 "Añadir pedido",
                 "Eliminar pedido",
                 "Editar pedido",
-                "Listar todos los pedidoDTOS",
-                "Listar pedidoDTOS pendientes",
-                "Listar pedidoDTOS enviados"));
+                "Listar todos los pedidos",
+                "Listar pedidos pendientes",
+                "Listar pedidos enviados"));
         super.setListaMenu(listaMenu);
     }
     /**
@@ -43,105 +43,104 @@ public class VistaPedidos extends VistaBase {
     }
 
     /**
-     * Muestra una lista con todos los pedidoDTOS o filtrando por clienteDTO.
-     * @param pedidoDTOS Lista de pedidoDTOS.
-     * @param ClienteDTO ClienteDTO para filtrar (puede ser null).
+     * Muestra una lista con todos los pedidos o filtrando por clienteDTO.
+     * @param pedidosDTO Lista de pedidos.
+     * @param clienteDTO cliente para filtrar (puede ser null).
      * @param opcion Opción extra para formato de salida.
      */
-    public void showListPedidos(List<PedidoDTO> pedidoDTOS, ClienteDTO ClienteDTO, boolean opcion) {
-        if (ClienteDTO == null) {
+    public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
+        if (clienteDTO == null) {
             showMensaje("******************* LISTA DE PEDIDOS *******************", true);
-            showOptions(listToStr(pedidoDTOS), 0, true, false, opcion);
+            showOptions(listToStr(pedidosDTO), 0, true, false, opcion);
             showMensaje("********************************************************", true);
         }
         else {
-            showMensaje("******************* LISTA DE PEDIDOS DEL CLIENTE  " + pedidoDTOS.getFirst().getCliente().getNombre() + " *******************", true);
-            showOptions(listToStr(pedidoDTOS), 0, true, false, opcion);
+            showMensaje("******************* LISTA DE PEDIDOS DEL CLIENTE  " + pedidosDTO.getFirst().getCliente().getNombre() + " *******************", true);
+            showOptions(listToStr(pedidosDTO), 0, true, false, opcion);
             showMensaje("********************************************************", true);
         }
     }
 
     /**
-     * Muestra una lista de clienteDTOS.
-     *
-     * @param ClienteDTOS Lista con los clienteDTOS
+     * Muestra una lista de clientes.
+     * @param clientesDTO Lista con los clientes
      */
-    public void showListClientes(List<ClienteDTO> ClienteDTOS) {
-        showListGenerica(ClienteDTOS, "LISTA DE CLIENTES", true, true);
+    public void showListClientes(List<ClienteDTO> clientesDTO) {
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES", true, true);
     }
     /**
-     * Muestra una lista con todos los clienteDTOS.
-     * @param ClienteDTOS Lista de clienteDTOS.
+     * Muestra una lista con todos los clientes.
+     * @param clientesDTO Lista de clientes.
      */
-    public void showListClientesPedidos(List<ClienteDTO> ClienteDTOS) {
-        showListGenerica(ClienteDTOS, "LISTA DE CLIENTES CON PEDIDOS", true, true);
+    public void showListClientesPedidos(List<ClienteDTO> clientesDTO) {
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS", true, true);
     }
     /**
-     * Muestra una lista de clienteDTOS que tienen al menos un pedido.
-     * @param ClienteDTOS Lista de clienteDTOS con pedidoDTOS.
+     * Muestra una lista de clientes que tienen al menos un pedido.
+     * @param clientesDTO Lista de clientes con pedidos.
      */
-    public void showListClientesPedidosPendientes(List<ClienteDTO> ClienteDTOS) {
-        showListGenerica(ClienteDTOS, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, true);
+    public void showListClientesPedidosPendientes(List<ClienteDTO> clientesDTO) {
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, true);
     }
     /**
-     * Muestra una lista de clienteDTOS con pedidoDTOS enviados.
-     * @param ClienteDTOS Lista de clienteDTOS con pedidoDTOS enviados.
+     * Muestra una lista de clientes con pedidos enviados.
+     * @param clientesDTO Lista de clientes con pedidos enviados.
      */
-    public void showListClientesPedidosEnviados(List<ClienteDTO> ClienteDTOS) {
-        showListGenerica(ClienteDTOS, "LISTA DE CLIENTES CON ENVIADOS", true, true);
+    public void showListClientesPedidosEnviados(List<ClienteDTO> clientesDTO) {
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON ENVIADOS", true, true);
     }
     /**
      * Muestra la lista de artículos disponibles.
-     * @param ArticuloDTOS Lista de artículos.
+     * @param articulosDTO Lista de artículos.
      */
-    public void showListArticulos(List<ArticuloDTO> ArticuloDTOS) {
-        showListGenerica(ArticuloDTOS, "LISTA DE ARTICULOS", true, false);
+    public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+        showListGenerica(articulosDTO, "LISTA DE ARTICULOS", true, false);
     }
 
     /**
-     * Muestra todos los pedidoDTOS, filtrando si se indica clienteDTO.
-     * @param pedidoDTOS Lista de pedidoDTOS.
-     * @param ClienteDTO ClienteDTO (puede ser null).
+     * Muestra todos los pedidos, filtrando si se indica clienteDTO.
+     * @param pedidosDTO Lista de pedidos.
+     * @param clienteDTO clientes (puede ser null).
      */
-    public void showPedidos(List<PedidoDTO> pedidoDTOS, ClienteDTO ClienteDTO) {
-        if (ClienteDTO == null) showListGenerica(pedidoDTOS, "PEDIDOS", true, true);
-        else showListGenerica(pedidoDTOS, "PEDIDOS DEL CLIENTE " + ClienteDTO.getNombre(), true, true);
+    public void showPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS", true, true);
+        else showListGenerica(pedidosDTO, "PEDIDOS DEL CLIENTE " + clienteDTO.getNombre(), true, true);
     }
 
     /**
-     * Muestra los pedidoDTOS pendientes, filtrando si se indica clienteDTO.
-     * @param pedidoDTOS Lista de pedidoDTOS pendientes.
-     * @param ClienteDTO ClienteDTO (puede ser null).
+     * Muestra los pedidos pendientes, filtrando si se indica cliente.
+     * @param pedidosDTO Lista de pedidos pendientes.
+     * @param clienteDTO cliente (puede ser null).
      */
-    public void showPedidosPendientes(List<PedidoDTO> pedidoDTOS, ClienteDTO ClienteDTO) {
-        if (ClienteDTO == null) showListGenerica(pedidoDTOS, "PEDIDOS PENDIENTES", true, true);
-        else showListGenerica(pedidoDTOS, "PEDIDOS PENDIENTES DEL CLIENTE " + ClienteDTO.getNombre(), true, true);
+    public void showPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES", true, true);
+        else showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES DEL CLIENTE " + clienteDTO.getNombre(), true, true);
     }
 
     /**
-     * Muestra los pedidoDTOS enviados, filtrando si se indica clienteDTO.
-     * @param pedidoDTOS Lista de pedidoDTOS enviados.
-     * @param ClienteDTO ClienteDTO (puede ser null).
+     * Muestra los pedidos enviados, filtrando si se indica cliente.
+     * @param pedidosDTO Lista de pedidos enviados.
+     * @param clienteDTO cliente (puede ser null).
      */
-    public void showPedidosEnviados(List<PedidoDTO> pedidoDTOS, ClienteDTO ClienteDTO) {
-        if (ClienteDTO == null) showListGenerica(pedidoDTOS, "PEDIDOS ENVIADOS", true, true);
-        else showListGenerica(pedidoDTOS, "PEDIDOS ENVIADOS DEL CLIENTE " + ClienteDTO.getNombre(), true, true);
+    public void showPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS", true, true);
+        else showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS DEL CLIENTE " + clienteDTO.getNombre(), true, true);
     }
 
     /**
      * Solicita al usuario seleccionar un cliente o mantener el actual (ENTER).
-     * @param ClienteDTOS Lista de clienteDTOS disponibles.
-     * @param ClienteDTOActual ClienteDTO actualmente asociado.
-     * @return ClienteDTO seleccionado o null si se mantiene el actual.
+     * @param clientesDTO Lista de clientes disponibles.
+     * @param clienteDTOActual cliente actualmente asociado.
+     * @return cliente seleccionado o null si se mantiene el actual.
      */
-    public ClienteDTO askClienteOpcional(List<ClienteDTO> ClienteDTOS, ClienteDTO ClienteDTOActual) {
-        if (ClienteDTOS.isEmpty()) {
-            showMensajePausa("No hay clienteDTOS registrados.", true);
+    public ClienteDTO askClienteOpcional(List<ClienteDTO> clientesDTO, ClienteDTO clienteDTOActual) {
+        if (clientesDTO.isEmpty()) {
+            showMensajePausa("No hay clientes registrados.", true);
             return null;
         }
 
-        showListClientes(ClienteDTOS);
-        showMensaje("ClienteDTO actual: " + ClienteDTOActual.getNombre() + " (" + ClienteDTOActual.getNif() + ")", true);
+        showListClientes(clientesDTO);
+        showMensaje("Cliente actual: " + clienteDTOActual.getNombre() + " (" + clienteDTOActual.getNif() + ")", true);
         showMensaje("Selecciona un nuevo cliente o pulsa ENTER para mantener el actual:", true);
 
         Scanner scanner = new Scanner(System.in);
@@ -150,11 +149,11 @@ public class VistaPedidos extends VistaBase {
         if(index.isEmpty()) return null;
         try {
             int valorIndex = Integer.parseInt(index);
-            if (valorIndex < 1 || valorIndex > ClienteDTOS.size()) {
+            if (valorIndex < 1 || valorIndex > clientesDTO.size()) {
                 showMensajePausa("Índice fuera de rango. Se mantendrá el cliente actual.", true);
                 return null;
             }
-            return ClienteDTOS.get(valorIndex - 1);
+            return clientesDTO.get(valorIndex - 1);
         } catch (NumberFormatException e) {
             showMensajePausa("Entrada no válida. Se mantendrá el cliente actual.", true);
             return null;

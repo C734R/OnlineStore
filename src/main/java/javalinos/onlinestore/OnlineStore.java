@@ -5,10 +5,6 @@ import javalinos.onlinestore.controlador.ControlArticulos;
 import javalinos.onlinestore.controlador.ControlClientes;
 import javalinos.onlinestore.controlador.ControlMenuPrincipal;
 import javalinos.onlinestore.controlador.ControlPedidos;
-import javalinos.onlinestore.modelo.DAO.ConexionBBDD;
-import javalinos.onlinestore.modelo.DAO.FactoryDAO;
-import javalinos.onlinestore.modelo.gestores.BBDD.ModeloArticulosBBDD;
-import javalinos.onlinestore.modelo.gestores.BBDD.ModeloPedidosBBDD;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
@@ -58,8 +54,15 @@ public class OnlineStore {
     public static void main(String[] args){
         if (args.length != 0) configuracion = Integer.parseInt(args[1]);
         else configuracion = 1;
-        if(!precargaDatos(configuracion)) return;
-        iniciarPrograma();
+
+        // Aplicar autocierre al uso de la conexión por parte de ModeloFactory
+        try (ModeloFactory factory = new ModeloFactory(configuracion)) {
+            mFactory = factory;
+            if (!precargaDatos(configuracion)) return;
+            iniciarPrograma();
+        } catch (Exception e) {
+            System.err.println("Error crítico: " + e);
+        }
     }
 
     /**

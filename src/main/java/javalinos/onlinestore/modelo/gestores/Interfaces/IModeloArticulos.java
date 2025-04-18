@@ -2,8 +2,8 @@ package javalinos.onlinestore.modelo.gestores.Interfaces;
 
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public interface IModeloArticulos {
 
@@ -11,10 +11,10 @@ public interface IModeloArticulos {
     ArticuloDTO getArticuloIndex(int index) throws Exception;
     ArticuloDTO getArticuloDTOId(Integer id) throws Exception;
     ArticuloDTO getArticuloDTOCodigo(String codigo) throws Exception;
-    Map<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception;
+    LinkedHashMap<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception;
     Integer getStockArticulo(ArticuloDTO articuloDTO) throws Exception;
     void setArticulos(List<ArticuloDTO> articulosDTO) throws Exception;
-    void setStockArticulos(Map<ArticuloDTO, Integer> stockArticulos) throws Exception;
+    void setStockArticulos(LinkedHashMap<ArticuloDTO, Integer> stockArticulos) throws Exception;
     void updateStockArticulo(ArticuloDTO articuloDTO, Integer stock) throws Exception;
     void addArticulo(ArticuloDTO articuloDTO) throws Exception;
     void addArticuloStock(ArticuloDTO articuloDTO, int stock) throws Exception;

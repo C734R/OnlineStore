@@ -45,6 +45,11 @@ public class ModeloPedidosBBDD implements IModeloPedidos
         factoryDAO.getDAOPedido().insertar(pedido);
     }
 
+    public void addPedidoStock(PedidoDTO pedidoDTO) throws Exception {
+        Pedido pedido = pedidoDTOtoEntidad(pedidoDTO);
+        factoryDAO.getDAOPedido().insertarConStock(pedido);
+    }
+
     /**
      * Elimina un pedidoDTO de la lista.
      * @param pedidoDTO pedidoDTO a eliminar.
@@ -53,6 +58,11 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     {
         Pedido pedido = getPedidoEntidadNumero(pedidoDTO.getNumero());
         factoryDAO.getDAOPedido().eliminar(pedido.getId());
+    }
+
+    public void removePedidoStock(PedidoDTO pedidoDTO) throws Exception {
+        Pedido pedido = getPedidoEntidadNumero(pedidoDTO.getNumero());
+        factoryDAO.getDAOPedido().eliminarConStock(pedido);
     }
 
     public void removePedidosAll() throws Exception
@@ -102,7 +112,15 @@ public class ModeloPedidosBBDD implements IModeloPedidos
         Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
         Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
         pedidoNew.setId(pedidoOld.getId());
-        factoryDAO.getDAOPedido().insertar(pedidoNew);
+        factoryDAO.getDAOPedido().actualizar(pedidoNew);
+    }
+
+    public void updatePedidoStock(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
+        Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
+        Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
+        pedidoNew.setId(pedidoOld.getId());
+        Integer diferenciaStock = pedidoOld.getCantidad() - pedidoDTOOld.getCantidad();
+        factoryDAO.getDAOPedido().actualizarConStock(pedidoNew, diferenciaStock);
     }
 
     private Articulo getArticuloPedidoDTO(PedidoDTO pedidoDTO) throws Exception
