@@ -144,6 +144,12 @@ public class ModeloArticulosLocal implements IModeloArticulos {
             articulosDTO.set(index, articuloDTONew);
         }
     }
+
+    @Override
+    public void updateArticuloStock(ArticuloDTO articuloDTONew, Integer stockNew) throws Exception {
+
+    }
+
     /**
      * Actualiza el stock de un artículo.
      * @param articuloDTO artículo a actualizar.

@@ -1,7 +1,9 @@
 package javalinos.onlinestore.modelo.DAO.MySQL;
 
+import javalinos.onlinestore.modelo.DAO.FactoryDAO;
 import javalinos.onlinestore.modelo.DAO.Interfaces.IArticuloDAO;
 import javalinos.onlinestore.modelo.Entidades.Articulo;
+import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,11 +12,13 @@ import java.sql.SQLException;
 
 public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements IArticuloDAO
 {
+    private FactoryDAO factoryDAO;
 
-    public ArticuloDAOMySQL(Connection conexion) throws SQLException
+    public ArticuloDAOMySQL(Connection conexion, FactoryDAO factoryDAO) throws SQLException
     {
         super(conexion);
         super.tabla = "articulo";
+        this.factoryDAO = factoryDAO;
     }
 
     @Override
@@ -88,4 +92,33 @@ public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements
         return articulo;
     }
 
+    public void actualizarArticuloStock(Articulo articuloNew, Integer stockNew) throws Exception {
+        String sql = "UPDATE " + tabla + " SET " + definirSet() + " WHERE id = ?";
+        boolean autocommitOriginal = conexion.getAutoCommit();
+        try (PreparedStatement stmt = conexion.prepareStatement(sql)) {
+            conexion.setAutoCommit(false);
+            mapearUpdate(stmt, articuloNew);
+            int ultimoParametro = obtenerUltimoParametro(stmt);
+            Object entidadId = definirId(articuloNew);
+            if (entidadId == null) throw new Exception("La pedido no tiene un ID definido. No se puede actualizar.");
+            stmt.setInt(ultimoParametro, (int) entidadId);
+            int filas = stmt.executeUpdate();
+            if (filas <= 0) {
+                throw new Exception("No se ha encontrado el artículo con ID: " + entidadId);
+            }
+            if (stockNew != null) ActualizarStock(articuloNew, stockNew);
+            conexion.commit();
+        } catch (Exception e) {
+            conexion.rollback();
+            throw new Exception("Error al actualizar artículo y stock en la base de datos.", e);
+        } finally {
+            conexion.setAutoCommit(autocommitOriginal);
+        }
+    }
+
+    private void ActualizarStock(Articulo articuloNew, Integer stockNew) throws Exception {
+        ArticuloStock articuloStock = factoryDAO.getDAOArticuloStock().getPorId(articuloNew.getId());
+        articuloStock.setStock(stockNew);
+        factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
+    }
 }

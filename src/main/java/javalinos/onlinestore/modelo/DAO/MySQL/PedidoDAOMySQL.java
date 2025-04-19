@@ -174,11 +174,11 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
             mapearUpdate(stmt, pedidoNew);
             int ultimoParametro = obtenerUltimoParametro(stmt);
             Object entidadId = definirId(pedidoNew);
-            if (entidadId == null) throw new Exception("La pedido no tiene un ID definido. No se puede actualizar.");
+            if (entidadId == null) throw new Exception("El pedido no tiene un ID definido. No se puede actualizar.");
             stmt.setInt(ultimoParametro, (int)entidadId);
             int filas = stmt.executeUpdate();
             if (filas <= 0) {
-                throw new Exception("No se ha encontrado la pedido con ID: " + entidadId);
+                throw new Exception("No se ha encontrado el pedido con ID: " + entidadId);
             }
             ActualizarStock(pedidoNew, diferenciaStock);
             conexion.commit();

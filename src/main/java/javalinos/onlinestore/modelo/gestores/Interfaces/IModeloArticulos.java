@@ -23,6 +23,7 @@ public interface IModeloArticulos {
     void removeArticuloStock(ArticuloDTO articuloDTO) throws Exception;
     void removeArticulosStockAll() throws Exception;
     void updateArticulo(ArticuloDTO articuloDTOold, ArticuloDTO articuloDTONew) throws Exception;
+    void updateArticuloStock(ArticuloDTO articuloDTONew, Integer stockNew) throws Exception;
     void updateStockArticulo(ArticuloDTO articuloDTOold, int stock) throws Exception;
     ArticuloDTO makeArticulo(String descripcion, Float precio, Integer preparacion) throws Exception;
     void loadArticulos() throws Exception;

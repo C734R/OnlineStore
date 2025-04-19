@@ -29,7 +29,7 @@ public class FactoryDAO {
 
     public IArticuloDAO getDAOArticulo() throws SQLException {
         return switch (configuracion) {
-            case 1 -> new ArticuloDAOMySQL(conexion);
+            case 1 -> new ArticuloDAOMySQL(conexion, factoryDAO);
             case 2 -> null;
             default -> null;
         };

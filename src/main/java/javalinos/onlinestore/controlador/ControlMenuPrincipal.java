@@ -2,13 +2,17 @@ package javalinos.onlinestore.controlador;
 
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
+
+import static javalinos.onlinestore.OnlineStore.configuracion;
+import static javalinos.onlinestore.OnlineStore.precargaDatos;
+
 /**
  * Controlador del menú principal de la aplicación.
  */
 public class ControlMenuPrincipal extends ControlBase {
 
     private VistaMenuPrincipal vMenuPrincipal;
-
+    boolean iniciado = false;
     /**
      * Constructor principal de ControlMenuPrincipal.
      * @param mStore el ModelStore que va a utilizar
@@ -51,6 +55,10 @@ public class ControlMenuPrincipal extends ControlBase {
         int opcion;
         while(true) {
             vMenuPrincipal.showCabecera();
+            if(!iniciado && vMenuPrincipal.askBoolean("¿Deseas realizar la precarga de datos?", true, false)){
+                if(!precargaDatos()) return 0;
+            }
+            iniciado = true;
             vMenuPrincipal.showMenu(1);
             opcion = vMenuPrincipal.askInt("Seleccione una opción", 0, 3, false, false);
             switch (opcion) {

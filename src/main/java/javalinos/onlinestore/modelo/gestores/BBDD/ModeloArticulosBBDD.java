@@ -6,6 +6,7 @@ import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -61,6 +62,19 @@ public class ModeloArticulosBBDD implements IModeloArticulos
         Articulo articuloNew = new Articulo(articuloDTOOld);
         articuloNew.setId(articuloOld.getId());
         factoryDAO.getDAOArticulo().actualizar(articuloNew);
+    }
+
+    public void updateArticuloStock(ArticuloDTO articuloDTONew , Integer stockNew) throws Exception {
+        // Conviertes de DTO a Entidad (sin ID)
+        Articulo articuloEntidadNew = new Articulo(articuloDTONew);
+        // Extraes código único de DTO
+        String codigoArticuloNuevo = articuloEntidadNew.getCodigo();
+        // Obtienes EntidadOld
+        Articulo articuloEntidadOld = getArticuloEntidadCodigo(codigoArticuloNuevo);
+        // Asignas ID EntidadOld a EntidadNew
+        articuloEntidadNew.setId(articuloEntidadOld.getId());
+        // Actualizas stock pasando EntidadNew y StockNew
+        factoryDAO.getDAOArticulo().actualizarArticuloStock(articuloEntidadNew, stockNew);
     }
 
     //*************************** GETTERS & SETTERS ARTÍCULOS ***************************//

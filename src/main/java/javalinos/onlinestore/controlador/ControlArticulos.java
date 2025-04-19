@@ -188,6 +188,8 @@ public class ControlArticulos extends ControlBase {
     public void updateArticulo()
     {
         List<ArticuloDTO> articulosDTO;
+        boolean modificado = false;
+        Integer stockNew;
         vArticulos.showMensaje("******** Modificar Artículo ********", true);
         try
         {
@@ -214,46 +216,45 @@ public class ControlArticulos extends ControlBase {
         int seleccion = vArticulos.askInt("Selecciona el número del artículo a modificar", 1, articulosDTO.size(), true, true);
         if (seleccion == -99999) return;
 
-        ArticuloDTO ArticuloDTOOld = articulosDTO.get(seleccion - 1);
-        ArticuloDTO ArticuloDTONew = new ArticuloDTO(ArticuloDTOOld);
+        ArticuloDTO articuloDTOOld = articulosDTO.get(seleccion - 1);
+        ArticuloDTO articuloDTONew = new ArticuloDTO(articuloDTOOld);
 
         vArticulos.showMensaje("Deja un campo vacío para mantener el valor actual", true);
 
-        String descripcion = vArticulos.askStringOpcional("Descripción actual: " + ArticuloDTOOld.getDescripcion(), 250);
-        if (descripcion != null && !descripcion.isEmpty()) ArticuloDTONew.setDescripcion(descripcion);
-
+        String descripcion = vArticulos.askStringOpcional("Descripción actual: " + articuloDTOOld.getDescripcion(), 250);
+        if (descripcion != null && !descripcion.isEmpty()) {
+            articuloDTONew.setDescripcion(descripcion);
+            modificado = true;
+        }
         // Precio
-        Float precio = vArticulos.askPrecioOpcional("Precio actual: " + ArticuloDTOOld.getPrecio(), 0.0f, 9999.0f);
-        if (precio != null) ArticuloDTONew.setPrecio(precio);
-
+        Float precio = vArticulos.askPrecioOpcional("Precio actual: " + articuloDTOOld.getPrecio(), 0.0f, 9999.0f);
+        if (precio != null) {
+            articuloDTONew.setPrecio(precio);
+            modificado = true;
+        }
         // Días de preparación
-        Integer minutosPreparacion = vArticulos.askIntOpcional("Minutos de preparación actuales: " + ArticuloDTOOld.getMinutosPreparacion(), 1, 9999);
-        if (minutosPreparacion != null) ArticuloDTONew.setMinutosPreparacion(minutosPreparacion);
-
+        Integer minutosPreparacion = vArticulos.askIntOpcional("Minutos de preparación actuales: " + articuloDTOOld.getMinutosPreparacion(), 1, 9999);
+        if (minutosPreparacion != null) {
+            articuloDTONew.setMinutosPreparacion(minutosPreparacion);
+            modificado = true;
+        }
         // Stock
-        Integer stock;
         try
         {
-            stock = vArticulos.askIntOpcional("Stock actual: " + mArticulos.getStockArticulo(ArticuloDTOOld), 0, 999);
+            stockNew = vArticulos.askIntOpcional("Stock actual: " + mArticulos.getStockArticulo(articuloDTOOld), 0, 999);
+            if (stockNew != null) modificado = true;
         }
         catch (Exception e)
         {
             vArticulos.showMensajePausa("Error al mostrar el stock actual. " + e, true);
             return;
         }
-        if (stock == null) {
-            try
-            {
-                stock = mArticulos.getStockArticulo(ArticuloDTOOld);
-                mArticulos.updateArticulo(ArticuloDTOOld, ArticuloDTONew);
-                mArticulos.removeArticuloStock(ArticuloDTOOld);
-                mArticulos.addArticuloStock(ArticuloDTONew, stock);
-                vArticulos.showMensajePausa("Artículo y stock actualizado correctamente.", true);
-            }
-            catch (Exception e)
-            {
-                vArticulos.showMensajePausa("Error al actualizar el stock. " + e, true);
-            }
+        if (!modificado) return;
+        try {
+            mArticulos.updateArticuloStock(articuloDTONew, stockNew);
+            vArticulos.showMensajePausa("Artículo y stock actualizado correctamente.", true);
+        } catch (Exception e) {
+            vArticulos.showMensajePausa("Error al actualizar el stock. " + e, true);
         }
 
     }

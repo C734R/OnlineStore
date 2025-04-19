@@ -58,7 +58,8 @@ public class OnlineStore {
         // Aplicar autocierre al uso de la conexión por parte de ModeloFactory
         try (ModeloFactory factory = new ModeloFactory(configuracion)) {
             mFactory = factory;
-            if (!precargaDatos(configuracion)) return;
+            loadMVC(configuracion);
+            //if (!precargaDatos(configuracion)) return;
             iniciarPrograma();
         } catch (Exception e) {
             System.err.println("Error crítico: " + e);
@@ -68,18 +69,8 @@ public class OnlineStore {
     /**
      * Precarga los datos necesarios para la aplicación según la configuración.
      * Reintenta en caso de error hasta que el usuario decida salir.
-     * @param configuracion tipo de carga (0 = base, 1 = ORM, etc.).
      */
-    private static boolean precargaDatos(int configuracion)  {
-        try
-        {
-            loadMVC(configuracion);
-        }
-        catch (Exception e) {
-            // Mensaje de error por consola en carga MVC antes de inicializar ventanas
-            System.out.println(e.getMessage());
-            return false;
-        }
+    public static boolean precargaDatos()  {
         while(true) {
             try
             {
