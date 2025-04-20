@@ -110,7 +110,7 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("Error al obtener el número del último artículo.", true);
             return;
         }
-        String descripcion = vArticulos.askString("Introduce la descripción del artículo: ", 250);
+        String descripcion = vArticulos.askString("Introduce la descripción del artículo: ", 1, 250);
         if(descripcion == null) return;
         float precio = vArticulos.askPrecio(0.0f, 9999.0f);
         if(precio == -99999f) return;

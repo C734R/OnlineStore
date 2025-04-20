@@ -133,18 +133,21 @@ public abstract class VistaBase {
     /**
      * Solicita una cadena de texto con longitud máxima.
      * @param mensaje mensaje mostrado al usuario.
-     * @param longitud número máximo de caracteres.
      * @return texto ingresado o null si se superan los intentos.
      */
-    public String askString(String mensaje, int longitud) {
+    public String askString(String mensaje,int longitudMin, int longitudMax) {
         int intentos = 0;
         Scanner scanner = new Scanner(System.in);
         while(intentos < 3) {
             showMensaje(mensaje,true);
             try {
                 String entrada = scanner.nextLine();
-                if (entrada.length() > longitud) {
-                    showMensajePausa("Error. Entrada excedida. No puedes sobrepasar los " + longitud + " carácteres.", true);
+                if (entrada.length() > longitudMax) {
+                    showMensajePausa("Error. Entrada excedida. No puedes sobrepasar los " + longitudMax + " carácteres.", true);
+                    intentos++;
+                }
+                else if (entrada.length() < longitudMin) {
+                    showMensajePausa("Error. Entrada insuficiente. La longitud de la entrada no puede ser inferior a " + longitudMin + " caracteres.", true);
                     intentos++;
                 }
                 else return entrada;
@@ -244,7 +247,7 @@ public abstract class VistaBase {
         int intentos = 0;
         while (intentos < 3) {
             try {
-                return LocalDate.parse(askString("Introduce la fecha "+ mensaje + " (dd-mm-aaaa): ", 10), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                return LocalDate.parse(askString("Introduce la fecha "+ mensaje + " (dd-mm-aaaa): ", 10, 10), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             } catch (Exception e) {
                 showMensajePausa("Error. Fecha incorrecta. Introduce la fecha en el formato dd-mm-aaaa.", true);
                 intentos++;

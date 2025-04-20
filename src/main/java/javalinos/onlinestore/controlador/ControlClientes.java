@@ -92,9 +92,9 @@ public class ControlClientes extends ControlBase
     public void addCliente()
     {
         vClientes.showMensaje("******** Añadir Cliente ********", true);
-        String nombre = vClientes.askString("Ingrese el nombre del cliente:", 250);
+        String nombre = vClientes.askString("Ingrese el nombre del cliente:", 1,250);
         if (nombre == null ) return;
-        String domicilio = vClientes.askString("Ingrese el domicilio del cliente:", 250);
+        String domicilio = vClientes.askString("Ingrese el domicilio del cliente:", 1, 250);
         if (domicilio == null ) return;
         String nif = vClientes.askNIF();
         if (nif == null ) return;
@@ -152,20 +152,20 @@ public class ControlClientes extends ControlBase
      */
     public void removeClienteNif()
     {
-        String nif = vClientes.askString("Ingrese el NIF del cliente a eliminar:", 15);
+        String nif = vClientes.askNIF();
         if (nif == null) return;
-        ClienteDTO clienteDTO = null;
+        ClienteDTO clienteDTO;
         try
         {
             clienteDTO = mClientes.getClienteDTONif(nif);
+            if (clienteDTO == null){
+                vClientes.showMensajePausa("Error. El NIF introducido no corresponde a ningún usuario.", true);
+                return;
+            }
         }
         catch (Exception e)
         {
-            vClientes.showMensaje("Error al eliminar el cliente: " + e.getMessage(), true);
-            return;
-        }
-        if (clienteDTO == null){
-            vClientes.showMensajePausa("Error. El NIF introducido no corresponde a ningún usuario.", true);
+            vClientes.showMensajePausa("Error al eliminar el cliente: " + e.getMessage(), true);
             return;
         }
         try
@@ -175,7 +175,7 @@ public class ControlClientes extends ControlBase
         }
         catch (Exception e)
         {
-            vClientes.showMensaje("Error al eliminar el cliente: " + e.getMessage(), true);
+            vClientes.showMensajePausa("Error al eliminar el cliente: " + e.getMessage(), true);
         }
     }
 
@@ -184,21 +184,22 @@ public class ControlClientes extends ControlBase
      */
     public void removeClienteEmail()
     {
-        String email = vClientes.askString("Ingrese el Email del cliente a eliminar:", 250);
+        String email = vClientes.askEmail(false);
         if (email == null) return;
         ClienteDTO clienteDTO = null;
         try
         {
             clienteDTO = mClientes.getClienteDTOEmail(email);
+            if (clienteDTO == null) {
+                vClientes.showMensajePausa("Error. El Email introducido no corresponde a ningún usuario.", true);
+                return;
+            }
         }
         catch (Exception e)
         {
-            vClientes.showMensaje("Error al obtener el cliente: " + e.getMessage(), true);
+            vClientes.showMensajePausa("Error al obtener el cliente: " + e.getMessage(), true);
         }
-        if (clienteDTO == null) {
-            vClientes.showMensajePausa("Error. El Email introducido no corresponde a ningún usuario.", true);
-            return;
-        }
+
         try
         {
             mClientes.removeCliente(clienteDTO);
@@ -206,7 +207,7 @@ public class ControlClientes extends ControlBase
         }
         catch (Exception e)
         {
-            vClientes.showMensaje("Error al eliminar el cliente: " + e.getMessage(), true);
+            vClientes.showMensajePausa("Error al eliminar el cliente: " + e.getMessage(), true);
         }
     }
 
@@ -259,7 +260,7 @@ public class ControlClientes extends ControlBase
         ClienteDTO clienteDTONew;
         clienteDTONew = new ClienteDTO(clienteDTOOld);
         oldNameCliente = clienteDTOOld.getNombre();
-        newNameCliente = vClientes.askString("Introduce el nuevo nombre del usuario: ", 250);
+        newNameCliente = vClientes.askString("Introduce el nuevo nombre del usuario: ", 1, 250);
         if (newNameCliente == null) return;
         clienteDTONew.setNombre(newNameCliente);
         try
@@ -280,7 +281,7 @@ public class ControlClientes extends ControlBase
         ClienteDTO ClienteDTONew;
         ClienteDTONew = new ClienteDTO(clienteDTOOld);
         oldDomicilio = clienteDTOOld.getDomicilio();
-        newDomicilio = vClientes.askString("Introduce el nuevo domicilio: ", 250);
+        newDomicilio = vClientes.askString("Introduce el nuevo domicilio: ", 1, 250);
         if (newDomicilio == null) return;
         ClienteDTONew.setDomicilio(newDomicilio);
         try {
@@ -371,7 +372,7 @@ public class ControlClientes extends ControlBase
         ClienteDTO clienteDTO = null;
         while (true) {
             showListClientes();
-            datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 250);
+            datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 1, 250);
             if (datoCliente == null) return null;
             try {
                 intentos++;
@@ -491,7 +492,7 @@ public class ControlClientes extends ControlBase
     public void showCliente()
     {
         ClienteDTO clienteDTO;
-        String datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a mostrar: ", 250);
+        String datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a mostrar: ", 1, 250);
         try
         {
             if (mClientes.getClienteDTONif(datoCliente) == null)

@@ -31,4 +31,5 @@ module javalinos.onlinestore {
     opens javalinos.onlinestore.modelo.gestores.Local to javafx.fxml;
     exports javalinos.onlinestore.modelo.gestores.Interfaces;
     opens javalinos.onlinestore.modelo.gestores.Interfaces to javafx.fxml;
+    exports javalinos.onlinestore.utils.Conexiones;
 }
