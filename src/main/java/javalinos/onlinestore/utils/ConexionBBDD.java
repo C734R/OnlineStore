@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class ConexionBBDD {
+public class ConexionBBDD implements AutoCloseable {
 
     private Connection conexion;
 
@@ -16,7 +16,8 @@ public class ConexionBBDD {
         return conexion;
     }
 
-    public void cerrar() throws SQLException {
+    @Override
+    public void close() throws Exception {
         conexion.close();
     }
 }

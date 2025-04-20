@@ -3,7 +3,6 @@ package javalinos.onlinestore.controlador;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
 
-import static javalinos.onlinestore.OnlineStore.configuracion;
 import static javalinos.onlinestore.OnlineStore.precargaDatos;
 
 /**
@@ -86,8 +85,8 @@ public class ControlMenuPrincipal extends ControlBase {
      * Muestra un mensaje de error al fallar la precarga de datos.
      * @return true si el usuario desea volver a intentarlo, false en caso contrario
      */
-    public boolean errorPrecarga() {
-        vMenuPrincipal.showMensajePausa("Error. Se ha producido un error en la precarga de datos.", true);
+    public boolean errorPrecarga(Exception e) {
+        vMenuPrincipal.showMensajePausa("Error. Se ha producido un error en la precarga de datos: " + e, true);
         return vMenuPrincipal.askBoolean("¿Deseas volver a intentarlo?", true, false);
     }
 

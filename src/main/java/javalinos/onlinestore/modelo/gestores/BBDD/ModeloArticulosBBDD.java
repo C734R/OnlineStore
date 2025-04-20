@@ -198,6 +198,11 @@ public class ModeloArticulosBBDD implements IModeloArticulos
         return mapearArticuloStocks(articuloStocks);
     }
 
+    public Map<Integer, Integer> getArticuloStocksDTOIds() throws Exception {
+        List<ArticuloStock> articuloStocks = getArticuloStocksEntidades();
+        return mapearArticuloStocksId(articuloStocks);
+    }
+
     private List<ArticuloStock> getArticuloStocksEntidades() throws Exception {
         return factoryDAO.getDAOArticuloStock().getTodos();
     }
@@ -209,6 +214,14 @@ public class ModeloArticulosBBDD implements IModeloArticulos
             articuloStocksDTO.put(articuloDTO, articuloStock.getStock());
         }
         return articuloStocksDTO;
+    }
+
+    private Map<Integer, Integer> mapearArticuloStocksId (List<ArticuloStock> articuloStocks) throws Exception {
+        Map<Integer, Integer> stockIdArticulo = new LinkedHashMap<>();
+        for (ArticuloStock articuloStock : articuloStocks) {
+            stockIdArticulo.put(articuloStock.getArticulo(), articuloStock.getStock());
+        }
+        return stockIdArticulo;
     }
 
     /**

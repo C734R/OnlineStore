@@ -59,9 +59,9 @@ public class ModeloFactory implements AutoCloseable {
         }
     }
 
-    public void close() throws SQLException {
+    public void close() throws Exception {
         if (conexion != null) {
-            conexion.cerrar();
+            conexion.close();
         }
     }
 }

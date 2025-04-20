@@ -226,8 +226,8 @@ public class PedidoDTO {
     @Override
     public String toString() {
         return  "Número de pedido: " + numero + "\n" +
-                "ClienteDTO: " + clienteDTO + "\n" +
-                "ArticuloDTO: " + articuloDTO + "\n" +
+                "Cliente: " + clienteDTO + "\n" +
+                "Articulo: " + articuloDTO + "\n" +
                 "Cantidad: " + cantidad + "\n" +
                 "Fecha de creación: " + fechahora + "\n" +
                 "Coste del envío: " + String.format("%.2f",envio) + " €\n" +

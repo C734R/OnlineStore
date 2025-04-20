@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS Cliente (
     categoria INT NOT NULL,
     FOREIGN KEY FK_cliente_categoria(categoria) REFERENCES Categoria(id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
 );
 
 DROP TABLE IF EXISTS Articulo;
@@ -71,8 +71,8 @@ CREATE TABLE IF NOT EXISTS Pedido (
     precio DECIMAL(10,2) NOT NULL,
     FOREIGN KEY FK_pedido_cliente(cliente) REFERENCES Cliente(id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE,
+        ON DELETE RESTRICT ,
     FOREIGN KEY FK_pedido_articulo(articulo) REFERENCES Articulo(id)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE RESTRICT
 );

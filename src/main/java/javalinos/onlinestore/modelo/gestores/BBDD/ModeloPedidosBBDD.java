@@ -13,6 +13,7 @@ import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los pedidoDTOS.
@@ -119,7 +120,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
         Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
         Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
         pedidoNew.setId(pedidoOld.getId());
-        Integer diferenciaStock = pedidoOld.getCantidad() - pedidoDTOOld.getCantidad();
+        Integer diferenciaStock = pedidoOld.getCantidad() - pedidoNew.getCantidad();
         factoryDAO.getDAOPedido().actualizarConStock(pedidoNew, diferenciaStock);
     }
 
@@ -205,9 +206,9 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     }
 
     /**
-     * Obtiene todos los pedidoDTOS realizados por un clienteDTO.
-     * @param clienteDTO clienteDTO a consultar.
-     * @return lista de pedidoDTOS realizados por ese clienteDTO.
+     * Obtiene todos los pedidos realizados por un cliente.
+     * @param clienteDTO cliente a consultar.
+     * @return lista de pedidos realizados por ese cliente.
      */
     public List<PedidoDTO> getPedidosDTOCliente(ClienteDTO clienteDTO) throws Exception
     {
@@ -221,38 +222,28 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     }
 
     /**
-     * Obtiene pedidoDTOS enviados o pendientes, con opción de filtrar por clienteDTO.
+     * Obtiene pedidos enviados o pendientes, con opción de filtrar por cliente.
      * @param enviado true para enviados, false para pendientes.
-     * @param ClienteDTO clienteDTO a filtrar (puede ser null).
-     * @return lista de pedidoDTOS según los filtros.
+     * @param clienteDTO cliente a filtrar (puede ser null).
+     * @return lista de pedidos según los filtros.
      */
-    public List<PedidoDTO> getPedidosPendientesEnviados(Boolean enviado, ClienteDTO ClienteDTO) throws Exception
+    public List<PedidoDTO> getPedidosPendientesEnviados(Boolean enviado, ClienteDTO clienteDTO) throws Exception
     {
-        List<PedidoDTO> listaPedidosPE = new ArrayList<>();
-        List<PedidoDTO> listaPedidosDTO = getPedidosDTO();
-        if (ClienteDTO != null) {
-            for (PedidoDTO pedidoDTO : listaPedidosDTO) {
-                if (pedidoDTO.getCliente().equals(ClienteDTO)) {
-                    listaPedidosPE.add(pedidoDTO);
-                }
-            }
-        } else {
-            listaPedidosPE = listaPedidosDTO;
-        }
+        List<PedidoDTO> listaPedidosPE;
+        if(clienteDTO != null) listaPedidosPE = getPedidosDTOCliente(clienteDTO);
+        else listaPedidosPE = getPedidosDTO();
 
-        List<PedidoDTO> resultado = new ArrayList<>();
-
-        for (PedidoDTO pedidoDTO : listaPedidosPE) {
+        Iterator<PedidoDTO> iteradorPedidos = listaPedidosPE.iterator();
+        while (iteradorPedidos.hasNext()) {
+            PedidoDTO pedidoDTO = iteradorPedidos.next();
             boolean estaEnviado = checkEnviado(pedidoDTO);
 
-            if (enviado && estaEnviado) {
-                resultado.add(pedidoDTO);
-            } else if (!enviado && !estaEnviado) {
-                resultado.add(pedidoDTO);
+            if ((enviado && !estaEnviado) || (!enviado && estaEnviado)) {
+                iteradorPedidos.remove();
             }
         }
 
-        return resultado;
+        return listaPedidosPE;
     }
 
     /**

@@ -1,7 +1,8 @@
 package javalinos.onlinestore.modelo.DTO;
 
-import javalinos.onlinestore.modelo.Entidades.Categoria;
 import javalinos.onlinestore.modelo.Entidades.Cliente;
+
+import java.util.Objects;
 
 /**
  * Contiene todos los datos de un cliente.
@@ -168,5 +169,19 @@ public class ClienteDTO {
                 "NIF: " + nif + "\n" +
                 "Email: " + email + "\n" +
                 categoriaDTO.toString();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ClienteDTO other)) return false;
+        return nombre.equals(other.nombre) &&
+                domicilio.equals(other.domicilio) &&
+                nif.equals(other.nif) &&
+                email.equals(other.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre, domicilio, nif, email);
     }
 }

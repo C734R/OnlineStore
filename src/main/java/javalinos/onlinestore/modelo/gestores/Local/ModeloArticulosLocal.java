@@ -56,6 +56,12 @@ public class ModeloArticulosLocal implements IModeloArticulos {
     public LinkedHashMap<ArticuloDTO, Integer> getArticuloStocksDTO() throws Exception {
         return stockArticulos;
     }
+
+    @Override
+    public Map<Integer, Integer> getArticuloStocksDTOIds() throws Exception {
+        return Map.of();
+    }
+
     /**
      * Devuelve el stock de un artículo concreto.
      * @param articuloDTO artículo a consultar.

@@ -73,6 +73,7 @@ public class ControlArticulos extends ControlBase {
                     break;
                 case 3:
                     showListArticulos();
+                    vArticulos.showMensajePausa("",true);
                     break;
                 case 4:
                     updateArticulo();
@@ -109,7 +110,7 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("Error al obtener el número del último artículo.", true);
             return;
         }
-        String descripcion = vArticulos.askString("Introduce la descripción del artículo", 250);
+        String descripcion = vArticulos.askString("Introduce la descripción del artículo: ", 250);
         if(descripcion == null) return;
         float precio = vArticulos.askPrecio(0.0f, 9999.0f);
         if(precio == -99999f) return;
@@ -166,14 +167,13 @@ public class ControlArticulos extends ControlBase {
         vArticulos.showListArticulosNumerada(articulosDTO);
         vArticulos.showMensaje("Selecciona un artículo para eliminar: ", true);
 
-        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), false, false);
+        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), true, true);
         if(seleccion == -99999) return;
 
         ArticuloDTO articuloDTO = articulosDTO.get(seleccion-1);
         try
         {
             mArticulos.removeArticulo(articuloDTO);
-            mArticulos.removeArticuloStock(articuloDTO);
             vArticulos.showMensajePausa("Artículo y stock eliminados correctamente.", true);
         }
         catch (Exception e)

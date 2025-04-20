@@ -10,12 +10,20 @@ import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
 import javalinos.onlinestore.modelo.gestores.ModeloFactory;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
+import javalinos.onlinestore.utils.ConexionBBDD;
 import javalinos.onlinestore.vista.VistaArticulos;
 import javalinos.onlinestore.vista.VistaClientes;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
 import javalinos.onlinestore.vista.VistaPedidos;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Clase principal de la aplicación OnlineStore.
@@ -72,6 +80,12 @@ public class OnlineStore {
      */
     public static boolean precargaDatos()  {
         while(true) {
+            try (Connection conexion = new ConexionBBDD("localhost:3306","root", "1234","OnlineStore").getConexion()) {
+                ejecutarScriptSQL("src/main/java/javalinos/onlinestore/modelo/DAO/ScriptBBDD.sql", conexion);
+            } catch (Exception e) {
+                vMenuPrincipal.showMensajePausa("Error al ejecutar el script SQL:" + e, true);
+                return false;
+            }
             try
             {
                 cClientes.loadClientes();
@@ -80,11 +94,26 @@ public class OnlineStore {
                 break;
             }
             catch (Exception e){
-                if(!cMenuPrincipal.errorPrecarga()) return false;
+                if(!cMenuPrincipal.errorPrecarga(e)) return false;
             }
         }
         return true;
     }
+
+    public static void ejecutarScriptSQL(String ruta, Connection conexion) throws Exception {
+        String script = Files.readString(Path.of(ruta));
+        String[] sentencias = script.split(";");
+        try (Statement stmt = conexion.createStatement()) {
+            for (String sentencia : sentencias) {
+                sentencia = sentencia.trim();
+                if (!sentencia.isEmpty()) {
+                    stmt.execute(sentencia);
+                }
+            }
+        }
+        vMenuPrincipal.showMensaje("Script SQL ejecutado correctamente.", true);
+    }
+
 
     /**
      * Inicia el menú principal y controla el flujo del programa.

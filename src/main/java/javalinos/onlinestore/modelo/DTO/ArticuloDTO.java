@@ -127,6 +127,6 @@ public class ArticuloDTO {
         return  "Código: " + codigo + "\n" +
                 "Descripción: " + descripcion + "\n" +
                 "Precio " + precio + " €\n" +
-                "Tiempo de minutosPreparacion: " + minutosPreparacion + " minutos";
+                "Tiempo de preparación: " + minutosPreparacion + " minutos";
     }
 }
