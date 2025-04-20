@@ -238,6 +238,8 @@ public class ModeloPedidosBBDD implements IModeloPedidos
             PedidoDTO pedidoDTO = iteradorPedidos.next();
             boolean estaEnviado = checkEnviado(pedidoDTO);
 
+            // Si quiero enviados y no está enviado, borrar
+            // Si quiero pendientes y está enviado, borrar
             if ((enviado && !estaEnviado) || (!enviado && estaEnviado)) {
                 iteradorPedidos.remove();
             }

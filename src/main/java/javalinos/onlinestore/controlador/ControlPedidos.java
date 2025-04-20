@@ -3,7 +3,6 @@ package javalinos.onlinestore.controlador;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
-import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
@@ -105,11 +104,11 @@ public class ControlPedidos extends ControlBase{
                     vPedidos.showMensajePausa("",true);
                     break;
                 case 5:
-                    showListPedidosPendientesEnviados(askFiltrarCliente(2), false);
+                    showListPedidosPendientesEnviados(askFiltrarCliente(1), false);
                     vPedidos.showMensajePausa("",true);
                     break;
                 case 6:
-                    showListPedidosPendientesEnviados(askFiltrarCliente(1), true);
+                    showListPedidosPendientesEnviados(askFiltrarCliente(2), true);
                     vPedidos.showMensajePausa("",true);
                     break;
                 case 0:
@@ -129,7 +128,7 @@ public class ControlPedidos extends ControlBase{
     public void addPedidos()
     {
         vPedidos.showMensaje("******** Añadir Pedido ********", true);
-        List<ArticuloDTO> articulosDisponibles = null;
+        List<ArticuloDTO> articulosDisponibles;
         try {
             articulosDisponibles = mArticulos.getArticulosDTO();
             for (ArticuloDTO articuloDTO : articulosDisponibles)
@@ -301,7 +300,8 @@ public class ControlPedidos extends ControlBase{
                 }
                 return;
             }
-            vPedidos.showListPedidos(pedidoDTOS, clienteDTO, false);
+            if(!enviado) vPedidos.showListPedidosPendientes(pedidoDTOS, clienteDTO);
+            else vPedidos.showListPedidosEnviados(pedidoDTOS, clienteDTO);
         }
         catch (Exception e)
         {
@@ -400,8 +400,8 @@ public class ControlPedidos extends ControlBase{
             }
 
             if(tipoFiltrado == 0) vPedidos.showListClientesPedidos(clientesPedidos);
-            else if (tipoFiltrado == 1) vPedidos.showListClientesPedidosEnviados(clientesPedidos);
-            else vPedidos.showListClientesPedidosPendientes(clientesPedidos);
+            else if (tipoFiltrado == 1) vPedidos.showListClientesPedidosPendientes(clientesPedidos);
+            else vPedidos.showListClientesPedidosEnviados(clientesPedidos);
             indexCliente = vPedidos.askInt("Selecciona un cliente", 1, clientesPedidos.size(), true, true);
             if (indexCliente == -99999) return null;
 

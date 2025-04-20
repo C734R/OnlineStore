@@ -87,7 +87,7 @@ public class VistaPedidos extends VistaBase {
      * @param clientesDTO Lista de clientes con pedidos enviados.
      */
     public void showListClientesPedidosEnviados(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON ENVIADOS", true, true);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS ENVIADOS", true, true);
     }
     /**
      * Muestra la lista de artículos disponibles.
@@ -112,7 +112,7 @@ public class VistaPedidos extends VistaBase {
      * @param pedidosDTO Lista de pedidos pendientes.
      * @param clienteDTO cliente (puede ser null).
      */
-    public void showPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
+    public void showListPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
         if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES", true, true);
         else showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES DEL CLIENTE " + clienteDTO.getNombre(), true, true);
     }
@@ -122,7 +122,7 @@ public class VistaPedidos extends VistaBase {
      * @param pedidosDTO Lista de pedidos enviados.
      * @param clienteDTO cliente (puede ser null).
      */
-    public void showPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
+    public void showListPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
         if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS", true, true);
         else showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS DEL CLIENTE " + clienteDTO.getNombre(), true, true);
     }

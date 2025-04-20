@@ -18,7 +18,6 @@ INSERT INTO Categoria (nombre, cuota, descuento) VALUES
     ('Premium', 30.0, 0.20);
 
 DROP TABLE IF EXISTS Cliente;
-
 -- Tabla para clientes
 CREATE TABLE IF NOT EXISTS Cliente (
 
@@ -34,7 +33,6 @@ CREATE TABLE IF NOT EXISTS Cliente (
 );
 
 DROP TABLE IF EXISTS Articulo;
-
 -- Tabla para artículos
 CREATE TABLE IF NOT EXISTS Articulo (
 
@@ -46,7 +44,6 @@ CREATE TABLE IF NOT EXISTS Articulo (
 );
 
 DROP TABLE IF EXISTS ArticuloStock;
-
 -- Tabla para stock artículos
 CREATE TABLE IF NOT EXISTS ArticuloStock (
     articulo INT PRIMARY KEY,
@@ -57,7 +54,6 @@ CREATE TABLE IF NOT EXISTS ArticuloStock (
 );
 
 DROP TABLE IF EXISTS Pedido;
-
 -- Tabla para pedidos
 CREATE TABLE IF NOT EXISTS Pedido (
 
