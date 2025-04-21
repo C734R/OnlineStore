@@ -21,6 +21,7 @@ public class ModeloClientesLocal implements IModeloClientes {
      */
     public ModeloClientesLocal() {
         clientes = new ArrayList<>();
+        categorias = new ArrayList<>();
     }
 
     //*************************** Getters & Setters ***************************//

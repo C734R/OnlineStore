@@ -2,8 +2,8 @@
 -- Procedimientos almacenados
 
 -- Procedimiento para actualizar artículo con stock
-DELIMITER //
 DROP PROCEDURE IF EXISTS actualizar_articulo_con_stock;
+DELIMITER //
 CREATE PROCEDURE actualizar_articulo_con_stock(
     IN p_id INT,
     IN p_codigo VARCHAR(10),
@@ -37,9 +37,9 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER //
 -- Procedimiento para insertar pedido con actualización de stock
 DROP PROCEDURE IF EXISTS insertar_pedido_con_stock;
+DELIMITER //
 CREATE PROCEDURE insertar_pedido_con_stock(
     IN p_numero INT,
     IN p_cliente_id INT,
@@ -69,9 +69,9 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER //
 -- Procedimiento para eliminar pedido con devolución de stock
 DROP PROCEDURE IF EXISTS eliminar_pedido_con_stock;
+DELIMITER //
 CREATE PROCEDURE eliminar_pedido_con_stock(
     IN p_id INT
 )
@@ -109,9 +109,9 @@ BEGIN
 END //
 DELIMITER ;
 
-DELIMITER //
 -- Procedimiento para actualizar pedido y stock
 DROP PROCEDURE IF EXISTS actualizar_pedido_con_stock;
+DELIMITER //
 CREATE PROCEDURE actualizar_pedido_con_stock(
     IN p_id INT,
     IN p_numero INT,

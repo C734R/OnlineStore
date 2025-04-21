@@ -84,12 +84,8 @@ public class OnlineStore {
      */
     public static boolean precargaDatos()  {
         while(true) {
-            try (IConexionBBDD conexion = FactoryConexionBBDD.crearConexion(configuracion, "localhost", "root", "1234", "onlinestore")) {
-                assert conexion != null;
-                ejecutarScriptSQL("src/main/java/javalinos/onlinestore/ScriptBBDD.sql", (Connection) conexion.getConexion());
-            } catch (Exception e) {
-                vMenuPrincipal.showMensajePausa("Error al ejecutar el script SQL:" + e, true);
-                return false;
+            if(configuracion != Configuracion.LOCAL) {
+                if(!ejecutarScript()) return false;
             }
             try
             {
@@ -101,6 +97,17 @@ public class OnlineStore {
             catch (Exception e){
                 if(!cMenuPrincipal.errorPrecarga(e)) return false;
             }
+        }
+        return true;
+    }
+
+    private static boolean ejecutarScript() {
+        try (IConexionBBDD conexion = FactoryConexionBBDD.crearConexion(configuracion, "localhost", "root", "1234", "onlinestore")) {
+            assert conexion != null;
+            ejecutarScriptSQL("src/main/java/javalinos/onlinestore/ScriptBBDD.sql", (Connection) conexion.getConexion());
+        } catch (Exception e) {
+            vMenuPrincipal.showMensajePausa("Error al ejecutar el script SQL:" + e, true);
+            return false;
         }
         return true;
     }

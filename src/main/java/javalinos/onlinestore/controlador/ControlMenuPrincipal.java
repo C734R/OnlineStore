@@ -1,8 +1,10 @@
 package javalinos.onlinestore.controlador;
 
+import javalinos.onlinestore.Configuracion;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
 
+import static javalinos.onlinestore.OnlineStore.configuracion;
 import static javalinos.onlinestore.OnlineStore.precargaDatos;
 
 /**
@@ -54,6 +56,7 @@ public class ControlMenuPrincipal extends ControlBase {
         int opcion;
         while(true) {
             vMenuPrincipal.showCabecera();
+            vMenuPrincipal.showMensaje(" #### Ejecutando aplicación en modo: " + configuracion.name() + " ####",true);
             if(!iniciado && vMenuPrincipal.askBoolean("¿Deseas realizar la precarga de datos?", true, false)){
                 if(!precargaDatos()) return 0;
             }

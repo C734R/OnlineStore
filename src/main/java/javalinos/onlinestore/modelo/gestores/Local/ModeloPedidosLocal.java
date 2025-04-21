@@ -19,7 +19,7 @@ public class ModeloPedidosLocal implements IModeloPedidos {
      * Constructor por defecto. Inicializa una lista vacía de pedidoDTOS.
      */
     public ModeloPedidosLocal() {
-        this.pedidos = new ArrayList<PedidoDTO>();
+        this.pedidos = new ArrayList<>();
     }
     /**
      * Constructor alternativo que recibe una lista de pedidos ya existente.

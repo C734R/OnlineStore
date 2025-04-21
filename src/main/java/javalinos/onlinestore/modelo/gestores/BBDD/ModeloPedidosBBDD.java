@@ -128,7 +128,9 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     public void updatePedidoStock(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
         Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
-        Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
+        Pedido pedidoNew = new Pedido (
+                pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()),
+                mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
         pedidoNew.setId(pedidoOld.getId());
         Integer diferenciaStock = pedidoOld.getCantidad() - pedidoNew.getCantidad();
         factoryDAO.getDAOPedido().actualizarConStock(pedidoNew, diferenciaStock);
@@ -136,7 +138,9 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     public void updatePedidoStockSP(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
         Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
-        Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
+        Pedido pedidoNew = new Pedido (
+                pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()),
+                mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
         pedidoNew.setId(pedidoOld.getId());
         Integer diferenciaStock = pedidoOld.getCantidad() - pedidoNew.getCantidad();
         factoryDAO.getDAOPedido().actualizarConStockSP(pedidoNew, diferenciaStock);
