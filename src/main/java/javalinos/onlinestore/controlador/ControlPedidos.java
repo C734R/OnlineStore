@@ -164,7 +164,7 @@ public class ControlPedidos extends ControlBase{
                     vPedidos.showMensajePausa("Error. No se ha podido crear el pedido.", true);
                     return;
                 }
-                mPedidos.addPedidoStock(pedido);
+                mPedidos.addPedidoStockSP(pedido);
                 vPedidos.showMensajePausa("Pedido añadido correctamente y actualizado stock.", true);
             }
             else vPedidos.showMensaje("No hay artículos disponibles para comprar en este momento", true);
@@ -194,7 +194,7 @@ public class ControlPedidos extends ControlBase{
             int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true);
             if(numPedidoBorrar == -99999) return;
             PedidoDTO pedidoDTO = pedidos.get(numPedidoBorrar-1);
-            mPedidos.removePedidoStock(pedidoDTO);
+            mPedidos.removePedidoStockSP(pedidoDTO);
         }
         catch (Exception e)
         {
@@ -235,7 +235,7 @@ public class ControlPedidos extends ControlBase{
             if (nuevaCantidad == null) nuevaCantidad = pedidoDTOOld.getCantidad();
 
             PedidoDTO pedidoDTONew = mPedidos.makePedido(nuevoClienteDTO, pedidoDTOOld.getArticulo(), nuevaCantidad, LocalDate.now(), precioEnvio);
-            mPedidos.updatePedidoStock(pedidoDTOOld,pedidoDTONew);
+            mPedidos.updatePedidoStockSP(pedidoDTOOld,pedidoDTONew);
             vPedidos.showMensajePausa("Pedido actualizado correctamente.", true);
         }
         catch (Exception e)

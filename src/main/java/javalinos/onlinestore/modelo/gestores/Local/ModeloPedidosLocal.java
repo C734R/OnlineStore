@@ -63,6 +63,11 @@ public class ModeloPedidosLocal implements IModeloPedidos {
 
     }
 
+    @Override
+    public void addPedidoStockSP(PedidoDTO pedidoDTO) throws Exception {
+
+    }
+
     /**
      * Elimina un pedidos de la lista.
      * @param pedidos pedidos a eliminar.
@@ -73,6 +78,11 @@ public class ModeloPedidosLocal implements IModeloPedidos {
 
     @Override
     public void removePedidoStock(PedidoDTO pedidos) throws Exception {
+
+    }
+
+    @Override
+    public void removePedidoStockSP(PedidoDTO pedidoDTO) throws Exception {
 
     }
 
@@ -100,6 +110,11 @@ public class ModeloPedidosLocal implements IModeloPedidos {
 
     @Override
     public void updatePedidoStock(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
+
+    }
+
+    @Override
+    public void updatePedidoStockSP(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
 
     }
 

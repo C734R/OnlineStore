@@ -71,6 +71,11 @@ public class ModeloPedidosBBDD implements IModeloPedidos
         factoryDAO.getDAOPedido().eliminarConStock(pedido);
     }
 
+    public void removePedidoStockSP(PedidoDTO pedidoDTO) throws Exception {
+        Pedido pedido = getPedidoEntidadNumero(pedidoDTO.getNumero());
+        factoryDAO.getDAOPedido().eliminarConStockSP(pedido);
+    }
+
     public void removePedidosAll() throws Exception
     {
         factoryDAO.getDAOPedido().eliminarTodos();
@@ -127,6 +132,14 @@ public class ModeloPedidosBBDD implements IModeloPedidos
         pedidoNew.setId(pedidoOld.getId());
         Integer diferenciaStock = pedidoOld.getCantidad() - pedidoNew.getCantidad();
         factoryDAO.getDAOPedido().actualizarConStock(pedidoNew, diferenciaStock);
+    }
+
+    public void updatePedidoStockSP(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
+        Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
+        Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
+        pedidoNew.setId(pedidoOld.getId());
+        Integer diferenciaStock = pedidoOld.getCantidad() - pedidoNew.getCantidad();
+        factoryDAO.getDAOPedido().actualizarConStockSP(pedidoNew, diferenciaStock);
     }
 
     private Articulo getArticuloPedidoDTO(PedidoDTO pedidoDTO) throws Exception

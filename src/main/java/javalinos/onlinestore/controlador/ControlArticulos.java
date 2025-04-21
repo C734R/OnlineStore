@@ -251,7 +251,7 @@ public class ControlArticulos extends ControlBase {
         }
         if (!modificado) return;
         try {
-            mArticulos.updateArticuloStock(articuloDTONew, stockNew);
+            mArticulos.updateArticuloStockSP(articuloDTONew, stockNew);
             vArticulos.showMensajePausa("Artículo y stock actualizado correctamente.", true);
         } catch (Exception e) {
             vArticulos.showMensajePausa("Error al actualizar el stock. " + e, true);

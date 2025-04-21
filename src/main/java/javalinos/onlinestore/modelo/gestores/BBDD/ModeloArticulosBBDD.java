@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class ModeloArticulosBBDD implements IModeloArticulos
 {
-    private FactoryDAO factoryDAO;
+    private final FactoryDAO factoryDAO;
     /**
      * Constructor por defecto. Inicializa las listas de artículos y su stock.
      */
@@ -230,17 +230,6 @@ public class ModeloArticulosBBDD implements IModeloArticulos
             stockIdArticulo.put(articuloStock.getArticulo(), articuloStock.getStock());
         }
         return stockIdArticulo;
-    }
-
-    /**
-     * Actualiza el stock de un artículo.
-     * @param articuloDTO artículo a actualizar.
-     * @param stockNew nueva cantidad de stock.
-     */
-    public void updateStockArticulo(ArticuloDTO articuloDTO, int stockNew) throws Exception
-    {
-        Articulo articulo = new Articulo(articuloDTO);
-        factoryDAO.getDAOArticuloStock().insertar(new ArticuloStock(articulo.getId(), stockNew));
     }
 
     /**

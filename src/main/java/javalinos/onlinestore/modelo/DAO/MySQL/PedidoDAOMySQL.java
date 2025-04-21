@@ -140,6 +140,19 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
         }
     }
 
+    public void insertarConStockSP(Pedido pedido) throws Exception {
+        String call = "{CALL insertar_pedido_con_stock(?, ?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement stmt = conexion.prepareCall(call))
+        {
+            definirSetInsert(stmt, pedido);
+            stmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            throw new Exception("Error al insertar pedido con stock mediante procedimiento almacenado.", e);
+        }
+    }
+
     public void eliminarConStock(Pedido pedido) throws Exception {
         String query = "DELETE FROM " + tabla + " WHERE id = ?";
         boolean autocommitOriginal = conexion.getAutoCommit();
@@ -162,6 +175,19 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
         finally
         {
             conexion.setAutoCommit(autocommitOriginal);
+        }
+    }
+
+    public void eliminarConStockSP(Pedido pedido) throws Exception {
+        String call = "{CALL eliminar_pedido_con_stock(?)}";
+        try (CallableStatement stmt = conexion.prepareCall(call))
+        {
+            stmt.setInt(1, pedido.getId());
+            stmt.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            throw new Exception("Error al eliminar pedido con stock mediante procedimiento almacenado.", e);
         }
     }
 
@@ -201,22 +227,24 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
         factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
     }
 
-    public void insertarConStockSP(Pedido pedido) throws Exception {
-        String call = "{CALL insertar_pedido_con_stock(?, ?, ?, ?, ?, ?, ?)}";
-        try (CallableStatement stmt = conexion.prepareCall(call)) {
-            stmt.setInt(1, pedido.getNumero());
-            stmt.setInt(2, pedido.getCliente());
-            stmt.setInt(3, pedido.getArticulo());
-            stmt.setInt(4, pedido.getCantidad());
-            stmt.setDate(5, Date.valueOf(pedido.getFechahora()));
-            stmt.setFloat(6, pedido.getEnvio());
-            stmt.setFloat(7, pedido.getPrecio());
-
+    public void actualizarConStockSP(Pedido pedidoNew, Integer diferenciaStock) throws Exception {
+        String call = "{CALL actualizar_pedido_con_stock(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement stmt = conexion.prepareCall(call))
+        {
+            stmt.setInt(1, pedidoNew.getId());
+            stmt.setInt(2, pedidoNew.getNumero());
+            stmt.setInt(3, pedidoNew.getCliente());
+            stmt.setInt(4, pedidoNew.getArticulo());
+            stmt.setInt(5, pedidoNew.getCantidad());
+            stmt.setDate(6, Date.valueOf(pedidoNew.getFechahora()));
+            stmt.setFloat(7, pedidoNew.getEnvio());
+            stmt.setFloat(8, pedidoNew.getPrecio());
+            stmt.setInt(9, diferenciaStock);
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new Exception("Error al insertar pedido con stock mediante procedimiento almacenado.", e);
+        }
+        catch (SQLException e)
+        {
+            throw new Exception("Error al actualizar pedido con stock mediante procedimiento almacenado.", e);
         }
     }
-
-
 }

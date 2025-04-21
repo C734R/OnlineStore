@@ -8,5 +8,6 @@ public interface IArticuloDAO extends IBaseDAO<Articulo, Integer> {
 
     void actualizarArticuloStock(Articulo articuloNew, Integer stockNew) throws Exception;
 
+    // Procedimientos almacenados
     void actualizarArticuloConStockSP(Articulo articulo, int stockNuevo) throws Exception;
 }

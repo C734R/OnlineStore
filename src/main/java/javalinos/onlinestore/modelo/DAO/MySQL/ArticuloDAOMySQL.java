@@ -120,7 +120,6 @@ public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements
         factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
     }
 
-    @Override
     public void actualizarArticuloConStockSP(Articulo articulo, int stockNuevo) throws Exception {
         String call = "{CALL actualizar_articulo_con_stock(?, ?, ?, ?, ?, ?)}";
 
@@ -136,5 +135,4 @@ public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements
             throw new Exception("Error al actualizar artículo con stock mediante procedimiento almacenado.", e);
         }
     }
-
 }

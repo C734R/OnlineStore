@@ -1,9 +1,10 @@
-drop database if exists OnlineStore;
-create database if not exists OnlineStore;
-use OnlineStore;
+# DROP DATABASE IF EXISTS OnlineStore;
+# CREATE DATABASE IF NOT EXISTS OnlineStore;
+# USE OnlineStore;
+
+SET FOREIGN_KEY_CHECKS = 0;
 
 /*------ CREACIÓN DE TABLAS ------*/
-
 DROP TABLE IF EXISTS Categoria;
 -- Tabla para categorías
 CREATE TABLE IF NOT EXISTS Categoria (
@@ -72,3 +73,5 @@ CREATE TABLE IF NOT EXISTS Pedido (
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
+
+SET FOREIGN_KEY_CHECKS = 1;
