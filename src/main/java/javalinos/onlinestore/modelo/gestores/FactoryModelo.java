@@ -21,7 +21,12 @@ public class FactoryModelo implements AutoCloseable {
     public FactoryModelo(Configuracion configuracion) throws Exception {
         this.configuracion = configuracion;
         if (configuracion == Configuracion.JDBC_MYSQL) {
-            this.conexion = FactoryConexionBBDD.crearConexion(configuracion, "localhost:3306","root","1234","OnlineStore");
+            this.conexion = FactoryConexionBBDD.crearConexion(
+                    configuracion,
+                    "localhost:3306",
+                    "root",
+                    "1234",
+                    "OnlineStore");
             assert conexion != null;
             this.factoryDAO = new FactoryDAO(configuracion, (Connection) conexion.getConexion());
         }

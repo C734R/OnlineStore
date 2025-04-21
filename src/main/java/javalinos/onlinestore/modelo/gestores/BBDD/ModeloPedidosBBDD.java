@@ -37,8 +37,8 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     //*************************** CRUD PEDIDOS ***************************//
 
     /**
-     * Añade un pedidoDTO a la lista.
-     * @param pedidoDTO pedidoDTO a añadir.
+     * Añade un pedido a la BBDD.
+     * @param pedidoDTO pedido a añadir.
      */
     public void addPedido(PedidoDTO pedidoDTO) throws Exception
     {
@@ -49,6 +49,11 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     public void addPedidoStock(PedidoDTO pedidoDTO) throws Exception {
         Pedido pedido = pedidoDTOtoEntidad(pedidoDTO);
         factoryDAO.getDAOPedido().insertarConStock(pedido);
+    }
+
+    public void addPedidoStockSP(PedidoDTO pedidoDTO) throws Exception {
+        Pedido pedido = pedidoDTOtoEntidad(pedidoDTO);
+        factoryDAO.getDAOPedido().insertarConStockSP(pedido);
     }
 
     /**

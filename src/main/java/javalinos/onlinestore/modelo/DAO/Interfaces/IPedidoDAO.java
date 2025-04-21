@@ -14,4 +14,5 @@ public interface IPedidoDAO extends IBaseDAO<Pedido, Integer> {
     void eliminarConStock(Pedido pedido) throws Exception;
     void actualizarConStock(Pedido pedidoNew, Integer diferenciaStock) throws Exception;
 
+    void insertarConStockSP(Pedido pedido) throws Exception;
 }

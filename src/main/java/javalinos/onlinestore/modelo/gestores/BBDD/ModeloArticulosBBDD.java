@@ -77,6 +77,14 @@ public class ModeloArticulosBBDD implements IModeloArticulos
         factoryDAO.getDAOArticulo().actualizarArticuloStock(articuloEntidadNew, stockNew);
     }
 
+    public void updateArticuloStockSP(ArticuloDTO articuloDTONew, Integer stockNew) throws Exception {
+        Articulo articuloEntidadNew = new Articulo(articuloDTONew);
+        String codigoArticuloNuevo = articuloEntidadNew.getCodigo();
+        Articulo articuloEntidadOld = getArticuloEntidadCodigo(codigoArticuloNuevo);
+        articuloEntidadNew.setId(articuloEntidadOld.getId());
+        factoryDAO.getDAOArticulo().actualizarArticuloConStockSP(articuloEntidadNew, stockNew);
+    }
+
     //*************************** GETTERS & SETTERS ARTÍCULOS ***************************//
 
     /**

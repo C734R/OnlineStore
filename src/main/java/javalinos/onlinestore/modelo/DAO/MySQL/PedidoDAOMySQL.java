@@ -201,4 +201,22 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
         factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
     }
 
+    public void insertarConStockSP(Pedido pedido) throws Exception {
+        String call = "{CALL insertar_pedido_con_stock(?, ?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement stmt = conexion.prepareCall(call)) {
+            stmt.setInt(1, pedido.getNumero());
+            stmt.setInt(2, pedido.getCliente());
+            stmt.setInt(3, pedido.getArticulo());
+            stmt.setInt(4, pedido.getCantidad());
+            stmt.setDate(5, Date.valueOf(pedido.getFechahora()));
+            stmt.setFloat(6, pedido.getEnvio());
+            stmt.setFloat(7, pedido.getPrecio());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error al insertar pedido con stock mediante procedimiento almacenado.", e);
+        }
+    }
+
+
 }

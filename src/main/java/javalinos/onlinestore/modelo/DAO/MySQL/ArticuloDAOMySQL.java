@@ -5,10 +5,8 @@ import javalinos.onlinestore.modelo.DAO.Interfaces.IArticuloDAO;
 import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.math.BigDecimal;
+import java.sql.*;
 
 public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements IArticuloDAO
 {
@@ -121,4 +119,22 @@ public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements
         articuloStock.setStock(stockNew);
         factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
     }
+
+    @Override
+    public void actualizarArticuloConStockSP(Articulo articulo, int stockNuevo) throws Exception {
+        String call = "{CALL actualizar_articulo_con_stock(?, ?, ?, ?, ?, ?)}";
+
+        try (CallableStatement stmt = conexion.prepareCall(call)) {
+            stmt.setInt(1, articulo.getId());
+            stmt.setString(2, articulo.getCodigo());
+            stmt.setString(3, articulo.getDescripcion());
+            stmt.setBigDecimal(4, BigDecimal.valueOf(articulo.getPrecio()));
+            stmt.setInt(5, articulo.getMinutosPreparacion());
+            stmt.setInt(6, stockNuevo);
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new Exception("Error al actualizar artículo con stock mediante procedimiento almacenado.", e);
+        }
+    }
+
 }
