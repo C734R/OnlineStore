@@ -12,6 +12,7 @@ module javalinos.onlinestore {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires java.sql;
+    requires jakarta.persistence;
 
     opens javalinos.onlinestore to javafx.fxml;
     opens javalinos.onlinestore.controlador to javafx.fxml;
