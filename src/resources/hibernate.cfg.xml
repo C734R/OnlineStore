@@ -7,9 +7,9 @@
 
         <!-- Conexión a la base de datos -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/tu_basededatos</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/onlinestore</property>
         <property name="hibernate.connection.username">root</property>
-        <property name="hibernate.connection.password">tu_contraseña</property>
+        <property name="hibernate.connection.password">1234</property>
 
         <!-- Dialecto de Hibernate -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</property>
