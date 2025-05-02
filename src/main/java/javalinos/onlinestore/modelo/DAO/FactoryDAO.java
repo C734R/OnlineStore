@@ -3,6 +3,7 @@ package javalinos.onlinestore.modelo.DAO;
 import javalinos.onlinestore.Configuracion;
 import javalinos.onlinestore.modelo.DAO.Interfaces.*;
 import javalinos.onlinestore.modelo.DAO.MySQL.*;
+import javalinos.onlinestore.modelo.DAO.ORM.*;
 
 
 import java.sql.Connection;
@@ -23,7 +24,7 @@ public class FactoryDAO {
     public IClienteDAO getDAOCliente() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new ClienteDAOMySQL(conexion);
-            case HIBERNATE_MYSQL -> null;
+            case JPA_HIBERNATE_MYSQL -> new ClienteDAOHibernate();
             default -> null;
         };
     }
@@ -31,7 +32,7 @@ public class FactoryDAO {
     public IArticuloDAO getDAOArticulo() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new ArticuloDAOMySQL(conexion, factoryDAO);
-            case HIBERNATE_MYSQL -> null;
+            case JPA_HIBERNATE_MYSQL -> new ArticuloDAOHibernate();
             default -> null;
         };
     }
@@ -39,7 +40,7 @@ public class FactoryDAO {
     public IPedidoDAO getDAOPedido() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new PedidoDAOMySQL(conexion, factoryDAO);
-            case HIBERNATE_MYSQL -> null;
+            case JPA_HIBERNATE_MYSQL -> new PedidoDAOHibernate();
             default -> null;
         };
     }
@@ -47,7 +48,7 @@ public class FactoryDAO {
     public ICategoriaDAO getDAOCategoria() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new CategoriaDAOMySQL(conexion);
-            case HIBERNATE_MYSQL -> null;
+            case JPA_HIBERNATE_MYSQL -> new CategoriaDAOHibernate();
             default -> null;
         };
     }
@@ -55,7 +56,7 @@ public class FactoryDAO {
     public IArticuloStockDAO getDAOArticuloStock() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new ArticuloStockDAOMySQL(conexion);
-            case HIBERNATE_MYSQL -> null;
+            case JPA_HIBERNATE_MYSQL -> new ArticuloStockDAOHibernate();
             default -> null;
         };
     }

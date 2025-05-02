@@ -6,7 +6,6 @@ import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -177,7 +176,7 @@ public class ModeloArticulosBBDD implements IModeloArticulos
     public void addArticuloStock(ArticuloDTO articuloDTO, int stock) throws Exception
     {
         Articulo articulo = getArticuloEntidadCodigo(articuloDTO.getCodigo());
-        ArticuloStock articuloStock = new ArticuloStock(articulo.getId(), stock);
+        ArticuloStock articuloStock = new ArticuloStock(articulo, stock);
         factoryDAO.getDAOArticuloStock().insertar(articuloStock);
     }
 
@@ -218,7 +217,7 @@ public class ModeloArticulosBBDD implements IModeloArticulos
     private LinkedHashMap<ArticuloDTO, Integer> mapearArticuloStocks (List<ArticuloStock> articuloStocks) throws Exception {
         LinkedHashMap<ArticuloDTO, Integer> articuloStocksDTO = new LinkedHashMap<>();
         for (ArticuloStock articuloStock : articuloStocks) {
-            ArticuloDTO articuloDTO = getArticuloDTOId(articuloStock.getArticulo());
+            ArticuloDTO articuloDTO = getArticuloDTOId(articuloStock.getArticuloId());
             articuloStocksDTO.put(articuloDTO, articuloStock.getStock());
         }
         return articuloStocksDTO;
@@ -227,7 +226,7 @@ public class ModeloArticulosBBDD implements IModeloArticulos
     private Map<Integer, Integer> mapearArticuloStocksId (List<ArticuloStock> articuloStocks) throws Exception {
         Map<Integer, Integer> stockIdArticulo = new LinkedHashMap<>();
         for (ArticuloStock articuloStock : articuloStocks) {
-            stockIdArticulo.put(articuloStock.getArticulo(), articuloStock.getStock());
+            stockIdArticulo.put(articuloStock.getArticuloId(), articuloStock.getStock());
         }
         return stockIdArticulo;
     }

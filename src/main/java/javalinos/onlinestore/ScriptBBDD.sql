@@ -10,8 +10,8 @@ DROP TABLE IF EXISTS Categoria;
 CREATE TABLE IF NOT EXISTS Categoria (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(25) NOT NULL UNIQUE,
-    cuota DECIMAL(10,2),
-    descuento DECIMAL(10,2)
+    cuota DECIMAL(10,2) NOT NULL,
+    descuento DECIMAL(10,2) NOT NULL
 );
 
 INSERT INTO Categoria (nombre, cuota, descuento) VALUES
@@ -27,8 +27,8 @@ CREATE TABLE IF NOT EXISTS Cliente (
     domicilio VARCHAR(250) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     nif VARCHAR(15) NOT NULL UNIQUE,
-    categoria INT NOT NULL,
-    FOREIGN KEY FK_cliente_categoria(categoria) REFERENCES Categoria(id)
+    categoriaId INT NOT NULL,
+    FOREIGN KEY FK_cliente_categoria(categoriaId) REFERENCES Categoria(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );
@@ -47,9 +47,9 @@ CREATE TABLE IF NOT EXISTS Articulo (
 DROP TABLE IF EXISTS ArticuloStock;
 -- Tabla para stock artículos
 CREATE TABLE IF NOT EXISTS ArticuloStock (
-    articulo INT PRIMARY KEY,
+    articuloId INT PRIMARY KEY,
     stock INT DEFAULT 0 NOT NULL,
-    FOREIGN KEY (articulo) REFERENCES Articulo(id)
+    FOREIGN KEY (articuloId) REFERENCES Articulo(id)
         ON UPDATE CASCADE
         ON DELETE CASCADE
 );
@@ -60,16 +60,16 @@ CREATE TABLE IF NOT EXISTS Pedido (
 
     id INT AUTO_INCREMENT PRIMARY KEY,
     numero INT NOT NULL UNIQUE,
-    cliente INT NOT NULL,
-    articulo INT NOT NULL,
+    clienteId INT NOT NULL,
+    articuloId INT NOT NULL,
     cantidad INT NOT NULL,
     fechahora DATE NOT NULL,
     envio DECIMAL(10,2) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY FK_pedido_cliente(cliente) REFERENCES Cliente(id)
+    FOREIGN KEY FK_pedido_cliente(clienteId) REFERENCES Cliente(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT ,
-    FOREIGN KEY FK_pedido_articulo(articulo) REFERENCES Articulo(id)
+    FOREIGN KEY FK_pedido_articulo(articuloId) REFERENCES Articulo(id)
         ON UPDATE CASCADE
         ON DELETE RESTRICT
 );

@@ -95,7 +95,7 @@
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>5.6.15.Final</version>
+      <version>6.5.3.Final</version>
     </dependency>
 
     <!-- JPA API -->
@@ -106,12 +106,28 @@
     </dependency>
 
     <!-- Logger SLF4J para Hibernate -->
+    <!-- SLF4J API -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.12</version>
+    </dependency>
+
+    <!-- SLF4J SimpleLogger -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <version>2.0.12</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <version>2.0.12</version>
+    </dependency>
+
   </dependencies>
+
 
 
 

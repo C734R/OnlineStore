@@ -12,6 +12,7 @@ import javalinos.onlinestore.modelo.gestores.FactoryModelo;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.utils.Conexiones.FactoryConexionBBDD;
 import javalinos.onlinestore.utils.Conexiones.IConexionBBDD;
+import javalinos.onlinestore.utils.GestoresEntidades.ProveedorEntityManagerJPA;
 import javalinos.onlinestore.vista.VistaArticulos;
 import javalinos.onlinestore.vista.VistaClientes;
 import javalinos.onlinestore.vista.VistaMenuPrincipal;
@@ -20,8 +21,8 @@ import javalinos.onlinestore.vista.VistaPedidos;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * Clase principal de la aplicación OnlineStore.
@@ -32,7 +33,7 @@ import java.sql.Statement;
 public class OnlineStore {
 
     /** Valor de configuración para carga de datos. */
-    public static Configuracion configuracion = Configuracion.JDBC_MYSQL;
+    public static Configuracion configuracion;
 
     /** Modelo general de la tienda (agrega clientes, artículos y pedidos). */
     public static ModeloStore mStore;
@@ -58,14 +59,17 @@ public class OnlineStore {
      * @param args argumentos opcionales (modo de configuración).
      */
     public static void main(String[] args){
+        java.util.logging.LogManager.getLogManager().reset();
+        SLF4JBridgeHandler.install();
+
         if (args.length != 0) {
             switch (args[0]) {
                 case "0" -> configuracion = Configuracion.LOCAL;
                 case "1" -> configuracion = Configuracion.JDBC_MYSQL;
-                case "2" -> configuracion = Configuracion.HIBERNATE_MYSQL;
+                case "2" -> configuracion = Configuracion.JPA_HIBERNATE_MYSQL;
             }
         }
-        else configuracion = Configuracion.JDBC_MYSQL;
+        else configuracion = Configuracion.JPA_HIBERNATE_MYSQL;
 
         // Aplicar autocierre al uso de la conexión por parte de ModeloFactory
         try (FactoryModelo factory = new FactoryModelo(configuracion)) {
@@ -73,8 +77,12 @@ public class OnlineStore {
             loadMVC(configuracion);
             //if (!precargaDatos(configuracion)) return;
             iniciarPrograma();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             System.err.println("Error crítico: " + e);
+        }
+        finally {
+            if(configuracion == Configuracion.JPA_HIBERNATE_MYSQL) ProveedorEntityManagerJPA.cerrarEMF();
         }
     }
 
@@ -102,7 +110,7 @@ public class OnlineStore {
     }
 
     private static boolean ejecutarScript() {
-        try (IConexionBBDD conexion = FactoryConexionBBDD.crearConexion(configuracion, "localhost", "root", "1234", "onlinestore")) {
+        try (IConexionBBDD conexion = FactoryConexionBBDD.crearConexion(Configuracion.JDBC_MYSQL, "localhost", "root", "1234", "onlinestore")) {
             assert conexion != null;
             ejecutarScriptSQL("src/main/java/javalinos/onlinestore/ScriptBBDD.sql", (Connection) conexion.getConexion());
         } catch (Exception e) {

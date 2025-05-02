@@ -2,7 +2,6 @@ package javalinos.onlinestore.modelo.DAO.MySQL;
 
 import javalinos.onlinestore.modelo.DAO.Interfaces.IArticuloStockDAO;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
-import javalinos.onlinestore.modelo.Entidades.Categoria;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,17 +36,17 @@ public class ArticuloStockDAOMySQL extends BaseDAOMySQL<ArticuloStock, Integer> 
 
     @Override
     public void definirSetInsert(PreparedStatement stmt, ArticuloStock entidad) throws SQLException {
-        stmt.setInt(1, entidad.getArticulo());
+        stmt.setInt(1, entidad.getArticuloId());
         stmt.setInt(2, entidad.getStock());
     }
     @Override
     public Integer definirId(ArticuloStock articuloStock) {
-        return articuloStock.getArticulo();
+        return articuloStock.getArticuloId();
     }
 
     @Override
     public void mapearUpdate(PreparedStatement stmt, ArticuloStock articuloStock) throws SQLException {
-        stmt.setInt(1, articuloStock.getArticulo());
+        stmt.setInt(1, articuloStock.getArticuloId());
         stmt.setInt(2, articuloStock.getStock());
     }
 

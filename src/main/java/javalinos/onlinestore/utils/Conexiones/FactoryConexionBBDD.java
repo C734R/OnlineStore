@@ -13,7 +13,6 @@ public class FactoryConexionBBDD {
     {
         return switch (configuracion) {
             case JDBC_MYSQL -> new ConexionJDBCMySQL(host, usuario, contrasena, basedatos);
-            case HIBERNATE_MYSQL -> null;
             default -> throw new Exception("Tipo de conexión no soportado: " + configuracion);
         };
     }

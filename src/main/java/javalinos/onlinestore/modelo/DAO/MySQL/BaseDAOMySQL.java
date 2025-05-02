@@ -31,6 +31,7 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
         return null;
     }
 
+    public String definirValues() { return null; }
 
     public java.lang.Integer definirId(T entidad) {
         return null;
@@ -47,6 +48,7 @@ public abstract class BaseDAOMySQL<T, K> implements IBaseDAO<T, K> {
     }
 
     public void mapearUpdate(PreparedStatement stmt, T entidad) throws SQLException {}
+
     @Override
     public T getPorId(K id) throws Exception {
         T entidad = null;

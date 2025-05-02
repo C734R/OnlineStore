@@ -85,7 +85,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     {
         Cliente cliente = getClienteId(id);
         if (cliente == null) throw new Exception("Cliente no encontrado");
-        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
         return new ClienteDTO(cliente, categoriaDTO);
     }
 
@@ -162,7 +162,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     {
         Cliente cliente = getClienteEntidadNif(nif);
         if (cliente == null) throw new Exception("Cliente no encontrado.");
-        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
         if (categoriaDTO == null) throw new Exception("Categoria no encontrado.");
         return new ClienteDTO(cliente, categoriaDTO);
     }
@@ -181,7 +181,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     {
         Cliente cliente = getClienteEntidadEmail(email);
         if (cliente == null) throw new Exception("Cliente no encontrado.");
-        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
         if (categoriaDTO == null) throw new Exception("Categoria no encontrado.");
         return new ClienteDTO(cliente, categoriaDTO);
     }
@@ -215,7 +215,7 @@ public class ModeloClientesBBDD implements IModeloClientes
         List<ClienteDTO> clientesDTO = new ArrayList<>();
         for (Cliente cliente : clientes)
         {
-            CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoria());
+            CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
             clientesDTO.add(new ClienteDTO(cliente, categoriaDTO));
         }
         return clientesDTO;

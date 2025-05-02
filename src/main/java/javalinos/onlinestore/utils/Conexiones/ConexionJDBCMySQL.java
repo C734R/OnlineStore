@@ -6,11 +6,11 @@ import java.sql.SQLException;
 
 public class ConexionJDBCMySQL implements IConexionBBDD {
 
-    private Connection conexion;
+    private final Connection conexion;
 
-    public ConexionJDBCMySQL(String host, String usuario, String contrasena, String basedatos) throws SQLException {
+    public ConexionJDBCMySQL(String host, String usuario, String clave, String basedatos) throws SQLException {
         String url = "jdbc:mysql://" + host + "/" + basedatos;
-        conexion = DriverManager.getConnection(url, usuario, contrasena);
+        conexion = DriverManager.getConnection(url, usuario, clave);
     }
 
     public Connection getConexion() {

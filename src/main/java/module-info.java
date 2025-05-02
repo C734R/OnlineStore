@@ -13,6 +13,8 @@ module javalinos.onlinestore {
     requires com.almasb.fxgl.all;
     requires java.sql;
     requires jakarta.persistence;
+    requires org.hibernate.orm.core;
+    requires jul.to.slf4j;
 
     opens javalinos.onlinestore to javafx.fxml;
     opens javalinos.onlinestore.controlador to javafx.fxml;
@@ -33,4 +35,6 @@ module javalinos.onlinestore {
     exports javalinos.onlinestore.modelo.gestores.Interfaces;
     opens javalinos.onlinestore.modelo.gestores.Interfaces to javafx.fxml;
     exports javalinos.onlinestore.utils.Conexiones;
+    exports javalinos.onlinestore.utils.GestoresEntidades;
+    opens javalinos.onlinestore.modelo.Entidades to org.hibernate.orm.core;
 }

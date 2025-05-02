@@ -1,14 +1,25 @@
 package javalinos.onlinestore.modelo.Entidades;
 
+import jakarta.persistence.*;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 
+@Entity
+@Table(name = "articulo")
 public class Articulo
 {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false, unique = true)
     private String codigo;
+    @Column(nullable = false)
     private String descripcion;
+    @Column(nullable = false)
     private Float precio;
+    @Column(nullable = false)
     private Integer minutosPreparacion;
+
+    public Articulo() {}
 
     public Articulo(Integer id, String codigo, String descripcion, Float precio, Integer minutosPreparacion)
     {
@@ -31,7 +42,6 @@ public class Articulo
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -39,7 +49,6 @@ public class Articulo
     public String getCodigo() {
         return codigo;
     }
-
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
@@ -47,7 +56,6 @@ public class Articulo
     public String getDescripcion() {
         return descripcion;
     }
-
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
@@ -55,7 +63,6 @@ public class Articulo
     public Float getPrecio() {
         return precio;
     }
-
     public void setPrecio(Float precio) {
         this.precio = precio;
     }
@@ -63,7 +70,6 @@ public class Articulo
     public Integer getMinutosPreparacion() {
         return minutosPreparacion;
     }
-
     public void setMinutosPreparacion(Integer minutosPreparacion) {
         this.minutosPreparacion = minutosPreparacion;
     }

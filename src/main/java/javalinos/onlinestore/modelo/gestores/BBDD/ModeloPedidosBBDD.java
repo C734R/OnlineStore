@@ -94,8 +94,8 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     private PedidoDTO pedidoEntidadToPedidoDTO(Pedido pedido) throws Exception
     {
-        ArticuloDTO articuloDTO = mArticulos.getArticuloDTOId(pedido.getArticulo());
-        ClienteDTO clienteDTO = mClientes.getClienteDTOId(pedido.getCliente());
+        ArticuloDTO articuloDTO = mArticulos.getArticuloDTOId(pedido.getArticuloId());
+        ClienteDTO clienteDTO = mClientes.getClienteDTOId(pedido.getClienteId());
         return new PedidoDTO(pedido, clienteDTO, articuloDTO);
     }
 
@@ -196,12 +196,12 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     private ArticuloDTO getArticuloDTOPedido (Pedido pedido) throws Exception
     {
-        return mArticulos.getArticuloDTOId(pedido.getArticulo());
+        return mArticulos.getArticuloDTOId(pedido.getArticuloId());
     }
 
     private ClienteDTO getClienteDTOPedido(Pedido pedido) throws Exception
     {
-        return mClientes.getClienteDTOId(pedido.getCliente());
+        return mClientes.getClienteDTOId(pedido.getClienteId());
     }
 
     /**

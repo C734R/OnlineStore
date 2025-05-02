@@ -1,7 +1,6 @@
 package javalinos.onlinestore.modelo.DAO.MySQL;
 
 import javalinos.onlinestore.modelo.DAO.Interfaces.IClienteDAO;
-import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 import javalinos.onlinestore.modelo.Entidades.Categoria;
 import javalinos.onlinestore.modelo.Entidades.Cliente;
 
@@ -49,7 +48,7 @@ public class ClienteDAOMySQL extends BaseDAOMySQL<Cliente, Integer> implements I
         stmt.setString(2, entidad.getDomicilio());
         stmt.setString(3, entidad.getEmail());
         stmt.setString(4, entidad.getNif());
-        stmt.setInt(5, entidad.getCategoria());
+        stmt.setInt(5, entidad.getCategoriaId());
     }
 
     @Override
@@ -63,7 +62,7 @@ public class ClienteDAOMySQL extends BaseDAOMySQL<Cliente, Integer> implements I
         stmt.setString(2, cliente.getDomicilio());
         stmt.setString(3, cliente.getEmail());
         stmt.setString(4, cliente.getNif());
-        stmt.setInt(5, cliente.getCategoria());
+        stmt.setInt(5, cliente.getCategoriaId());
     }
 
     public Cliente getClienteNIF(String nif) throws Exception {

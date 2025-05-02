@@ -51,8 +51,8 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
     @Override
     public void definirSetInsert(PreparedStatement stmt, Pedido entidad) throws SQLException {
         stmt.setInt(1, entidad.getNumero());
-        stmt.setInt(2, entidad.getCliente());
-        stmt.setInt(3, entidad.getArticulo());
+        stmt.setInt(2, entidad.getClienteId());
+        stmt.setInt(3, entidad.getArticuloId());
         stmt.setInt(4, entidad.getCantidad());
         stmt.setDate(5, Date.valueOf(entidad.getFechahora()));
         stmt.setFloat(6, entidad.getEnvio());
@@ -67,8 +67,8 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
     @Override
     public void mapearUpdate(PreparedStatement stmt, Pedido pedido) throws SQLException {
         stmt.setInt(1, pedido.getNumero());
-        stmt.setInt(2, pedido.getCliente());
-        stmt.setInt(3, pedido.getArticulo());
+        stmt.setInt(2, pedido.getClienteId());
+        stmt.setInt(3, pedido.getArticuloId());
         stmt.setInt(4, pedido.getCantidad());
         stmt.setDate(5, Date.valueOf(pedido.getFechahora()));
         stmt.setFloat(6, pedido.getEnvio());
@@ -116,6 +116,7 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
         }
         return listaPedidos;
     }
+
     public void insertarConStock(Pedido pedido) throws Exception
     {
         String query = "INSERT INTO " + tabla + " " + definirColumnas() + " VALUES " + definirValues();
@@ -221,7 +222,7 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
     }
 
     private void ActualizarStock(Pedido pedido, Integer diferenciaStock) throws Exception {
-        Articulo articulo = factoryDAO.getDAOArticulo().getPorId(pedido.getArticulo());
+        Articulo articulo = factoryDAO.getDAOArticulo().getPorId(pedido.getArticuloId());
         ArticuloStock articuloStock = factoryDAO.getDAOArticuloStock().getPorId(articulo.getId());
         articuloStock.setStock(articuloStock.getStock() + diferenciaStock);
         factoryDAO.getDAOArticuloStock().actualizar(articuloStock);
@@ -233,8 +234,8 @@ public class PedidoDAOMySQL extends BaseDAOMySQL<Pedido, Integer> implements IPe
         {
             stmt.setInt(1, pedidoNew.getId());
             stmt.setInt(2, pedidoNew.getNumero());
-            stmt.setInt(3, pedidoNew.getCliente());
-            stmt.setInt(4, pedidoNew.getArticulo());
+            stmt.setInt(3, pedidoNew.getClienteId());
+            stmt.setInt(4, pedidoNew.getArticuloId());
             stmt.setInt(5, pedidoNew.getCantidad());
             stmt.setDate(6, Date.valueOf(pedidoNew.getFechahora()));
             stmt.setFloat(7, pedidoNew.getEnvio());

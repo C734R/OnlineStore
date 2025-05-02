@@ -10,7 +10,7 @@ import java.sql.*;
 
 public class ArticuloDAOMySQL extends BaseDAOMySQL<Articulo, Integer> implements IArticuloDAO
 {
-    private FactoryDAO factoryDAO;
+    private final FactoryDAO factoryDAO;
 
     public ArticuloDAOMySQL(Connection conexion, FactoryDAO factoryDAO) throws SQLException
     {
