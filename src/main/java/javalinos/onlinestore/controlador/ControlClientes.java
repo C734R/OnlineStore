@@ -399,18 +399,26 @@ public class ControlClientes extends ControlBase
      */
     public ClienteDTO askClienteModificar()
     {
+        enum modos {nif, email, nulo};
+        modos modo = modos.nulo;
+        ClienteDTO clienteDTO;
         String datoCliente;
         int intentos = 0;
-        ClienteDTO clienteDTO = null;
         while (true) {
             showListClientes();
-            datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 1, 250, true, false, true);
-            if (datoCliente == null) return null;
-            try {
+            datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
+            if (datoCliente != null) {
+                if (checkNIF(datoCliente)) modo = modos.nif;
+                else if (checkEmail(datoCliente)) modo = modos.email;
+            }
+            if(datoCliente == null || modo == modos.nulo) {
+                vClientes.showMensajePausa("NIF o Email inválido.", true);
                 intentos++;
-                if (checkEmail(datoCliente)) clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
-                else if(checkNIF(datoCliente))clienteDTO = mClientes.getClienteDTONif(datoCliente);
-                else continue;
+                continue;
+            }
+            try {
+                if (modo == modos.email) clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
+                else clienteDTO = mClientes.getClienteDTONif(datoCliente);
                 if (clienteDTO != null) {
                     vClientes.showMensaje("******** Datos del cliente a modificar ********", true);
                     vClientes.showMensaje(clienteDTO.toString(), true);
@@ -523,16 +531,21 @@ public class ControlClientes extends ControlBase
      */
     public void showCliente()
     {
+        enum modos {nif, email, nulo};
+        modos modo = modos.nulo;
         ClienteDTO clienteDTO;
         String datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a mostrar: ", 1, 250, false, false, false);
-        if(datoCliente == null){
-            vClientes.showMensajePausa("NIF o Email inválido", true);
+        if (datoCliente != null) {
+            if (checkNIF(datoCliente)) modo = modos.nif;
+            else if (checkEmail(datoCliente)) modo = modos.email;
+        }
+        if(datoCliente == null || modo == modos.nulo) {
+            vClientes.showMensajePausa("NIF o Email inválido.", true);
             return;
         }
         try
         {
-            if (mClientes.getClienteDTONif(datoCliente) == null)
-                clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
+            if (modo == modos.email) clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
             else clienteDTO = mClientes.getClienteDTONif(datoCliente);
             if (clienteDTO == null)
             {
