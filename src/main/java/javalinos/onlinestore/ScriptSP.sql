@@ -31,7 +31,7 @@ BEGIN
 
     UPDATE ArticuloStock
     SET stock = p_stockNuevo
-    WHERE articulo = p_id;
+    WHERE articuloId = p_id;
 
     COMMIT;
 END //
@@ -42,8 +42,8 @@ DROP PROCEDURE IF EXISTS insertar_pedido_con_stock;
 DELIMITER //
 CREATE PROCEDURE insertar_pedido_con_stock(
     IN p_numero INT,
-    IN p_cliente_id INT,
-    IN p_articulo_id INT,
+    IN p_clienteId INT,
+    IN p_articuloIid INT,
     IN p_cantidad INT,
     IN p_fechahora DATE,
     IN p_envio DECIMAL(10,2),
@@ -58,12 +58,12 @@ BEGIN
 
     START TRANSACTION;
 
-    INSERT INTO pedido (numero, cliente, articulo, cantidad, fechahora, envio, precio)
-    VALUES (p_numero, p_cliente_id, p_articulo_id, p_cantidad, p_fechahora, p_envio, p_precio);
+    INSERT INTO pedido (numero, clienteId, articuloId, cantidad, fechahora, envio, precio)
+    VALUES (p_numero, p_clienteId, p_articuloIid, p_cantidad, p_fechahora, p_envio, p_precio);
 
     UPDATE articulostock
     SET stock = stock - p_cantidad
-    WHERE articulo = p_articulo_id;
+    WHERE articuloId = p_articuloIid;
 
     COMMIT;
 END //
@@ -76,7 +76,7 @@ CREATE PROCEDURE eliminar_pedido_con_stock(
     IN p_id INT
 )
 BEGIN
-    DECLARE p_articulo INT;
+    DECLARE p_articuloId INT;
     DECLARE p_cantidad INT;
     DECLARE stock_actual INT;
     DECLARE exit handler for SQLEXCEPTION
@@ -87,11 +87,11 @@ BEGIN
 
     START TRANSACTION;
 
-    SELECT articulo, cantidad INTO p_articulo, p_cantidad
+    SELECT articuloId, cantidad INTO p_articuloId, p_cantidad
     FROM pedido
     WHERE id = p_id FOR UPDATE;
 
-    IF p_articulo IS NULL THEN
+    IF p_articuloId IS NULL THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Pedido no encontrado';
     END IF;
 
@@ -99,11 +99,11 @@ BEGIN
 
     SELECT stock INTO stock_actual
     FROM articulostock
-    WHERE articulo = p_articulo FOR UPDATE;
+    WHERE articuloId = p_articuloId FOR UPDATE;
 
     UPDATE articulostock
     SET stock = stock_actual + p_cantidad
-    WHERE articulo = p_articulo;
+    WHERE articuloId = p_articuloId;
 
     COMMIT;
 END //
@@ -115,8 +115,8 @@ DELIMITER //
 CREATE PROCEDURE actualizar_pedido_con_stock(
     IN p_id INT,
     IN p_numero INT,
-    IN p_cliente INT,
-    IN p_articulo INT,
+    IN p_clienteId INT,
+    IN p_articuloId INT,
     IN p_cantidad INT,
     IN p_fechahora DATE,
     IN p_envio FLOAT,
@@ -134,8 +134,8 @@ BEGIN
 
     UPDATE pedido
     SET numero = p_numero,
-        cliente = p_cliente,
-        articulo = p_articulo,
+        clienteId = p_clienteId,
+        articuloId = p_articuloId,
         cantidad = p_cantidad,
         fechahora = p_fechahora,
         envio = p_envio,
@@ -144,11 +144,11 @@ BEGIN
 
     SELECT stock INTO stock_actual
     FROM articulostock
-    WHERE articulo = p_articulo FOR UPDATE;
+    WHERE articuloId = p_articuloId FOR UPDATE;
 
     UPDATE articulostock
     SET stock = stock_actual + p_diferenciaStock
-    WHERE articulo = p_articulo;
+    WHERE articuloId = p_articuloId;
 
     COMMIT;
 END //

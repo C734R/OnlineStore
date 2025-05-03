@@ -8,6 +8,8 @@ import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 
 import java.util.*;
 
+import static javalinos.onlinestore.OnlineStore.configuracion;
+
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los artículos y su stock.
  */
@@ -218,10 +220,18 @@ public class ModeloArticulosBBDD implements IModeloArticulos
     private LinkedHashMap<ArticuloDTO, Integer> mapearArticuloStocks (List<ArticuloStock> articuloStocks) throws Exception {
         LinkedHashMap<ArticuloDTO, Integer> articuloStocksDTO = new LinkedHashMap<>();
         for (ArticuloStock articuloStock : articuloStocks) {
-            ArticuloDTO articuloDTO = getArticuloDTOId(articuloStock.getArticuloId());
+            ArticuloDTO articuloDTO = getArticuloDTOEntidadArticuloStock(articuloStock);
             articuloStocksDTO.put(articuloDTO, articuloStock.getStock());
         }
         return articuloStocksDTO;
+    }
+
+    private ArticuloDTO getArticuloDTOEntidadArticuloStock(ArticuloStock articuloStock) throws Exception {
+        return switch (configuracion) {
+            case JDBC_MYSQL ->  getArticuloDTOId(articuloStock.getArticuloId());
+            case JPA_HIBERNATE_MYSQL -> getArticuloDTOId(articuloStock.getArticulo().getId());
+            default -> null;
+        };
     }
 
     private Map<Integer, Integer> mapearArticuloStocksId (List<ArticuloStock> articuloStocks) throws Exception {

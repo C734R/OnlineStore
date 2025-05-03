@@ -41,7 +41,7 @@ public class PedidoDAOHibernate extends BaseDAOHIbernate<Pedido, Integer> implem
     public List<Pedido> getPedidosCliente(Cliente cliente) throws Exception {
         try
         {
-            return em.createQuery("FROM "+ clase.getSimpleName() +" p WHERE p.clienteId = :clienteId", clase)
+            return em.createQuery("FROM "+ clase.getSimpleName() +" p WHERE p.cliente.id = :clienteId", clase)
                     .setParameter("clienteId", cliente.getId())
                     .getResultList();
         }
@@ -130,16 +130,16 @@ public class PedidoDAOHibernate extends BaseDAOHIbernate<Pedido, Integer> implem
             StoredProcedureQuery query = em.createStoredProcedureQuery("insertar_pedido_con_stock");
 
             query.registerStoredProcedureParameter("p_numero", Integer.class, ParameterMode.IN);
-            query.registerStoredProcedureParameter("p_cliente_id", Integer.class, ParameterMode.IN);
-            query.registerStoredProcedureParameter("p_articulo_id", Integer.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_clienteId", Integer.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_articuloId", Integer.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_cantidad", Integer.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_fechahora", Date.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_envio", Float.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_precio", Float.class, ParameterMode.IN);
 
             query.setParameter("p_numero", pedido.getNumero());
-            query.setParameter("p_cliente_id", pedido.getClienteId());
-            query.setParameter("p_articulo_id", pedido.getArticuloId());
+            query.setParameter("p_clienteId", pedido.getClienteId());
+            query.setParameter("p_articuloId", pedido.getArticuloId());
             query.setParameter("p_cantidad", pedido.getCantidad());
             query.setParameter("p_fechahora", Date.valueOf(pedido.getFechahora()));
             query.setParameter("p_envio", pedido.getEnvio());
@@ -185,8 +185,8 @@ public class PedidoDAOHibernate extends BaseDAOHIbernate<Pedido, Integer> implem
 
             query.registerStoredProcedureParameter("p_id", Integer.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_numero", Integer.class, ParameterMode.IN);
-            query.registerStoredProcedureParameter("p_cliente", Integer.class, ParameterMode.IN);
-            query.registerStoredProcedureParameter("p_articulo", Integer.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_clienteId", Integer.class, ParameterMode.IN);
+            query.registerStoredProcedureParameter("p_articuloId", Integer.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_cantidad", Integer.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_fechahora", Date.class, ParameterMode.IN);
             query.registerStoredProcedureParameter("p_envio", Float.class, ParameterMode.IN);
@@ -195,8 +195,8 @@ public class PedidoDAOHibernate extends BaseDAOHIbernate<Pedido, Integer> implem
 
             query.setParameter("p_id", pedidoNew.getId());
             query.setParameter("p_numero", pedidoNew.getNumero());
-            query.setParameter("p_cliente", pedidoNew.getClienteId());
-            query.setParameter("p_articulo", pedidoNew.getArticuloId());
+            query.setParameter("p_clienteId", pedidoNew.getClienteId());
+            query.setParameter("p_articuloId", pedidoNew.getArticuloId());
             query.setParameter("p_cantidad", pedidoNew.getCantidad());
             query.setParameter("p_fechahora", Date.valueOf(pedidoNew.getFechahora()));
             query.setParameter("p_envio", pedidoNew.getEnvio());

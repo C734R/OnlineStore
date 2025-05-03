@@ -143,12 +143,12 @@ public abstract class VistaBase {
             showMensaje(mensaje,true);
             try {
                 String entrada = scanner.nextLine();
-                if (entrada.length() < longitudMax && entrada.length() > longitudMin) return entrada;
+                if (entrada.length() <= longitudMax && entrada.length() >= longitudMin) return entrada;
                 else if (entrada.length() > longitudMax) {
                     if (error) showMensajePausa("Error. Entrada excedida. No puedes sobrepasar los " + longitudMax + " carácteres. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
                     if (!sinFin) intentos++;
                 }
-                else if (entrada.length() < longitudMin) {
+                else {
                     if (error) showMensajePausa("Error. Entrada insuficiente. La longitud de la entrada no puede ser inferior a " + longitudMin + " caracteres. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
                     if (!sinFin) intentos++;
                 }

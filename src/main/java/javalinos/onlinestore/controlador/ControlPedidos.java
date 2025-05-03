@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static javalinos.onlinestore.OnlineStore.cClientes;
+import static javalinos.onlinestore.OnlineStore.vClientes;
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
 /**
  * Controlador para gestionar la lógica relacionada con los pedidos.
@@ -343,7 +344,10 @@ public class ControlPedidos extends ControlBase{
 
         if (crear && indexCliente == (cClientes.getIndexCliente(true)+2)) {
             cClientes.addCliente();
-            return cClientes.getCliente(cClientes.getIndexCliente(true));
+            if (indexCliente != (cClientes.getIndexCliente(true)+1)){
+                vClientes.showMensajePausa("No se ha podido crear el cliente.", true);
+                return null;
+            }
         }
 
         ClienteDTO ClienteDTO = cClientes.getCliente(indexCliente-1);
@@ -381,11 +385,16 @@ public class ControlPedidos extends ControlBase{
             for (ClienteDTO cliente : todosLosClientes) {
                 List<PedidoDTO> pedidosFiltrados = null;
 
-                if (tipoFiltrado == 0) {
+                if (tipoFiltrado == 0)
+                {
                     pedidosFiltrados = mPedidos.getPedidosDTOCliente(cliente);
-                } else if (tipoFiltrado == 1) {
+                }
+                else if (tipoFiltrado == 1)
+                {
                     pedidosFiltrados = mPedidos.getPedidosPendientesEnviados(false, cliente);
-                } else if (tipoFiltrado == 2) {
+                }
+                else if (tipoFiltrado == 2)
+                {
                     pedidosFiltrados = mPedidos.getPedidosPendientesEnviados(true, cliente);
                 }
 

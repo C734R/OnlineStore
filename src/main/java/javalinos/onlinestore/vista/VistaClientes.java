@@ -61,7 +61,7 @@ public class VistaClientes extends VistaBase {
                 showMensajePausa("El DNI introducido es erróneo. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
                 if (!sinFin) intentos++;
             }
-            else return nif;
+            else if (checkNIF(nif))return nif;
         }
         if (reintentar) showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
         return null;

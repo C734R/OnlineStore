@@ -79,7 +79,7 @@ public class ControlClientes extends ControlBase
         }
         catch (Exception e)
         {
-            vClientes.showMensajePausa("Error al ejecutar la operación: \n"+ e.getMessage(), true);
+            vClientes.showMensajePausa("Error al ejecutar la operación: \n" + e, true);
         }
     }
 
@@ -90,15 +90,32 @@ public class ControlClientes extends ControlBase
      */
     public void addCliente()
     {
+        String nif;
+        String email;
         vClientes.showMensaje("******** Añadir Cliente ********", true);
         String nombre = vClientes.askString("Ingrese el nombre del cliente:", 1,250, true, false, true);
         if (nombre == null ) return;
         String domicilio = vClientes.askString("Ingrese el domicilio del cliente:", 1, 250, true, false, true);
         if (domicilio == null ) return;
-        String nif = vClientes.askNIF(false, true, false);
-        if (nif == null ) return;
-        String email = vClientes.askEmail(false, true, false);
-        if (email == null ) return;
+        while(true) {
+            nif = vClientes.askNIF(false, true, false);
+            if (nif == null) return;
+            else if (getClienteNIF(nif, false) != null) {
+                vClientes.showMensajePausa("Ya existe un cliente con este NIF registrado.", true);
+                boolean reintentar = vClientes.askBoolean("¿Quieres introducir otro?", true, true);
+                if (!reintentar) return;
+            } else break;
+        }
+        while(true) {
+            email = vClientes.askEmail(false, true, false);
+            if (email == null ) return;
+            else if (getClienteEmail(email, false) != null){
+                vClientes.showMensajePausa("Ya existe un cliente con este email registrado.", true);
+                boolean reintentar = vClientes.askBoolean("¿Quieres introducir otro?", true, true);
+                if (!reintentar) return;
+            }
+            else break;
+        }
         CategoriaDTO categoriaDTO = getCategoria(vClientes.askCategoriaCliente());
         if (categoriaDTO == null) return;
         ClienteDTO nuevoClienteDTO = mClientes.makeCliente(nombre, domicilio, nif, email, categoriaDTO);
@@ -108,9 +125,22 @@ public class ControlClientes extends ControlBase
             vClientes.showMensajePausa("Cliente registrado con éxito.", true);
         }
         catch (Exception e) {
-            vClientes.showMensajePausa("Error al registrar el cliente: " + e.getMessage(), true);
+            vClientes.showMensajePausa("Error al registrar el cliente: " + e, true);
         }
 
+    }
+
+    private ClienteDTO getClienteNIF(String nif, boolean error)
+    {
+        try
+        {
+            return mClientes.getClienteDTONif(nif);
+        }
+        catch (Exception e)
+        {
+            if (error) vClientes.showMensajePausa("Error al obtener el cliente seleccionado por NIF: " + e,true);
+        }
+        return null;
     }
 
     /**
@@ -460,7 +490,7 @@ public class ControlClientes extends ControlBase
      * @param email email del cliente
      * @return cliente correspondiente
      */
-    public ClienteDTO getClienteEmail(String email)
+    public ClienteDTO getClienteEmail(String email, boolean error)
     {
         try
         {
@@ -468,7 +498,7 @@ public class ControlClientes extends ControlBase
         }
         catch (Exception e)
         {
-            vClientes.showMensajePausa("Error al obtener el cliente seleccionado por email: " + e,true);
+            if (error) vClientes.showMensajePausa("Error al obtener el cliente seleccionado por email: " + e,true);
         }
         return null;
     }
