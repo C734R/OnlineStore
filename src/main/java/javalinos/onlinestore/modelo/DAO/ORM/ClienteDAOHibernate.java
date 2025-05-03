@@ -52,8 +52,8 @@ public class ClienteDAOHibernate extends BaseDAOHIbernate<Cliente, Integer> impl
     public List<Cliente> getClientesCategoria(Categoria categoria) throws Exception {
         try
         {
-            return em.createQuery("FROM " + clase.getSimpleName() + " c WHERE c.categoriaId = :categoriaId", clase)
-                    .setParameter("categoriaId", categoria.getId())
+            return em.createQuery("FROM " + clase.getSimpleName() + " c WHERE c.categoria = :categoria", clase)
+                    .setParameter("categoria", categoria)
                     .getResultList();
         }
         catch (Exception e)

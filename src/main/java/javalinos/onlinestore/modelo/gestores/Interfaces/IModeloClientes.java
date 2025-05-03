@@ -2,6 +2,7 @@ package javalinos.onlinestore.modelo.gestores.Interfaces;
 
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
+import javalinos.onlinestore.modelo.Entidades.Cliente;
 
 import java.util.List;
 
@@ -13,13 +14,16 @@ public interface IModeloClientes {
     void addCliente(ClienteDTO clienteDTO) throws Exception;
     void removeCliente(ClienteDTO clienteDTO) throws Exception;
     void removeClientesAll() throws Exception;
-    ClienteDTO getClienteIndex(int index) throws Exception;
+    ClienteDTO getClienteDTOIndex(int index) throws Exception;
     ClienteDTO getClienteDTOId(int id) throws Exception;
     Integer getIdClienteDTO(ClienteDTO clienteDTO) throws Exception;
     void updateCliente(ClienteDTO clienteDTOOld, ClienteDTO clienteDTONew) throws Exception;
     int sizeClientes() throws Exception;
     ClienteDTO getClienteDTONif(String nif) throws Exception;
     ClienteDTO getClienteDTOEmail(String email) throws Exception;
+    Cliente getClienteEntidadNif(String nif) throws Exception;
+    Cliente getClienteEntidadEmail(String email) throws Exception;
+    Cliente getClienteEntidadId(int id) throws Exception;
     List<ClienteDTO> getClientesCategoria(CategoriaDTO categoriaDTO) throws Exception;
     CategoriaDTO getCategoriaDTOOpcion(int opcion) throws Exception;
     int getLastIndexCliente() throws Exception;

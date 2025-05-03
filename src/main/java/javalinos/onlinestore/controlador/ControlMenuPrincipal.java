@@ -62,7 +62,7 @@ public class ControlMenuPrincipal extends ControlBase {
             }
             iniciado = true;
             vMenuPrincipal.showMenu(1);
-            opcion = vMenuPrincipal.askInt("Seleccione una opción", 0, 3, false, false);
+            opcion = vMenuPrincipal.askInt("Seleccione una opción", 0, 3, false, false, true);
             switch (opcion) {
                 case 1:
                     vMenuPrincipal.showMensaje("*** Accediendo al menú de gestión de clientes... ***\n", true);

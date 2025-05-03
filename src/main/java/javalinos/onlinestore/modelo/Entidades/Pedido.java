@@ -58,6 +58,20 @@ public class Pedido {
         this.precio = pedidoDTO.getPrecio();
     }
 
+    public Pedido(PedidoDTO pedidoDTO, Cliente cliente, Articulo articulo)
+    {
+        this.id = null;
+        this.numero = pedidoDTO.getNumero();
+        this.clienteId = cliente.getId();
+        this.articuloId = articulo.getId();
+        this.cantidad = pedidoDTO.getCantidad();
+        this.fechahora = pedidoDTO.getFechahora();
+        this.envio = pedidoDTO.getEnvio();
+        this.precio = pedidoDTO.getPrecio();
+        this.cliente = cliente;
+        this.articulo = articulo;
+    }
+
     public Integer getId() {
         return id;
     }

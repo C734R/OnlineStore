@@ -15,15 +15,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static javalinos.onlinestore.Configuracion.JDBC_MYSQL;
+import static javalinos.onlinestore.OnlineStore.configuracion;
+
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los pedidoDTOS.
  */
 public class ModeloPedidosBBDD implements IModeloPedidos
 {
 
-    private FactoryDAO factoryDAO;
-    private IModeloArticulos mArticulos;
-    private IModeloClientes mClientes;
+    private final FactoryDAO factoryDAO;
+    private final IModeloArticulos mArticulos;
+    private final IModeloClientes mClientes;
     /**
      * Constructor por defecto. Inicializa una lista vacía de pedidoDTOS.
      */
@@ -94,13 +98,34 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     private PedidoDTO pedidoEntidadToPedidoDTO(Pedido pedido) throws Exception
     {
-        ArticuloDTO articuloDTO = mArticulos.getArticuloDTOId(pedido.getArticuloId());
-        ClienteDTO clienteDTO = mClientes.getClienteDTOId(pedido.getClienteId());
+        ArticuloDTO articuloDTO;
+        ClienteDTO clienteDTO;
+        switch (configuracion) {
+            case JDBC_MYSQL:
+                {
+                    articuloDTO = mArticulos.getArticuloDTOId(pedido.getArticuloId());
+                    clienteDTO = mClientes.getClienteDTOId(pedido.getClienteId());
+                }
+                break;
+            case JPA_HIBERNATE_MYSQL:
+                {
+                    articuloDTO = mArticulos.getArticuloDTOId(pedido.getArticulo().getId());
+                    clienteDTO = mClientes.getClienteDTOId(pedido.getCliente().getId());
+                }
+                break;
+            default:
+                articuloDTO = null;
+                clienteDTO = null;
+        }
         return new PedidoDTO(pedido, clienteDTO, articuloDTO);
     }
 
     private Pedido pedidoDTOtoEntidad(PedidoDTO pedidoDTO) throws Exception {
-        return new Pedido(pedidoDTO, mClientes.getIdClienteDTO(pedidoDTO.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTO.getArticulo()));
+        return switch (configuracion) {
+            case JDBC_MYSQL -> new Pedido(pedidoDTO, mClientes.getIdClienteDTO(pedidoDTO.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTO.getArticulo()));
+            case JPA_HIBERNATE_MYSQL -> new Pedido(pedidoDTO, mClientes.getClienteEntidadEmail(pedidoDTO.getCliente().getEmail()), mArticulos.getArticuloEntidadCodigo(pedidoDTO.getArticulo().getCodigo()));
+            default -> null;
+        };
     }
 
     private Pedido getPedidoEntidadNumero(int numero) throws Exception
@@ -196,12 +221,19 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     private ArticuloDTO getArticuloDTOPedido (Pedido pedido) throws Exception
     {
-        return mArticulos.getArticuloDTOId(pedido.getArticuloId());
+        return switch (configuracion) {
+            case JDBC_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticuloId());
+            case JPA_HIBERNATE_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticulo().getId());
+            default -> null;
+        };
     }
 
-    private ClienteDTO getClienteDTOPedido(Pedido pedido) throws Exception
-    {
-        return mClientes.getClienteDTOId(pedido.getClienteId());
+    private ClienteDTO getClienteDTOPedido(Pedido pedido) throws Exception {
+        return switch (configuracion) {
+            case JDBC_MYSQL -> mClientes.getClienteDTOId(pedido.getClienteId());
+            case JPA_HIBERNATE_MYSQL -> mClientes.getClienteDTOId(pedido.getCliente().getId());
+            default -> null;
+        };
     }
 
     /**
@@ -343,32 +375,32 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     /**
      * Carga pedidoDTOS de prueba en función de la configuración.
-     * @param ClienteDTOS lista de clienteDTOS disponibles.
+     * @param ClientesDTO lista de clienteDTOS disponibles.
      * @param ArticuloDTOS lista de artículos disponibles.
      */
-    public void loadPedidos(List<ClienteDTO> ClienteDTOS, List<ArticuloDTO> ArticuloDTOS) throws Exception
+    public void loadPedidos(List<ClienteDTO> ClientesDTO, List<ArticuloDTO> ArticuloDTOS) throws Exception
     {
         try {
             removePedidosAll();
 
-            addPedido(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(0), 2, LocalDate.now().minusDays(3), 5f));
-            addPedido(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(1), 1, LocalDate.now().minusDays(1), 5f));
-            addPedido(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(2), 5, LocalDate.now().minusDays(3), 5f));
-            addPedido(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
-            addPedido(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(4), 4, LocalDate.now().minusMonths(1), 5f));
-            addPedido(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(5), 2, LocalDate.now().minusDays(2), 5f));
-            addPedido(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
-            addPedido(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(7), 6, LocalDate.now().minusMonths(2), 5f));
-            addPedido(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(8), 3, LocalDate.now().minusDays(5), 5f));
-            addPedido(makePedido(ClienteDTOS.get(0), ArticuloDTOS.get(1), 10, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(4), ArticuloDTOS.get(2), 7, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(7), ArticuloDTOS.get(3), 12, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(1), ArticuloDTOS.get(4), 6, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(5), ArticuloDTOS.get(5), 15, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(8), ArticuloDTOS.get(6), 9, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(2), ArticuloDTOS.get(7), 11, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(6), ArticuloDTOS.get(0), 8, LocalDate.now(), 5f));
-            addPedido(makePedido(ClienteDTOS.get(3), ArticuloDTOS.get(1), 13, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(0), ArticuloDTOS.get(0), 2, LocalDate.now().minusDays(3), 5f));
+            addPedido(makePedido(ClientesDTO.get(4), ArticuloDTOS.get(1), 1, LocalDate.now().minusDays(1), 5f));
+            addPedido(makePedido(ClientesDTO.get(7), ArticuloDTOS.get(2), 5, LocalDate.now().minusDays(3), 5f));
+            addPedido(makePedido(ClientesDTO.get(1), ArticuloDTOS.get(3), 3, LocalDate.now().minusWeeks(1), 5f));
+            addPedido(makePedido(ClientesDTO.get(5), ArticuloDTOS.get(4), 4, LocalDate.now().minusMonths(1), 5f));
+            addPedido(makePedido(ClientesDTO.get(8), ArticuloDTOS.get(5), 2, LocalDate.now().minusDays(2), 5f));
+            addPedido(makePedido(ClientesDTO.get(2), ArticuloDTOS.get(6), 1, LocalDate.now().minusWeeks(2), 5f));
+            addPedido(makePedido(ClientesDTO.get(6), ArticuloDTOS.get(7), 6, LocalDate.now().minusMonths(2), 5f));
+            addPedido(makePedido(ClientesDTO.get(3), ArticuloDTOS.get(8), 3, LocalDate.now().minusDays(5), 5f));
+            addPedido(makePedido(ClientesDTO.get(0), ArticuloDTOS.get(1), 10, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(4), ArticuloDTOS.get(2), 7, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(7), ArticuloDTOS.get(3), 12, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(1), ArticuloDTOS.get(4), 6, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(5), ArticuloDTOS.get(5), 15, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(8), ArticuloDTOS.get(6), 9, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(2), ArticuloDTOS.get(7), 11, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(6), ArticuloDTOS.get(0), 8, LocalDate.now(), 5f));
+            addPedido(makePedido(ClientesDTO.get(3), ArticuloDTOS.get(1), 13, LocalDate.now(), 5f));
 
         }
         catch (Exception e)

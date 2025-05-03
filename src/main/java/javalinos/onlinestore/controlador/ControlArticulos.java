@@ -63,7 +63,7 @@ public class ControlArticulos extends ControlBase {
         while (true) {
             vArticulos.showCabecera();
             vArticulos.showMenu(2);
-            opcion = vArticulos.askInt("Introduce una opción", 0, 5, false, false);
+            opcion = vArticulos.askInt("Introduce una opción", 0, 5, false, false, true);
             switch (opcion) {
                 case 1:
                     addArticulo();
@@ -110,13 +110,13 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("Error al obtener el número del último artículo.", true);
             return;
         }
-        String descripcion = vArticulos.askString("Introduce la descripción del artículo: ", 1, 250);
+        String descripcion = vArticulos.askString("Introduce la descripción del artículo: ", 1, 250, true, false, true);
         if(descripcion == null) return;
         float precio = vArticulos.askPrecio(0.0f, 9999.0f);
         if(precio == -99999f) return;
-        int preparacion = vArticulos.askInt("Introduce los minutos de preparación del artículo", 1, 9999, true, false);
+        int preparacion = vArticulos.askInt("Introduce los minutos de preparación del artículo", 1, 9999, true, false, true);
         if(preparacion == -99999f) return;
-        int stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false);
+        int stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false, true);
         if(stock == -99999) return;
         try
         {
@@ -167,7 +167,7 @@ public class ControlArticulos extends ControlBase {
         vArticulos.showListArticulosNumerada(articulosDTO);
         vArticulos.showMensaje("Selecciona un artículo para eliminar: ", true);
 
-        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), true, true);
+        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), true, true, true);
         if(seleccion == -99999) return;
 
         ArticuloDTO articuloDTO = articulosDTO.get(seleccion-1);
@@ -213,7 +213,7 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("Error al mostrar el listado de stocks." + e, true);
             return;
         }
-        int seleccion = vArticulos.askInt("Selecciona el número del artículo a modificar", 1, articulosDTO.size(), true, true);
+        int seleccion = vArticulos.askInt("Selecciona el número del artículo a modificar", 1, articulosDTO.size(), true, true, true);
         if (seleccion == -99999) return;
 
         ArticuloDTO articuloDTOOld = articulosDTO.get(seleccion - 1);

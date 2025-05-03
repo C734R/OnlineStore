@@ -14,9 +14,9 @@ CREATE TABLE IF NOT EXISTS Categoria (
     descuento DECIMAL(10,2) NOT NULL
 );
 
-INSERT INTO Categoria (nombre, cuota, descuento) VALUES
-    ('Estándar', 0.0, 0.0),
-    ('Premium', 30.0, 0.20);
+# INSERT INTO Categoria (nombre, cuota, descuento) VALUES
+#     ('Estándar', 0.0, 0.0),
+#     ('Premium', 30.0, 0.20);
 
 DROP TABLE IF EXISTS Cliente;
 -- Tabla para clientes

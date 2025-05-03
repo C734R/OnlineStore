@@ -113,7 +113,7 @@ public class ModeloArticulosTest {
 
         ArticuloDTO obtenido = null;
         try {
-            obtenido = mArticulos.getArticuloIndex(0);
+            obtenido = mArticulos.getArticuloDTOIndex(0);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -144,17 +144,17 @@ public class ModeloArticulosTest {
     void testGetArticuloIndex() {
         ArticuloDTO ArticuloDTO = mArticulos.getArticulosDTO().get(1);
         try {
-            assertEquals(ArticuloDTO, mArticulos.getArticuloIndex(1));
+            assertEquals(ArticuloDTO, mArticulos.getArticuloDTOIndex(1));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         try {
-            assertNull(mArticulos.getArticuloIndex(-1));
+            assertNull(mArticulos.getArticuloDTOIndex(-1));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
         try {
-            assertNull(mArticulos.getArticuloIndex(100));
+            assertNull(mArticulos.getArticuloDTOIndex(100));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

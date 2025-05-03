@@ -9,15 +9,15 @@ import javalinos.onlinestore.modelo.DAO.ORM.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import static javalinos.onlinestore.OnlineStore.configuracion;
+
 public class FactoryDAO {
 
     protected final Connection conexion;
-    protected final Configuracion configuracion;
     public final FactoryDAO factoryDAO;
 
-    public FactoryDAO(Configuracion configuracion, Connection conexion) {
+    public FactoryDAO(Connection conexion) {
         this.conexion = conexion;
-        this.configuracion = configuracion;
         this.factoryDAO = this;
     }
 

@@ -10,6 +10,8 @@ import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javalinos.onlinestore.OnlineStore.configuracion;
+
 /**
  * Modelo encargado de gestionar las operaciones relacionadas con los clienteDTOS.
  */
@@ -60,7 +62,7 @@ public class ModeloClientesBBDD implements IModeloClientes
      * @param index índice del cliente.
      * @return cliente en la posición dada o null si está fuera de rango.
      */
-    public ClienteDTO getClienteIndex(int index) throws Exception
+    public ClienteDTO getClienteDTOIndex(int index) throws Exception
     {
         List<ClienteDTO> clientesDTO = getClientesDTO();
         if (index >= 0 && index < clientesDTO.size()) {
@@ -84,9 +86,19 @@ public class ModeloClientesBBDD implements IModeloClientes
     public ClienteDTO getClienteDTOId(int id) throws Exception
     {
         Cliente cliente = getClienteId(id);
-        if (cliente == null) throw new Exception("Cliente no encontrado");
-        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
+        if (cliente == null) throw new Exception("Cliente no encontrado.");
+        CategoriaDTO categoriaDTO = getCategoriaDTOClienteEntidad(cliente);
+        if (categoriaDTO == null) throw new Exception("CategoriaDTO no obtenido.");
         return new ClienteDTO(cliente, categoriaDTO);
+    }
+
+    private Integer getCategoriaIdClienteEntidad(Cliente cliente)
+    {
+        return switch (configuracion) {
+            case JDBC_MYSQL -> cliente.getCategoriaId();
+            case JPA_HIBERNATE_MYSQL -> cliente.getCategoria().getId();
+            default -> null;
+        };
     }
 
     private Cliente getClienteEntidadNombre(String nombre) throws Exception
@@ -162,12 +174,17 @@ public class ModeloClientesBBDD implements IModeloClientes
     {
         Cliente cliente = getClienteEntidadNif(nif);
         if (cliente == null) throw new Exception("Cliente no encontrado.");
-        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
+        CategoriaDTO categoriaDTO = getCategoriaDTOClienteEntidad(cliente);
         if (categoriaDTO == null) throw new Exception("Categoria no encontrado.");
         return new ClienteDTO(cliente, categoriaDTO);
     }
 
-    private Cliente getClienteEntidadNif(String nif) throws Exception
+    private CategoriaDTO getCategoriaDTOClienteEntidad(Cliente cliente) throws Exception {
+        Integer categoriaId = getCategoriaIdClienteEntidad(cliente);
+        return getCategoriaDTOId(categoriaId);
+    }
+
+    public Cliente getClienteEntidadNif(String nif) throws Exception
     {
         return factoryDAO.getDAOCliente().getClienteNIF(nif);
     }
@@ -181,14 +198,19 @@ public class ModeloClientesBBDD implements IModeloClientes
     {
         Cliente cliente = getClienteEntidadEmail(email);
         if (cliente == null) throw new Exception("Cliente no encontrado.");
-        CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
+        CategoriaDTO categoriaDTO = getCategoriaDTOClienteEntidad(cliente);
         if (categoriaDTO == null) throw new Exception("Categoria no encontrado.");
         return new ClienteDTO(cliente, categoriaDTO);
     }
 
-    private Cliente getClienteEntidadEmail(String email) throws  Exception
+    public Cliente getClienteEntidadEmail(String email) throws  Exception
     {
         return factoryDAO.getDAOCliente().getClienteEmail(email);
+    }
+
+    @Override
+    public Cliente getClienteEntidadId(int id) throws Exception {
+        return factoryDAO.getDAOCliente().getPorId(id);
     }
 
     /**
@@ -215,7 +237,7 @@ public class ModeloClientesBBDD implements IModeloClientes
         List<ClienteDTO> clientesDTO = new ArrayList<>();
         for (Cliente cliente : clientes)
         {
-            CategoriaDTO categoriaDTO = getCategoriaDTOId(cliente.getCategoriaId());
+            CategoriaDTO categoriaDTO = getCategoriaDTOClienteEntidad(cliente);
             clientesDTO.add(new ClienteDTO(cliente, categoriaDTO));
         }
         return clientesDTO;
@@ -338,7 +360,7 @@ public class ModeloClientesBBDD implements IModeloClientes
         return new CategoriaDTO(factoryDAO.getDAOCategoria().getPorId(id));
     }
 
-    private CategoriaDTO getCategoriaDTONombre(String nombre) throws Exception
+    public CategoriaDTO getCategoriaDTONombre(String nombre) throws Exception
     {
         return new CategoriaDTO(getCategoriaEntidadNombre(nombre));
     }

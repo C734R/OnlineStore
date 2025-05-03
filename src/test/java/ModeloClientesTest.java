@@ -113,7 +113,7 @@ public class ModeloClientesTest {
      */
     @Test
     void testObtenerPorIndice() {
-        ClienteDTO ClienteDTO = mClientes.getClienteIndex(0);
+        ClienteDTO ClienteDTO = mClientes.getClienteDTOIndex(0);
         assertNotNull(ClienteDTO);
     }
     /**

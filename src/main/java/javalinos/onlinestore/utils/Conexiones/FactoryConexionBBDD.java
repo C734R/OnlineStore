@@ -2,6 +2,7 @@ package javalinos.onlinestore.utils.Conexiones;
 
 import javalinos.onlinestore.Configuracion;
 
+
 public class FactoryConexionBBDD {
 
     public static IConexionBBDD crearConexion(

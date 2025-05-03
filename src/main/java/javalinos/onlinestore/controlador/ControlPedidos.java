@@ -87,7 +87,7 @@ public class ControlPedidos extends ControlBase{
         {
             vPedidos.showCabecera();
             vPedidos.showMenu(2);
-            opcion = vPedidos.askInt("Introduce una opción", 0, 6, false, false);
+            opcion = vPedidos.askInt("Introduce una opción", 0, 6, false, false, true);
             switch (opcion)
             {
                 case 1:
@@ -150,12 +150,12 @@ public class ControlPedidos extends ControlBase{
             if (!articulosDisponibles.isEmpty())
             {
                 vPedidos.showOptions(listToStr(articulosDisponibles), 0, true, true, true);
-                int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 1, articulosDisponibles.size(), true, true);
+                int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 1, articulosDisponibles.size(), true, true, true);
                 if (indexArticulo == -99999) return;
                 indexArticulo = indexArticulo - 1;
-                ArticuloDTO articuloDTO = mArticulos.getArticuloIndex(indexArticulo);
+                ArticuloDTO articuloDTO = mArticulos.getArticuloDTOIndex(indexArticulo);
 
-                int stockComprado = vPedidos.askInt("Ingresa la cantidad que quiere comprar", 1, mArticulos.getStockArticulo(articuloDTO), true, true);
+                int stockComprado = vPedidos.askInt("Ingresa la cantidad que quiere comprar", 1, mArticulos.getStockArticulo(articuloDTO), true, true, true);
                 if (stockComprado == -99999) return;
 
                 PedidoDTO pedido = mPedidos.makePedido(clienteDTO, articuloDTO, stockComprado, LocalDate.now(), precioEnvio);
@@ -191,7 +191,7 @@ public class ControlPedidos extends ControlBase{
                 return;
             }
             vPedidos.showListPedidos(pedidos,null, true);
-            int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true);
+            int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true, true);
             if(numPedidoBorrar == -99999) return;
             PedidoDTO pedidoDTO = pedidos.get(numPedidoBorrar-1);
             mPedidos.removePedidoStockSP(pedidoDTO);
@@ -218,7 +218,7 @@ public class ControlPedidos extends ControlBase{
             }
 
             vPedidos.showListPedidos(pedidosDTO, null, true);
-            int seleccion = vPedidos.askInt("Selecciona el número del pedido a modificar", 1, pedidosDTO.size(), true, true);
+            int seleccion = vPedidos.askInt("Selecciona el número del pedido a modificar", 1, pedidosDTO.size(), true, true, true);
             if (seleccion == -99999) return;
 
             PedidoDTO pedidoDTOOld = pedidosDTO.get(seleccion - 1);
@@ -337,8 +337,8 @@ public class ControlPedidos extends ControlBase{
         int indexCliente;
         List<ClienteDTO> clientesDTO = cClientes.getListaClientes();
         vPedidos.showListClientes(clientesDTO);
-        if(crear) indexCliente = vPedidos.askInt("Selecciona un cliente existente o crea uno eligiendo " + (cClientes.getIndexCliente(true)+2), (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+2), true, true);
-        else indexCliente = vPedidos.askInt("Selecciona un cliente", (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+1), true, true);
+        if(crear) indexCliente = vPedidos.askInt("Selecciona un cliente existente o crea uno eligiendo " + (cClientes.getIndexCliente(true)+2), (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+2), true, true, true);
+        else indexCliente = vPedidos.askInt("Selecciona un cliente", (cClientes.getIndexCliente(false)+1), (cClientes.getIndexCliente(true)+1), true, true, true);
         if (indexCliente == -99999) return null;
 
         if (crear && indexCliente == (cClientes.getIndexCliente(true)+2)) {
@@ -402,7 +402,7 @@ public class ControlPedidos extends ControlBase{
             if(tipoFiltrado == 0) vPedidos.showListClientesPedidos(clientesPedidos);
             else if (tipoFiltrado == 1) vPedidos.showListClientesPedidosPendientes(clientesPedidos);
             else vPedidos.showListClientesPedidosEnviados(clientesPedidos);
-            indexCliente = vPedidos.askInt("Selecciona un cliente", 1, clientesPedidos.size(), true, true);
+            indexCliente = vPedidos.askInt("Selecciona un cliente", 1, clientesPedidos.size(), true, true, true);
             if (indexCliente == -99999) return null;
 
             ClienteDTO clienteSeleccionado = clientesPedidos.get(indexCliente - 1);

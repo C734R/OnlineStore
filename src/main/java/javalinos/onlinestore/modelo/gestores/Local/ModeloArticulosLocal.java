@@ -1,6 +1,7 @@
 package javalinos.onlinestore.modelo.gestores.Local;
 
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 
 import java.util.*;
@@ -33,7 +34,7 @@ public class ModeloArticulosLocal implements IModeloArticulos {
      * @param index posición en la lista.
      * @return artículo encontrado o null si está fuera de rango.
      */
-    public ArticuloDTO getArticuloIndex(int index) throws Exception {
+    public ArticuloDTO getArticuloDTOIndex(int index) throws Exception {
         if (index < 0 || index >= articulosDTO.size()) return null;
         return articulosDTO.get(index);
     }
@@ -45,6 +46,16 @@ public class ModeloArticulosLocal implements IModeloArticulos {
 
     @Override
     public ArticuloDTO getArticuloDTOCodigo(String codigo) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Articulo getArticuloEntidadId(Integer id) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Articulo getArticuloEntidadCodigo(String codigo) throws Exception {
         return null;
     }
 

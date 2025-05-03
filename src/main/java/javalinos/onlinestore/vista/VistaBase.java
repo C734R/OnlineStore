@@ -73,10 +73,10 @@ public abstract class VistaBase {
      * @param min valor mínimo aceptado.
      * @param max valor máximo aceptado.
      * @param reintentar true para mostrar mensajes de error y permitir reintentos.
-     * @param sumIntentos true para limitar a 3 intentos como máximo.
+     * @param sinFin true para no limitar intentos.
      * @return número entero ingresado o -99999 si se superan los intentos.
      */
-    public int askInt(String mensaje, int min, int max, boolean reintentar, boolean sumIntentos) {
+    public int askInt(String mensaje, int min, int max, boolean reintentar, boolean sinFin, boolean error) {
         Scanner scanner = new Scanner(System.in);
         int integer, intentos = 0;
         if(!reintentar) intentos = 2;
@@ -85,16 +85,16 @@ public abstract class VistaBase {
                 showMensaje(mensaje + " (entre " + min + " y " + max + "): ", true);
                 integer = scanner.nextInt();
                 if (integer >= min && integer <= max) return integer;
-                else if(reintentar) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
-                if (sumIntentos || !reintentar) intentos++;
+                else if (error) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ". " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
             }
             catch (InputMismatchException e) {
-                if(reintentar) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
-                if (sumIntentos || !reintentar) intentos++;
+                if (error) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ". " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
                 scanner.next();
             }
         }
-        if(reintentar) showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...",true);
+        if (reintentar && error) showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...",true);
         return -99999;
     }
 
@@ -104,10 +104,10 @@ public abstract class VistaBase {
      * @param min valor mínimo aceptado.
      * @param max valor máximo aceptado.
      * @param reintentar true para mostrar mensajes de error y permitir reintentos.
-     * @param sumIntentos true para limitar a 3 intentos como máximo.
+     * @param sinFin true para no limitar intentos.
      * @return número float ingresado o -99999f si se superan los intentos.
      */
-    public Float askFloat(String mensaje, float min, float max, boolean reintentar, boolean sumIntentos) {
+    public Float askFloat(String mensaje, float min, float max, boolean reintentar, boolean sinFin) {
         Scanner scanner = new Scanner(System.in);
         float _float;
         int intentos = 0;
@@ -117,16 +117,16 @@ public abstract class VistaBase {
                 showMensaje(mensaje + " (entre " + min + " y " + max + "): ", true);
                 _float = scanner.nextFloat();
                 if (_float >= min && _float <= max) return _float;
-                else if(reintentar) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ".", true);
-                if (sumIntentos || !reintentar) intentos++;
+                else showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ". " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
             }
             catch (InputMismatchException e) {
-                if(reintentar) showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ".", true);
-                if (sumIntentos || !reintentar) intentos++;
+                showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ". " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
                 scanner.next();
             }
         }
-        if(reintentar) showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...",true);
+        if (reintentar) showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...",true);
         return -99999f;
     }
 
@@ -135,29 +135,30 @@ public abstract class VistaBase {
      * @param mensaje mensaje mostrado al usuario.
      * @return texto ingresado o null si se superan los intentos.
      */
-    public String askString(String mensaje,int longitudMin, int longitudMax) {
+    public String askString(String mensaje,int longitudMin, int longitudMax, boolean reintentar, boolean sinFin, boolean error) {
         int intentos = 0;
+        if(!reintentar) intentos = 2;
         Scanner scanner = new Scanner(System.in);
         while(intentos < 3) {
             showMensaje(mensaje,true);
             try {
                 String entrada = scanner.nextLine();
-                if (entrada.length() > longitudMax) {
-                    showMensajePausa("Error. Entrada excedida. No puedes sobrepasar los " + longitudMax + " carácteres.", true);
-                    intentos++;
+                if (entrada.length() < longitudMax && entrada.length() > longitudMin) return entrada;
+                else if (entrada.length() > longitudMax) {
+                    if (error) showMensajePausa("Error. Entrada excedida. No puedes sobrepasar los " + longitudMax + " carácteres. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                    if (!sinFin) intentos++;
                 }
                 else if (entrada.length() < longitudMin) {
-                    showMensajePausa("Error. Entrada insuficiente. La longitud de la entrada no puede ser inferior a " + longitudMin + " caracteres.", true);
-                    intentos++;
+                    if (error) showMensajePausa("Error. Entrada insuficiente. La longitud de la entrada no puede ser inferior a " + longitudMin + " caracteres. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                    if (!sinFin) intentos++;
                 }
-                else return entrada;
             }
             catch (Exception e) {
-                showMensajePausa("Error. Entrada inválida. Introduce una cadena de texto.", true);
-                intentos++;
+                if (error) showMensajePausa("Error. Entrada inválida. " + (reintentar ? "Introduce una cadena de texto." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
             }
         }
-        showMensajePausa("Error. Demasiados intentos fallidos. Volviendo...", true);
+        if (reintentar && error) showMensajePausa("Error. Demasiados intentos fallidos. Volviendo...", true);
         return null;
     }
 
@@ -172,7 +173,7 @@ public abstract class VistaBase {
         showMensaje(mensaje,true);
         showMensaje("1. Sí", true);
         showMensaje("0. No", true);
-        int respuesta = askInt("Introduce una opción", 0, 1, reintentar, maxIntentos);
+        int respuesta = askInt("Introduce una opción", 0, 1, reintentar, maxIntentos, true);
         return respuesta != 0;
     }
 
@@ -247,7 +248,7 @@ public abstract class VistaBase {
         int intentos = 0;
         while (intentos < 3) {
             try {
-                return LocalDate.parse(askString("Introduce la fecha "+ mensaje + " (dd-mm-aaaa): ", 10, 10), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                return LocalDate.parse(askString("Introduce la fecha "+ mensaje + " (dd-mm-aaaa): ", 10, 10, false,false, false), DateTimeFormatter.ofPattern("dd-MM-yyyy"));
             } catch (Exception e) {
                 showMensajePausa("Error. Fecha incorrecta. Introduce la fecha en el formato dd-mm-aaaa.", true);
                 intentos++;

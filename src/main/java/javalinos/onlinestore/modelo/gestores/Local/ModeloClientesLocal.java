@@ -2,6 +2,7 @@ package javalinos.onlinestore.modelo.gestores.Local;
 
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
+import javalinos.onlinestore.modelo.Entidades.Cliente;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ public class ModeloClientesLocal implements IModeloClientes {
      * @param index índice del cliente.
      * @return cliente en la posición dada o null si está fuera de rango.
      */
-    public ClienteDTO getClienteIndex(int index) {
+    public ClienteDTO getClienteDTOIndex(int index) {
         if (index >= 0 && index < clientes.size()) {
             return clientes.get(index);
         }
@@ -142,6 +143,21 @@ public class ModeloClientesLocal implements IModeloClientes {
                 return ClienteDTO;
             }
         }
+        return null;
+    }
+
+    @Override
+    public Cliente getClienteEntidadNif(String nif) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Cliente getClienteEntidadEmail(String email) throws Exception {
+        return null;
+    }
+
+    @Override
+    public Cliente getClienteEntidadId(int id) throws Exception {
         return null;
     }
 

@@ -124,7 +124,7 @@ public class ModeloArticulosBBDD implements IModeloArticulos
      * @param index posición en la lista.
      * @return artículo encontrado o null si está fuera de rango.
      */
-    public ArticuloDTO getArticuloIndex(int index) throws Exception
+    public ArticuloDTO getArticuloDTOIndex(int index) throws Exception
     {
         List<ArticuloDTO> articulosDTO = getArticulosDTO();
         if (index < 0 || index >= articulosDTO.size()) return null;
@@ -136,14 +136,14 @@ public class ModeloArticulosBBDD implements IModeloArticulos
         return factoryDAO.getDAOArticulo().getArticuloCodigo(articuloDTO.getCodigo()).getId();
     }
 
-    private Articulo getArticuloEntidadCodigo(String codigo) throws Exception
+    public Articulo getArticuloEntidadCodigo(String codigo) throws Exception
     {
         return factoryDAO.getDAOArticulo().getArticuloCodigo(codigo);
     }
 
     public ArticuloDTO getArticuloDTOId(Integer id) throws Exception
     {
-        return new ArticuloDTO(getArticuloId(id));
+        return new ArticuloDTO(getArticuloEntidadId(id));
     }
 
     public ArticuloDTO getArticuloDTOCodigo(String codigo) throws Exception
@@ -151,7 +151,8 @@ public class ModeloArticulosBBDD implements IModeloArticulos
         return new ArticuloDTO(getArticuloEntidadCodigo(codigo));
     }
 
-    private Articulo getArticuloId(Integer id) throws Exception
+
+    public Articulo getArticuloEntidadId(Integer id) throws Exception
     {
         return factoryDAO.getDAOArticulo().getPorId(id);
     }

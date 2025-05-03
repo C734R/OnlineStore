@@ -72,9 +72,9 @@ public class OnlineStore {
         else configuracion = Configuracion.JPA_HIBERNATE_MYSQL;
 
         // Aplicar autocierre al uso de la conexión por parte de ModeloFactory
-        try (FactoryModelo factory = new FactoryModelo(configuracion)) {
+        try (FactoryModelo factory = new FactoryModelo()) {
             mFactory = factory;
-            loadMVC(configuracion);
+            loadMVC();
             //if (!precargaDatos(configuracion)) return;
             iniciarPrograma();
         }
@@ -160,11 +160,10 @@ public class OnlineStore {
     }
     /**
      * Carga el modelo-vista-controlador (MVC) según el modo de configuración.
-     * @param configuracion modo de carga (0 = Local, 1 = con BBDD, 2 = con ORM, etc.).
      */
-    private static void loadMVC(Configuracion configuracion) throws Exception {
+    private static void loadMVC() throws Exception {
 
-            mFactory = new FactoryModelo(configuracion);
+            mFactory = new FactoryModelo();
 
             mClientes = mFactory.getModeloClientes();
             mArticulos = mFactory.getModeloArticulos();

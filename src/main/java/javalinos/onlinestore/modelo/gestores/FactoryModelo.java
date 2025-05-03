@@ -8,29 +8,26 @@ import javalinos.onlinestore.modelo.gestores.Local.*;
 import javalinos.onlinestore.utils.Conexiones.FactoryConexionBBDD;
 import javalinos.onlinestore.utils.Conexiones.IConexionBBDD;
 
-import java.sql.Connection;
+import static javalinos.onlinestore.OnlineStore.configuracion;
 
 public class FactoryModelo implements AutoCloseable {
 
-    private final Configuracion configuracion;
     private final FactoryDAO factoryDAO;
     private final IConexionBBDD conexion;
 
-    public FactoryModelo(Configuracion configuracion) throws Exception {
-        this.configuracion = configuracion;
+    public FactoryModelo() throws Exception {
         if (configuracion == Configuracion.JDBC_MYSQL) {
             this.conexion = FactoryConexionBBDD.crearConexion(
                     configuracion,
                     "localhost:3306",
                     "root",
-                    "1234",
-                    "OnlineStore");
+                    "1234", "OnlineStore");
             assert conexion != null;
-            this.factoryDAO = new FactoryDAO(configuracion, conexion.getConexion());
+            this.factoryDAO = new FactoryDAO(conexion.getConexion());
         }
         else if (configuracion == Configuracion.JPA_HIBERNATE_MYSQL) {
             this.conexion = null;
-            this.factoryDAO = new FactoryDAO(configuracion, null);
+            this.factoryDAO = new FactoryDAO(null);
         }
         else {
             this.conexion = null;

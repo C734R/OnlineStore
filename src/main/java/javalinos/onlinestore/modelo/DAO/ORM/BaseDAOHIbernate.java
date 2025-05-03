@@ -53,7 +53,8 @@ public abstract class BaseDAOHIbernate<T, K> implements IBaseDAO<T, K>{
 
         try
         {
-            return em.createQuery("FROM "  + clase.getSimpleName(), clase).getResultList();
+            return em.createQuery("FROM "  + clase.getSimpleName(), clase)
+                    .getResultList();
         }
         catch (Exception e)
         {

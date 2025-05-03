@@ -50,18 +50,20 @@ public class VistaClientes extends VistaBase {
      * Solicita al usuario un NIF válido (3 intentos).
      * @return NIF introducido o null si se supera el límite de intentos.
      */
-    public String askNIF() {
+    public String askNIF(boolean modificar, boolean reintentar, boolean sinFin) {
         String nif;
         int intentos = 0;
+        if (!reintentar) intentos = 2;
         while (intentos < 3) {
-            nif = askString("Introduce el NIF: ", 9,15);
-            if (checkNIF(nif)) return nif;
-            else {
-                if (intentos < 2) showMensaje("El DNI introducido es erróneo. Vuelve a intentarlo", true);
-                intentos++;
+            if (modificar) nif = askString("Introduce el nuevo NIF: ", 9,15, false, false, false);
+            else nif = askString("Introduce el NIF: ", 9,15, false, false, false);
+            if (nif == null || !checkNIF(nif)) {
+                showMensajePausa("El DNI introducido es erróneo. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
             }
+            else return nif;
         }
-        showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
+        if (reintentar) showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
         return null;
     }
 
@@ -70,19 +72,20 @@ public class VistaClientes extends VistaBase {
      * @param modificar indica si es parte de una modificación.
      * @return Email introducido o null si se supera el límite de intentos.
      */
-    public String askEmail(boolean modificar) {
+    public String askEmail(boolean modificar, boolean reintentar, boolean sinFin) {
         String email;
         int intentos = 0;
+        if (!reintentar) intentos = 2;
         while (intentos < 3) {
-            if (modificar) email = askString("Introduce el nuevo email: ", 4, 50);
-            else email = askString("Introduce el email: ", 4, 50);
-            if (checkEmail(email)) return email;
-            else {
-                if (intentos < 2) showMensaje("El email introducido es erróneo. Vuelve a intentarlo.", true);
-                intentos++;
+            if (modificar) email = askString("Introduce el nuevo email: ", 4, 50, false, false, false);
+            else email = askString("Introduce el email: ", 4, 50, false, false, false);
+            if (email == null || !checkEmail(email)){
+                showMensajePausa("El email introducido es erróneo. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
             }
+            else return email;
         }
-        showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
+        if (reintentar) showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
         return null;
     }
 
@@ -93,13 +96,13 @@ public class VistaClientes extends VistaBase {
     public int askMetodoEliminar() {
         while (true) {
             showMetodosEliminar();
-            int metodo = askInt("Seleccione el método de eliminación", 0, listCategorias.size(), false, false);
-            if (metodo > 0 && metodo <= listCategorias.size()) return metodo;
+            int metodo = askInt("Seleccione el método de eliminación", 0, listMetodos.size(), false, false, false);
+            if (metodo > 0 && metodo <= listMetodos.size()) return metodo;
             else if (metodo == 0) {
-                showMensaje("Volviendo atrás...", true);
+                showMensajePausa("Volviendo atrás...", true);
                 return metodo;
             }
-            else showMensaje("Introduce una de las opciones listadas.", true);
+            else showMensajePausa("Introduce una de las opciones listadas.", true);
         }
     }
 
@@ -110,13 +113,13 @@ public class VistaClientes extends VistaBase {
     public int askCategoriaCliente() {
         while (true) {
             showCategorias();
-            int categoria = askInt("Seleccione la categoría del cliente", 0, listCategorias.size(), false, false);
+            int categoria = askInt("Seleccione la categoría del cliente", 0, listCategorias.size(), false, false, false);
             if (categoria > 0 && categoria <= listCategorias.size()) return categoria;
             else if (categoria == 0) {
-                showMensaje("Volviendo atrás...", true);
+                showMensajePausa("Volviendo atrás...", true);
                 return categoria;
             }
-            else showMensaje("Introduce una de las opciones listadas.", true);
+            else showMensajePausa("Introduce una de las opciones listadas.", true);
         }
     }
 
