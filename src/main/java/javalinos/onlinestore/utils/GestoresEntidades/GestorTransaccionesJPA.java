@@ -4,10 +4,10 @@ import jakarta.persistence.EntityManager;
 
 public class GestorTransaccionesJPA {
 
-    // Un contexto para cada hilo
+    // Almacena el EntityManager asociado al hilo actual
     private static final ThreadLocal<EntityManager> contexto = new ThreadLocal<>();
 
-    // Inicia una transacción del EntityManager
+    // Asocia el EntityManager al hilo actual e inicia la transacción si no está activa
     public static void iniciar(EntityManager em) {
         contexto.set(em);
         if (!em.getTransaction().isActive()) {
@@ -15,43 +15,38 @@ public class GestorTransaccionesJPA {
         }
     }
 
-    // Ejecuta la transacción del EntityManager
+    // Confirma la transacción activa del EntityManager y libera el contexto
     public static void commit() {
         EntityManager em = contexto.get();
-        try
-        {
+        try {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().commit();
             }
-        }
-        finally {
+        } finally {
             cerrarEntityManager(em);
             contexto.remove();
         }
-
     }
 
-    // Revierte los cambios en la transacción del EntityManager
+    // Revierte la transacción activa del EntityManager y libera el contexto
     public static void rollback() {
         EntityManager em = contexto.get();
-        try{
+        try {
             if (em != null && em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }
-        }
-        finally {
+        } finally {
             cerrarEntityManager(em);
             contexto.remove();
         }
     }
 
-    // Obtiene el EntityManager del hilo
+    // Devuelve el EntityManager asociado al hilo actual
     public static EntityManager getEntityManager() {
         return contexto.get();
     }
 
-
-    // Cerrar el EntityManager si está abierto
+    // Cierra el EntityManager si sigue abierto
     private static void cerrarEntityManager(EntityManager em) {
         if (em != null && em.isOpen()) {
             em.close();

@@ -2,6 +2,7 @@ package javalinos.onlinestore.modelo.gestores.BBDD;
 
 import javalinos.onlinestore.modelo.DAO.FactoryDAO;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+import javalinos.onlinestore.modelo.DTO.ArticuloStockDTO;
 import javalinos.onlinestore.modelo.Entidades.Articulo;
 import javalinos.onlinestore.modelo.Entidades.ArticuloStock;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
@@ -237,9 +238,17 @@ public class ModeloArticulosBBDD implements IModeloArticulos
     private Map<Integer, Integer> mapearArticuloStocksId (List<ArticuloStock> articuloStocks) throws Exception {
         Map<Integer, Integer> stockIdArticulo = new LinkedHashMap<>();
         for (ArticuloStock articuloStock : articuloStocks) {
-            stockIdArticulo.put(articuloStock.getArticuloId(), articuloStock.getStock());
+            stockIdArticulo.put(getArticuloStockEntidadId(articuloStock), articuloStock.getStock());
         }
         return stockIdArticulo;
+    }
+
+    private Integer getArticuloStockEntidadId(ArticuloStock articuloStock) throws Exception {
+        return switch (configuracion) {
+            case JDBC_MYSQL -> articuloStock.getArticuloId();
+            case JPA_HIBERNATE_MYSQL -> articuloStock.getArticulo().getId();
+            default -> null;
+        };
     }
 
     /**

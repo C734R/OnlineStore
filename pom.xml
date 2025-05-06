@@ -120,6 +120,7 @@
       <version>2.0.12</version>
     </dependency>
 
+    <!-- Enrutador JUL a SLF4J -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>jul-to-slf4j</artifactId>

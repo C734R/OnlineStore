@@ -111,7 +111,6 @@ public class OnlineStore {
 
     private static boolean ejecutarScript() {
         try (IConexionBBDD conexion = FactoryConexionBBDD.crearConexion(Configuracion.JDBC_MYSQL, "localhost", "root", "1234", "onlinestore")) {
-            assert conexion != null;
             ejecutarScriptSQL("src/main/java/javalinos/onlinestore/ScriptBBDD.sql", (Connection) conexion.getConexion());
         } catch (Exception e) {
             vMenuPrincipal.showMensajePausa("Error al ejecutar el script SQL:" + e, true);

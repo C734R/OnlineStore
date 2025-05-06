@@ -146,6 +146,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     public void updatePedido(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception
     {
         Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
+        pedidoDTONew.setNumero(pedidoOld.getNumero());
         Pedido pedidoNew = new Pedido (pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
         pedidoNew.setId(pedidoOld.getId());
         factoryDAO.getDAOPedido().actualizar(pedidoNew);
@@ -163,6 +164,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
 
     public void updatePedidoStockSP(PedidoDTO pedidoDTOOld, PedidoDTO pedidoDTONew) throws Exception {
         Pedido pedidoOld = getPedidoEntidadNumero(pedidoDTOOld.getNumero());
+        pedidoDTONew.setNumero(pedidoOld.getNumero());
         Pedido pedidoNew = new Pedido (
                 pedidoDTONew, mClientes.getIdClienteDTO(pedidoDTONew.getCliente()),
                 mArticulos.getIdArticuloDTO(pedidoDTONew.getArticulo()));
