@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="javalinos.onlinestore.vista.JavaFX.VistaMenuPrincipalJavaFX">
+   <Button layoutX="229.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0"
+           text="Menu Clientes"/>
+   <Button layoutX="229.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0"
+           text="Menu Artículos"/>
+   <Button layoutX="229.0" layoutY="243.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0"
+           text="Menu Pedidos"/>
+</AnchorPane>

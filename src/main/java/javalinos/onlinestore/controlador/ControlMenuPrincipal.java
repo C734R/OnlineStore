@@ -1,8 +1,7 @@
 package javalinos.onlinestore.controlador;
 
-import javalinos.onlinestore.Configuracion;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
-import javalinos.onlinestore.vista.VistaMenuPrincipal;
+import javalinos.onlinestore.vista.Consola.VistaMenuPrincipal;
 
 import static javalinos.onlinestore.OnlineStore.configuracion;
 import static javalinos.onlinestore.OnlineStore.precargaDatos;

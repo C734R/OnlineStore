@@ -7,7 +7,7 @@ import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
-import javalinos.onlinestore.vista.VistaPedidos;
+import javalinos.onlinestore.vista.Consola.VistaPedidos;
 
 import java.time.LocalDate;
 import java.util.*;

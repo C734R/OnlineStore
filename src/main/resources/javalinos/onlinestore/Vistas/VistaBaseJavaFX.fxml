@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.VistaBaseJavaFX">
+   <top>
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="52.0" prefWidth="640.0" text="ONLINE STORE" textAlignment="CENTER" textFill="#183585" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Arial Bold" size="24.0" />
+         </font>
+      </Label>
+   </top>
+</BorderPane>

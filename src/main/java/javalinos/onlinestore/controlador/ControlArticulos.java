@@ -1,13 +1,11 @@
 package javalinos.onlinestore.controlador;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
-import javalinos.onlinestore.vista.VistaArticulos;
-import javalinos.onlinestore.modelo.gestores.Local.ModeloArticulosLocal;
+import javalinos.onlinestore.vista.Consola.VistaArticulos;
 
 /**
  * Controlador para gestionar la lógica del módulo de artículos.

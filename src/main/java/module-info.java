@@ -26,7 +26,9 @@ module javalinos.onlinestore {
     exports javalinos.onlinestore.modelo.gestores;
     exports javalinos.onlinestore.modelo.DTO;
     exports javalinos.onlinestore.utils;
-    exports javalinos.onlinestore.vista;
+    exports javalinos.onlinestore.vista.Consola;
+    exports javalinos.onlinestore.vista.Interfaces;
+    exports javalinos.onlinestore.vista.JavaFX;
     exports javalinos.onlinestore.modelo.Entidades;
     exports javalinos.onlinestore.modelo.DAO;
     exports javalinos.onlinestore.modelo.DAO.Interfaces;

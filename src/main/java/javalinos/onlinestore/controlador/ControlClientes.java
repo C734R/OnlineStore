@@ -4,7 +4,8 @@ import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
-import javalinos.onlinestore.vista.VistaClientes;
+import javalinos.onlinestore.vista.Consola.VistaClientes;
+import javalinos.onlinestore.vista.Interfaces.IVistaClientes;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ import static javalinos.onlinestore.utils.Utilidades.checkNIF;
 public class ControlClientes extends ControlBase
 {
 
-    private final VistaClientes vClientes;
+    private final IVistaClientes vClientes;
     private final IModeloClientes mClientes;
 
     /**
@@ -25,7 +26,7 @@ public class ControlClientes extends ControlBase
      * @param mStore modelo principal de la tienda
      * @param vClientes vista asociada a los clientes
      */
-    public ControlClientes(ModeloStore mStore, VistaClientes vClientes)
+    public ControlClientes(ModeloStore mStore, IVistaClientes vClientes)
     {
         super(mStore);
         this.vClientes = vClientes;

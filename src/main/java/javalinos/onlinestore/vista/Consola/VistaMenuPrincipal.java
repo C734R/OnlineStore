@@ -1,4 +1,6 @@
-package javalinos.onlinestore.vista;
+package javalinos.onlinestore.vista.Consola;
+
+import javalinos.onlinestore.vista.Interfaces.IVistaMenuPrincipal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +10,7 @@ import java.util.List;
  * - Muestra el menú inicial con opciones de gestión de clientes, artículos y pedidos.
  * - Entidad relacionada: VistaBase
  */
-public class VistaMenuPrincipal extends VistaBase {
+public class VistaMenuPrincipal extends VistaBase implements IVistaMenuPrincipal {
     /**
      * Constructor por defecto.
      * Establece la cabecera con arte ASCII y el menú principal del sistema.

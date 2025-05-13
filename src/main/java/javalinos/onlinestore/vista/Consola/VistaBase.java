@@ -1,4 +1,6 @@
-package javalinos.onlinestore.vista;
+package javalinos.onlinestore.vista.Consola;
+
+import javalinos.onlinestore.vista.Interfaces.IVistaBase;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -13,7 +15,7 @@ import static javalinos.onlinestore.utils.Utilidades.listToStr;
  * - Métodos para mostrar menús, mensajes, solicitar datos y validar entrada.
  * - Utiliza genéricos para mostrar listas de cualquier tipo.
  */
-public abstract class VistaBase {
+public abstract class VistaBase implements IVistaBase {
 
     private String cabecera;
     private List<String> listaMenu;

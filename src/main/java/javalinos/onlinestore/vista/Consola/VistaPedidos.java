@@ -1,8 +1,9 @@
-package javalinos.onlinestore.vista;
+package javalinos.onlinestore.vista.Consola;
 
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
+import javalinos.onlinestore.vista.Interfaces.IVistaPedidos;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import static javalinos.onlinestore.utils.Utilidades.listToStr;
  * Vista encargada de mostrar y gestionar la interacción con el usuario para los pedidos.
  * - Entidades relacionadas: PedidoDTO, ClienteDTO, ArticuloDTO
  */
-public class VistaPedidos extends VistaBase {
+public class VistaPedidos extends VistaBase implements IVistaPedidos {
     /**
      * Constructor por defecto. Inicializa la cabecera y el menú principal de pedidos.
      */

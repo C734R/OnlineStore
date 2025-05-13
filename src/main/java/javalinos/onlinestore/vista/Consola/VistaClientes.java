@@ -1,7 +1,8 @@
-package javalinos.onlinestore.vista;
+package javalinos.onlinestore.vista.Consola;
 
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
+import javalinos.onlinestore.vista.Interfaces.IVistaClientes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,7 +15,7 @@ import static javalinos.onlinestore.utils.Utilidades.checkNIF;
  * - Permite mostrar, solicitar y modificar datos de clientes.
  * - Entidades relacionadas: ClienteDTO, CategoriaDTO
  */
-public class VistaClientes extends VistaBase {
+public class VistaClientes extends VistaBase implements IVistaClientes {
 
     private final List<String> listMods = new ArrayList<>(Arrays.asList("Modificar nombre", "Modificar domicilio", "Modificar NIF", "Modificar email", "Modificar categoría"));
     private final List<String> listCategorias = new ArrayList<>(Arrays.asList("Estándar", "Premium"));

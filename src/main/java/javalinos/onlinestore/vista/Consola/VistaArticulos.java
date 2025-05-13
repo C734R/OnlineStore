@@ -1,6 +1,7 @@
-package javalinos.onlinestore.vista;
+package javalinos.onlinestore.vista.Consola;
 
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
+import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
 
 import java.util.*;
 /**
@@ -8,7 +9,7 @@ import java.util.*;
  * - Permite mostrar artículos y su stock.
  * - Solicita información como precios.
  */
-public class VistaArticulos extends VistaBase {
+public class VistaArticulos extends VistaBase implements IVistaArticulos {
     /**
      * Constructor por defecto. Inicializa la cabecera y el menú de artículos.
      */

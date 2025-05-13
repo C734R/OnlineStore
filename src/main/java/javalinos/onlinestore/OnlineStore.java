@@ -13,10 +13,10 @@ import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.utils.Conexiones.FactoryConexionBBDD;
 import javalinos.onlinestore.utils.Conexiones.IConexionBBDD;
 import javalinos.onlinestore.utils.GestoresEntidades.ProveedorEntityManagerJPA;
-import javalinos.onlinestore.vista.VistaArticulos;
-import javalinos.onlinestore.vista.VistaClientes;
-import javalinos.onlinestore.vista.VistaMenuPrincipal;
-import javalinos.onlinestore.vista.VistaPedidos;
+import javalinos.onlinestore.vista.Consola.VistaArticulos;
+import javalinos.onlinestore.vista.Consola.VistaClientes;
+import javalinos.onlinestore.vista.Consola.VistaMenuPrincipal;
+import javalinos.onlinestore.vista.Consola.VistaPedidos;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
