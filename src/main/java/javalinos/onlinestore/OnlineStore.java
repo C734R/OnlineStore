@@ -1,6 +1,9 @@
 package javalinos.onlinestore;
 // Dependencias
 
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javalinos.onlinestore.controlador.ControlArticulos;
 import javalinos.onlinestore.controlador.ControlClientes;
 import javalinos.onlinestore.controlador.ControlMenuPrincipal;
@@ -13,15 +16,16 @@ import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.utils.Conexiones.FactoryConexionBBDD;
 import javalinos.onlinestore.utils.Conexiones.IConexionBBDD;
 import javalinos.onlinestore.utils.GestoresEntidades.ProveedorEntityManagerJPA;
-import javalinos.onlinestore.vista.Consola.VistaArticulos;
-import javalinos.onlinestore.vista.Consola.VistaClientes;
-import javalinos.onlinestore.vista.Consola.VistaMenuPrincipal;
-import javalinos.onlinestore.vista.Consola.VistaPedidos;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.Statement;
+
+import javalinos.onlinestore.vista.FactoryVista;
+import javalinos.onlinestore.vista.Interfaces.*;
+import javalinos.onlinestore.vista.JavaFX.AplicacionFX;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
@@ -43,10 +47,11 @@ public class OnlineStore {
     public static FactoryModelo mFactory;
 
     /** Vistas principales del sistema. */
-    public static VistaMenuPrincipal vMenuPrincipal;
-    public static VistaArticulos vArticulos;
-    public static VistaClientes vClientes;
-    public static VistaPedidos vPedidos;
+    public static IVistaMenuPrincipal vMenuPrincipal;
+    public static IVistaArticulos vArticulos;
+    public static IVistaClientes vClientes;
+    public static IVistaPedidos vPedidos;
+    public static FactoryVista vFactory;
 
     /** Controladores que gestionan la lógica de las vistas. */
     public static ControlMenuPrincipal cMenuPrincipal;
@@ -138,6 +143,47 @@ public class OnlineStore {
      * Inicia el menú principal y controla el flujo del programa.
      */
     private static void iniciarPrograma(){
+        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) iniciarJavaFX();
+        else iniciarConsola();
+    }
+
+    private static void iniciarJavaFX() {
+        javafx.application.Application.launch(AplicacionFX.class);
+        int opcion;
+        while(true) {
+            opcion = cMenuPrincipal.iniciar();
+            switch (opcion) {
+                case 1:
+                    cargarVista("/fxml/VistaClientesJavaFX.fxml", "Gestión de Clientes");
+                    break;
+                case 2:
+                    cargarVista("/fxml/VistaArticulosJavaFX.fxml", "Gestión de Artículos");
+                    break;
+                case 3:
+                    cargarVista("/fxml/VistaPedidosJavaFX.fxml", "Gestión de Pedidos");
+                    break;
+                case 0:
+                    cMenuPrincipal.salir();
+                    return;
+            }
+        }
+    }
+
+    private void cargarVista(String fxml, String titulo) {
+        try {
+            Stage stage = (Stage) Stage.getWindows().filtered(Window::isShowing).getFirst();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VistaBaseJavaFX.fxml"));
+            loader.load();
+            IVistaBase controlVista = loader.getController();
+            controlVista.setTitulo(titulo);
+            controlVista.cargarVistaCentral(ruta);
+        }
+        catch (IOException e) {
+            controlVista.
+        }
+    }
+
+    private static void iniciarConsola() {
         int opcion;
         while(true) {
             opcion = cMenuPrincipal.iniciar();
@@ -157,28 +203,30 @@ public class OnlineStore {
             }
         }
     }
+
     /**
      * Carga el modelo-vista-controlador (MVC) según el modo de configuración.
      */
     private static void loadMVC() throws Exception {
 
             mFactory = new FactoryModelo();
+            vFactory = new FactoryVista();
 
             mClientes = mFactory.getModeloClientes();
             mArticulos = mFactory.getModeloArticulos();
             mPedidos = mFactory.getModeloPedidos();
             mStore = new ModeloStore(mClientes, mArticulos, mPedidos);
 
-            vMenuPrincipal = new VistaMenuPrincipal();
+            vMenuPrincipal = vFactory.getVistaMenuPrincipal();
             cMenuPrincipal = new ControlMenuPrincipal(mStore, vMenuPrincipal);
 
-            vClientes = new VistaClientes();
+            vClientes = vFactory.getVistaClientes();
             cClientes = new ControlClientes(mStore, vClientes);
 
-            vArticulos = new VistaArticulos();
+            vArticulos = vFactory.getVistaArticulos();
             cArticulos = new ControlArticulos(mStore, vArticulos);
 
-            vPedidos = new VistaPedidos();
+            vPedidos = vFactory.getVistaPedidos();
             cPedidos = new ControlPedidos(mStore, vPedidos);
 
     }

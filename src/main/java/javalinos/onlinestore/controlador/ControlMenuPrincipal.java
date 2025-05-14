@@ -2,6 +2,7 @@ package javalinos.onlinestore.controlador;
 
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.Consola.VistaMenuPrincipal;
+import javalinos.onlinestore.vista.Interfaces.IVistaMenuPrincipal;
 
 import static javalinos.onlinestore.OnlineStore.configuracion;
 import static javalinos.onlinestore.OnlineStore.precargaDatos;
@@ -11,14 +12,14 @@ import static javalinos.onlinestore.OnlineStore.precargaDatos;
  */
 public class ControlMenuPrincipal extends ControlBase {
 
-    private VistaMenuPrincipal vMenuPrincipal;
+    private IVistaMenuPrincipal vMenuPrincipal;
     boolean iniciado = false;
     /**
      * Constructor principal de ControlMenuPrincipal.
      * @param mStore el ModelStore que va a utilizar
      * @param vMenuPrincipal la vista que va a utilizar
      */
-    public ControlMenuPrincipal(ModeloStore mStore, VistaMenuPrincipal vMenuPrincipal) {
+    public ControlMenuPrincipal(ModeloStore mStore, IVistaMenuPrincipal vMenuPrincipal) {
         super(mStore);
         this.vMenuPrincipal = vMenuPrincipal;
     }
@@ -34,7 +35,7 @@ public class ControlMenuPrincipal extends ControlBase {
      * Devuelve la vista del menú principal.
      * @return Vista del menú principal
      */
-    public VistaMenuPrincipal getVistaMenuPrincipal() {
+    public IVistaMenuPrincipal getVistaMenuPrincipal() {
         return vMenuPrincipal;
     }
     /**

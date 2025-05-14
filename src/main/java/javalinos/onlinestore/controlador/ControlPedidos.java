@@ -8,6 +8,7 @@ import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloPedidos;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.Consola.VistaPedidos;
+import javalinos.onlinestore.vista.Interfaces.IVistaPedidos;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -20,7 +21,7 @@ import static javalinos.onlinestore.utils.Utilidades.listToStr;
  */
 public class ControlPedidos extends ControlBase{
 
-    private VistaPedidos vPedidos;
+    private IVistaPedidos vPedidos;
     private IModeloArticulos mArticulos;
     private IModeloClientes mClientes;
     private IModeloPedidos mPedidos;
@@ -31,7 +32,7 @@ public class ControlPedidos extends ControlBase{
      * @param mStore el ModeloStore que contiene todos los modelos
      * @param vPedidos la vista de pedidos asociada
      */
-    public ControlPedidos(ModeloStore mStore, VistaPedidos vPedidos) {
+    public ControlPedidos(ModeloStore mStore, IVistaPedidos vPedidos) {
         super.setModeloStore(mStore);
         this.mArticulos = mStore.getModeloArticulos();
         this.mClientes = mStore.getModeloClientes();
@@ -51,7 +52,7 @@ public class ControlPedidos extends ControlBase{
      * Devuelve la vista de pedidos.
      * @return VistaPedidos asociada
      */
-    public VistaPedidos getVistaPedidos() {
+    public IVistaPedidos getVistaPedidos() {
         return vPedidos;
     }
     /**

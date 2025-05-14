@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
+
+    public VistaArticulosJavaFX() {}
+
     public float askPrecio(float min, float max) {
         return 0;
     }

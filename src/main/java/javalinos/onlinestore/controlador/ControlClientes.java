@@ -1,5 +1,6 @@
 package javalinos.onlinestore.controlador;
 
+import javalinos.onlinestore.Configuracion;
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloClientes;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
@@ -9,6 +10,7 @@ import javalinos.onlinestore.vista.Interfaces.IVistaClientes;
 
 import java.util.List;
 
+import static javalinos.onlinestore.OnlineStore.configuracion;
 import static javalinos.onlinestore.utils.Utilidades.checkEmail;
 import static javalinos.onlinestore.utils.Utilidades.checkNIF;
 
@@ -40,6 +42,16 @@ public class ControlClientes extends ControlBase
      */
     public void iniciar()
     {
+        if (configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) iniciarVentana();
+        else iniciarConsola();
+    }
+
+    private void iniciarVentana() {
+        int
+        vClientes.showMenu();
+    }
+
+    private void iniciarConsola() {
         int opcion;
         try
         {

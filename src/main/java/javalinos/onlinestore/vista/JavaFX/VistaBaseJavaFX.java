@@ -1,19 +1,43 @@
 package javalinos.onlinestore.vista.JavaFX;
 
+import javafx.application.Application;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javalinos.onlinestore.vista.Interfaces.IVistaBase;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
-public class VistaBaseJavaFX implements IVistaBase {
+public class VistaBaseJavaFX extends Application implements IVistaBase {
+
+    @FXML private Label lblTitulo;
+    @FXML private StackPane cntCentral;
+
     @Override
     public void setCabecera(String cabecera) {
-
+        lblTitulo.setText(cabecera);
     }
 
     @Override
     public void showCabecera() {
+        lblTitulo.setDisable(false);
+    }
 
+    public void cargarVistaCentral(String rutaFXML) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
+            Node vista = loader.load();
+            cntCentral.getChildren().setAll(vista);
+        } catch (IOException e) {
+            showError("Error al cargar vista central: " + e.getMessage());
+        }
     }
 
     @Override
@@ -48,7 +72,11 @@ public class VistaBaseJavaFX implements IVistaBase {
 
     @Override
     public void showMensaje(String mensaje, boolean salto) {
-
+        Alert alertaInfo = new Alert(Alert.AlertType.INFORMATION);
+        alertaInfo.setTitle("Información");
+        alertaInfo.setHeaderText(null);
+        alertaInfo.setContentText(mensaje);
+        alertaInfo.showAndWait();
     }
 
     @Override
@@ -68,7 +96,19 @@ public class VistaBaseJavaFX implements IVistaBase {
 
     @Override
     public void showMensajePausa(String mensaje, boolean salto) {
+        Alert alertaError = new Alert(Alert.AlertType.WARNING);
+        alertaError.setTitle("Advertencia");
+        alertaError.setHeaderText("Atención");
+        alertaError.setContentText(mensaje);
+        alertaError.showAndWait();
+    }
 
+    public void showError(String mensaje) {
+        Alert alertaError = new Alert(Alert.AlertType.ERROR);
+        alertaError.setTitle("Error");
+        alertaError.setHeaderText("Se ha producido un error");
+        alertaError.setContentText(mensaje);
+        alertaError.showAndWait();
     }
 
     @Override
@@ -89,5 +129,10 @@ public class VistaBaseJavaFX implements IVistaBase {
     @Override
     public Integer askIntOpcional(String mensaje, int min, int max) {
         return 0;
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+
     }
 }

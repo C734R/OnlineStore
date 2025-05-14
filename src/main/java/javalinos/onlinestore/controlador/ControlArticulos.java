@@ -6,13 +6,14 @@ import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.gestores.Interfaces.IModeloArticulos;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.Consola.VistaArticulos;
+import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
 
 /**
  * Controlador para gestionar la lógica del módulo de artículos.
  */
 public class ControlArticulos extends ControlBase {
 
-    private VistaArticulos vArticulos;
+    private IVistaArticulos vArticulos;
     private IModeloArticulos mArticulos;
 
     /**
@@ -20,7 +21,7 @@ public class ControlArticulos extends ControlBase {
      * @param mStore modelo principal de la tienda
      * @param vistaArticulos vista de artículos asociada
      */
-    public ControlArticulos(ModeloStore mStore, VistaArticulos vistaArticulos) {
+    public ControlArticulos(ModeloStore mStore, IVistaArticulos vistaArticulos) {
         super(mStore);
         this.vArticulos = vistaArticulos;
         this.mArticulos = mStore.getModeloArticulos();
@@ -38,7 +39,7 @@ public class ControlArticulos extends ControlBase {
      * Devuelve la vista de artículos.
      * @return vista actual de artículos
      */
-    public VistaArticulos getVistaArticulos() {
+    public IVistaArticulos getVistaArticulos() {
         return vArticulos;
     }
 
