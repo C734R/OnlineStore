@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.FormularioNuevoPedidoJavaFX">
+<GridPane alignment="CENTER" hgap="10.0" vgap="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.NuevoPedidoJavaFX">
     <Label text="Cliente:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
     <ComboBox fx:id="comboCliente" GridPane.columnIndex="1" GridPane.rowIndex="0" />
     <Label text="Artículo:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
@@ -15,8 +15,8 @@
     <TextField fx:id="txtCantidad" GridPane.columnIndex="1" GridPane.rowIndex="2" />
     <Label text="Envío:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
     <TextField fx:id="txtEnvio" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-    <Label text="Precio:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-    <TextField fx:id="txtPrecio" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+    <Label text="Precio Total:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+    <Label fx:id="lblPrecioTotal" text="-" GridPane.columnIndex="1" GridPane.rowIndex="4" />
     <HBox spacing="10.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
         <Button text="Guardar" onAction="#GuardarNuevoPedido" />
         <Button text="Cancelar" onAction="#CancelarNuevoPedido" />
