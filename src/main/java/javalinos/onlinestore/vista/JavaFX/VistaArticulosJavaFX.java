@@ -6,7 +6,7 @@ import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
 import java.util.List;
 import java.util.Map;
 
-public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
+public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
 
     public VistaArticulosJavaFX() {}
 
@@ -14,23 +14,29 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         return 0;
     }
 
-    public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+    public void onNuevoArticulo() {
+
 
     }
 
-    public void showListArticulosStock(Map<ArticuloDTO, Integer> articuloStockMap) {
+    public void onModificarArticulo() {
 
     }
 
-    public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
+    public void onEliminarArticulo() {
 
     }
 
-    public void showArticulo(ArticuloDTO articuloDTO) {
+    public void onListarArticulo() {
 
     }
 
-    public void showStockArticulos(Map<ArticuloDTO, Integer> articuloStockMap) {
+    public void onStockArticulo() {
 
     }
 }
+
+
+
+
+
