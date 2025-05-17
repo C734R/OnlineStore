@@ -47,8 +47,7 @@ public class ControlClientes extends ControlBase
     }
 
     private void iniciarVentana() {
-        int
-        vClientes.showMenu();
+        vClientes.showMenu(1);
     }
 
     private void iniciarConsola() {
@@ -195,6 +194,7 @@ public class ControlClientes extends ControlBase
     public void removeClienteNif()
     {
         String nif = vClientes.askNIF(false, false, false);
+
         if (nif == null) return;
         ClienteDTO clienteDTO;
         try

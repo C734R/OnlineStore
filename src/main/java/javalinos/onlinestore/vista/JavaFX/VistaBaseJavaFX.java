@@ -2,20 +2,22 @@ package javalinos.onlinestore.vista.JavaFX;
 
 import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javalinos.onlinestore.vista.Interfaces.IVistaBase;
 
-import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class VistaBaseJavaFX extends Application implements IVistaBase {
+import static javalinos.onlinestore.vista.JavaFX.GestorEscenas.crearVentana;
+import static javalinos.onlinestore.vista.JavaFX.GestorEscenas.iniciarVentanaPrincipal;
+
+public class VistaBaseJavaFX extends Application implements IVistaBase, Initializable {
 
     @FXML private Label lblTitulo;
     @FXML private StackPane cntCentral;
@@ -30,18 +32,25 @@ public class VistaBaseJavaFX extends Application implements IVistaBase {
         lblTitulo.setDisable(false);
     }
 
-    public void cargarVistaCentral(String rutaFXML) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(rutaFXML));
-            Node vista = loader.load();
-            cntCentral.getChildren().setAll(vista);
-        } catch (IOException e) {
-            showError("Error al cargar vista central: " + e.getMessage());
-        }
-    }
 
     @Override
     public void showMenu(int retorno) {
+        switch (retorno) {
+            case 0:
+                iniciarVentanaPrincipal();
+                break;
+            case 1:
+                crearVentana(TipoVentana.GestionClientes);
+                break;
+            case 2:
+                crearVentana(TipoVentana.GestionArticulos);
+                break;
+            case 3:
+                crearVentana(TipoVentana.GestionPedidos);
+                break;
+            default:
+                break;
+        }
 
     }
 
@@ -133,6 +142,11 @@ public class VistaBaseJavaFX extends Application implements IVistaBase {
 
     @Override
     public void start(Stage stage) throws Exception {
+
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
     }
 }

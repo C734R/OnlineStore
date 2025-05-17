@@ -1,33 +1,65 @@
 package javalinos.onlinestore.vista.JavaFX;
 
-import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.stage.Stage;
+import javafx.scene.control.*;
+import javalinos.onlinestore.controlador.ControlClientes;
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaClientes;
-
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClientes {
 
-    @FXML private Label Nombre;
-    @FXML private Label Domicilio;
-    @FXML private Label Email;
-    @FXML private Label NIF;
+    private ControlClientes cClientes;
 
-    public VistaClientesJavaFX() {
+    @FXML private Button btnAddCliente;
+    @FXML private Button btnModCliente;
+    @FXML private Button btnDeleteCliente;
+    @FXML private Button btnListClientes;
 
+    @FXML private TableView<ClienteDTO> tblClientes;
+    @FXML private TableColumn<ClienteDTO, String> colNombre;
+    @FXML private TableColumn<ClienteDTO, String> colDomicilio;
+    @FXML private TableColumn<ClienteDTO, String> colEmail;
+    @FXML private TableColumn<ClienteDTO, String> colDNI;
+    @FXML private TableColumn<ClienteDTO, String> colCategoria;
+
+
+    @FXML private TextField txtNomeCliente;
+    @FXML private TextField txtDNI;
+    @FXML private TextField txtEmail;
+
+    public VistaClientesJavaFX(ControlClientes cClientes) {
+        this.cClientes = cClientes;
     }
+
 
     @Override
-    public void start(Stage stage) throws Exception {
-
+    public void initialize(URL url, ResourceBundle rb) {
+        // Suscripciones botones
+        btnAddCliente.setOnAction(event -> addCliente());
+        btnDeleteCliente.setOnAction(event -> removeCliente());
+        btnListClientes.setOnAction(event -> listarClientes());
+        btnModCliente.setOnAction(event -> modCliente());
     }
 
-    public void show() {
+    private void listarClientes() {
 
+        cClientes.showListClientes();
+    }
+
+    private void addCliente() {
+        cClientes.addCliente();
+    }
+
+    private void removeCliente() {
+        cClientes.removeCliente();
+    }
+
+    private void modCliente() {
+        cClientes.modCliente();
     }
 
     @Override
@@ -53,7 +85,8 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
-
+        tblClientes.getItems().clear();
+        tblClientes.getItems().addAll(clientesDTO);
     }
 
     @Override

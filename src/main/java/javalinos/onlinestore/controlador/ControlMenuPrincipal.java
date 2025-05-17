@@ -1,8 +1,10 @@
 package javalinos.onlinestore.controlador;
 
+import javalinos.onlinestore.Configuracion;
 import javalinos.onlinestore.modelo.gestores.ModeloStore;
 import javalinos.onlinestore.vista.Consola.VistaMenuPrincipal;
 import javalinos.onlinestore.vista.Interfaces.IVistaMenuPrincipal;
+import javalinos.onlinestore.vista.JavaFX.GestorEscenas;
 
 import static javalinos.onlinestore.OnlineStore.configuracion;
 import static javalinos.onlinestore.OnlineStore.precargaDatos;
@@ -40,19 +42,30 @@ public class ControlMenuPrincipal extends ControlBase {
     }
     /**
      * Asigna una nueva vista para el menú principal.
-     * @param vistaMenuPrincipal vista a asignar
+     * @param vMenuPrincipal vista a asignar
      */
-    public void setVistaMenuPrincipal(VistaMenuPrincipal vistaMenuPrincipal) {
+    public void setVistaMenuPrincipal(VistaMenuPrincipal vMenuPrincipal) {
         this.vMenuPrincipal = vMenuPrincipal;
     }
 
     //*************************** Menu principal ***************************//
 
+    public int iniciar()
+    {
+        if (configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) iniciarVentana();
+        else return iniciarConsola();
+        return 0;
+    }
+
+    private void iniciarVentana() {
+        vMenuPrincipal.showMenu(0);
+    }
+
     /**
      * Inicia el menú principal y permite seleccionar una opción.
      * @return número entero según la opción seleccionada
      */
-    public int iniciar() {
+    public int iniciarConsola() {
         int opcion;
         while(true) {
             vMenuPrincipal.showCabecera();
