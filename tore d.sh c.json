@@ -1,0 +1,230 @@
+[33mcommit 35e1f3e045c7cf3fa37c43d35abe58cbf8fc4526[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mMiriam_vistas[m[33m)[m
+Author: Alan García Sánchez <agarciasanchez22@uoc.edu>
+Date:   Wed May 14 22:13:32 2025 +0200
+
+    - Creado FactoryVista.java para devolver vistas en función de la Configuracion del programa.
+    
+    - Implementando ejecución de ventanas y nuevos sistemas de menús.
+    
+    - Implementados algunos popups.
+
+[33mcommit 6e2981f1f49b423c828feba474927e61a575c6a4[m
+Author: Alan García Sánchez <agarciasanchez22@uoc.edu>
+Date:   Wed May 14 01:14:29 2025 +0200
+
+    - Creada estructura archivos JavaFX.
+
+[33mcommit e106964cf63a549f876f6187f8e6f162f379f991[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Tue May 6 02:07:54 2025 +0200
+
+    - Fin producto 4.
+
+[33mcommit f2076a50e6fface0e29ac1710ea299e302622dfa[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Sat May 3 20:16:43 2025 +0200
+
+    - Resuelto error introducción NIF o Email en mostrar cliente y modificar cliente.
+
+[33mcommit 24c07cdce1715e1d49e8326241fd7eb3b7e6c1be[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Sat May 3 05:31:19 2025 +0200
+
+    - Resueltos errores Gestión Artículos y Gestión Pedidos.
+    - Listo para últimas pruebas y grabación.
+
+[33mcommit 3792487d6507f883a34c4e66293ac1f0b976ce6a[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Sat May 3 04:03:04 2025 +0200
+
+    - Resueltos errores Gestión Clientes.
+    - Diversas mejoras y correcciones auxiliares.
+    - Depurando Gestión Artículos...
+
+[33mcommit 948554ddfd6f6339b62f53de0545eba2d170be74[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Fri May 2 03:54:15 2025 +0200
+
+    - Implementado Proveedor de Gestor de entidades.
+    - Implementado Gestor de transacciones.
+    - Mapeadas Entidades.
+    - Creados y definidos DAOs para JPA/Hibernate.
+    - Pequeñas correcciones para adaptar incompatibilidades JDBC/JPA.
+    - Depurando código -> Precarga pedidos.
+
+[33mcommit 9179f2a9d055c693cca42e80b6edb33c588446b2[m
+Author: MiguelGarzo <mgarzom@uoc.edu>
+Date:   Wed Apr 30 13:53:41 2025 +0200
+
+    ArticuloStock y Pedidos ORM hechas
+
+[33mcommit 23fbab36fd1160d27706a3603e9b305b1d85a78c[m
+Author: MirDuran <mduranre@uoc.edu>
+Date:   Wed Apr 30 12:55:08 2025 +0200
+
+    Dependencias Maven  y conexionHibernate
+
+[33mcommit d828cf66eeaab079c04d60572ce2dab7853815bc[m
+Author: MirDuran <mduranre@uoc.edu>
+Date:   Wed Apr 30 12:31:02 2025 +0200
+
+    Dependencias Maven y configuración Hibernate
+
+[33mcommit d80c5340169031dc375849b03c9d43e8fa1b0698[m
+Author: MiguelGarzo <mgarzom@uoc.edu>
+Date:   Tue Apr 29 12:49:32 2025 +0200
+
+    Clases ORM creadas
+
+[33mcommit 812df89db8e556e5c4d00a037bbf2c298a0fd2c8[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 21 22:25:20 2025 +0200
+
+    - Últimas correcciones.
+
+[33mcommit 917eb84791623fdf26063fc78b1810cf0b5c0e37[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 21 15:17:08 2025 +0200
+
+    - Implementados finalmente procedimientos almacenados.
+
+[33mcommit f9fbdba2b4fbb6cdbc2bc8eb663f8613a52c68ce[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 21 03:42:40 2025 +0200
+
+    - Añadidos procedimientos almacenados a modo de ejemplo.
+
+[33mcommit 9879109741d5c8755e0cdaceec45ad8c229bca96[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 21 01:46:25 2025 +0200
+
+    - Implementado FactoryConexionBBDD para obtener la conexión en función de la Configuracion establecida en el programa.
+    - Diversas correcciones y modificaciones menores.
+
+[33mcommit 01833554db8c89c51da9b98da315e3ba31a2dc32[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Sun Apr 20 20:16:25 2025 +0200
+
+    - Corregida lógica de filtros listados pedidos.
+    - Producto terminado si no surgen más errores durante grabación.
+
+[33mcommit bbbc6ec84bfb38f2acb96a44ca56f40e1dd30966[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Sun Apr 20 03:54:22 2025 +0200
+
+    - Corregidos errores principales pedidos.
+    - Pendiente revisar lógica listados. Algo no me cuadra.
+
+[33mcommit 77c7bcff65dbc0dd1957fd9b2f009b7deb86c4c9[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Sun Apr 20 00:33:50 2025 +0200
+
+    - Corregido error en modificación de artículos.
+    - Añadida relación artículo-stock en modifiación.
+    - Añadida selección manual para precarga.
+    - Pendiente solucionar pedidos.
+
+[33mcommit c3a73a33caeaf1aefe8a66b03683b90bfd7e34ab[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Fri Apr 18 04:02:52 2025 +0200
+
+    - Corregidos multiples errores. Principalmente relacionados con la gestión del stock.
+    - Implementadas transacciones que aseguran la correcta relación de pedidos y stocks de artículos.
+    - Pendientes más pruebas de depuración.
+
+[33mcommit a0d64c51e6b70bf661830509001505b1db689c79[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Wed Apr 16 07:25:18 2025 +0200
+
+    - Implementada toda la estructura Factory DAO y DTO.
+    - Implementado control de excepciones en Modelo y Controles.
+    - Pendiente realizar depuración y aplicar correcciones.
+
+[33mcommit ae32a86d8c4dd746d9e23b7c8e8445aef3e3a0a0[m
+Merge: 0d9c6c8 7e844c9
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Tue Apr 8 20:42:07 2025 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       src/main/java/javalinos/onlinestore/controlador/ControlClientes.java
+    #       src/main/java/javalinos/onlinestore/modelo/gestores/BBDD/ModeloClientesBBDD.java
+    #       src/main/java/javalinos/onlinestore/modelo/gestores/Interfaces/IModeloClientes.java
+    #       src/main/java/javalinos/onlinestore/modelo/gestores/Local/ModeloClientesLocal.java
+
+[33mcommit 0d9c6c809b31266edcc2f66f56a9a2622052cf98[m
+Author: Alan García Sánchez <142612294+c734r@users.noreply.github.com>
+Date:   Tue Apr 8 15:40:18 2025 +0200
+
+    - Implementado Factory en Modelos, así como interfaces.
+    - Implementando nuevo ModeloClientesBBDD.
+
+[33mcommit 7e844c90f559e2372e031c7a977e6a98a1f8b36a[m
+Author: Alan García Sánchez <142612294+C734R@users.noreply.github.com>
+Date:   Tue Apr 8 15:40:18 2025 +0200
+
+    - Implementado Factory en Modelos, así como interfaces.
+    - Implementando nuevo ModeloClientesBBDD.
+
+[33mcommit b87ea0f731e2fdbaf0671192274272365eb0c745[m
+Merge: faa21c2 7b08e18
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 7 22:10:15 2025 +0200
+
+    Merge remote-tracking branch 'origin/master'
+
+[33mcommit faa21c21e56901f7b77401d8a182e208a69b6da4[m
+Merge: 5c80f72 70699e1
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 7 22:05:15 2025 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       .idea/dataSources.xml
+
+[33mcommit 7b08e18938312e5e45d8efd7c3246cfaf4d64606[m
+Merge: 5c80f72 70699e1
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 7 22:05:15 2025 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    # Conflicts:
+    #       .idea/dataSources.xml
+
+[33mcommit 5c80f72ee4e256da9f68b8ebb339a2e4b8a440f0[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Mon Apr 7 22:03:21 2025 +0200
+
+    - Implementado Factory DAO y Factory DTO.
+    - Creadas Entidades.
+    - Insertado y adaptado script BBDD.
+    - Comenzando implementación persistencia BBDD en Modelos.
+
+[33mcommit be946684c8b6efca36ccacf0b93c635a716a6830[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Thu Apr 3 21:52:44 2025 +0200
+
+    - Implementando patrón Factory DAO.
+
+[33mcommit 70699e16f46480f6a3af969750c59dfbb9e4b233[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Thu Apr 3 21:52:44 2025 +0200
+
+    - Implementando patrón Factory DAO.
+
+[33mcommit c6ad869331640a6db2d0daeea59640bc281f52ba[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Sat Mar 29 01:19:40 2025 +0100
+
+    - Terminados comentarios Javadoc.
+    - Añadida creación artefacto .jar.
+
+[33mcommit 0e39f537cce5961817e99ccba41484d4d7c4bf44[m
+Author: C734R <alan_g_s93@hotmail.com>
+Date:   Fri Mar 28 22:58:26 2025 +0100
+
+    - Artículos ahora indica el tiempo de preparación en minutos como indica el caso práctico.
+    - Correcciones diversas en todos los métodos para aceptar el n
