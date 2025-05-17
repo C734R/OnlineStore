@@ -4,8 +4,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javalinos.onlinestore.controlador.ControlArticulos;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
-import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
-import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
 import java.net.URL;
 import java.util.List;
@@ -27,15 +25,15 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
     @FXML
     private TableView<ArticuloDTO> tablaArticulos;
     @FXML
-    private TableColumn<ClienteDTO, String> columnaID;
+    private TableColumn<ArticuloDTO, String> columnaID;
     @FXML
-    private TableColumn<ClienteDTO, String> columnaCodigo;
+    private TableColumn<ArticuloDTO, String> columnaCodigo;
     @FXML
-    private TableColumn<ClienteDTO, String> columnaDescripcion;
+    private TableColumn<ArticuloDTO, String> columnaDescripcion;
     @FXML
-    private TableColumn<ClienteDTO, String> columnaPrecio;
+    private TableColumn<ArticuloDTO, String> columnaPrecio;
     @FXML
-    private TableColumn<ClienteDTO, String> columnaPreparacion;
+    private TableColumn<ArticuloDTO, String> columnaPreparacion;
 
     @FXML
     private TextField txtIDArticulo;
@@ -51,23 +49,25 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
     private TextField txtStockArticulo;
 
 
-    public VistaArticulosJavaFX() {
+    public VistaArticulosJavaFX(ControlArticulos cArticulos) {
         this.cArticulos = cArticulos;
     }
+
 
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Suscripciones botones
         btnAddArticulo.setOnAction(event -> addArticulo());
-        btnModArticulo.setOnAction(event -> removeArticulo());
-        btnDeleteArticulo.setOnAction(event -> listarArticulo());
-        btnListArticulo.setOnAction(event -> modArticulo());
+        btnModArticulo.setOnAction(event -> modArticulo());
+        btnDeleteArticulo.setOnAction(event -> removeArticulo());
+        btnListArticulo.setOnAction(event -> listarArticulo());
     }
 
     private void listarArticulo() {
+        tablaArticulos.getItems().clear();
         cArticulos.showListArticulos();
-        
+
     }
 
     private void addArticulo() {
@@ -81,15 +81,83 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
     private void modArticulo() {
         cArticulos.updateArticulo();
     }
+// Getters y Setters
+@Override
+public float askPrecio(float min, float max) {
+    String input = txtPrecioArticulo.getText().trim();
 
-    @Override
-    public float askPrecio(float min, float max) {
-        return 0;
+    if (input.isEmpty()) {
+        showError("El campo de precio está vacío.");
+        return -99999f;
     }
+
+    try {
+        float precio = Float.parseFloat(input);
+        if (precio >= min && precio <= max) {
+            return precio;
+        } else {
+            showError("Precio fuera de rango (" + min + " - " + max + ").");
+        }
+    } catch (NumberFormatException e) {
+        showError("Formato inválido para el precio. Usa solo números.");
+    }
+
+    return -99999f;
+}
+
 
     @Override
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
         tablaArticulos.getItems().clear();
         tablaArticulos.getItems().addAll(articulosDTO);
     }
+
+    public TableView<ArticuloDTO> getTablaArticulos() {
+        return tablaArticulos;
+    }
+
+    public TextField getTxtIDArticulo() {
+        return txtIDArticulo;
+    }
+
+    public TextField getTxtCodigoArticulo() {
+        return txtCodigoArticulo;
+    }
+
+    public TextField getTxtDescripcionArticulo() {
+        return txtDescripcionArticulo;
+    }
+
+    public TextField getTxtPrecioArticulo() {
+        return txtPrecioArticulo;
+    }
+
+    public TextField getTxtPreparacionArticulo() {
+        return txtPreparacionArticulo;
+    }
+
+    public TextField getTxtStockArticulo() {
+        return txtStockArticulo;
+    }
+
+    public Button getBtnAddArticulo() {
+        return btnAddArticulo;
+    }
+
+    public Button getBtnModArticulo() {
+        return btnModArticulo;
+    }
+
+    public Button getBtnDeleteArticulo() {
+        return btnDeleteArticulo;
+    }
+
+    public Button getBtnListArticulo() {
+        return btnListArticulo;
+    }
+
+    public ControlArticulos getControlArticulos() {
+        return cArticulos;
+    }
+
 }

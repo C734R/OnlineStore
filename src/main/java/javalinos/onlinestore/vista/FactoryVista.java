@@ -18,8 +18,7 @@ import javalinos.onlinestore.vista.JavaFX.VistaPedidosJavaFX;
 import java.util.List;
 import java.util.Map;
 
-import static javalinos.onlinestore.OnlineStore.cClientes;
-import static javalinos.onlinestore.OnlineStore.configuracion;
+import static javalinos.onlinestore.OnlineStore.*;
 
 public class FactoryVista {
 
@@ -32,7 +31,7 @@ public class FactoryVista {
     }
 
     public IVistaArticulos getVistaArticulos() {
-        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) return new VistaArticulosJavaFX() {
+        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) return new VistaArticulosJavaFX(cArticulos) {
             @Override
             public float askPrecio(float min, float max) {
                 return 0;

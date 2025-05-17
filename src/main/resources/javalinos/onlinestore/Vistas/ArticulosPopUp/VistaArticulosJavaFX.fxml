@@ -4,21 +4,20 @@
         <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.VistaClientesJavaFX">
-<Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Volver" />
-<Button layoutX="74.0" layoutY="42.0" mnemonicParsing="false" text="Añadir Artículo" />
-<Button layoutX="189.0" layoutY="42.0" mnemonicParsing="false" text="Modificar Articulo" />
-<Button layoutX="317.0" layoutY="42.0" mnemonicParsing="false" text="EliminarArticulo" />
-<Button layoutX="437.0" layoutY="42.0" mnemonicParsing="false" text="Mostrar Articulo" />
+    <Button fx:id="btnVolver" layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Volver" />
+    <Button fx:id="btnAddArticulo" layoutX="74.0" layoutY="42.0" mnemonicParsing="false" text="Añadir Artículo" />
+    <Button fx:id="btnModArticulo" layoutX="189.0" layoutY="42.0" mnemonicParsing="false" text="Modificar Articulo" />
+    <Button fx:id="btnDeleteArticulo" layoutX="317.0" layoutY="42.0" mnemonicParsing="false" text="EliminarArticulo" />
+    <Button fx:id="btnListArticulo" layoutX="437.0" layoutY="42.0" mnemonicParsing="false" text="Mostrar Articulo" />
 
-
-<TableView fx:id="tablaArticulos" layoutX="21.0" layoutY="96.0" prefHeight="252.0" prefWidth="557.0">
-    <columns>
-        <TableColumn fx:id="columnaID"   text="Id" />
-        <TableColumn fx:id="columnaCodigo"  text="Codigo" />
-        <TableColumn fx:id="columnaDescripcion"  text="Descripción" />
-        <TableColumn fx:id="columnaPrecio"  text="Precio" />
-        <TableColumn fx:id="columnaPreparacion" text="Preparación" />
-    </columns>
-</TableView>
+    <TableView fx:id="tablaArticulos" layoutX="21.0" layoutY="96.0" prefHeight="252.0" prefWidth="557.0">
+        <columns>
+            <TableColumn fx:id="columnaID" text="Id" />
+            <TableColumn fx:id="columnaCodigo" text="Codigo" />
+            <TableColumn fx:id="columnaDescripcion" text="Descripción" />
+            <TableColumn fx:id="columnaPrecio" text="Precio" />
+            <TableColumn fx:id="columnaPreparacion" text="Preparación" />
+        </columns>
+    </TableView>
 
 </AnchorPane>
