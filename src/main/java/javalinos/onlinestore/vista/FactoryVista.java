@@ -14,6 +14,7 @@ import javalinos.onlinestore.vista.JavaFX.VistaClientesJavaFX;
 import javalinos.onlinestore.vista.JavaFX.VistaMenuPrincipalJavaFX;
 import javalinos.onlinestore.vista.JavaFX.VistaPedidosJavaFX;
 
+import static javalinos.onlinestore.OnlineStore.cClientes;
 import static javalinos.onlinestore.OnlineStore.configuracion;
 
 public class FactoryVista {
@@ -22,7 +23,7 @@ public class FactoryVista {
 
     public IVistaClientes getVistaClientes() {
 
-        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) return new VistaClientesJavaFX();
+        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) return new VistaClientesJavaFX(cClientes);
         else return new VistaClientes();
     }
 

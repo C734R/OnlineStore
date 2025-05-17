@@ -25,8 +25,11 @@ import java.sql.Statement;
 
 import javalinos.onlinestore.vista.FactoryVista;
 import javalinos.onlinestore.vista.Interfaces.*;
-import javalinos.onlinestore.vista.JavaFX.AplicacionFX;
+import javalinos.onlinestore.vista.JavaFX.GestorEscenas;
+import javalinos.onlinestore.vista.JavaFX.TipoVentana;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+
+import static javalinos.onlinestore.vista.JavaFX.GestorEscenas.crearVentana;
 
 /**
  * Clase principal de la aplicación OnlineStore.
@@ -64,17 +67,24 @@ public class OnlineStore {
      * @param args argumentos opcionales (modo de configuración).
      */
     public static void main(String[] args){
+
+        // Forzar componentes logs
         java.util.logging.LogManager.getLogManager().reset();
         SLF4JBridgeHandler.install();
 
+        // Procesar argumento de configuración
         if (args.length != 0) {
             switch (args[0]) {
                 case "0" -> configuracion = Configuracion.LOCAL;
                 case "1" -> configuracion = Configuracion.JDBC_MYSQL;
                 case "2" -> configuracion = Configuracion.JPA_HIBERNATE_MYSQL;
+                case "3" -> configuracion = Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL;
             }
         }
-        else configuracion = Configuracion.JPA_HIBERNATE_MYSQL;
+        else configuracion = Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL;
+
+        // Si se selecciona opción con JAVAFX, iniciar ciclo de vida servicio
+        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) GestorEscenas.launch(GestorEscenas.class, args);
 
         // Aplicar autocierre al uso de la conexión por parte de ModeloFactory
         try (FactoryModelo factory = new FactoryModelo()) {
@@ -148,38 +158,24 @@ public class OnlineStore {
     }
 
     private static void iniciarJavaFX() {
-        javafx.application.Application.launch(AplicacionFX.class);
+        javafx.application.Application.launch(GestorEscenas.class);
         int opcion;
         while(true) {
             opcion = cMenuPrincipal.iniciar();
             switch (opcion) {
                 case 1:
-                    cargarVista("/fxml/VistaClientesJavaFX.fxml", "Gestión de Clientes");
+                    vClientes.showMenu(1);
                     break;
                 case 2:
-                    cargarVista("/fxml/VistaArticulosJavaFX.fxml", "Gestión de Artículos");
+                    vArticulos.showMenu(2);
                     break;
                 case 3:
-                    cargarVista("/fxml/VistaPedidosJavaFX.fxml", "Gestión de Pedidos");
+                    vPedidos.showMenu(3);
                     break;
                 case 0:
                     cMenuPrincipal.salir();
                     return;
             }
-        }
-    }
-
-    private void cargarVista(String fxml, String titulo) {
-        try {
-            Stage stage = (Stage) Stage.getWindows().filtered(Window::isShowing).getFirst();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VistaBaseJavaFX.fxml"));
-            loader.load();
-            IVistaBase controlVista = loader.getController();
-            controlVista.setTitulo(titulo);
-            controlVista.cargarVistaCentral(ruta);
-        }
-        catch (IOException e) {
-            controlVista.
         }
     }
 
