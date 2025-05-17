@@ -1,6 +1,7 @@
 package javalinos.onlinestore.vista;
 
 import javalinos.onlinestore.Configuracion;
+import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.vista.Consola.VistaArticulos;
 import javalinos.onlinestore.vista.Consola.VistaClientes;
 import javalinos.onlinestore.vista.Consola.VistaMenuPrincipal;
@@ -13,6 +14,9 @@ import javalinos.onlinestore.vista.JavaFX.VistaArticulosJavaFX;
 import javalinos.onlinestore.vista.JavaFX.VistaClientesJavaFX;
 import javalinos.onlinestore.vista.JavaFX.VistaMenuPrincipalJavaFX;
 import javalinos.onlinestore.vista.JavaFX.VistaPedidosJavaFX;
+
+import java.util.List;
+import java.util.Map;
 
 import static javalinos.onlinestore.OnlineStore.cClientes;
 import static javalinos.onlinestore.OnlineStore.configuracion;
@@ -28,7 +32,37 @@ public class FactoryVista {
     }
 
     public IVistaArticulos getVistaArticulos() {
-        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) return new VistaArticulosJavaFX();
+        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) return new VistaArticulosJavaFX() {
+            @Override
+            public float askPrecio(float min, float max) {
+                return 0;
+            }
+
+            @Override
+            public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+
+            }
+
+            @Override
+            public void showListArticulosStock(Map<ArticuloDTO, Integer> articuloStockMap) {
+
+            }
+
+            @Override
+            public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
+
+            }
+
+            @Override
+            public void showArticulo(ArticuloDTO articuloDTO) {
+
+            }
+
+            @Override
+            public void showStockArticulos(Map<ArticuloDTO, Integer> articuloStockMap) {
+
+            }
+        };
         else return new VistaArticulos();
     }
 
