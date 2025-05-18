@@ -1,5 +1,7 @@
 package javalinos.onlinestore.vista.JavaFX;
 
+import javalinos.onlinestore.controlador.ControlArticulos;
+import javalinos.onlinestore.controlador.ControlPedidos;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
@@ -28,10 +30,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos {
 
-    private List<PedidoDTO> listaPedidos; // Para almacenar la lista actual de pedidos
+    private ControlPedidos cPedidos;
 
     @FXML
     private TableView<PedidoDTO> tablaPedidos;
+
     @FXML
     private TableColumn<PedidoDTO, Integer> columnaNumero;
     @FXML
@@ -46,6 +49,7 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
     private TableColumn<PedidoDTO, Float> columnaEnvio;
     @FXML
     private TableColumn<PedidoDTO, Float> columnaPrecio;
+
     @FXML
     private Button botonNuevoPedido;
     @FXML
@@ -59,10 +63,12 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
     @FXML
     private Button botonListarPedidosEnviados;
 
-    private IModeloPedidos modeloPedidos;
+    public VistaPedidosJavaFX(ControlArticulos cArticulos) {
+        this.cPedidos = cPedidos;
+    }
 
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Aquí configurarías las columnas de la tabla (setCellValueFactory)
         columnaNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
         columnaCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
         columnaArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
@@ -70,73 +76,38 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
         columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fechahora"));
         columnaEnvio.setCellValueFactory(new PropertyValueFactory<>("envio"));
         columnaPrecio.setCellValueFactory(new PropertyValueFactory<>("precioTotal"));
+
+        botonNuevoPedido.setOnAction(event -> addPedido());
+        botonEliminarPedido.setOnAction(event -> removePedido());
+        botonEditarPedido.setOnAction(event -> modPedido());
+        botonListarTodosPedidos.setOnAction(event -> listarPedido(null));
+        botonListarPedidosEnviados.setOnAction(event -> showPedidosEnviados(null, true));
+        botonListarPedidosPendientes.setOnAction(event -> showPedidosEnviados(null, false));
     }
+
+    private void addPedido() { cPedidos.addPedidos(); }
 
     @FXML
-    private void NuevoPedido() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("NuevoPedidoJavaFX.fxml"));
-            Parent root = loader.load();
+    private void removePedido() { cPedidos.removePedidos(); }
 
-            NuevoPedidoJavaFX controller = loader.getController();
-            controller.setModeloPedidos(modeloPedidos);
-            controller.setVistaPedidos(this);
-
-            Stage stage = new Stage();
-            stage.setTitle("Nuevo Pedido");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-            cargarPedidos();
-        } catch (Exception e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error al Abrir Formulario", null, "No se pudo abrir el formulario: " + e.getMessage());
-        }
+    private void modPedido() {
+        cPedidos.updatePedido();
     }
 
-    @FXML
-    private void EliminarPedido() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("EliminarPedido.fxml")); // Carga el FXML de la ventana de eliminar
-            Parent root = loader.load();
-
-            EliminarPedidoJavaFX controller = loader.getController(); // Obtiene el controlador de la ventana de eliminar
-            controller.setModeloPedidos(modeloPedidos); // Pasa la instancia del modelo al controlador de eliminar
-
-            Stage stage = new Stage();
-            stage.setTitle("Eliminar Pedido");
-            stage.initModality(Modality.APPLICATION_MODAL); // Bloquea la ventana principal hasta que se cierre esta
-            stage.setScene(new Scene(root));
-            stage.showAndWait(); // Muestra la ventana y espera a que el usuario interactúe con ella
-
-            cargarPedidos(); // Recarga la lista de pedidos después de que se cierre la ventana de eliminar (si se eliminó algo)
-
-        } catch (Exception e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error al Abrir Formulario", null, "No se pudo abrir el formulario para eliminar pedido: " + e.getMessage());
-        }
+    private void listarPedido(ClienteDTO clienteDTO) {
+        tablaPedidos.getItems().clear();
+        cPedidos.showListPedidos(clienteDTO);
     }
 
-    public void cargarPedidos() {
-        try {
-            List<PedidoDTO> pedidos = modeloPedidos.getPedidosDTO();
-            showListPedidos(pedidos, null, false); // O con el cliente actual si lo mantienes
-        } catch (Exception e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error al Cargar Pedidos", null, "No se pudieron cargar los pedidos: " + e.getMessage());
-        }
+    private void showPedidosEnviados(ClienteDTO clienteDTO, boolean enviado){
+        tablaPedidos.getItems().clear();
+        cPedidos.showListPedidosPendientesEnviados(clienteDTO, enviado);
     }
 
     @Override
     public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
-        ObservableList<PedidoDTO> observablePedidos = FXCollections.observableArrayList(pedidosDTO);
-        tablaPedidos.setItems(observablePedidos);
-
-        String mensaje = "Lista de pedidos cargada.";
-        if (clienteDTO != null) {
-            mensaje = "Pedidos del cliente " + clienteDTO.getNombre() + " cargados.";
-        }
-        if (opcion) { // Puedes usar 'opcion' para indicar si son pendientes/enviados
-            mensaje += " (Filtrados).";
-        }
-        mostrarAlerta(Alert.AlertType.INFORMATION, "Lista de Pedidos", null, mensaje);
+        tablaPedidos.getItems().clear();
+        tablaPedidos.getItems().addAll(pedidosDTO);
     }
 
     @Override
