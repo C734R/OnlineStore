@@ -1,17 +1,16 @@
 package javalinos.onlinestore.vista.JavaFX;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
-import java.util.List;
-import java.util.Map;
+
+import java.net.URL;
+import java.util.*;
 
 import static javalinos.onlinestore.OnlineStore.cArticulos;
-import static javalinos.onlinestore.OnlineStore.cClientes;
 
-public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
+public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
 
     @FXML private Button btnVolver;
     @FXML private Button btnAddArticulo;
@@ -26,28 +25,19 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
     @FXML private TableColumn<ArticuloDTO, Float> columnaPrecio;
     @FXML private TableColumn<ArticuloDTO, Integer> columnaPreparacion;
 
-    @FXML private TextField txtDescripcion, txtPrecio, txtPreparacion, txtStock;
-
-    @FXML
-    public void initialize() {
-        btnAddArticulo.setOnAction(event -> {
-            String descripcion = txtDescripcion.getText();
-            float precio = Float.parseFloat(txtPrecio.getText());
-            int preparacion = Integer.parseInt(txtPreparacion.getText());
-            int stock = Integer.parseInt(txtStock.getText());
-            ArticuloDTO articulo = new ArticuloDTO(null, descripcion, precio, preparacion);
-            cArticulos.addArticulo(articulo, stock);
-        });
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        btnAddArticulo.setOnAction(event -> cArticulos.addArticulo());
         btnDeleteArticulo.setOnAction(event -> cArticulos.removeArticulo());
         btnModArticulo.setOnAction(event -> cArticulos.updateArticulo());
         btnListArticulo.setOnAction(event -> cArticulos.showListArticulos());
         btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionArticulos"));
 
-        columnaID.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<Integer>());
-        columnaCodigo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCodigo()));
-        columnaDescripcion.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDescripcion()));
-        columnaPrecio.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPrecio()));
-        columnaPreparacion.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getMinutosPreparacion()));
+//        columnaID.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<Integer>());
+//        columnaCodigo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCodigo()));
+//        columnaDescripcion.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDescripcion()));
+//        columnaPrecio.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPrecio()));
+//        columnaPreparacion.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getMinutosPreparacion()));
     }
 
     @Override
@@ -66,9 +56,27 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
                 } catch (NumberFormatException ignored) {}
                 dialog.setHeaderText("Valor inválido. Introduce un número entre " + min + " y " + max);
             } else {
-                return -1f; // Cancelado
+                return -1f;
             }
         }
+    }
+
+    @Override
+    public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < articulosDTO.size(); i++) {
+            ArticuloDTO articulo = articulosDTO.get(i);
+            builder.append(i + 1).append(" - ")
+                    .append(articulo.getCodigo()).append(" - ")
+                    .append(articulo.getDescripcion()).append("\n");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Listado de Artículos");
+        alert.setHeaderText("Artículos disponibles:");
+        alert.setContentText(builder.toString());
+        alert.showAndWait();
+
     }
 
     public String askCodigo() {
@@ -96,6 +104,10 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
         alert.showAndWait();
     }
 
+    @Override
+    public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
+
+    }
 
 
     public void showArticulo(ArticuloDTO articuloDTO) {
@@ -117,18 +129,36 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
         showListArticulosStock(articuloStockMap);
     }
 
+    @Override
+    public int askRemoveArticulo(List<ArticuloDTO> articulosDTO) {
 
-    public void btnAddArticulo(ActionEvent actionEvent) {
-        cArticulos.addArticulo();
-    }
-    public void btnDeleteArticulo(ActionEvent actionEvent) {
-        cArticulos.removeArticulo();
-    }
-    public void btnModArticulo(ActionEvent actionEvent) {
-        cArticulos.updateArticulo();
-    }
-    public void btnListArticulo(ActionEvent actionEvent) {
-        cArticulos.showListArticulos();
+        Map<String, Integer> mapa = new HashMap<>();
+        int index = 1;
+        for (ArticuloDTO articulo : articulosDTO) {
+            mapa.put(articulo.getCodigo() + " - " + articulo.getDescripcion(), index);
+            index++;
+        }
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion = 0;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el artículo a eliminar");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            seleccion = mapa.get(respuesta);
+        } else return 0;
+         if (seleccion == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+        }
+        return seleccion;
+
     }
 
 }

@@ -69,7 +69,7 @@ public class ControlArticulos extends ControlBase {
             opcion = vArticulos.askInt("Introduce una opción", 0, 5, false, false, true);
             switch (opcion) {
                 case 1:
-                    addArticulo(null, null);
+                    addArticulo();
                     break;
                 case 2:
                     removeArticulo();
@@ -99,15 +99,41 @@ public class ControlArticulos extends ControlBase {
     /**
      * Añade un nuevo artículo al sistema.
      */
-    public void addArticulo(ArticuloDTO articuloDTO, Integer stock)
+    public void addArticulo()
     {
-        LinkedHashMap<ArticuloDTO,Integer> articuloStock = new LinkedHashMap<>();
-        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) articuloStock.put(articuloDTO,stock);
-        else articuloStock = pedirArticuloDTOConsola();
-        assert articuloStock != null;
-        if (articuloStock.isEmpty()) return;
-        articuloDTO = articuloStock.keySet().iterator().next();
-        stock = articuloStock.get(articuloDTO);
+        ArticuloDTO articuloDTO;
+        vArticulos.showMensaje(" Añadir Artículo ", true);
+        try
+        {
+            int numeroArticulo = mArticulos.getArticulosDTO().size();
+            vArticulos.showMensaje("El siguiente código disponible es: ART00" + numeroArticulo, true);
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al obtener el número del último artículo.", true);
+            return;
+        }
+        String descripcion = vArticulos.askString("Introduce la descripción del artículo: ", 1, 250, true, false, true);
+        if(descripcion == null) return;
+        float precio = vArticulos.askPrecio(0.0f, 9999.0f);
+        if(precio == -99999f) return;
+        int preparacion = vArticulos.askInt("Introduce los minutos de preparación del artículo", 1, 9999, true, false, true);
+        if(preparacion == -99999f) return;
+        int stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false, true);
+        if(stock == -99999) return;
+        try
+        {
+            articuloDTO = mArticulos.makeArticulo(descripcion, precio, preparacion);
+            if (articuloDTO == null) {
+                vArticulos.showMensajePausa("Error. No se ha podido crear el artículo.", true);
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            vArticulos.showMensajePausa("Error al crear un nuevo artículo." + e, true);
+            return ;
+        }
         try
         {
             mArticulos.addArticulo(articuloDTO);
@@ -119,49 +145,6 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("Error al añadir el artículo y stock." + e, true);
         }
     }
-
-    private LinkedHashMap<ArticuloDTO, Integer> pedirArticuloDTOConsola() {
-        LinkedHashMap<ArticuloDTO, Integer> articuloStock = new LinkedHashMap<>();
-        ArticuloDTO articuloDTO;
-        vArticulos.showMensaje("******** Añadir Artículo ********", true);
-        try
-        {
-            int numeroArticulo = mArticulos.getArticulosDTO().size();
-            vArticulos.showMensaje("El siguiente código disponible es: ART00" + numeroArticulo, true);
-        }
-        catch (Exception e)
-        {
-            vArticulos.showMensajePausa("Error al obtener el número del último artículo.", true);
-            return null;
-        }
-        String descripcion = vArticulos.askString("Introduce la descripción del artículo: ", 1, 250, true, false, true);
-        if(descripcion == null) return null;
-        float precio = vArticulos.askPrecio(0.0f, 9999.0f);
-        if(precio == -99999f) return null;
-        int preparacion = vArticulos.askInt("Introduce los minutos de preparación del artículo", 1, 9999, true, false, true);
-        if(preparacion == -99999f) return null;
-        int stock = vArticulos.askInt("Introduce la cantidad de stock del artículo", 0, 999, true, false, true);
-        if(stock == -99999) return null;
-        try
-        {
-            articuloDTO = mArticulos.makeArticulo(descripcion, precio, preparacion);
-            if (articuloDTO == null) {
-                vArticulos.showMensajePausa("Error. No se ha podido crear el artículo.", true);
-                return null;
-            }
-            articuloStock.put(articuloDTO,stock);
-            return articuloStock;
-        }
-        catch (Exception e)
-        {
-            vArticulos.showMensajePausa("Error al crear un nuevo artículo." + e, true);
-            return null;
-        }
-
-
-    }
-
-
 
     /**
      * Elimina un artículo seleccionado por el usuario.
@@ -184,10 +167,7 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("No hay artículos para eliminar.", true);
             return;
         }
-        vArticulos.showListArticulosNumerada(articulosDTO);
-        vArticulos.showMensaje("Selecciona un artículo para eliminar: ", true);
-
-        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), true, true, true);
+        int seleccion = vArticulos.askRemoveArticulo(articulosDTO);
         if(seleccion == -99999) return;
 
         ArticuloDTO articuloDTO = articulosDTO.get(seleccion-1);

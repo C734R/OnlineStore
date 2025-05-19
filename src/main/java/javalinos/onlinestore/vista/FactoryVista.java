@@ -45,7 +45,7 @@ public class FactoryVista {
                 vClientesRaiz = loader.load();
                 return loader.getController();
             } catch (IOException e) {
-                throw new RuntimeException("No se pudo cargar el FXML", e);
+                throw new RuntimeException("No se pudo cargar el FXML Clientes", e);
             }
         } else {
             return new VistaClientes();
@@ -59,7 +59,7 @@ public class FactoryVista {
                 vArticulosRaiz = loader.load();
                 return loader.getController();
             } catch (IOException e) {
-                throw new RuntimeException("No se pudo cargar el FXML", e);
+                throw new RuntimeException("No se pudo cargar el FXML Articulos", e);
             }
         } else {
             return new VistaArticulos();
@@ -73,7 +73,7 @@ public class FactoryVista {
                 vMenuPrincipalRaiz = loader.load();
                 return loader.getController();
             } catch (IOException e) {
-                throw new RuntimeException("No se pudo cargar el FXML", e);
+                throw new RuntimeException("No se pudo cargar el FXML MenuPrincipal", e);
             }
         } else {
             return new VistaMenuPrincipal();
@@ -87,7 +87,7 @@ public class FactoryVista {
                 vPedidosRaiz = loader.load();
                 return loader.getController();
             } catch (IOException e) {
-                throw new RuntimeException("No se pudo cargar el FXML", e);
+                throw new RuntimeException("No se pudo cargar el FXML Pedidos", e);
             }
         } else {
             return new VistaPedidos();
