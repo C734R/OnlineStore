@@ -64,7 +64,7 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
         btnListArticulo.setOnAction(event -> listarArticulo());
     }
 
-    private void listarArticulo() {
+    .    private void listarArticulo() {
         tablaArticulos.getItems().clear();
         cArticulos.showListArticulos();
 
