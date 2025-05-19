@@ -253,7 +253,7 @@ public class ControlArticulos extends ControlBase {
             modificado = true;
         }
         // Días de preparación
-        Integer minutosPreparacion = vArticulos.askIntOpcional("Minutos de preparación actuales: " + articuloDTOOld.getMinutosPreparacion(), 1, 9999);
+        Integer minutosPreparacion = vArticulos.askIntOpcional("Minutos de preparación actuales: " + articuloDTOOld.getMinutosPreparacion(preparacion), 1, 9999);
         if (minutosPreparacion != null) {
             articuloDTONew.setMinutosPreparacion(minutosPreparacion);
             modificado = true;

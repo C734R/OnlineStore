@@ -47,7 +47,7 @@ public class ModeloArticulosTest {
         ArticuloDTO ArticuloDTO = mArticulos.makeArticulo("Prueba", 15.45f, 300);
         assertEquals("Prueba", ArticuloDTO.getDescripcion());
         assertEquals(15.45f, ArticuloDTO.getPrecio());
-        assertEquals(300, ArticuloDTO.getMinutosPreparacion());
+        assertEquals(300, ArticuloDTO.getMinutosPreparacion(preparacion));
         assertTrue(ArticuloDTO.getCodigo().startsWith("ART"));
     }
     /**

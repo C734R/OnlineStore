@@ -36,7 +36,7 @@ public class PedidoDTO {
         this.fechahora = fechahora;
         this.envio = envio;
         this.precio = precio;
-        this.diasPreparacion = calcTotalPreparacion(articuloDTO.getMinutosPreparacion(), cantidad);
+        this.diasPreparacion = calcTotalPreparacion(articuloDTO.getMinutosPreparacion(preparacion), cantidad);
     }
     /**
      * Constructor vacío.
@@ -76,7 +76,7 @@ public class PedidoDTO {
         this.fechahora = pedido.getFechahora();
         this.envio = pedido.getEnvio();
         this.precio = pedido.getPrecio();
-        this.diasPreparacion = calcTotalPreparacion(articuloDTO.getMinutosPreparacion(), pedido.getCantidad());
+        this.diasPreparacion = calcTotalPreparacion(articuloDTO.getMinutosPreparacion(preparacion), pedido.getCantidad());
     }
 
     /**

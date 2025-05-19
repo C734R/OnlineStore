@@ -36,7 +36,7 @@ public class Articulo
         this.codigo = articuloDTO.getCodigo();
         this.descripcion = articuloDTO.getDescripcion();
         this.precio = articuloDTO.getPrecio();
-        this.minutosPreparacion = articuloDTO.getMinutosPreparacion();
+        this.minutosPreparacion = articuloDTO.getMinutosPreparacion(preparacion);
     }
 
     public Integer getId() {

@@ -49,7 +49,7 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
     private TextField txtStockArticulo;
 
 
-    public VistaArticulosJavaFX(ControlArticulos cArticulos) {
+    public VistaArticulosJavaFX() {
         this.cArticulos = cArticulos;
     }
 
@@ -64,14 +64,32 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
         btnListArticulo.setOnAction(event -> listarArticulo());
     }
 
-    .    private void listarArticulo() {
+        private void listarArticulo() {
         tablaArticulos.getItems().clear();
         cArticulos.showListArticulos();
 
     }
 
     private void addArticulo() {
-        cArticulos.addArticulo();
+        try {
+            String codigo = txtCodigoArticulo.getText().trim();
+            String descripcion = txtDescripcionArticulo.getText().trim();
+            float precio = Float.parseFloat(txtPrecioArticulo.getText().trim());
+            String preparacion = txtPreparacionArticulo.getText().trim();
+            int stock = Integer.parseInt(txtStockArticulo.getText().trim());
+
+            ArticuloDTO articulo = new ArticuloDTO();
+            articulo.setCodigo(codigo);
+            articulo.setDescripcion(descripcion);
+            articulo.setPrecio(precio);
+            articulo.getMinutosPreparacion(preparacion);
+
+            cArticulos.addArticulo(articulo, stock);
+        } catch (NumberFormatException e) {
+            showError("Error en el formato numérico (precio o stock).");
+        } catch (Exception e) {
+            showError("Error al añadir el artículo: " + e.getMessage());
+        }
     }
 
     private void removeArticulo() {

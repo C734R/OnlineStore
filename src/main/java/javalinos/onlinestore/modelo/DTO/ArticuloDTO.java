@@ -44,7 +44,7 @@ public class ArticuloDTO {
         this.codigo = ArticuloDTO.getCodigo();
         this.descripcion = ArticuloDTO.getDescripcion();
         this.precio = ArticuloDTO.getPrecio();
-        this.minutosPreparacion = ArticuloDTO.getMinutosPreparacion();
+        this.minutosPreparacion = ArticuloDTO.getMinutosPreparacion(preparacion);
     }
 
     public ArticuloDTO(Articulo articulo) {
@@ -106,7 +106,7 @@ public class ArticuloDTO {
      * Devuelve el tiempo de preparación en minutos.
      * @return tiempo en minutos.
      */
-    public Integer getMinutosPreparacion() {
+    public Integer getMinutosPreparacion(String preparacion) {
         return minutosPreparacion;
     }
 
