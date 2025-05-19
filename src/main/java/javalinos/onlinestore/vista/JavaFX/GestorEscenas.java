@@ -20,6 +20,7 @@ public class GestorEscenas extends Application {
     @Override
     public void start(Stage primaryStage) {
         ventanaPrincipal = primaryStage;
+        iniciarVentanaPrincipal();
     }
 
     public static void crearVentana(TipoVentana tipoVentana, Stage... stage) {

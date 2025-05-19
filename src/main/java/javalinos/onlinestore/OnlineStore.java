@@ -1,9 +1,7 @@
 package javalinos.onlinestore;
 // Dependencias
 
-import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import javafx.application.Application;
 import javalinos.onlinestore.controlador.ControlArticulos;
 import javalinos.onlinestore.controlador.ControlClientes;
 import javalinos.onlinestore.controlador.ControlMenuPrincipal;
@@ -17,7 +15,6 @@ import javalinos.onlinestore.utils.Conexiones.FactoryConexionBBDD;
 import javalinos.onlinestore.utils.Conexiones.IConexionBBDD;
 import javalinos.onlinestore.utils.GestoresEntidades.ProveedorEntityManagerJPA;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
@@ -26,10 +23,7 @@ import java.sql.Statement;
 import javalinos.onlinestore.vista.FactoryVista;
 import javalinos.onlinestore.vista.Interfaces.*;
 import javalinos.onlinestore.vista.JavaFX.GestorEscenas;
-import javalinos.onlinestore.vista.JavaFX.TipoVentana;
 import org.slf4j.bridge.SLF4JBridgeHandler;
-
-import static javalinos.onlinestore.vista.JavaFX.GestorEscenas.crearVentana;
 
 /**
  * Clase principal de la aplicación OnlineStore.
@@ -82,9 +76,6 @@ public class OnlineStore {
             }
         }
         else configuracion = Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL;
-
-        // Si se selecciona opción con JAVAFX, iniciar ciclo de vida servicio
-        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) GestorEscenas.launch(GestorEscenas.class, args);
 
         // Aplicar autocierre al uso de la conexión por parte de ModeloFactory
         try (FactoryModelo factory = new FactoryModelo()) {
@@ -153,30 +144,8 @@ public class OnlineStore {
      * Inicia el menú principal y controla el flujo del programa.
      */
     private static void iniciarPrograma(){
-        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) iniciarJavaFX();
+        if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) Application.launch(GestorEscenas.class);
         else iniciarConsola();
-    }
-
-    private static void iniciarJavaFX() {
-        javafx.application.Application.launch(GestorEscenas.class);
-        int opcion;
-        while(true) {
-            opcion = cMenuPrincipal.iniciar();
-            switch (opcion) {
-                case 1:
-                    vClientes.showMenu(1);
-                    break;
-                case 2:
-                    vArticulos.showMenu(2);
-                    break;
-                case 3:
-                    vPedidos.showMenu(3);
-                    break;
-                case 0:
-                    cMenuPrincipal.salir();
-                    return;
-            }
-        }
     }
 
     private static void iniciarConsola() {

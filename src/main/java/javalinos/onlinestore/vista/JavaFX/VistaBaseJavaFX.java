@@ -36,9 +36,6 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
     @Override
     public void showMenu(int retorno) {
         switch (retorno) {
-            case 0:
-                iniciarVentanaPrincipal();
-                break;
             case 1:
                 crearVentana(TipoVentana.GestionClientes);
                 break;
