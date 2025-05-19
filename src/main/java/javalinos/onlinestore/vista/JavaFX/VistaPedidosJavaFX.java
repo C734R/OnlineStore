@@ -44,7 +44,7 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
 
 
     @FXML
-    public void initialize() {
+    public void initialize(URL url, ResourceBundle rb) {
         botonNuevoPedido.setOnAction(event -> cPedidos.addPedidos());
         botonEliminarPedido.setOnAction(event -> cPedidos.removePedidos());
         botonEditarPedido.setOnAction(event -> cPedidos.updatePedido());
