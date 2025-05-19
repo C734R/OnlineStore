@@ -3,21 +3,29 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.VistaClientesJavaFX">
-   <Button layoutX="14.0" layoutY="361.0" mnemonicParsing="false" text="Volver" />
-   <Button layoutX="74.0" layoutY="42.0" mnemonicParsing="false" text="Añadir cliente" />
-   <Button layoutX="189.0" layoutY="42.0" mnemonicParsing="false" text="Modificar cliente" />
-   <Button layoutX="317.0" layoutY="42.0" mnemonicParsing="false" text="Eliminar cliente" />
-   <Button layoutX="437.0" layoutY="42.0" mnemonicParsing="false" text="Listar Clientes" />
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.VistaClientesJavaFX">
+   <top>
+      <fx:include source="VistaBaseJavaFX.fxml" />
+   </top>
+   <left>
+      <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
+         <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0" mnemonicParsing="false" text="Volver" />
+         <Button fx:id="btnAddCliente" layoutX="74.0" layoutY="22.0" mnemonicParsing="false" text="Añadir cliente" />
+         <Button fx:id="btnModCliente" layoutX="189.0" layoutY="22.0" mnemonicParsing="false" text="Modificar cliente" />
+         <Button fx:id="btnDeleteCliente" layoutX="317.0" layoutY="22.0" mnemonicParsing="false" text="Eliminar cliente" />
+         <Button fx:id="btnListClientes" layoutX="437.0" layoutY="22.0" mnemonicParsing="false" text="Listar Clientes" />
 
-   <TableView fx:id="tblClientes" layoutX="21.0" layoutY="96.0" prefHeight="252.0" prefWidth="557.0">
-      <columns>
-         <TableColumn fx:id="colNombre" text="Nombre" />
-         <TableColumn fx:id="colDomicilio" text="Domicilio" />
-         <TableColumn fx:id="colEmail" text="Email" />
-         <TableColumn fx:id="colDNI" text="DNI" />
-         <TableColumn fx:id="colCategoria" text="CategoriaID" />
-      </columns>
-   </TableView>
+         <TableView fx:id="tblClientes" layoutX="21.0" layoutY="67.0" prefHeight="252.0" prefWidth="557.0">
+            <columns>
+               <TableColumn fx:id="colNombre" text="Nombre" />
+               <TableColumn fx:id="colDomicilio" text="Domicilio" />
+               <TableColumn fx:id="colEmail" text="Email" />
+               <TableColumn fx:id="colDNI" text="DNI" />
+               <TableColumn fx:id="colCategoria" text="CategoriaID" />
+            </columns>
+         </TableView>
+      </AnchorPane>
+   </left>
 
-</AnchorPane>
+
+</BorderPane>

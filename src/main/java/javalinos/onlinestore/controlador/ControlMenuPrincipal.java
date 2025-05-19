@@ -123,12 +123,12 @@ public class ControlMenuPrincipal extends ControlBase {
      * Muestra un mensaje de salida del programa.
      */
     public void salir() {
-        if (configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) iniciarVentana();
+        if (configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) cerrarVentana();
         else vMenuPrincipal.showMensaje("********* ¡¡Hasta pronto!! *********",true);
     }
 
     private void cerrarVentana() {
-
+        GestorEscenas.cerrarVentana("MenuPrincipal");
     }
 
 

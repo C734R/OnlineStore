@@ -4,6 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javalinos.onlinestore.vista.Interfaces.IVistaMenuPrincipal;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import static javalinos.onlinestore.OnlineStore.cMenuPrincipal;
 
 public class VistaMenuPrincipalJavaFX extends VistaBaseJavaFX implements IVistaMenuPrincipal {
@@ -13,11 +16,12 @@ public class VistaMenuPrincipalJavaFX extends VistaBaseJavaFX implements IVistaM
     @FXML private Button btnGestionPedidos;
     @FXML private Button btnSalir;
 
-
-    public void initialize() {
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
         btnGestionClientes.setOnAction(event -> cMenuPrincipal.iniciarVentana(1));
         btnGestionArticulos.setOnAction(event -> cMenuPrincipal.iniciarVentana(2));
         btnGestionPedidos.setOnAction(event -> cMenuPrincipal.iniciarVentana(3));
         btnSalir.setOnAction(event -> cMenuPrincipal.salir());
     }
+
 }

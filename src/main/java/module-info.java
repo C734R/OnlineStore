@@ -20,6 +20,7 @@ module javalinos.onlinestore {
     opens javalinos.onlinestore.controlador to javafx.fxml;
     opens javalinos.onlinestore.modelo.gestores to javafx.fxml;
     opens javalinos.onlinestore.modelo.DTO to javafx.fxml;
+    opens javalinos.onlinestore.vista.JavaFX to javafx.fxml;
 
     exports javalinos.onlinestore;
     exports javalinos.onlinestore.controlador;

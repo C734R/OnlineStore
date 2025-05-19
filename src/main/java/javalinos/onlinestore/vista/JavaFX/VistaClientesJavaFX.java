@@ -2,7 +2,6 @@ package javalinos.onlinestore.vista.JavaFX;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javalinos.onlinestore.controlador.ControlArticulos;
 import javalinos.onlinestore.controlador.ControlClientes;
 import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
@@ -14,7 +13,6 @@ import java.util.ResourceBundle;
 public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClientes {
 
     private ControlClientes cClientes;
-    private ControlArticulos cArticulos;
 
     @FXML private Button btnAddCliente;
     @FXML private Button btnModCliente;

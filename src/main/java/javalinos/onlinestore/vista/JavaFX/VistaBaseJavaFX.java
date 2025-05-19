@@ -5,17 +5,21 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javalinos.onlinestore.vista.Interfaces.IVistaBase;
 
+import javax.swing.text.html.parser.Parser;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
+import static javalinos.onlinestore.OnlineStore.vFactory;
 import static javalinos.onlinestore.vista.JavaFX.GestorEscenas.crearVentana;
-import static javalinos.onlinestore.vista.JavaFX.GestorEscenas.iniciarVentanaPrincipal;
 
 public class VistaBaseJavaFX extends Application implements IVistaBase, Initializable {
 
@@ -37,13 +41,13 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
     public void showMenu(int retorno) {
         switch (retorno) {
             case 1:
-                crearVentana(TipoVentana.GestionClientes);
+                crearVentana(TipoVentana.GestionClientes, vFactory.getVClientesRaiz());
                 break;
             case 2:
-                crearVentana(TipoVentana.GestionArticulos);
+                crearVentana(TipoVentana.GestionArticulos, vFactory.getVArticulosRaiz());
                 break;
             case 3:
-                crearVentana(TipoVentana.GestionPedidos);
+                crearVentana(TipoVentana.GestionPedidos, vFactory.getVPedidosRaiz());
                 break;
             default:
                 break;
@@ -58,7 +62,36 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
 
     @Override
     public int askInt(String mensaje, int min, int max, boolean reintentar, boolean sinFin, boolean error) {
-        return 0;
+        int integer, intentos = 0;
+        if(!reintentar) intentos = 2;
+
+        TextInputDialog dialogo = new TextInputDialog();
+        dialogo.setTitle("Introducción de enteros");
+        dialogo.setHeaderText(mensaje);
+        dialogo.setContentText("Número entero: ");
+
+        while(intentos < 3) {
+            try {
+                Optional<String> resultado = dialogo.showAndWait();
+
+                // Comprobar si es entero
+                if (resultado.isPresent()) {
+                    integer = Integer.parseInt(resultado.get());
+                }
+                else return -99999;
+
+                if (integer >= min && integer <= max) return integer;
+                else if (error) showMensajePausa("Error. Entrada fuera de rango. Introduce un número del " + min + " al " + max + ". " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
+            }
+            catch (InputMismatchException e) {
+                if (error)
+                    showMensajePausa("Error. Entrada inválida. Introduce un número del " + min + " al " + max + ". " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
+            }
+        }
+        if (reintentar && error) showMensajePausa("Error. Has sobrepasado el número de intentos. Volviendo...",true);
+        return -99999;
     }
 
     @Override

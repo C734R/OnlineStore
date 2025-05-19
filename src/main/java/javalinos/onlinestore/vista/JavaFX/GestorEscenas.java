@@ -1,15 +1,15 @@
 package javalinos.onlinestore.vista.JavaFX;
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
+import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+
+import static javalinos.onlinestore.OnlineStore.loadMVC;
+import static javalinos.onlinestore.OnlineStore.vFactory;
 
 public class GestorEscenas extends Application {
 
@@ -18,27 +18,52 @@ public class GestorEscenas extends Application {
     private static final String ID_MENU_PRINCIPAL = "MenuPrincipal";
 
     @Override
-    public void start(Stage primaryStage) {
-        ventanaPrincipal = primaryStage;
-        iniciarVentanaPrincipal();
+    public void start(Stage primaryStage) throws Exception {
+        try {
+            loadMVC();
+            ventanaPrincipal = primaryStage;
+
+            // Obtener la vista raíz desde FactoryVista
+            Parent raiz = vFactory.getVMenuPrincipalRaiz();
+            if (raiz == null) throw new IllegalStateException("Vista principal no cargada desde el FXML.");
+
+            // Configurar escena y propiedades de la ventana principal
+            ventanaPrincipal.setScene(new Scene(raiz));
+            ventanaPrincipal.setTitle("Menú Principal");
+            ventanaPrincipal.setResizable(false);
+
+            // Cierre de todas las ventanas abiertas si se cierra la principal
+            ventanaPrincipal.setOnCloseRequest(event -> {
+                ventanasSecundarias.values().forEach(Stage::close);
+                ventanasSecundarias.clear();
+                Platform.exit();
+            });
+
+            ventanaPrincipal.show();
+        }
+        catch (Exception e) {
+            System.out.println("Error al iniciar ventana:" + e);
+        }
     }
 
-    public static void crearVentana(TipoVentana tipoVentana, Stage... stage) {
+    public static void crearVentana(TipoVentana tipoVentana, Parent raiz, Stage... stage) {
         // Si es secundaria y ya está abierta, se enfoca en vez de crearla nueva
         if (!tipoVentana.nombre.equals(ID_MENU_PRINCIPAL) && ventanasSecundarias.containsKey(tipoVentana.nombre)) {
-            ventanasSecundarias.get(tipoVentana.nombre).toFront();
+            Stage ventanaExistente = ventanasSecundarias.get(tipoVentana.nombre);
+            ventanaExistente.show();
+            ventanaExistente.toFront();
             return;
         }
 
         try {
             // Definir raíz ventanas
-            Parent raiz = FXMLLoader.load(Objects.requireNonNull(GestorEscenas.class.getResource(tipoVentana.ruta)));
+            //Parent raiz = FXMLLoader.load(Objects.requireNonNull(GestorEscenas.class.getResource(tipoVentana.ruta)));
             // Si se pasa un stage (menu principal) cargar stage, si no, nuevo
             Stage nuevaVentana = (stage.length > 0) ? stage[0] : new Stage();
 
             // Definir propiedades ventana
-            nuevaVentana.setTitle(tipoVentana.titulo);
             nuevaVentana.setScene(new Scene(raiz));
+            nuevaVentana.setTitle(tipoVentana.titulo);
             nuevaVentana.setResizable(false);
             nuevaVentana.show();
 
@@ -61,27 +86,31 @@ public class GestorEscenas extends Application {
                 // Registrar nueva ventana
                 ventanasSecundarias.put(tipoVentana.nombre, nuevaVentana);
                 // Definir evento para eliminar ventana
-                nuevaVentana.setOnCloseRequest(e -> ventanasSecundarias.remove(tipoVentana.nombre));
+                nuevaVentana.setOnCloseRequest(e -> {
+                    e.consume();
+                    nuevaVentana.hide();
+                });
             }
 
         }
-        catch (IOException e)
+        catch (Exception e)
         {
             // Lanzar excepción si falla carga ventana
-            throw new RuntimeException("Error al cargar la ventana: " + tipoVentana.ruta);
+            throw new RuntimeException("Error al cargar la ventana: " + tipoVentana.nombre + " (" + tipoVentana.ruta + ")", e);
         }
     }
 
     public static void cerrarVentana(String idVentana) {
-        Stage ventana = ventanasSecundarias.remove(idVentana);
-        if (ventana != null) ventana.close();
-    }
-
-    public static void iniciarVentanaPrincipal() {
-        if (ventanaPrincipal != null && ventanaPrincipal.getScene() == null) {
-            crearVentana(TipoVentana.MenuPrincipal, ventanaPrincipal);
+        if (ID_MENU_PRINCIPAL.equals(idVentana)) {
+            if (ventanaPrincipal != null) {
+                ventanaPrincipal.close();
+                ventanaPrincipal = null;
+                Platform.exit();
+            }
+        } else {
+            Stage ventana = ventanasSecundarias.remove(idVentana);
+            if (ventana != null) ventana.close();
         }
     }
-
 
 }
