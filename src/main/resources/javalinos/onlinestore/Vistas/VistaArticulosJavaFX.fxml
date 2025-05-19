@@ -1,14 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="javalinos.onlinestore.vista.JavaFX.VistaArticulosJavaFX"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="400.0" prefWidth="600.0"
+            xmlns="http://javafx.com/javafx/17.0.12"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="javalinos.onlinestore.vista.JavaFX.VistaArticulosJavaFX">
 
-</AnchorPane>
+    <top>
+        <fx:include source="VistaBaseJavaFX.fxml" />
+    </top>
+
+    <left>
+        <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
+
+            <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0"
+                    mnemonicParsing="false" text="Volver"
+                    onAction="#onBtnVolverClick" />
+
+            <Button fx:id="btnAddArticulo" layoutX="71.0" layoutY="29.0"
+                    mnemonicParsing="false" text="Añadir Artículo"
+                    onAction="#onBtnAddArticuloClick" />
+
+            <Button fx:id="btnModArticulo" layoutX="188.0" layoutY="29.0"
+                    mnemonicParsing="false" text="Modificar Articulo"
+                    onAction="#onBtnModArticuloClick" />
+
+            <Button fx:id="btnDeleteArticulo" layoutX="318.0" layoutY="29.0"
+                    mnemonicParsing="false" text="Eliminar Articulo"
+                    onAction="#onBtnDeleteArticuloClick" />
+
+            <Button fx:id="btnListArticulo" layoutX="438.0" layoutY="29.0"
+                    mnemonicParsing="false" text="Mostrar Articulos"
+                    onAction="#onBtnListArticuloClick" />
+
+            <TableView fx:id="tblArticulos" layoutX="21.0" layoutY="67.0"
+                       prefHeight="252.0" prefWidth="557.0">
+                <columns>
+                    <TableColumn fx:id="columnaID" text="Id" />
+                    <TableColumn fx:id="columnaCodigo" text="Codigo" />
+                    <TableColumn fx:id="columnaDescripcion" text="Descripción" />
+                    <TableColumn fx:id="columnaPrecio" text="Precio" />
+                    <TableColumn fx:id="columnaPreparacion" text="Preparación" />
+                </columns>
+            </TableView>
+
+        </AnchorPane>
+    </left>
+</BorderPane>
