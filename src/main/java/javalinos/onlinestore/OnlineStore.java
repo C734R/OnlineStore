@@ -80,7 +80,7 @@ public class OnlineStore {
         // Aplicar autocierre al uso de la conexión por parte de ModeloFactory
         try (FactoryModelo factory = new FactoryModelo()) {
             mFactory = factory;
-            loadMVC();
+            //loadMVC();
             //if (!precargaDatos(configuracion)) return;
             iniciarPrograma();
         }
@@ -143,12 +143,13 @@ public class OnlineStore {
     /**
      * Inicia el menú principal y controla el flujo del programa.
      */
-    private static void iniciarPrograma(){
+    private static void iniciarPrograma() throws Exception {
         if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) Application.launch(GestorEscenas.class);
         else iniciarConsola();
     }
 
-    private static void iniciarConsola() {
+    private static void iniciarConsola() throws Exception {
+        loadMVC();
         int opcion;
         while(true) {
             opcion = cMenuPrincipal.iniciar();
@@ -172,7 +173,7 @@ public class OnlineStore {
     /**
      * Carga el modelo-vista-controlador (MVC) según el modo de configuración.
      */
-    private static void loadMVC() throws Exception {
+    public static void loadMVC() throws Exception {
 
             mFactory = new FactoryModelo();
             vFactory = new FactoryVista();

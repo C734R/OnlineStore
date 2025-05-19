@@ -10,14 +10,15 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClientes {
+import static javalinos.onlinestore.OnlineStore.cClientes;
 
-    private ControlClientes cClientes;
+public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClientes {
 
     @FXML private Button btnAddCliente;
     @FXML private Button btnModCliente;
     @FXML private Button btnDeleteCliente;
     @FXML private Button btnListClientes;
+    @FXML private Button btnVolver;
 
     @FXML private TableView<ClienteDTO> tblClientes;
     @FXML private TableColumn<ClienteDTO, String> colNombre;
@@ -30,11 +31,6 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
     @FXML private TextField txtNomeCliente;
     @FXML private TextField txtDNI;
     @FXML private TextField txtEmail;
-
-    public VistaClientesJavaFX(ControlClientes cClientes) {
-        this.cClientes = cClientes;
-    }
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
