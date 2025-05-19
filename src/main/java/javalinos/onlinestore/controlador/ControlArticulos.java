@@ -102,7 +102,7 @@ public class ControlArticulos extends ControlBase {
     public void addArticulo()
     {
         ArticuloDTO articuloDTO;
-        vArticulos.showMensaje("******** Añadir Artículo ********", true);
+        vArticulos.showMensaje(" Añadir Artículo ", true);
         try
         {
             int numeroArticulo = mArticulos.getArticulosDTO().size();

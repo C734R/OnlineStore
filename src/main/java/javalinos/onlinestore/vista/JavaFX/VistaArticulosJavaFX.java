@@ -65,6 +65,19 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
 
     @Override
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < articulosDTO.size(); i++) {
+            ArticuloDTO articulo = articulosDTO.get(i);
+            builder.append(i + 1).append(" - ")
+                    .append(articulo.getCodigo()).append(" - ")
+                    .append(articulo.getDescripcion()).append("\n");
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Listado de Artículos");
+        alert.setHeaderText("Artículos disponibles:");
+        alert.setContentText(builder.toString());
+        alert.showAndWait();
 
     }
 
