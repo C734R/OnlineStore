@@ -17,23 +17,23 @@
 
             <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0"
                     mnemonicParsing="false" text="Volver"
-                    onAction="#onBtnVolverClick" />
+                    onAction="#btnVolver" />
 
             <Button fx:id="btnAddArticulo" layoutX="71.0" layoutY="29.0"
                     mnemonicParsing="false" text="Añadir Artículo"
-                    onAction="#onBtnAddArticuloClick" />
+                    onAction="#btnAddArticulo" />
 
             <Button fx:id="btnModArticulo" layoutX="188.0" layoutY="29.0"
                     mnemonicParsing="false" text="Modificar Articulo"
-                    onAction="#onBtnModArticuloClick" />
+                    onAction="#btnModArticulo" />
 
             <Button fx:id="btnDeleteArticulo" layoutX="318.0" layoutY="29.0"
                     mnemonicParsing="false" text="Eliminar Articulo"
-                    onAction="#onBtnDeleteArticuloClick" />
+                    onAction="#btnDeleteArticulo" />
 
             <Button fx:id="btnListArticulo" layoutX="438.0" layoutY="29.0"
                     mnemonicParsing="false" text="Mostrar Articulos"
-                    onAction="#onBtnListArticuloClick" />
+                    onAction="#btnListArticulo" />
 
             <TableView fx:id="tblArticulos" layoutX="21.0" layoutY="67.0"
                        prefHeight="252.0" prefWidth="557.0">
