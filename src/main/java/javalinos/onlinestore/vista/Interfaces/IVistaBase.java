@@ -18,6 +18,7 @@ public interface IVistaBase {
     <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) ;
     LocalDate askFecha(String mensaje);
     void showMensajePausa(String mensaje, boolean salto);
+
     String askStringOpcional(String mensaje, int maxLongitud);
     Float askFloatOpcional(String mensaje, float min, float max);
     Float askPrecioOpcional(String mensaje, float min, float max);

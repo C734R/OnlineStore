@@ -24,7 +24,7 @@ public class FactoryModelo implements AutoCloseable {
                     "1234", "OnlineStore");
             this.factoryDAO = new FactoryDAO(conexion.getConexion());
         }
-        else if (configuracion == Configuracion.JPA_HIBERNATE_MYSQL) {
+        else if (configuracion == Configuracion.JPA_HIBERNATE_MYSQL || configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) {
             this.conexion = null;
             this.factoryDAO = new FactoryDAO(null);
         }

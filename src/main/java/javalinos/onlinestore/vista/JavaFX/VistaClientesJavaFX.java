@@ -7,10 +7,12 @@ import javalinos.onlinestore.modelo.DTO.CategoriaDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaClientes;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static javalinos.onlinestore.OnlineStore.cClientes;
+import static javalinos.onlinestore.OnlineStore.vClientes;
+import static javalinos.onlinestore.utils.Utilidades.checkEmail;
+import static javalinos.onlinestore.utils.Utilidades.checkNIF;
 
 public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClientes {
 
@@ -18,6 +20,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
     @FXML private Button btnModCliente;
     @FXML private Button btnDeleteCliente;
     @FXML private Button btnListClientes;
+    @FXML private Button btnListClientesCategoria;
     @FXML private Button btnVolver;
 
     @FXML private TableView<ClienteDTO> tblClientes;
@@ -27,57 +30,134 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
     @FXML private TableColumn<ClienteDTO, String> colDNI;
     @FXML private TableColumn<ClienteDTO, String> colCategoria;
 
-
-    @FXML private TextField txtNomeCliente;
-    @FXML private TextField txtDNI;
-    @FXML private TextField txtEmail;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Suscripciones botones
-        btnAddCliente.setOnAction(event -> addCliente());
-        btnDeleteCliente.setOnAction(event -> removeCliente());
-        btnListClientes.setOnAction(event -> listarClientes());
-        btnModCliente.setOnAction(event -> modCliente());
-    }
-
-    private void listarClientes() {
-
-        cClientes.showListClientes();
-    }
-
-    private void addCliente() {
-        cClientes.addCliente();
-    }
-
-    private void removeCliente() {
-        cClientes.removeCliente();
-    }
-
-    private void modCliente() {
-        cClientes.modCliente();
+        btnAddCliente.setOnAction(event -> cClientes.addCliente());
+        btnDeleteCliente.setOnAction(event -> cClientes.removeCliente());
+        btnModCliente.setOnAction(event -> cClientes.modCliente());
+        btnListClientes.setOnAction(event -> cClientes.showListClientes());
+        btnListClientesCategoria.setOnAction(event -> cClientes.showListClientesCategoria());
+        btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionClientes"));
     }
 
     @Override
     public String askNIF(boolean modificar, boolean reintentar, boolean sinFin) {
-
-        return "";
+        String nif;
+        int intentos = 0;
+        if (!reintentar) intentos = 2;
+        while (intentos < 3) {
+            if (modificar) nif = askString("Introduce el nuevo NIF: ", 9, 15, false, false, false);
+            else nif = askString("Introduce el NIF: ", 9, 15, false, false, false);
+            if (nif == null || !checkNIF(nif)) {
+                showMensajePausa("El DNI introducido es erróneo. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
+            } else if (checkNIF(nif)) return nif;
+        }
+        if (reintentar) showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
+        return null;
     }
 
     @Override
     public String askEmail(boolean modificar, boolean reintentar, boolean sinFin) {
-        return "";
+        String email;
+        int intentos = 0;
+        if (!reintentar) intentos = 2;
+        while (intentos < 3) {
+            if (modificar) email = askString("Introduce el nuevo email: ", 4, 50, false, false, false);
+            else email = askString("Introduce el email: ", 4, 50, false, false, false);
+            if (email == null || !checkEmail(email)) {
+                showMensajePausa("El email introducido es erróneo. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
+            } else return email;
+        }
+        if (reintentar) showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
+        return null;
     }
 
     @Override
     public int askMetodoEliminar() {
-        return 0;
+        Map<String, Integer> mapa = Map.of(
+                "Por NIF", 1,
+                "Por Email", 2,
+                "Volver", 0
+        );
+        String respuesta = null;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int metodo = 0;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el método de eliminación");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+        } else return 0;
+        switch (respuesta) {
+            case "Por NIF":
+                metodo = mapa.get("Por NIF");
+                break;
+            case "Por Email":
+                metodo = mapa.get("Por Email");
+                break;
+            case "Volver":
+                metodo = mapa.get("Volver");
+                break;
+            default:
+                return 0;
+        }
+        if (metodo == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+            return metodo;
+        }
+        else return metodo;
     }
+
 
     @Override
     public int askCategoriaCliente() {
-        return 0;
-    }
+
+        Map<String, Integer> mapa = Map.of(
+                "Estándar", 1,
+                "Premium", 2,
+                "Volver", 0
+        );
+        String respuesta = null;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int categoria = 0;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione la categoría del cliente");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+        } else return 0;
+        switch (respuesta) {
+            case "Estándar":
+                categoria = mapa.get("Estándar");
+                break;
+            case "Premium":
+                categoria = mapa.get("Premium");
+                break;
+            case "Volver":
+                categoria = mapa.get("Volver");
+                break;
+            default:
+                return 0;
+        }
+        if (categoria == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+            return categoria;
+        }
+        else return categoria;
+}
 
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
@@ -92,7 +172,8 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public void showListClientesCategoria(List<ClienteDTO> clientesDTO, CategoriaDTO categoriaDTO) {
-
+        tblClientes.getItems().clear();
+        tblClientes.getItems().addAll(clientesDTO);
     }
 
     @Override
