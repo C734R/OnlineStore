@@ -24,4 +24,6 @@ public class VistaMenuPrincipalJavaFX extends VistaBaseJavaFX implements IVistaM
         btnSalir.setOnAction(event -> cMenuPrincipal.salir());
     }
 
+
+
 }
