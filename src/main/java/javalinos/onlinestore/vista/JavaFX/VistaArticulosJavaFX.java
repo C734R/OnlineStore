@@ -11,7 +11,7 @@ import java.util.Map;
 import static javalinos.onlinestore.OnlineStore.cArticulos;
 import static javalinos.onlinestore.OnlineStore.cClientes;
 
-public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
+public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
 
     @FXML private Button btnVolver;
     @FXML private Button btnAddArticulo;
@@ -35,7 +35,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
             float precio = Float.parseFloat(txtPrecio.getText());
             int preparacion = Integer.parseInt(txtPreparacion.getText());
             int stock = Integer.parseInt(txtStock.getText());
-            ArticuloDTO articulo = new ArticuloDTO(descripcion, precio, preparacion);
+            ArticuloDTO articulo = new ArticuloDTO(null, descripcion, precio, preparacion);
             cArticulos.addArticulo(articulo, stock);
         });
         btnDeleteArticulo.setOnAction(event -> cArticulos.removeArticulo());
