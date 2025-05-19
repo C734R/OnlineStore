@@ -1,17 +1,18 @@
 package javalinos.onlinestore.vista.JavaFX;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
+
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import static javalinos.onlinestore.OnlineStore.cArticulos;
-import static javalinos.onlinestore.OnlineStore.cClientes;
 
-public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
+public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
 
     @FXML private Button btnVolver;
     @FXML private Button btnAddArticulo;
@@ -26,28 +27,19 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
     @FXML private TableColumn<ArticuloDTO, Float> columnaPrecio;
     @FXML private TableColumn<ArticuloDTO, Integer> columnaPreparacion;
 
-    @FXML private TextField txtDescripcion, txtPrecio, txtPreparacion, txtStock;
-
-    @FXML
-    public void initialize() {
-        btnAddArticulo.setOnAction(event -> {
-            String descripcion = txtDescripcion.getText();
-            float precio = Float.parseFloat(txtPrecio.getText());
-            int preparacion = Integer.parseInt(txtPreparacion.getText());
-            int stock = Integer.parseInt(txtStock.getText());
-            ArticuloDTO articulo = new ArticuloDTO(null, descripcion, precio, preparacion);
-            cArticulos.addArticulo(articulo, stock);
-        });
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        btnAddArticulo.setOnAction(event -> cArticulos.addArticulo());
         btnDeleteArticulo.setOnAction(event -> cArticulos.removeArticulo());
         btnModArticulo.setOnAction(event -> cArticulos.updateArticulo());
         btnListArticulo.setOnAction(event -> cArticulos.showListArticulos());
         btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionArticulos"));
 
-        columnaID.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<Integer>());
-        columnaCodigo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCodigo()));
-        columnaDescripcion.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDescripcion()));
-        columnaPrecio.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPrecio()));
-        columnaPreparacion.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getMinutosPreparacion()));
+//        columnaID.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<Integer>());
+//        columnaCodigo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCodigo()));
+//        columnaDescripcion.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDescripcion()));
+//        columnaPrecio.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPrecio()));
+//        columnaPreparacion.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getMinutosPreparacion()));
     }
 
     @Override
@@ -66,9 +58,14 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
                 } catch (NumberFormatException ignored) {}
                 dialog.setHeaderText("Valor inválido. Introduce un número entre " + min + " y " + max);
             } else {
-                return -1f; // Cancelado
+                return -1f;
             }
         }
+    }
+
+    @Override
+    public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+
     }
 
     public String askCodigo() {
@@ -96,6 +93,10 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
         alert.showAndWait();
     }
 
+    @Override
+    public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
+
+    }
 
 
     public void showArticulo(ArticuloDTO articuloDTO) {
@@ -115,20 +116,6 @@ public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IV
     @Override
     public void showStockArticulos(Map<ArticuloDTO, Integer> articuloStockMap) {
         showListArticulosStock(articuloStockMap);
-    }
-
-
-    public void btnAddArticulo(ActionEvent actionEvent) {
-        cArticulos.addArticulo();
-    }
-    public void btnDeleteArticulo(ActionEvent actionEvent) {
-        cArticulos.removeArticulo();
-    }
-    public void btnModArticulo(ActionEvent actionEvent) {
-        cArticulos.updateArticulo();
-    }
-    public void btnListArticulo(ActionEvent actionEvent) {
-        cArticulos.showListArticulos();
     }
 
 }

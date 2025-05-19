@@ -12,31 +12,20 @@
         <fx:include source="VistaBaseJavaFX.fxml" />
     </top>
 
-    <left>
+    <center>
         <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
 
-            <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0"
-                    mnemonicParsing="false" text="Volver"
-                    onAction="#btnVolver" />
+            <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0" mnemonicParsing="false" text="Volver"/>
 
-            <Button fx:id="btnAddArticulo" layoutX="71.0" layoutY="29.0"
-                    mnemonicParsing="false" text="Añadir Artículo"
-                    onAction="#btnAddArticulo" />
+            <Button fx:id="btnAddArticulo" layoutX="71.0" layoutY="29.0" mnemonicParsing="false" text="Añadir Artículo"/>
 
-            <Button fx:id="btnModArticulo" layoutX="188.0" layoutY="29.0"
-                    mnemonicParsing="false" text="Modificar Articulo"
-                    onAction="#btnModArticulo" />
+            <Button fx:id="btnModArticulo" layoutX="188.0" layoutY="29.0" mnemonicParsing="false" text="Modificar Articulo"/>
 
-            <Button fx:id="btnDeleteArticulo" layoutX="318.0" layoutY="29.0"
-                    mnemonicParsing="false" text="Eliminar Articulo"
-                    onAction="#btnDeleteArticulo" />
+            <Button fx:id="btnDeleteArticulo" layoutX="318.0" layoutY="29.0" mnemonicParsing="false" text="Eliminar Articulo"/>
 
-            <Button fx:id="btnListArticulo" layoutX="438.0" layoutY="29.0"
-                    mnemonicParsing="false" text="Mostrar Articulos"
-                    onAction="#btnListArticulo" />
+            <Button fx:id="btnListArticulo" layoutX="438.0" layoutY="29.0" mnemonicParsing="false" text="Mostrar Articulos"/>
 
-            <TableView fx:id="tblArticulos" layoutX="21.0" layoutY="67.0"
-                       prefHeight="252.0" prefWidth="557.0">
+            <TableView fx:id="tblArticulos" layoutX="21.0" layoutY="67.0" prefHeight="252.0" prefWidth="557.0">
                 <columns>
                     <TableColumn fx:id="columnaID" text="Id" />
                     <TableColumn fx:id="columnaCodigo" text="Codigo" />
@@ -47,5 +36,5 @@
             </TableView>
 
         </AnchorPane>
-    </left>
+    </center>
 </BorderPane>
