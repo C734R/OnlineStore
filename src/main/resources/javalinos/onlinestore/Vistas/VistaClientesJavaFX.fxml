@@ -10,10 +10,11 @@
    <left>
       <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
          <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0" mnemonicParsing="false" text="Volver" />
-         <Button fx:id="btnAddCliente" layoutX="74.0" layoutY="22.0" mnemonicParsing="false" text="Añadir cliente" />
-         <Button fx:id="btnModCliente" layoutX="189.0" layoutY="22.0" mnemonicParsing="false" text="Modificar cliente" />
-         <Button fx:id="btnDeleteCliente" layoutX="317.0" layoutY="22.0" mnemonicParsing="false" text="Eliminar cliente" />
-         <Button fx:id="btnListClientes" layoutX="437.0" layoutY="22.0" mnemonicParsing="false" text="Listar Clientes" />
+         <Button fx:id="btnAddCliente" layoutX="21.0" layoutY="25.0" mnemonicParsing="false" text="Añadir cliente" />
+         <Button fx:id="btnModCliente" layoutX="127.0" layoutY="25.0" mnemonicParsing="false" text="Modificar cliente" />
+         <Button fx:id="btnDeleteCliente" layoutX="253.0" layoutY="25.0" mnemonicParsing="false" text="Eliminar cliente" />
+         <Button fx:id="btnListClientes" layoutX="488.0" layoutY="25.0" mnemonicParsing="false" text="Listar Clientes" />
+         <Button fx:id="btnListClientesCategoria" layoutX="378.0" layoutY="25.0" mnemonicParsing="false" text="Listar Clientes Categoría" />
 
          <TableView fx:id="tblClientes" layoutX="21.0" layoutY="67.0" prefHeight="252.0" prefWidth="557.0">
             <columns>

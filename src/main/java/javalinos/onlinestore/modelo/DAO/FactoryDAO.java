@@ -24,7 +24,7 @@ public class FactoryDAO {
     public IClienteDAO getDAOCliente() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new ClienteDAOMySQL(conexion);
-            case JPA_HIBERNATE_MYSQL -> new ClienteDAOHibernate();
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> new ClienteDAOHibernate();
             default -> null;
         };
     }
@@ -32,7 +32,7 @@ public class FactoryDAO {
     public IArticuloDAO getDAOArticulo() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new ArticuloDAOMySQL(conexion, factoryDAO);
-            case JPA_HIBERNATE_MYSQL -> new ArticuloDAOHibernate();
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> new ArticuloDAOHibernate();
             default -> null;
         };
     }
@@ -40,7 +40,7 @@ public class FactoryDAO {
     public IPedidoDAO getDAOPedido() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new PedidoDAOMySQL(conexion, factoryDAO);
-            case JPA_HIBERNATE_MYSQL -> new PedidoDAOHibernate();
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> new PedidoDAOHibernate();
             default -> null;
         };
     }
@@ -48,7 +48,7 @@ public class FactoryDAO {
     public ICategoriaDAO getDAOCategoria() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new CategoriaDAOMySQL(conexion);
-            case JPA_HIBERNATE_MYSQL -> new CategoriaDAOHibernate();
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> new CategoriaDAOHibernate();
             default -> null;
         };
     }
@@ -56,7 +56,7 @@ public class FactoryDAO {
     public IArticuloStockDAO getDAOArticuloStock() throws SQLException {
         return switch (configuracion) {
             case JDBC_MYSQL -> new ArticuloStockDAOMySQL(conexion);
-            case JPA_HIBERNATE_MYSQL -> new ArticuloStockDAOHibernate();
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> new ArticuloStockDAOHibernate();
             default -> null;
         };
     }

@@ -8,8 +8,7 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
-import static javalinos.onlinestore.OnlineStore.loadMVC;
-import static javalinos.onlinestore.OnlineStore.vFactory;
+import static javalinos.onlinestore.OnlineStore.*;
 
 public class GestorEscenas extends Application {
 
@@ -40,6 +39,7 @@ public class GestorEscenas extends Application {
             });
 
             ventanaPrincipal.show();
+            cMenuPrincipal.iniciar();
         }
         catch (Exception e) {
             System.out.println("Error al iniciar ventana:" + e);
@@ -109,7 +109,10 @@ public class GestorEscenas extends Application {
             }
         } else {
             Stage ventana = ventanasSecundarias.remove(idVentana);
-            if (ventana != null) ventana.close();
+            if (ventana != null) {
+                Stage ventanaExistente = ventanasSecundarias.get(idVentana);
+                ventanaExistente.hide();
+            }
         }
     }
 

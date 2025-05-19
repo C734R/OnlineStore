@@ -58,7 +58,16 @@ public class ControlMenuPrincipal extends ControlBase {
     }
 
     private void iniciarVentana() {
-        vMenuPrincipal.showMenu(1);
+        vMenuPrincipal.showMensaje(" #### Ejecutando aplicación en modo: " + configuracion.name() + " ####",true);
+        while(!iniciado)
+            if(vMenuPrincipal.askBoolean("¿Deseas realizar la precarga de datos?", true, false)){
+                if(!precargaDatos()) {
+                    vMenuPrincipal.showMensajePausa("Error al realizar la precarga de datos",true);
+                    continue;
+                }
+                iniciado = true;
+                vMenuPrincipal.showMenu(1);
+            }
     }
 
     /**
