@@ -10,18 +10,18 @@
     <left>
         <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
             <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0" mnemonicParsing="false" text="Volver" />
-            <Button fx:id="btnAddCliente" layoutX="74.0" layoutY="22.0" mnemonicParsing="false" text="Añadir cliente" />
-            <Button fx:id="btnModCliente" layoutX="189.0" layoutY="22.0" mnemonicParsing="false" text="Modificar cliente" />
-            <Button fx:id="btnDeleteCliente" layoutX="317.0" layoutY="22.0" mnemonicParsing="false" text="Eliminar cliente" />
-            <Button fx:id="btnListClientes" layoutX="437.0" layoutY="22.0" mnemonicParsing="false" text="Listar Clientes" />
+            <Button fx:id="btnAddArticulo" layoutX="71.0" layoutY="29.0" mnemonicParsing="false" text="Añadir Artículo" />
+            <Button fx:id="btnModArticulo" layoutX="188.0" layoutY="29.0" mnemonicParsing="false" text="Modificar Articulo" />
+            <Button fx:id="btnDeleteArticulo" layoutX="318.0" layoutY="29.0" mnemonicParsing="false" text="EliminarArticulo" />
+            <Button fx:id="btnListArticulo" layoutX="438.0" layoutY="29.0" mnemonicParsing="false" text="Mostrar Articulo" />
 
             <TableView fx:id="tblClientes" layoutX="21.0" layoutY="67.0" prefHeight="252.0" prefWidth="557.0">
                 <columns>
-                    <TableColumn fx:id="colNombre" text="Nombre" />
-                    <TableColumn fx:id="colDomicilio" text="Domicilio" />
-                    <TableColumn fx:id="colEmail" text="Email" />
-                    <TableColumn fx:id="colDNI" text="DNI" />
-                    <TableColumn fx:id="colCategoria" text="CategoriaID" />
+                    <TableColumn fx:id="columnaID" text="Id" />
+                    <TableColumn fx:id="columnaCodigo" text="Codigo" />
+                    <TableColumn fx:id="columnaDescripcion" text="Descripción" />
+                    <TableColumn fx:id="columnaPrecio" text="Precio" />
+                    <TableColumn fx:id="columnaPreparacion" text="Preparación" />
                 </columns>
             </TableView>
         </AnchorPane>
@@ -29,4 +29,3 @@
 
 
 </BorderPane>
-    
