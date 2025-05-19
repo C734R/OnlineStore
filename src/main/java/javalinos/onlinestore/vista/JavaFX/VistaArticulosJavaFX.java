@@ -1,5 +1,6 @@
 package javalinos.onlinestore.vista.JavaFX;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
@@ -7,7 +8,10 @@ import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
 import java.util.List;
 import java.util.Map;
 
-public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
+import static javalinos.onlinestore.OnlineStore.cArticulos;
+import static javalinos.onlinestore.OnlineStore.cClientes;
+
+public abstract class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArticulos {
 
     @FXML private Button btnVolver;
     @FXML private Button btnAddArticulo;
@@ -22,8 +26,23 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
     @FXML private TableColumn<ArticuloDTO, Float> columnaPrecio;
     @FXML private TableColumn<ArticuloDTO, Integer> columnaPreparacion;
 
+    @FXML private TextField txtDescripcion, txtPrecio, txtPreparacion, txtStock;
+
     @FXML
     public void initialize() {
+        btnAddArticulo.setOnAction(event -> {
+            String descripcion = txtDescripcion.getText();
+            float precio = Float.parseFloat(txtPrecio.getText());
+            int preparacion = Integer.parseInt(txtPreparacion.getText());
+            int stock = Integer.parseInt(txtStock.getText());
+            ArticuloDTO articulo = new ArticuloDTO(null, descripcion, precio, preparacion);
+            cArticulos.addArticulo(articulo, stock);
+        });
+        btnDeleteArticulo.setOnAction(event -> cArticulos.removeArticulo());
+        btnModArticulo.setOnAction(event -> cArticulos.updateArticulo());
+        btnListArticulo.setOnAction(event -> cArticulos.showListArticulos());
+        btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionArticulos"));
+
         columnaID.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<Integer>());
         columnaCodigo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCodigo()));
         columnaDescripcion.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDescripcion()));
@@ -52,12 +71,16 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         }
     }
 
-    @Override
-    public void showListArticulos(List<ArticuloDTO> articulosDTO) {
-        tblArticulos.getItems().setAll(articulosDTO);
+    public String askCodigo() {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Introducir Código");
+        dialog.setHeaderText("Introduce el código del artículo:");
+        dialog.setContentText("Código:");
+
+        var result = dialog.showAndWait();
+        return result.orElse(null);
     }
 
-    @Override
     public void showListArticulosStock(Map<ArticuloDTO, Integer> articuloStockMap) {
         StringBuilder builder = new StringBuilder();
         articuloStockMap.forEach((articulo, stock) -> {
@@ -73,21 +96,8 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         alert.showAndWait();
     }
 
-    @Override
-    public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < articulosDTO.size(); i++) {
-            builder.append(i + 1).append(". ").append(articulosDTO.get(i).getDescripcion()).append("\n");
-        }
 
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Lista Numerada");
-        alert.setHeaderText("Artículos:");
-        alert.setContentText(builder.toString());
-        alert.showAndWait();
-    }
 
-    @Override
     public void showArticulo(ArticuloDTO articuloDTO) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Detalles del Artículo");
@@ -106,29 +116,19 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
     public void showStockArticulos(Map<ArticuloDTO, Integer> articuloStockMap) {
         showListArticulosStock(articuloStockMap);
     }
-    @FXML
-    private void onBtnAddArticuloClick() {
-        System.out.println("Añadir artículo clicado");
-    }
 
-    @FXML
-    private void onBtnModArticuloClick() {
-        System.out.println("Modificar artículo clicado");
-    }
 
-    @FXML
-    private void onBtnDeleteArticuloClick() {
-        System.out.println("Eliminar artículo clicado");
+    public void btnAddArticulo(ActionEvent actionEvent) {
+        cArticulos.addArticulo();
     }
-
-    @FXML
-    private void onBtnListArticuloClick() {
-        System.out.println("Mostrar artículos clicado");
+    public void btnDeleteArticulo(ActionEvent actionEvent) {
+        cArticulos.removeArticulo();
     }
-
-    @FXML
-    private void onBtnVolverClick() {
-        System.out.println("Volver clicado");
+    public void btnModArticulo(ActionEvent actionEvent) {
+        cArticulos.updateArticulo();
+    }
+    public void btnListArticulo(ActionEvent actionEvent) {
+        cArticulos.showListArticulos();
     }
 
 }
