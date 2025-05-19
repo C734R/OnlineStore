@@ -118,6 +118,7 @@ public class ArticuloDTO {
         this.minutosPreparacion = minutosPreparacion;
     }
 
+
     /**
      * Devuelve la representación textual del artículo.
      * @return string con los datos del artículo.
@@ -128,5 +129,10 @@ public class ArticuloDTO {
                 "Descripción: " + descripcion + "\n" +
                 "Precio " + precio + " €\n" +
                 "Tiempo de preparación: " + minutosPreparacion + " minutos";
+    }
+
+
+    public String getId() {
+        return "";
     }
 }
