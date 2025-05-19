@@ -15,87 +15,47 @@ import javalinos.onlinestore.vista.Interfaces.IVistaPedidos;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import static javalinos.onlinestore.OnlineStore.cClientes;
 
 public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos {
     private ControlPedidos cPedidos;
 
-    @FXML
-    private TableView<PedidoDTO> tablaPedidos;
+    @FXML private TableView<PedidoDTO> tablaPedidos;
+
+    @FXML private TableColumn<PedidoDTO, Integer> columnaNumero;
+    @FXML private TableColumn<PedidoDTO, ClienteDTO> columnaCliente;
+    @FXML private TableColumn<PedidoDTO, ArticuloDTO> columnaArticulo;
+    @FXML private TableColumn<PedidoDTO, Integer> columnaCantidad;
+    @FXML private TableColumn<PedidoDTO, LocalDate> columnaFecha;
+    @FXML private TableColumn<PedidoDTO, Float> columnaEnvio;
+    @FXML private TableColumn<PedidoDTO, Float> columnaPrecio;
+
+    @FXML private Button botonNuevoPedido;
+    @FXML private Button botonEliminarPedido;
+    @FXML private Button botonEditarPedido;
+    @FXML private Button botonListarTodosPedidos;
+    @FXML private Button botonListarPedidosPendientes;
+    @FXML private Button botonListarPedidosEnviados;
+    @FXML private Button botonVolver;
+
 
     @FXML
-    private TableColumn<PedidoDTO, Integer> columnaNumero;
-    @FXML
-    private TableColumn<PedidoDTO, ClienteDTO> columnaCliente;
-    @FXML
-    private TableColumn<PedidoDTO, String> columnaArticulo;
-    @FXML
-    private TableColumn<PedidoDTO, Integer> columnaCantidad;
-    @FXML
-    private TableColumn<PedidoDTO, LocalDate> columnaFecha;
-    @FXML
-    private TableColumn<PedidoDTO, Float> columnaEnvio;
-    @FXML
-    private TableColumn<PedidoDTO, Float> columnaPrecio;
-
-    @FXML
-    private Button botonNuevoPedido;
-    @FXML
-    private Button botonEliminarPedido;
-    @FXML
-    private Button botonEditarPedido;
-    @FXML
-    private Button botonListarTodosPedidos;
-    @FXML
-    private Button botonListarPedidosPendientes;
-    @FXML
-    private Button botonListarPedidosEnviados;
-
-    public VistaPedidosJavaFX(ControlArticulos cArticulos) {
-        this.cPedidos = cPedidos;
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        columnaNumero.setCellValueFactory(new PropertyValueFactory<>("numero"));
-        columnaCliente.setCellValueFactory(new PropertyValueFactory<>("cliente"));
-        columnaArticulo.setCellValueFactory(new PropertyValueFactory<>("articulo"));
-        columnaCantidad.setCellValueFactory(new PropertyValueFactory<>("cantidad"));
-        columnaFecha.setCellValueFactory(new PropertyValueFactory<>("fechahora"));
-        columnaEnvio.setCellValueFactory(new PropertyValueFactory<>("envio"));
-        columnaPrecio.setCellValueFactory(new PropertyValueFactory<>("precioTotal"));
-
-        botonNuevoPedido.setOnAction(event -> addPedido());
-        botonEliminarPedido.setOnAction(event -> removePedido());
-        botonEditarPedido.setOnAction(event -> modPedido());
-        botonListarTodosPedidos.setOnAction(event -> listarPedido(null));
-        botonListarPedidosEnviados.setOnAction(event -> showPedidosEnviados(null, true));
-        botonListarPedidosPendientes.setOnAction(event -> showPedidosEnviados(null, false));
-    }
-
-    private void addPedido() { cPedidos.addPedidos(); }
-
-    @FXML
-    private void removePedido() { cPedidos.removePedidos(); }
-
-    private void modPedido() {
-        cPedidos.updatePedido();
-    }
-
-    private void listarPedido(ClienteDTO clienteDTO) {
-        tablaPedidos.getItems().clear();
-        cPedidos.showListPedidos(clienteDTO);
-    }
-
-    private void showPedidosEnviados(ClienteDTO clienteDTO, boolean enviado){
-        tablaPedidos.getItems().clear();
-        cPedidos.showListPedidosPendientesEnviados(clienteDTO, enviado);
+    public void initialize() {
+        botonNuevoPedido.setOnAction(event -> cPedidos.addPedidos());
+        botonEliminarPedido.setOnAction(event -> cPedidos.removePedidos());
+        botonEditarPedido.setOnAction(event -> cPedidos.updatePedido());
+        botonListarTodosPedidos.setOnAction(event -> cPedidos.showListPedidos(null));
+        botonListarPedidosPendientes.setOnAction(event -> cPedidos.showListPedidosPendientesEnviados(null, false));
+        botonListarPedidosEnviados.setOnAction(event -> cPedidos.showListPedidosPendientesEnviados(null, true));
+        botonVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionPedidos"));
     }
 
     @Override
     public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
-        tablaPedidos.getItems().clear();
         tablaPedidos.getItems().addAll(pedidosDTO);
     }
 
@@ -144,11 +104,4 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
         return null;
     }
 
-    public void mostrarAlerta(Alert.AlertType tipo, String titulo, String encabezado, String contenido) {
-        Alert alert = new Alert(tipo);
-        alert.setTitle(titulo);
-        alert.setHeaderText(encabezado);
-        alert.setContentText(contenido);
-        alert.showAndWait();
-    }
 }

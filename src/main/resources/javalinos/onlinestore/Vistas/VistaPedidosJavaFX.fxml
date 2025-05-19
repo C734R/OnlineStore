@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="javalinos.onlinestore.vista.JavaFX.VistaPedidosJavaFX"
-            prefHeight="400.0" prefWidth="600.0">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.VistaPedidosJavaFX">
+    <top>
+        <fx:include source="VistaBaseJavaFX.fxml" />
+    </top>
+    <left>
+        <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
+            <Button fx:id="botonVolver" layoutX="276.0" layoutY="324.0" mnemonicParsing="false" text="Volver" />
+            <Button fx:id="botonNuevoPedido" layoutX="14.0" layoutY="2.0" mnemonicParsing="false" text="Añadir pedido" />
+            <Button fx:id="botonEditarPedido" layoutX="115.0" layoutY="2.0" mnemonicParsing="false" text="Modificar pedido" />
+            <Button fx:id="botonEliminarPedido" layoutX="236.0" layoutY="2.0" mnemonicParsing="false" text="Eliminar pedido" />
+            <Button fx:id="botonListarTodosPedidos" layoutX="497.0" layoutY="2.0" mnemonicParsing="false" text="Listar pedidos" />
+            <Button fx:id="botonListarPedidosPendientes" layoutX="224.0" layoutY="35.0" mnemonicParsing="false" text="Listar pedidos pendientes" />
+            <Button fx:id="botonListarPedidosEnviados" layoutX="345.0" layoutY="2.0" mnemonicParsing="false" text="Listar pedidos enviados" />
 
-</AnchorPane>
+            <TableView fx:id="tblClientes" layoutX="21.0" layoutY="67.0" prefHeight="252.0" prefWidth="557.0">
+                <columns>
+                    <TableColumn fx:id="columnaNumero" text="Numero" />
+                    <TableColumn fx:id="columnaCliente" text="Cliente" />
+                    <TableColumn fx:id="columnaArticulo" text="Articulo" />
+                    <TableColumn fx:id="columnaCantidad" text="Cantidad" />
+                    <TableColumn fx:id="columnaFecha" text="Fecha" />
+                    <TableColumn fx:id="columnaEnvio" text="Envio" />
+                    <TableColumn fx:id="columnaPrecio" text="Precio" />
+                </columns>
+            </TableView>
+        </AnchorPane>
+    </left>
+
+
+</BorderPane>
