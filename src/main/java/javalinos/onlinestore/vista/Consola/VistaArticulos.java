@@ -108,4 +108,12 @@ public class VistaArticulos extends VistaBase implements IVistaArticulos {
         }
         showMensaje("****************************************", true);
     }
+
+    @Override
+    public int askRemoveArticulo(List<ArticuloDTO> articulosDTO) {
+        showListArticulosNumerada(articulosDTO);
+        showMensaje("Selecciona un artículo para eliminar: ", true);
+
+        return askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), true, true, true);
+    }
 }

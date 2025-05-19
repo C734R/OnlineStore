@@ -6,9 +6,7 @@ import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
 
 import java.net.URL;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static javalinos.onlinestore.OnlineStore.cArticulos;
 
@@ -129,6 +127,38 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
     @Override
     public void showStockArticulos(Map<ArticuloDTO, Integer> articuloStockMap) {
         showListArticulosStock(articuloStockMap);
+    }
+
+    @Override
+    public int askRemoveArticulo(List<ArticuloDTO> articulosDTO) {
+
+        Map<String, Integer> mapa = new HashMap<>();
+        int index = 1;
+        for (ArticuloDTO articulo : articulosDTO) {
+            mapa.put(articulo.getCodigo() + " - " + articulo.getDescripcion(), index);
+            index++;
+        }
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion = 0;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el artículo a eliminar");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            seleccion = mapa.get(respuesta);
+        } else return 0;
+         if (seleccion == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+        }
+        return seleccion;
+
     }
 
 }

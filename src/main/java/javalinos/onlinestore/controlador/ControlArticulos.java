@@ -167,10 +167,7 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("No hay artículos para eliminar.", true);
             return;
         }
-        vArticulos.showListArticulosNumerada(articulosDTO);
-        vArticulos.showMensaje("Selecciona un artículo para eliminar: ", true);
-
-        int seleccion = vArticulos.askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), true, true, true);
+        int seleccion = vArticulos.askRemoveArticulo(articulosDTO);
         if(seleccion == -99999) return;
 
         ArticuloDTO articuloDTO = articulosDTO.get(seleccion-1);

@@ -3,10 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane prefHeight="400.0" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/17.0.12"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="javalinos.onlinestore.vista.JavaFX.VistaArticulosJavaFX">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.VistaArticulosJavaFX">
 
     <top>
         <fx:include source="VistaBaseJavaFX.fxml" />
@@ -15,26 +12,17 @@
     <center>
         <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
 
-            <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0" mnemonicParsing="false" text="Volver"/>
+            <Button fx:id="btnVolver" layoutX="265.0" layoutY="297.0" mnemonicParsing="false" text="Volver" />
 
-            <Button fx:id="btnAddArticulo" layoutX="71.0" layoutY="29.0" mnemonicParsing="false" text="Añadir Artículo"/>
+            <Button fx:id="btnAddArticulo" layoutX="175.0" layoutY="50.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Añadir Artículo" />
 
-            <Button fx:id="btnModArticulo" layoutX="188.0" layoutY="29.0" mnemonicParsing="false" text="Modificar Articulo"/>
+            <Button fx:id="btnModArticulo" layoutX="175.0" layoutY="100.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Modificar Articulo" />
 
-            <Button fx:id="btnDeleteArticulo" layoutX="318.0" layoutY="29.0" mnemonicParsing="false" text="Eliminar Articulo"/>
+            <Button fx:id="btnDeleteArticulo" layoutX="175.0" layoutY="150.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Eliminar Articulo" />
 
-            <Button fx:id="btnListArticulo" layoutX="438.0" layoutY="29.0" mnemonicParsing="false" text="Mostrar Articulos"/>
+            <Button fx:id="btnListArticulo" layoutX="175.0" layoutY="200.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Mostrar Articulos" />
 
-            <TableView fx:id="tblArticulos" layoutX="21.0" layoutY="67.0" prefHeight="252.0" prefWidth="557.0">
-                <columns>
-                    <TableColumn fx:id="columnaID" text="Id" />
-                    <TableColumn fx:id="columnaCodigo" text="Codigo" />
-                    <TableColumn fx:id="columnaDescripcion" text="Descripción" />
-                    <TableColumn fx:id="columnaPrecio" text="Precio" />
-                    <TableColumn fx:id="columnaPreparacion" text="Preparación" />
-                </columns>
-            </TableView>
-
+   
         </AnchorPane>
     </center>
 </BorderPane>
