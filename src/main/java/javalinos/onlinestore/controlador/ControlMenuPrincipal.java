@@ -58,7 +58,7 @@ public class ControlMenuPrincipal extends ControlBase {
     }
 
     private void iniciarVentana() {
-        vMenuPrincipal.showMenu(0);
+        vMenuPrincipal.showMenu(1);
     }
 
     /**
@@ -95,6 +95,19 @@ public class ControlMenuPrincipal extends ControlBase {
         }
     }
 
+    public void iniciarVentana(int opcion) {
+        switch (opcion) {
+            case 1:
+                vMenuPrincipal.showMenu(1);
+                break;
+            case 2:
+                vMenuPrincipal.showMenu(2);
+                break;
+            case 3:
+                vMenuPrincipal.showMenu(3);
+        }
+    }
+
     //*************************** Error precarga ***************************//
 
     /**
@@ -110,7 +123,12 @@ public class ControlMenuPrincipal extends ControlBase {
      * Muestra un mensaje de salida del programa.
      */
     public void salir() {
-        vMenuPrincipal.showMensaje("********* ¡¡Hasta pronto!! *********",true);
+        if (configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) iniciarVentana();
+        else vMenuPrincipal.showMensaje("********* ¡¡Hasta pronto!! *********",true);
+    }
+
+    private void cerrarVentana() {
+
     }
 
 

@@ -4,8 +4,8 @@
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="javalinos.onlinestore.vista.JavaFX.VistaMenuPrincipalJavaFX">
-   <Button layoutX="229.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Menu Clientes" />
-   <Button layoutX="229.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Menu Artículos" />
-   <Button layoutX="229.0" layoutY="243.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Menu Pedidos" />
-   <Button layoutX="229.0" layoutY="320.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Salir" />
+   <Button fx:id="btnGestionClientes" layoutX="229.0" layoutY="137.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Gestión Clientes" />
+   <Button fx:id="btnGestionArticulos" layoutX="229.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Gestión Artículos" />
+   <Button fx:id="btnGestionPedidos" layoutX="229.0" layoutY="243.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Gestión Pedidos" />
+   <Button fx:id="btnSalir" layoutX="229.0" layoutY="320.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Salir" />
 </AnchorPane>
