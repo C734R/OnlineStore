@@ -79,8 +79,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
     public int askMetodoEliminar() {
         Map<String, Integer> mapa = Map.of(
                 "Por NIF", 1,
-                "Por Email", 2,
-                "Volver", 0
+                "Por Email", 2
         );
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
@@ -109,8 +108,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
         Map<String, Integer> mapa = Map.of(
                 "Estándar", 1,
-                "Premium", 2,
-                "Volver", 0
+                "Premium", 2
         );
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
@@ -177,8 +175,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
                 "Modificar domicilio", 2,
                 "Modificar NIF", 3,
                 "Modificar email", 4,
-                "Modificar categoría", 5,
-                "Volver", 0
+                "Modificar categoría", 5
         );
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());

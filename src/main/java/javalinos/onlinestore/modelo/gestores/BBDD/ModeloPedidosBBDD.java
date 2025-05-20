@@ -225,7 +225,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     {
         return switch (configuracion) {
             case JDBC_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticuloId());
-            case JPA_HIBERNATE_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticulo().getId());
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticulo().getId());
             default -> null;
         };
     }
