@@ -7,26 +7,16 @@
    <top>
       <fx:include source="VistaBaseJavaFX.fxml" />
    </top>
-   <left>
+   <bottom>
       <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
-         <Button fx:id="btnVolver" layoutX="276.0" layoutY="339.0" mnemonicParsing="false" text="Volver" />
-         <Button fx:id="btnAddCliente" layoutX="21.0" layoutY="25.0" mnemonicParsing="false" text="Añadir cliente" />
-         <Button fx:id="btnModCliente" layoutX="127.0" layoutY="25.0" mnemonicParsing="false" text="Modificar cliente" />
-         <Button fx:id="btnDeleteCliente" layoutX="253.0" layoutY="25.0" mnemonicParsing="false" text="Eliminar cliente" />
-         <Button fx:id="btnListClientes" layoutX="488.0" layoutY="25.0" mnemonicParsing="false" text="Listar Clientes" />
-         <Button fx:id="btnListClientesCategoria" layoutX="378.0" layoutY="25.0" mnemonicParsing="false" text="Listar Clientes Categoría" />
-
-         <TableView fx:id="tblClientes" layoutX="21.0" layoutY="67.0" prefHeight="252.0" prefWidth="557.0">
-            <columns>
-               <TableColumn fx:id="colNombre" text="Nombre" />
-               <TableColumn fx:id="colDomicilio" text="Domicilio" />
-               <TableColumn fx:id="colEmail" text="Email" />
-               <TableColumn fx:id="colDNI" text="DNI" />
-               <TableColumn fx:id="colCategoria" text="CategoriaID" />
-            </columns>
-         </TableView>
+         <Button fx:id="btnAddCliente" layoutX="200.0" layoutY="50.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Añadir cliente" />
+         <Button fx:id="btnModCliente" layoutX="200.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Modificar cliente" />
+         <Button fx:id="btnDeleteCliente" layoutX="200.0" layoutY="130.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Eliminar cliente" />
+         <Button fx:id="btnListClientes" layoutX="200.0" layoutY="170.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Listar Clientes" />
+         <Button fx:id="btnListClientesCategoria" layoutX="200.0" layoutY="210.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Listar Clientes Categoría" />
+         <Button fx:id="btnVolver" layoutX="200.0" layoutY="260.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Volver" />
       </AnchorPane>
-   </left>
+   </bottom>
 
 
 </BorderPane>

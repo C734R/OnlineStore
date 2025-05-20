@@ -230,7 +230,7 @@ public class ModeloArticulosBBDD implements IModeloArticulos
     private ArticuloDTO getArticuloDTOEntidadArticuloStock(ArticuloStock articuloStock) throws Exception {
         return switch (configuracion) {
             case JDBC_MYSQL ->  getArticuloDTOId(articuloStock.getArticuloId());
-            case JPA_HIBERNATE_MYSQL -> getArticuloDTOId(articuloStock.getArticulo().getId());
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> getArticuloDTOId(articuloStock.getArticulo().getId());
             default -> null;
         };
     }
@@ -246,7 +246,7 @@ public class ModeloArticulosBBDD implements IModeloArticulos
     private Integer getArticuloStockEntidadId(ArticuloStock articuloStock) throws Exception {
         return switch (configuracion) {
             case JDBC_MYSQL -> articuloStock.getArticuloId();
-            case JPA_HIBERNATE_MYSQL -> articuloStock.getArticulo().getId();
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> articuloStock.getArticulo().getId();
             default -> null;
         };
     }
