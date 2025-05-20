@@ -15,4 +15,6 @@ public interface IVistaArticulos extends IVistaBase{
     void showStockArticulos(Map<ArticuloDTO, Integer> articuloStockMap);
 
     int askRemoveArticulo(List<ArticuloDTO> articulosDTO);
+
+    int askUpdateArticulo(List<ArticuloDTO> articulosDTO);
 }

@@ -142,12 +142,47 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         if (resultado.isPresent()) {
             respuesta = resultado.get();
             seleccion = mapa.get(respuesta);
-        } else return 0;
+        }
+        else return -99999;
          if (seleccion == 0) {
             showMensajePausa("Volviendo atrás...", true);
+            return -99999;
         }
         return seleccion;
 
     }
+    @Override
+    public int askUpdateArticulo(List<ArticuloDTO> articulosDTO) {
 
+        LinkedHashMap<String, Integer> mapa = new LinkedHashMap<>();
+        int index = 1;
+        for (ArticuloDTO articulo : articulosDTO) {
+            mapa.put(articulo.getCodigo() + " - " + articulo.getDescripcion(), index);
+            index++;
+        }
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion = 0;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el artículo a modificar");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            seleccion = mapa.get(respuesta);
+        }
+        else return -99999;
+        if (seleccion == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+            return -99999;
+        }
+        return seleccion;
+    }
 }
+
+

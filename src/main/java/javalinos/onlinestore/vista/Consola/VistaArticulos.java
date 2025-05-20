@@ -4,6 +4,9 @@ import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaArticulos;
 
 import java.util.*;
+
+import static javalinos.onlinestore.OnlineStore.cArticulos;
+
 /**
  * Vista encargada de la interacción con el usuario para la gestión de artículos.
  * - Permite mostrar artículos y su stock.
@@ -115,5 +118,19 @@ public class VistaArticulos extends VistaBase implements IVistaArticulos {
         showMensaje("Selecciona un artículo para eliminar: ", true);
 
         return askInt("Introduce el número del artículo a eliminar", 1, articulosDTO.size(), true, true, true);
+    }
+
+    @Override
+    public int askUpdateArticulo(List<ArticuloDTO> articulosDTO) {
+        try
+        {
+            showListArticulosStock(cArticulos.getArticuloStocksDTO());
+        }
+        catch (Exception e)
+        {
+            showMensajePausa("Error al mostrar el listado de stocks." + e, true);
+            return -99999;
+        }
+        return askInt("Selecciona el número del artículo a modificar", 1, articulosDTO.size(), true, true, true);
     }
 }

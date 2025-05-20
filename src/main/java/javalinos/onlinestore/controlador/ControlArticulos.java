@@ -185,8 +185,7 @@ public class ControlArticulos extends ControlBase {
     /**
      * Modifica los datos de un artículo existente.
      */
-    public void updateArticulo()
-    {
+    public void updateArticulo()    {
         List<ArticuloDTO> articulosDTO;
         boolean modificado = false;
         Integer stockNew;
@@ -204,16 +203,8 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("Error al obtener el listado de artículos." + e, true);
             return;
         }
-        try
-        {
-            vArticulos.showListArticulosStock(mArticulos.getArticuloStocksDTO());
-        }
-        catch (Exception e)
-        {
-            vArticulos.showMensajePausa("Error al mostrar el listado de stocks." + e, true);
-            return;
-        }
-        int seleccion = vArticulos.askInt("Selecciona el número del artículo a modificar", 1, articulosDTO.size(), true, true, true);
+
+        int seleccion = vArticulos.askUpdateArticulo(articulosDTO);
         if (seleccion == -99999) return;
 
         ArticuloDTO articuloDTOOld = articulosDTO.get(seleccion - 1);
@@ -309,5 +300,15 @@ public class ControlArticulos extends ControlBase {
 
     public ArticuloDTO makeArticuloDTO(String descripcion, float precio, int preparacion) throws Exception {
         return mArticulos.makeArticulo(descripcion, precio, preparacion);
+    }
+
+    public Map<ArticuloDTO, Integer> getArticuloStocksDTO() {
+        Map<ArticuloDTO, Integer> articuloStockMap = new LinkedHashMap<>();
+        try {
+            articuloStockMap = mArticulos.getArticuloStocksDTO();
+        } catch (Exception e) {
+            vArticulos.showMensajePausa("Error al obtener el stock de los artículos." + e, true);
+        }
+        return articuloStockMap;
     }
 }
