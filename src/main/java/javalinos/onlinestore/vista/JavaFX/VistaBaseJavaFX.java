@@ -239,10 +239,10 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
             try {
                 Optional<String> resultado = dialogo.showAndWait();
                 if (resultado.isPresent()) {
+                    if(resultado.get().isEmpty()) return null;
                     entrada = resultado.get();
                 }
                 else return null;
-                if (entrada.isEmpty()) return null;
                 if (entrada.length() > maxLongitud) {
                     showMensajePausa("Error. Máximo " + maxLongitud + " caracteres.", true);
                     intentos++;
@@ -261,17 +261,65 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
 
     @Override
     public Float askFloatOpcional(String mensaje, float min, float max) {
-        return 0f;
+        int intentos = 0;
+        float _float;
+        TextInputDialog dialogo = new TextInputDialog();
+        dialogo.setTitle("Introduzca un número decimal");
+        dialogo.setHeaderText(mensaje + " (entre " + min + " y " + max + ") (ENTER para mantener actual): ");
+        dialogo.setContentText("Número decimal: ");
+        dialogo.getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
+        dialogo.getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        while (intentos < 3) {
+            try {
+                Optional<String> resultado = dialogo.showAndWait();
+                if (resultado.isPresent()) {
+                    if(resultado.get().isEmpty()) return null;
+                    _float = Float.parseFloat(resultado.get());
+                }
+                else return null;
+                if (_float >= min && _float <= max) return _float;
+                else showMensajePausa("Error. Introduce un número entre " + min + " y " + max + ".", true);
+            } catch (NumberFormatException e) {
+                showMensajePausa("Error. Formato inválido. Introduce un número decimal.", true);
+            }
+            intentos++;
+        }
+        showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
+        return null;
     }
 
     @Override
     public Float askPrecioOpcional(String mensaje, float min, float max) {
-        return 0f;
+        return askFloatOpcional(mensaje, min, max);
     }
 
     @Override
     public Integer askIntOpcional(String mensaje, int min, int max) {
-        return 0;
+        int integer, intentos = 0;
+        TextInputDialog dialogo = new TextInputDialog();
+        dialogo.setTitle("Introduzca un número entero");
+        dialogo.setHeaderText(mensaje + " (entre " + min + " y " + max + ") (ENTER para mantener actual): ");
+        dialogo.setContentText("Número entero: ");
+
+        while(intentos < 3) {
+            try {
+                Optional<String> resultado = dialogo.showAndWait();
+                if (resultado.isPresent()) {
+                    if(resultado.get().isEmpty()) return null;
+                    integer = Integer.parseInt(resultado.get());
+                }
+                else return null;
+                int valor = integer;
+                if (valor >= min && valor <= max) return valor;
+                else showMensajePausa("Error. Introduce un número entre " + min + " y " + max + ".", true);
+            } catch (NumberFormatException e) {
+                showMensajePausa("Error. Formato inválido. Introduce un número entero.", true);
+            }
+            intentos++;
+        }
+        showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
+        return null;
     }
 
     @Override

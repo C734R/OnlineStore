@@ -330,10 +330,8 @@ public abstract class VistaBase implements IVistaBase {
             } catch (NumberFormatException e) {
                 showMensajePausa("Error. Formato inválido. Introduce un número decimal.", true);
             }
-
             intentos++;
         }
-
         showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
         return null;
     }
