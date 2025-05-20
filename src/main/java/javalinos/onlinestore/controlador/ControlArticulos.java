@@ -311,4 +311,6 @@ public class ControlArticulos extends ControlBase {
         }
         return articuloStockMap;
     }
+
+
 }
