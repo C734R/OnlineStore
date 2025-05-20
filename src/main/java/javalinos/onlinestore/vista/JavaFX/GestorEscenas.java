@@ -108,9 +108,8 @@ public class GestorEscenas extends Application {
                 Platform.exit();
             }
         } else {
-            Stage ventana = ventanasSecundarias.remove(idVentana);
-            if (ventana != null) {
-                Stage ventanaExistente = ventanasSecundarias.get(idVentana);
+            Stage ventanaExistente = ventanasSecundarias.get(idVentana);
+            if (ventanaExistente != null) {
                 ventanaExistente.hide();
             }
         }

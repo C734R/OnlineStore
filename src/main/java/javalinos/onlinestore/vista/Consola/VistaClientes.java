@@ -183,4 +183,10 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
         showMensaje(clienteDTO.toString(), true);
         showMensaje("*****************************************", true);
     }
+
+    @Override
+    public int askModificacion() {
+        showMods();
+        return askInt("Introduce el tipo de modificación que deseas realizar", 0, 5, false, false, true);
+    }
 }

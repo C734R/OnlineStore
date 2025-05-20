@@ -79,10 +79,9 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
     public int askMetodoEliminar() {
         Map<String, Integer> mapa = Map.of(
                 "Por NIF", 1,
-                "Por Email", 2,
-                "Volver", 0
+                "Por Email", 2
         );
-        String respuesta = null;
+        String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
         int metodo = 0;
 
@@ -95,25 +94,12 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
         if (resultado.isPresent()) {
             respuesta = resultado.get();
+            metodo = mapa.get(respuesta);
         } else return 0;
-        switch (respuesta) {
-            case "Por NIF":
-                metodo = mapa.get("Por NIF");
-                break;
-            case "Por Email":
-                metodo = mapa.get("Por Email");
-                break;
-            case "Volver":
-                metodo = mapa.get("Volver");
-                break;
-            default:
-                return 0;
-        }
         if (metodo == 0) {
             showMensajePausa("Volviendo atrás...", true);
-            return metodo;
         }
-        else return metodo;
+        return metodo;
     }
 
 
@@ -122,10 +108,9 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
         Map<String, Integer> mapa = Map.of(
                 "Estándar", 1,
-                "Premium", 2,
-                "Volver", 0
+                "Premium", 2
         );
-        String respuesta = null;
+        String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
         int categoria = 0;
 
@@ -138,26 +123,13 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
         if (resultado.isPresent()) {
             respuesta = resultado.get();
+            categoria = mapa.get(respuesta);
         } else return 0;
-        switch (respuesta) {
-            case "Estándar":
-                categoria = mapa.get("Estándar");
-                break;
-            case "Premium":
-                categoria = mapa.get("Premium");
-                break;
-            case "Volver":
-                categoria = mapa.get("Volver");
-                break;
-            default:
-                return 0;
-        }
         if (categoria == 0) {
             showMensajePausa("Volviendo atrás...", true);
-            return categoria;
         }
-        else return categoria;
-}
+        return categoria;
+    }
 
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
@@ -194,5 +166,35 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
     @Override
     public void showCliente(ClienteDTO clienteDTO) {
 
+    }
+
+    @Override
+    public int askModificacion() {
+        Map<String, Integer> mapa = Map.of(
+                "Modificar nombre", 1,
+                "Modificar domicilio", 2,
+                "Modificar NIF", 3,
+                "Modificar email", 4,
+                "Modificar categoría", 5
+        );
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int metodo = 0;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el método de eliminación");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            metodo = mapa.get(respuesta);
+        } else return 0;
+        if (metodo == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+        }
+        return metodo;
     }
 }

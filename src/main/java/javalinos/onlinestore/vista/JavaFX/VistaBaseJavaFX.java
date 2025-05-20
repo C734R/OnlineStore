@@ -7,6 +7,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javalinos.onlinestore.vista.Interfaces.IVistaBase;
@@ -128,6 +129,8 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         dialogo.setTitle("Introduzca una cadena de caracteres");
         dialogo.setHeaderText(mensaje);
         dialogo.setContentText("Cadena de caracteres: ");
+        dialogo.getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
+        dialogo.getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
 
         while(intentos < 3) {
             try {
@@ -206,11 +209,11 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
 
     @Override
     public void showMensajePausa(String mensaje, boolean salto) {
-        Alert alertaError = new Alert(Alert.AlertType.WARNING);
-        alertaError.setTitle("Advertencia");
-        alertaError.setHeaderText("Atención");
-        alertaError.setContentText(mensaje);
-        alertaError.showAndWait();
+        Alert alertaAdvertencia = new Alert(Alert.AlertType.WARNING);
+        alertaAdvertencia.setTitle("Advertencia");
+        alertaAdvertencia.setHeaderText("Atención");
+        alertaAdvertencia.setContentText(mensaje);
+        alertaAdvertencia.showAndWait();
     }
 
 //    public void showError(String mensaje) {

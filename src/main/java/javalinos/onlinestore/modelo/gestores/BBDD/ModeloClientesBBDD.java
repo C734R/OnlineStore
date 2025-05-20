@@ -96,7 +96,7 @@ public class ModeloClientesBBDD implements IModeloClientes
     {
         return switch (configuracion) {
             case JDBC_MYSQL -> cliente.getCategoriaId();
-            case JPA_HIBERNATE_MYSQL -> cliente.getCategoria().getId();
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> cliente.getCategoria().getId();
             default -> null;
         };
     }

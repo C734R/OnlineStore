@@ -107,7 +107,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
                     clienteDTO = mClientes.getClienteDTOId(pedido.getClienteId());
                 }
                 break;
-            case JPA_HIBERNATE_MYSQL:
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL:
                 {
                     articuloDTO = mArticulos.getArticuloDTOId(pedido.getArticulo().getId());
                     clienteDTO = mClientes.getClienteDTOId(pedido.getCliente().getId());
@@ -123,7 +123,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     private Pedido pedidoDTOtoEntidad(PedidoDTO pedidoDTO) throws Exception {
         return switch (configuracion) {
             case JDBC_MYSQL -> new Pedido(pedidoDTO, mClientes.getIdClienteDTO(pedidoDTO.getCliente()), mArticulos.getIdArticuloDTO(pedidoDTO.getArticulo()));
-            case JPA_HIBERNATE_MYSQL -> new Pedido(pedidoDTO, mClientes.getClienteEntidadEmail(pedidoDTO.getCliente().getEmail()), mArticulos.getArticuloEntidadCodigo(pedidoDTO.getArticulo().getCodigo()));
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> new Pedido(pedidoDTO, mClientes.getClienteEntidadEmail(pedidoDTO.getCliente().getEmail()), mArticulos.getArticuloEntidadCodigo(pedidoDTO.getArticulo().getCodigo()));
             default -> null;
         };
     }
@@ -225,7 +225,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     {
         return switch (configuracion) {
             case JDBC_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticuloId());
-            case JPA_HIBERNATE_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticulo().getId());
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> mArticulos.getArticuloDTOId(pedido.getArticulo().getId());
             default -> null;
         };
     }
@@ -233,7 +233,7 @@ public class ModeloPedidosBBDD implements IModeloPedidos
     private ClienteDTO getClienteDTOPedido(Pedido pedido) throws Exception {
         return switch (configuracion) {
             case JDBC_MYSQL -> mClientes.getClienteDTOId(pedido.getClienteId());
-            case JPA_HIBERNATE_MYSQL -> mClientes.getClienteDTOId(pedido.getCliente().getId());
+            case JPA_HIBERNATE_MYSQL, JAVAFX_ORM_HIBERNATE_MYSQL -> mClientes.getClienteDTOId(pedido.getCliente().getId());
             default -> null;
         };
     }
