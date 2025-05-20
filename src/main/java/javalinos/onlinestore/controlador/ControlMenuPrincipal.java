@@ -66,7 +66,6 @@ public class ControlMenuPrincipal extends ControlBase {
                     continue;
                 }
                 iniciado = true;
-                vMenuPrincipal.showMenu(1);
             }
     }
 
