@@ -36,3 +36,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
+/out/artifacts/Javalinos_OnlineStore_jar/Javalinos.OnlineStore.jar
