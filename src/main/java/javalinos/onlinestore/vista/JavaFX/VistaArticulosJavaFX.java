@@ -19,11 +19,6 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
     @FXML private Button btnListArticulo;
 
     @FXML private TableView<ArticuloDTO> tblArticulos;
-    @FXML private TableColumn<ArticuloDTO, Integer> columnaID;
-    @FXML private TableColumn<ArticuloDTO, String> columnaCodigo;
-    @FXML private TableColumn<ArticuloDTO, String> columnaDescripcion;
-    @FXML private TableColumn<ArticuloDTO, Float> columnaPrecio;
-    @FXML private TableColumn<ArticuloDTO, Integer> columnaPreparacion;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -32,13 +27,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         btnModArticulo.setOnAction(event -> cArticulos.updateArticulo());
         btnListArticulo.setOnAction(event -> cArticulos.showListArticulos());
         btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionArticulos"));
-
-//        columnaID.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<Integer>());
-//        columnaCodigo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCodigo()));
-//        columnaDescripcion.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDescripcion()));
-//        columnaPrecio.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPrecio()));
-//        columnaPreparacion.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getMinutosPreparacion()));
-    }
+  }
 
     @Override
     public float askPrecio(float min, float max) {
@@ -153,12 +142,47 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         if (resultado.isPresent()) {
             respuesta = resultado.get();
             seleccion = mapa.get(respuesta);
-        } else return 0;
+        }
+        else return -99999;
          if (seleccion == 0) {
             showMensajePausa("Volviendo atrás...", true);
+            return -99999;
         }
         return seleccion;
 
     }
+    @Override
+    public int askUpdateArticulo(List<ArticuloDTO> articulosDTO) {
 
+        LinkedHashMap<String, Integer> mapa = new LinkedHashMap<>();
+        int index = 1;
+        for (ArticuloDTO articulo : articulosDTO) {
+            mapa.put(articulo.getCodigo() + " - " + articulo.getDescripcion(), index);
+            index++;
+        }
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion = 0;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el artículo a modificar");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            seleccion = mapa.get(respuesta);
+        }
+        else return -99999;
+        if (seleccion == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+            return -99999;
+        }
+        return seleccion;
+    }
 }
+
+
