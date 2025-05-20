@@ -1,38 +1,20 @@
 package javalinos.onlinestore.vista.JavaFX;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javalinos.onlinestore.controlador.ControlArticulos;
-import javalinos.onlinestore.controlador.ControlPedidos;
+import javafx.scene.control.*;
 import javalinos.onlinestore.modelo.DTO.ArticuloDTO;
 import javalinos.onlinestore.modelo.DTO.ClienteDTO;
 import javalinos.onlinestore.modelo.DTO.PedidoDTO;
 import javalinos.onlinestore.vista.Interfaces.IVistaPedidos;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static javalinos.onlinestore.OnlineStore.cPedidos;
 import static javalinos.onlinestore.OnlineStore.cClientes;
 
 public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos {
-    private ControlPedidos cPedidos;
-
-    @FXML private TableView<PedidoDTO> tablaPedidos;
-
-    @FXML private TableColumn<PedidoDTO, Integer> columnaNumero;
-    @FXML private TableColumn<PedidoDTO, ClienteDTO> columnaCliente;
-    @FXML private TableColumn<PedidoDTO, ArticuloDTO> columnaArticulo;
-    @FXML private TableColumn<PedidoDTO, Integer> columnaCantidad;
-    @FXML private TableColumn<PedidoDTO, LocalDate> columnaFecha;
-    @FXML private TableColumn<PedidoDTO, Float> columnaEnvio;
-    @FXML private TableColumn<PedidoDTO, Float> columnaPrecio;
 
     @FXML private Button botonNuevoPedido;
     @FXML private Button botonEliminarPedido;
@@ -41,7 +23,6 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
     @FXML private Button botonListarPedidosPendientes;
     @FXML private Button botonListarPedidosEnviados;
     @FXML private Button botonVolver;
-
 
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
@@ -56,7 +37,34 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
 
     @Override
     public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
-        tablaPedidos.getItems().addAll(pedidosDTO);
+        clienteDTO = askClienteOpcional(cClientes.getListaClientes(), null);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pedidosDTO.size(); i++) {
+            PedidoDTO pedido = pedidosDTO.get(i);
+            if (clienteDTO != null && clienteDTO == pedido.getCliente()){
+                builder.append(i + 1).append(" - ")
+                        .append(pedido.getNumero()).append(" - ")
+                        .append(pedido.getArticulo()).append(" - ")
+                        .append(pedido.getCliente()).append(" - ")
+                        .append(pedido.getCantidad()).append(" - ")
+                        .append(pedido.getPrecio()).append("\n");
+            }
+            else if (clienteDTO == null){
+                builder.append(i + 1).append(" - ")
+                        .append(pedido.getNumero()).append(" - ")
+                        .append(pedido.getArticulo()).append(" - ")
+                        .append(pedido.getCliente()).append(" - ")
+                        .append(pedido.getCantidad()).append(" - ")
+                        .append(pedido.getPrecio()).append("\n");
+            }
+        }
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Listado de Pedidos");
+        alert.setHeaderText("Pedidos existentes:");
+        alert.setContentText(builder.toString());
+        alert.showAndWait();
+
     }
 
     @Override
@@ -91,16 +99,85 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
 
     @Override
     public void showListPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-
+        clienteDTO = askClienteOpcional(cClientes.getListaClientes(), null);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pedidosDTO.size(); i++) {
+            PedidoDTO pedido = pedidosDTO.get(i);
+            if (clienteDTO != null && clienteDTO == pedido.getCliente()){
+                builder.append(i + 1).append(" - ")
+                        .append(pedido.getNumero()).append(" - ")
+                        .append(pedido.getArticulo()).append(" - ")
+                        .append(pedido.getCliente()).append(" - ")
+                        .append(pedido.getCantidad()).append(" - ")
+                        .append(pedido.getPrecio()).append("\n");
+            }
+            else if (clienteDTO == null){
+                builder.append(i + 1).append(" - ")
+                        .append(pedido.getNumero()).append(" - ")
+                        .append(pedido.getArticulo()).append(" - ")
+                        .append(pedido.getCliente()).append(" - ")
+                        .append(pedido.getCantidad()).append(" - ")
+                        .append(pedido.getPrecio()).append("\n");
+            }
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Listado de Pedidos Pendientes de Envio");
+        alert.setHeaderText("Pedidos existentes:");
+        alert.setContentText(builder.toString());
+        alert.showAndWait();
     }
 
     @Override
     public void showListPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-
+        clienteDTO = askClienteOpcional(cClientes.getListaClientes(), null);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < pedidosDTO.size(); i++) {
+            PedidoDTO pedido = pedidosDTO.get(i);
+            if (clienteDTO != null && clienteDTO == pedido.getCliente()){
+                builder.append(i + 1).append(" - ")
+                        .append(pedido.getNumero()).append(" - ")
+                        .append(pedido.getArticulo()).append(" - ")
+                        .append(pedido.getCliente()).append(" - ")
+                        .append(pedido.getCantidad()).append(" - ")
+                        .append(pedido.getPrecio()).append("\n");
+            }
+            else if (clienteDTO == null){
+                builder.append(i + 1).append(" - ")
+                        .append(pedido.getNumero()).append(" - ")
+                        .append(pedido.getArticulo()).append(" - ")
+                        .append(pedido.getCliente()).append(" - ")
+                        .append(pedido.getCantidad()).append(" - ")
+                        .append(pedido.getPrecio()).append("\n");
+            }
+        }
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Listado de Pedidos Enviados");
+        alert.setHeaderText("Pedidos existentes:");
+        alert.setContentText(builder.toString());
+        alert.showAndWait();
     }
 
     @Override
     public ClienteDTO askClienteOpcional(List<ClienteDTO> clientesDTO, ClienteDTO clienteDTOActual) {
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Filtro por cliente");
+        dialog.setHeaderText("Introduzca el DNI del cliente");
+        dialog.setContentText("DNI:");
+
+        var result = dialog.showAndWait();
+        if (result.isPresent()) {
+            try {
+                String dniIngresado = result.get();
+                for (ClienteDTO cliente : clientesDTO) {
+                    if (cliente.getNif().equalsIgnoreCase(dniIngresado)){
+                        return cliente;
+                    }
+                }
+            } catch (NumberFormatException ignored) {}
+            dialog.setHeaderText("Valor inválido. Introduce un número entre");
+        } else {
+            return null;
+        }
         return null;
     }
 
