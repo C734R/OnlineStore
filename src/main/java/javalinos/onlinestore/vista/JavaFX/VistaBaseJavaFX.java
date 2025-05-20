@@ -226,7 +226,37 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
 
     @Override
     public String askStringOpcional(String mensaje, int maxLongitud) {
-        return "";
+        int intentos = 0;
+        String entrada;
+        TextInputDialog dialogo = new TextInputDialog();
+        dialogo.setTitle("Introduzca una cadena de caracteres");
+        dialogo.setHeaderText(mensaje + " (ENTER para mantener actual): ");
+        dialogo.setContentText("Cadena de caracteres: ");
+        dialogo.getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
+        dialogo.getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        while (intentos < 3) {
+            try {
+                Optional<String> resultado = dialogo.showAndWait();
+                if (resultado.isPresent()) {
+                    entrada = resultado.get();
+                }
+                else return null;
+                if (entrada.isEmpty()) return null;
+                if (entrada.length() > maxLongitud) {
+                    showMensajePausa("Error. Máximo " + maxLongitud + " caracteres.", true);
+                    intentos++;
+                } else {
+                    return entrada;
+                }
+            } catch (Exception e) {
+                showMensajePausa("Error. Entrada inválida. Intenta de nuevo.", true);
+                intentos++;
+            }
+        }
+
+        showMensajePausa("Demasiados intentos fallidos. Se mantendrá el valor actual.", true);
+        return null;
     }
 
     @Override
