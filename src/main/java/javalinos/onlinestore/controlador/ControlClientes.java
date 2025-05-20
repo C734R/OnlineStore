@@ -260,12 +260,22 @@ public class ControlClientes extends ControlBase
      */
     public void modCliente()
     {
+        if (configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) modClienteJavaFX();
+        else modClienteConsola();
+    }
+
+    private void modClienteJavaFX() {
+        ClienteDTO clienteDTO = null;
+        vClientes.askModificacion();
+    }
+
+    private void modClienteConsola()
+    {
         int opcion ;
         while (true){
             ClienteDTO clienteDTO = null;
             vClientes.showMensaje("******** Menú de Modificación de Clientes ********", true);
-            vClientes.showMods();
-            opcion = vClientes.askInt("Introduce el tipo de modificación que deseas realizar", 0, 5, false, false, true);
+            opcion = vClientes.askModificacion();
             if (opcion != 0) {
                 clienteDTO = askClienteModificar();
                 if (clienteDTO == null) continue;

@@ -17,4 +17,6 @@ public interface IVistaClientes extends IVistaBase {
     void showCategorias();
     void showMetodosEliminar();
     void showCliente(ClienteDTO clienteDTO);
+
+    int askModificacion();
 }
