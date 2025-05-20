@@ -230,7 +230,7 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         String entrada;
         TextInputDialog dialogo = new TextInputDialog();
         dialogo.setTitle("Introduzca una cadena de caracteres");
-        dialogo.setHeaderText(mensaje + " (ENTER para mantener actual): ");
+        dialogo.setHeaderText(mensaje + "\n(ENTER para mantener actual)");
         dialogo.setContentText("Cadena de caracteres: ");
         dialogo.getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
         dialogo.getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -265,7 +265,7 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         float _float;
         TextInputDialog dialogo = new TextInputDialog();
         dialogo.setTitle("Introduzca un número decimal");
-        dialogo.setHeaderText(mensaje + " (entre " + min + " y " + max + ") (ENTER para mantener actual): ");
+        dialogo.setHeaderText(mensaje + " (entre " + min + " y " + max + ")\n(ENTER para mantener actual)");
         dialogo.setContentText("Número decimal: ");
         dialogo.getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
         dialogo.getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
@@ -299,7 +299,7 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         int integer, intentos = 0;
         TextInputDialog dialogo = new TextInputDialog();
         dialogo.setTitle("Introduzca un número entero");
-        dialogo.setHeaderText(mensaje + " (entre " + min + " y " + max + ") (ENTER para mantener actual): ");
+        dialogo.setHeaderText(mensaje + " (entre " + min + " y " + max + ")\n (ENTER para mantener actual)");
         dialogo.setContentText("Número entero: ");
 
         while(intentos < 3) {
