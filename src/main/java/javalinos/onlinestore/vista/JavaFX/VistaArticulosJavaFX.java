@@ -19,11 +19,6 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
     @FXML private Button btnListArticulo;
 
     @FXML private TableView<ArticuloDTO> tblArticulos;
-    @FXML private TableColumn<ArticuloDTO, Integer> columnaID;
-    @FXML private TableColumn<ArticuloDTO, String> columnaCodigo;
-    @FXML private TableColumn<ArticuloDTO, String> columnaDescripcion;
-    @FXML private TableColumn<ArticuloDTO, Float> columnaPrecio;
-    @FXML private TableColumn<ArticuloDTO, Integer> columnaPreparacion;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -32,13 +27,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         btnModArticulo.setOnAction(event -> cArticulos.updateArticulo());
         btnListArticulo.setOnAction(event -> cArticulos.showListArticulos());
         btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionArticulos"));
-
-//        columnaID.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<Integer>());
-//        columnaCodigo.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getCodigo()));
-//        columnaDescripcion.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(data.getValue().getDescripcion()));
-//        columnaPrecio.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPrecio()));
-//        columnaPreparacion.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getMinutosPreparacion()));
-    }
+  }
 
     @Override
     public float askPrecio(float min, float max) {
