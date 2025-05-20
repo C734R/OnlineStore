@@ -36,7 +36,6 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
 
     @Override
     public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
-        clienteDTO = askClienteOpcional(cClientes.getListaClientes(), null);
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < pedidosDTO.size(); i++) {
             PedidoDTO pedido = pedidosDTO.get(i);
@@ -90,7 +89,7 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
             showMensajePausa("Volviendo atrás...", true);
         }
         else if (filtro == 1){
-            cPedidos.askCliente(false);
+            cPedidos.showListPedidos(cPedidos.askCliente(false));
         }
         else if (filtro == 2){
             cPedidos.showListPedidos(null);
