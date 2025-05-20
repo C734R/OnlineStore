@@ -50,12 +50,14 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
             for (int i = 0; i < pedidosDTO.size(); i++) {
                 PedidoDTO pedido = pedidosDTO.get(i);
                 if (clienteDTO == null || clienteDTO.equals(pedido.getCliente())) {
-                    builder.append(i + 1).append(" - ")
+                    builder.append("--------------------------------------------------------------\n")
+                            .append(i + 1).append(" - Pedido\n")
                             .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
                             .append(pedido.getArticulo()).append(" - ")
                             .append(pedido.getCliente()).append(" - ")
                             .append(pedido.getCantidad()).append(" - ")
-                            .append(pedido.getPrecio()).append("\n");
+                            .append(pedido.getPrecio()).append("\n")
+                            .append("--------------------------------------------------------------\n");
                 }
             }
         }
