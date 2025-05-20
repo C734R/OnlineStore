@@ -254,25 +254,28 @@ public class ControlPedidos extends ControlBase{
      */
     public void showListPedidos(ClienteDTO clienteDTO)
     {
-        clienteDTO = askCliente(false);
-        List<PedidoDTO> pedidosDTO;
-        vPedidos.showMensaje("******** Listar Pedidos ********", true);
         try
         {
-            pedidosDTO = mPedidos.getPedidosDTO();
+            if (mPedidos.getPedidosDTO().isEmpty()) {
+                vPedidos.showMensajePausa("Aún no existen pedidos registrados.", true);
+                return;
+            }
+            List<PedidoDTO> pedidoDTOS;
+            if(clienteDTO != null) {
+                pedidoDTOS = mPedidos.getPedidosDTOCliente(clienteDTO);
+                if (pedidoDTOS.isEmpty()) {
+                    vPedidos.showMensajePausa("No hay pedidos registrados para este cliente.", true);
+                    return;
+                }
+            }
+            else pedidoDTOS = mPedidos.getPedidosDTO();
+            vPedidos.showListPedidos(pedidoDTOS, clienteDTO, false);
         }
         catch (Exception e)
         {
-            vPedidos.showMensajePausa("Error al obtener la lista de pedidos. " + e, true);
-            return;
-        }
-        if (pedidosDTO.isEmpty()) {
-            vPedidos.showMensajePausa("No hay pedidos disponibles.", true);
-            return;
+            vPedidos.showMensajePausa("Error al mostrar pedidos." + e, true);
         }
 
-        vPedidos.showMensaje("Lista de pedidos disponibles:", true);
-        vPedidos.showListPedidos(pedidosDTO, clienteDTO, false);
     }
 
     /**
