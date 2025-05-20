@@ -23,43 +23,55 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
     @FXML private Button botonListarPedidosEnviados;
     @FXML private Button botonVolver;
 
+    private boolean enviados;
+    private boolean pendientes;
+
     @FXML
     public void initialize(URL url, ResourceBundle rb) {
         botonNuevoPedido.setOnAction(event -> cPedidos.addPedidos());
         botonEliminarPedido.setOnAction(event -> cPedidos.removePedidos());
         botonEditarPedido.setOnAction(event -> cPedidos.updatePedido());
         botonListarTodosPedidos.setOnAction(event -> askFiltroCliente());
-        botonListarPedidosPendientes.setOnAction(event -> cPedidos.showListPedidosPendientesEnviados(null, false));
-        botonListarPedidosEnviados.setOnAction(event -> cPedidos.showListPedidosPendientesEnviados(null, true));
+        botonListarPedidosPendientes.setOnAction(event -> {
+            askFiltroCliente();
+            pendientes = true;
+        });
+        botonListarPedidosEnviados.setOnAction(event -> {
+            askFiltroCliente();
+            enviados = true;
+        });
         botonVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionPedidos"));
     }
 
     @Override
     public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < pedidosDTO.size(); i++) {
-            PedidoDTO pedido = pedidosDTO.get(i);
-            if (clienteDTO != null && clienteDTO == pedido.getCliente()) {
-                builder.append(i + 1).append(" - ")
-                        .append(pedido.getNumero()).append(" - ")
-                        .append(pedido.getArticulo()).append(" - ")
-                        .append(pedido.getCliente()).append(" - ")
-                        .append(pedido.getCantidad()).append(" - ")
-                        .append(pedido.getPrecio()).append("\n");
-            } else if (clienteDTO == null) {
-                builder.append(i + 1).append(" - ")
-                        .append(pedido.getNumero()).append(" - ")
-                        .append(pedido.getArticulo()).append(" - ")
-                        .append(pedido.getCliente()).append(" - ")
-                        .append(pedido.getCantidad()).append(" - ")
-                        .append(pedido.getPrecio()).append("\n");
+        if (pedidosDTO != null) {
+            for (int i = 0; i < pedidosDTO.size(); i++) {
+                PedidoDTO pedido = pedidosDTO.get(i);
+                if (clienteDTO == null || clienteDTO.equals(pedido.getCliente())) {
+                    builder.append(i + 1).append(" - ")
+                            .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
+                            .append(pedido.getArticulo()).append(" - ")
+                            .append(pedido.getCliente()).append(" - ")
+                            .append(pedido.getCantidad()).append(" - ")
+                            .append(pedido.getPrecio()).append("\n");
+                }
             }
         }
+
+        TextArea textArea = new TextArea(builder.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Listado de Pedidos");
         alert.setHeaderText("Pedidos existentes:");
-        alert.setContentText(builder.toString());
+        alert.getDialogPane().setContent(textArea);
+
+        textArea.setPrefWidth(600);
+        textArea.setPrefHeight(400);
+
         alert.showAndWait();
 
     }
@@ -89,10 +101,31 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
             showMensajePausa("Volviendo atrás...", true);
         }
         else if (filtro == 1){
-            cPedidos.showListPedidos(cPedidos.askCliente(false));
+            ClienteDTO clienteDTO = cPedidos.askCliente(false);
+            if (pendientes){
+                cPedidos.showListPedidosPendientesEnviados(clienteDTO, false);
+                pendientes = false;
+            }
+            else if (enviados){
+                cPedidos.showListPedidosPendientesEnviados(clienteDTO, true);
+                enviados = false;
+            }
+            else {
+                cPedidos.showListPedidos(clienteDTO);
+            }
         }
         else if (filtro == 2){
-            cPedidos.showListPedidos(null);
+            if (pendientes){
+                cPedidos.showListPedidosPendientesEnviados(null, false);
+                pendientes = false;
+            }
+            else if (enviados){
+                cPedidos.showListPedidosPendientesEnviados(null, true);
+                enviados = false;
+            }
+            else{
+                cPedidos.showListPedidos(null);
+            }
         }
     }
 
@@ -133,7 +166,7 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
             PedidoDTO pedido = pedidosDTO.get(i);
             if (clienteDTO != null && clienteDTO == pedido.getCliente()){
                 builder.append(i + 1).append(" - ")
-                        .append(pedido.getNumero()).append(" - ")
+                        .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
                         .append(pedido.getArticulo()).append(" - ")
                         .append(pedido.getCliente()).append(" - ")
                         .append(pedido.getCantidad()).append(" - ")
@@ -141,17 +174,25 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
             }
             else if (clienteDTO == null){
                 builder.append(i + 1).append(" - ")
-                        .append(pedido.getNumero()).append(" - ")
+                        .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
                         .append(pedido.getArticulo()).append(" - ")
                         .append(pedido.getCliente()).append(" - ")
                         .append(pedido.getCantidad()).append(" - ")
                         .append(pedido.getPrecio()).append("\n");
             }
         }
+        TextArea textArea = new TextArea(builder.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Listado de Pedidos Pendientes de Envio");
         alert.setHeaderText("Pedidos existentes:");
-        alert.setContentText(builder.toString());
+        alert.getDialogPane().setContent(textArea);
+
+        textArea.setPrefWidth(600);
+        textArea.setPrefHeight(400);
+
         alert.showAndWait();
     }
 
@@ -162,7 +203,7 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
             PedidoDTO pedido = pedidosDTO.get(i);
             if (clienteDTO != null && clienteDTO == pedido.getCliente()){
                 builder.append(i + 1).append(" - ")
-                        .append(pedido.getNumero()).append(" - ")
+                        .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
                         .append(pedido.getArticulo()).append(" - ")
                         .append(pedido.getCliente()).append(" - ")
                         .append(pedido.getCantidad()).append(" - ")
@@ -170,17 +211,25 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
             }
             else if (clienteDTO == null){
                 builder.append(i + 1).append(" - ")
-                        .append(pedido.getNumero()).append(" - ")
+                        .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
                         .append(pedido.getArticulo()).append(" - ")
                         .append(pedido.getCliente()).append(" - ")
                         .append(pedido.getCantidad()).append(" - ")
                         .append(pedido.getPrecio()).append("\n");
             }
         }
+        TextArea textArea = new TextArea(builder.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Listado de Pedidos Enviados");
         alert.setHeaderText("Pedidos existentes:");
-        alert.setContentText(builder.toString());
+        alert.getDialogPane().setContent(textArea);
+
+        textArea.setPrefWidth(600);
+        textArea.setPrefHeight(400);
+
         alert.showAndWait();
     }
 
