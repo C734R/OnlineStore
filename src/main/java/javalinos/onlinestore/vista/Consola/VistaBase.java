@@ -164,6 +164,10 @@ public abstract class VistaBase implements IVistaBase {
         return null;
     }
 
+    public String askStringListado(List<String> lista, String mensaje, int longitudMin, int longitudMax, boolean reintentar, boolean sinFin, boolean error) {
+        return null;
+    }
+
     /**
      * Solicita al usuario una opción tipo sí/no.
      * @param mensaje mensaje mostrado al usuario.
@@ -282,7 +286,7 @@ public abstract class VistaBase implements IVistaBase {
      * @param maxLongitud longitud máxima aceptada.
      * @return nueva cadena o null si se mantiene actual.
      */
-    public String askStringOpcional(String mensaje, int maxLongitud) {
+    public String askStringOpcional(String mensaje, int minLongitud, int maxLongitud) {
         Scanner scanner = new Scanner(System.in);
         int intentos = 0;
 
@@ -291,8 +295,8 @@ public abstract class VistaBase implements IVistaBase {
             try {
                 String entrada = scanner.nextLine();
                 if (entrada.isEmpty()) return null;
-                if (entrada.length() > maxLongitud) {
-                    showMensajePausa("Error. Máximo " + maxLongitud + " caracteres.", true);
+                if (entrada.length() > maxLongitud || entrada.length() < minLongitud) {
+                    showMensajePausa("Error. Mínimo " + minLongitud + ", máximo " + maxLongitud + " caracteres.", true);
                     intentos++;
                 } else {
                     return entrada;

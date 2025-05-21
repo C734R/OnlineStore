@@ -3,18 +3,17 @@ package javalinos.onlinestore.vista.JavaFX;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceDialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javalinos.onlinestore.vista.Interfaces.IVistaBase;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
 import static javalinos.onlinestore.OnlineStore.vFactory;
+import static javalinos.onlinestore.utils.Utilidades.listToStr;
 import static javalinos.onlinestore.vista.JavaFX.GestorEscenas.crearVentana;
 
 public class VistaBaseJavaFX extends Application implements IVistaBase, Initializable {
@@ -159,6 +158,64 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
     }
 
     @Override
+    public String askStringListado(List<String> lista, String mensaje, int longitudMin, int longitudMax, boolean reintentar, boolean sinFin, boolean error) {
+        int intentos = 0;
+        if(!reintentar) intentos = 2;
+        String entrada;
+
+        StringBuilder builder = new StringBuilder();
+        for(String _entrada: lista) {
+            builder.append("--------------------------------------\n");
+            builder.append(_entrada).append("\n");
+            builder.append("--------------------------------------\n");
+        }
+
+        TextInputDialog dialogo = new TextInputDialog();
+        dialogo.setTitle("Introduzca una cadena de caracteres");
+        dialogo.setHeaderText(mensaje);
+        dialogo.setContentText("Cadena de caracteres: ");
+        dialogo.getDialogPane().setPrefWidth(Region.USE_COMPUTED_SIZE);
+        dialogo.getDialogPane().setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        TextArea textArea = new TextArea(builder.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+        textArea.setPrefRowCount(10);
+
+        // Empaquetar en un VBox junto al campo de entrada original
+        VBox vbox = new VBox();
+        vbox.setSpacing(10);
+        vbox.getChildren().addAll(textArea, dialogo.getEditor());
+
+        dialogo.getDialogPane().setContent(vbox);
+
+        while(intentos < 3) {
+            try {
+                Optional<String> resultado = dialogo.showAndWait();
+                if (resultado.isPresent()) {
+                    entrada = resultado.get();
+                }
+                else return null;
+                if (entrada.length() <= longitudMax && entrada.length() >= longitudMin) return entrada;
+                else if (entrada.length() > longitudMax) {
+                    if (error) showMensajePausa("Error. Entrada excedida. No puedes sobrepasar los " + longitudMax + " carácteres. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                    if (!sinFin) intentos++;
+                }
+                else {
+                    if (error) showMensajePausa("Error. Entrada insuficiente. La longitud de la entrada no puede ser inferior a " + longitudMin + " caracteres. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
+                    if (!sinFin) intentos++;
+                }
+            }
+            catch (Exception e) {
+                if (error) showMensajePausa("Error. Entrada inválida. " + (reintentar ? "Introduce una cadena de texto." : "Volviendo..."), true);
+                if (!sinFin) intentos++;
+            }
+        }
+        if (reintentar && error) showMensajePausa("Error. Demasiados intentos fallidos. Volviendo...", true);
+        return null;
+    }
+
+    @Override
     public Boolean askBoolean(String mensaje, boolean reintentar, boolean maxIntentos) {
         Map<String, Boolean> mapa = Map.of(
                 "Sí", true,
@@ -188,17 +245,68 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         Alert alertaInfo = new Alert(Alert.AlertType.INFORMATION);
         alertaInfo.setTitle("Información");
         alertaInfo.setHeaderText(null);
-        alertaInfo.setContentText(mensaje);
+        alertaInfo.setContentText(mensaje + (salto ? "\n" : ""));
         alertaInfo.showAndWait();
     }
 
     @Override
     public void showOptions(List<String> lista, int tipoRetorno, Boolean encuadre, Boolean numeracion, Boolean opcion) {
+        StringBuilder builder = new StringBuilder();
+        int i = 1;
+        for(String entrada: lista) {
+            if(lista.indexOf(entrada) == lista.lastIndexOf(lista.getFirst())) {
+                builder.append(entrada);
+                ++i;
+                continue;
+            }
+            else if(lista.indexOf(entrada) == lista.lastIndexOf(lista.getLast())) {
+                builder.append(entrada);
+                ++i;
+                continue;
+            }
+            if(encuadre) builder.append("--------------------------------------\n");
+            if(opcion) builder.append("Opción ").append(i).append(": ").append("\n");
+            if(numeracion && !opcion) builder.append(i).append(".");
+            builder.append(entrada).append("\n");
+            if(encuadre) builder.append("--------------------------------------\n");
+            ++i;
+        }
+        switch (tipoRetorno) {
+            case 1:
+                builder.append("0.Salir").append("\n");
+                break;
+            case 2:
+                builder.append("0.Volver").append("\n");
+                break;
+            case 3:
+                builder.append("0.Cancelar").append("\n");
+                break;
+            case 0:
+            default:
+                break;
+        }
 
+        TextArea textArea = new TextArea(builder.toString());
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Listado de Pedidos Enviados");
+        alert.setHeaderText("Pedidos existentes:");
+        alert.getDialogPane().setContent(textArea);
+
+        textArea.setPrefWidth(600);
+        textArea.setPrefHeight(400);
+
+        alert.showAndWait();
     }
 
     @Override
     public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) {
+        List<String> listaString = listToStr(lista);
+        // Añadir título al inicio de la lista
+        listaString.addFirst("******** " + titulo + " ********");
+        listaString.addLast("********************************************");
 
     }
 
@@ -225,7 +333,7 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
 //    }
 
     @Override
-    public String askStringOpcional(String mensaje, int maxLongitud) {
+    public String askStringOpcional(String mensaje, int minLongitud, int maxLongitud) {
         int intentos = 0;
         String entrada;
         TextInputDialog dialogo = new TextInputDialog();
@@ -243,7 +351,7 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
                     entrada = resultado.get();
                 }
                 else return null;
-                if (entrada.length() > maxLongitud) {
+                if (entrada.length() > maxLongitud || entrada.length() < minLongitud) {
                     showMensajePausa("Error. Máximo " + maxLongitud + " caracteres.", true);
                     intentos++;
                 } else {

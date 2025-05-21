@@ -11,8 +11,7 @@ import javalinos.onlinestore.vista.Interfaces.IVistaClientes;
 import java.util.List;
 
 import static javalinos.onlinestore.OnlineStore.configuracion;
-import static javalinos.onlinestore.utils.Utilidades.checkEmail;
-import static javalinos.onlinestore.utils.Utilidades.checkNIF;
+import static javalinos.onlinestore.utils.Utilidades.*;
 
 /**
  * Controlador para gestionar la lógica del módulo de clientes.
@@ -265,8 +264,42 @@ public class ControlClientes extends ControlBase
     }
 
     private void modClienteJavaFX() {
-        ClienteDTO clienteDTO = null;
-        vClientes.askModificacion();
+        ClienteDTO clienteDTO;
+        vClientes.showMensaje("******** Menú de Modificación de Clientes ********", true);
+        while(true) {
+            switch (vClientes.askModificacion()) {
+                case 1:
+                    clienteDTO = askClienteModificar();
+                    if (clienteDTO == null) return;
+                    modClienteNombre(clienteDTO);
+                    break;
+                case 2:
+                    clienteDTO = askClienteModificar();
+                    if (clienteDTO == null) return;
+                    modClienteDomicilio(clienteDTO);
+                    break;
+                case 3:
+                    clienteDTO = askClienteModificar();
+                    if (clienteDTO == null) return;
+                    modClienteNIF(clienteDTO);
+                    break;
+                case 4:
+                    clienteDTO = askClienteModificar();
+                    if (clienteDTO == null) return;
+                    modClienteEmail(clienteDTO);
+                    break;
+                case 5:
+                    clienteDTO = askClienteModificar();
+                    if (clienteDTO == null) return;
+                    modClienteCategoria(clienteDTO);
+                    break;
+                case 0:
+                    vClientes.showMensajePausa("Volviendo al menú de gestión de clientes...", true);
+                    return;
+                default:
+                    vClientes.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
+            }
+        }
     }
 
     private void modClienteConsola()
@@ -315,7 +348,7 @@ public class ControlClientes extends ControlBase
         ClienteDTO clienteDTONew;
         clienteDTONew = new ClienteDTO(clienteDTOOld);
         oldNameCliente = clienteDTOOld.getNombre();
-        newNameCliente = vClientes.askString("Introduce el nuevo nombre del usuario: ", 1, 250, true, false, true);
+        newNameCliente = vClientes.askStringOpcional("Introduce el nuevo nombre del usuario: ", 1,250);
         if (newNameCliente == null) return;
         clienteDTONew.setNombre(newNameCliente);
         try
@@ -336,7 +369,7 @@ public class ControlClientes extends ControlBase
         ClienteDTO ClienteDTONew;
         ClienteDTONew = new ClienteDTO(clienteDTOOld);
         oldDomicilio = clienteDTOOld.getDomicilio();
-        newDomicilio = vClientes.askString("Introduce el nuevo domicilio: ", 1, 250, true, false, true);
+        newDomicilio = vClientes.askStringOpcional("Introduce el nuevo domicilio: ",  1, 250);
         if (newDomicilio == null) return;
         ClienteDTONew.setDomicilio(newDomicilio);
         try {
@@ -428,8 +461,11 @@ public class ControlClientes extends ControlBase
         String datoCliente;
         int intentos = 0;
         while (true) {
-            showListClientes();
-            datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
+            if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) datoCliente = vClientes.askStringListado(listToStr(getListaClientes()),"Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
+            else {
+                showListClientes();
+                datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
+            }
             if (datoCliente != null) {
                 if (checkNIF(datoCliente)) modo = modos.nif;
                 else if (checkEmail(datoCliente)) modo = modos.email;
@@ -443,9 +479,7 @@ public class ControlClientes extends ControlBase
                 if (modo == modos.email) clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
                 else clienteDTO = mClientes.getClienteDTONif(datoCliente);
                 if (clienteDTO != null) {
-                    vClientes.showMensaje("******** Datos del cliente a modificar ********", true);
-                    vClientes.showMensaje(clienteDTO.toString(), true);
-                    vClientes.showMensaje("***********************************************", true);
+                    vClientes.showDatosCliente(clienteDTO);
                     break;
                 }
                 if (intentos > 2) {
@@ -547,7 +581,7 @@ public class ControlClientes extends ControlBase
     public <VO,VN> void showExitoMod (String datoModificar, VO valorOld, VN valorNew )
     {
         vClientes.showMensaje("El " + datoModificar + " del cliente se ha cambiado de forma exitosa de " + valorOld + " a " + valorNew + ".",true);
-        vClientes.showMensajePausa("",true);
+        if(configuracion != Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) vClientes.showMensajePausa("",true);
     }
     /**
      * Muestra los datos de un cliente introduciendo su NIF o email.

@@ -106,6 +106,7 @@ public class OnlineStore {
                 cClientes.loadClientes();
                 cArticulos.loadArticulos();
                 cPedidos.loadPedidos();
+                cMenuPrincipal.exitoPrecarga();
                 break;
             }
             catch (Exception e){

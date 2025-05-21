@@ -51,6 +51,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * Solicita al usuario un NIF válido (3 intentos).
      * @return NIF introducido o null si se supera el límite de intentos.
      */
+    @Override
     public String askNIF(boolean modificar, boolean reintentar, boolean sinFin) {
         String nif;
         int intentos = 0;
@@ -73,6 +74,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * @param modificar indica si es parte de una modificación.
      * @return Email introducido o null si se supera el límite de intentos.
      */
+    @Override
     public String askEmail(boolean modificar, boolean reintentar, boolean sinFin) {
         String email;
         int intentos = 0;
@@ -94,6 +96,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * Solicita el modo para eliminar un cliente.
      * @return opción seleccionada (0 = salir).
      */
+    @Override
     public int askMetodoEliminar() {
         while (true) {
             showMetodosEliminar();
@@ -111,6 +114,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * Solicita al usuario que seleccione una categoría de cliente.
      * @return índice de categoría seleccionada o 0 para volver atrás.
      */
+    @Override
     public int askCategoriaCliente() {
         while (true) {
             showCategorias();
@@ -130,6 +134,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * Muestra una lista simple de clientes.
      * @param clientesDTO lista de clientes.
      */
+    @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
         showListGenerica(clientesDTO,"CLIENTES", true, false);
     }
@@ -138,6 +143,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * Muestra una lista numerada de clientes.
      * @param clientesDTO lista de clientes.
      */
+    @Override
     public void showListClientesNumerada(List<ClienteDTO> clientesDTO) {
         showListGenerica(clientesDTO,"CLIENTES NUMERADOS", true, true);
     }
@@ -147,6 +153,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * @param clientesDTO lista de clientes filtrados.
      * @param categoriaDTO categoría seleccionada.
      */
+    @Override
     public void showListClientesCategoria(List<ClienteDTO> clientesDTO, CategoriaDTO categoriaDTO) {
         showListGenerica(clientesDTO, "LISTA DE CLIENTES DE CATEGORÍA "+ categoriaDTO.getNombre(), true, false);
     }
@@ -154,6 +161,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
     /**
      * Muestra las opciones de modificación de datos del cliente.
      */
+    @Override
     public void showMods() {
         showOptions(listMods,2, false, true, false);
     }
@@ -161,6 +169,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
     /**
      * Muestra las categorías de cliente disponibles.
      */
+    @Override
     public void showCategorias() {
         showMensaje("******** TIPOS DE CATEGORÍA ********", true);
         showOptions(listCategorias, 3,false, true, false);
@@ -169,6 +178,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
     /**
      * Muestra los métodos de eliminación disponibles.
      */
+    @Override
     public void showMetodosEliminar() {
         showMensaje("******** METODOS DE ELIMINACIÓN DE USUARIO ********", true);
         showOptions(listMetodos, 3,false, true, false);
@@ -178,6 +188,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      * Muestra los datos completos de un cliente.
      * @param clienteDTO cliente a mostrar.
      */
+    @Override
     public void showCliente(ClienteDTO clienteDTO) {
         showMensaje("******** DATOS DEL CLIENTE " + clienteDTO.getNombre() +" ********", true);
         showMensaje(clienteDTO.toString(), true);
@@ -189,4 +200,13 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
         showMods();
         return askInt("Introduce el tipo de modificación que deseas realizar", 0, 5, false, false, true);
     }
+
+    @Override
+    public void showDatosCliente(ClienteDTO clienteDTO) {
+        showMensaje("******** Datos del cliente a modificar ********", true);
+        showMensaje(clienteDTO.toString(), true);
+        showMensaje("***********************************************", true);
+
+    }
+
 }

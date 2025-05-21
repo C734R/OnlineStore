@@ -131,6 +131,10 @@ public class ControlMenuPrincipal extends ControlBase {
         return vMenuPrincipal.askBoolean("¿Deseas volver a intentarlo?", true, false);
     }
 
+    public void exitoPrecarga() {
+        vMenuPrincipal.showMensaje("*** Precarga realizada con éxito ***", true);
+    }
+
     /**
      * Muestra un mensaje de salida del programa.
      */

@@ -72,8 +72,7 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
     private void askFiltroCliente(TipoListado tipoListado) { // Recibe el tipo de listado deseado
         Map<String, Integer> mapa = Map.of(
                 "Sí", 1,
-                "No", 2,
-                "Volver", 0
+                "No", 2
         );
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());

@@ -212,7 +212,7 @@ public class ControlArticulos extends ControlBase {
 
         vArticulos.showMensaje("Deja un campo vacío para mantener el valor actual", true);
 
-        String descripcion = vArticulos.askStringOpcional("Descripción actual: " + articuloDTOOld.getDescripcion(), 250);
+        String descripcion = vArticulos.askStringOpcional("Descripción actual: " + articuloDTOOld.getDescripcion(), 1,250);
         if (descripcion != null && !descripcion.isEmpty()) {
             articuloDTONew.setDescripcion(descripcion);
             modificado = true;

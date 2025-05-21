@@ -16,6 +16,10 @@ import static javalinos.onlinestore.utils.Utilidades.checkNIF;
 
 public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClientes {
 
+    private final List<String> listMods = new ArrayList<>(Arrays.asList("Modificar nombre", "Modificar domicilio", "Modificar NIF", "Modificar email", "Modificar categoría"));
+    private final List<String> listCategorias = new ArrayList<>(Arrays.asList("Estándar", "Premium"));
+    private final List<String> listMetodos = new ArrayList<>(Arrays.asList("Por NIF", "Por Email"));
+
     @FXML private Button btnAddCliente;
     @FXML private Button btnModCliente;
     @FXML private Button btnDeleteCliente;
@@ -47,12 +51,13 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
         int intentos = 0;
         if (!reintentar) intentos = 2;
         while (intentos < 3) {
-            if (modificar) nif = askString("Introduce el nuevo NIF: ", 9, 15, false, false, false);
+            if (modificar) nif = askStringOpcional("Introduce el nuevo NIF: ", 9, 15);
             else nif = askString("Introduce el NIF: ", 9, 15, false, false, false);
             if (nif == null || !checkNIF(nif)) {
                 showMensajePausa("El DNI introducido es erróneo. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
                 if (!sinFin) intentos++;
-            } else if (checkNIF(nif)) return nif;
+            }
+            else if (checkNIF(nif)) return nif;
         }
         if (reintentar) showMensajePausa("Has superado el número de intentos permitidos. Volviendo...", true);
         return null;
@@ -64,7 +69,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
         int intentos = 0;
         if (!reintentar) intentos = 2;
         while (intentos < 3) {
-            if (modificar) email = askString("Introduce el nuevo email: ", 4, 50, false, false, false);
+            if (modificar) email = askStringOpcional("Introduce el nuevo email: ", 4, 50);
             else email = askString("Introduce el email: ", 4, 50, false, false, false);
             if (email == null || !checkEmail(email)) {
                 showMensajePausa("El email introducido es erróneo. " + (reintentar ? "Vuelve a intentarlo." : "Volviendo..."), true);
@@ -133,19 +138,17 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
-        tblClientes.getItems().clear();
-        tblClientes.getItems().addAll(clientesDTO);
+        showListGenerica(clientesDTO,"CLIENTES", true, false);
     }
 
     @Override
     public void showListClientesNumerada(List<ClienteDTO> clientesDTO) {
-
+        showListGenerica(clientesDTO,"CLIENTES NUMERADOS", true, true);
     }
 
     @Override
     public void showListClientesCategoria(List<ClienteDTO> clientesDTO, CategoriaDTO categoriaDTO) {
-        tblClientes.getItems().clear();
-        tblClientes.getItems().addAll(clientesDTO);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES DE CATEGORÍA "+ categoriaDTO.getNombre(), true, false);
     }
 
     @Override
@@ -170,20 +173,19 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public int askModificacion() {
-        Map<String, Integer> mapa = Map.of(
-                "Modificar nombre", 1,
-                "Modificar domicilio", 2,
-                "Modificar NIF", 3,
-                "Modificar email", 4,
-                "Modificar categoría", 5
-        );
+        Map<String, Integer> mapa = new HashMap<>();
+        int index = 1;
+        for (String mod : listMods) {
+            mapa.put(mod, index);
+            index++;
+        }
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
         int metodo = 0;
 
         ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
         dialogo.setTitle("Seleccione una opción");
-        dialogo.setHeaderText("Seleccione el método de eliminación");
+        dialogo.setHeaderText("Seleccione la opción de modificación");
         dialogo.setContentText("Opciones:");
 
         Optional<String> resultado = dialogo.showAndWait();
@@ -196,5 +198,13 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
             showMensajePausa("Volviendo atrás...", true);
         }
         return metodo;
+    }
+
+    @Override
+    public void showDatosCliente(ClienteDTO clienteDTO) {
+        showMensaje("******** Datos del cliente a modificar ********\n" +
+                     clienteDTO.toString() + "\n" +
+                    "***********************************************", true);
+
     }
 }
