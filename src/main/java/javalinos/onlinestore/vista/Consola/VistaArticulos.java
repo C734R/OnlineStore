@@ -64,6 +64,7 @@ public class VistaArticulos extends VistaBase implements IVistaArticulos {
      * @param articulosDTO lista de artículos.
      */
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
+        showMensaje("Lista de artículos disponibles:", true);
         showListGenerica(articulosDTO,"ARTÍCULOS", true, false);
     }
 

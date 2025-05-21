@@ -102,7 +102,7 @@ public class ControlArticulos extends ControlBase {
     public void addArticulo()
     {
         ArticuloDTO articuloDTO;
-        vArticulos.showMensaje(" Añadir Artículo ", true);
+        vArticulos.showMensaje("******** Añadir Artículo ********", true);
         try
         {
             int numeroArticulo = mArticulos.getArticulosDTO().size();
@@ -258,7 +258,7 @@ public class ControlArticulos extends ControlBase {
      */
     public void showListArticulos() {
         List<ArticuloDTO> articulosDTO;
-        vArticulos.showMensaje("******** Listar Artículos ********", true);
+        vArticulos.showMensaje("******** Lista de Artículos ********", true);
         try
         {
             articulosDTO = mArticulos.getArticulosDTO();
@@ -272,8 +272,6 @@ public class ControlArticulos extends ControlBase {
             vArticulos.showMensajePausa("No hay artículos disponibles.", true);
             return;
         }
-
-        vArticulos.showMensaje("Lista de artículos disponibles:", true);
         vArticulos.showListArticulos(articulosDTO);
     }
 

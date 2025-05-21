@@ -10,10 +10,10 @@
 
    <center>
       <AnchorPane>
-         <Button fx:id="btnGestionClientes" layoutX="229.0" layoutY="58.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Gestión Clientes" />
-         <Button fx:id="btnGestionArticulos" layoutX="229.0" layoutY="101.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Gestión Artículos" />
-         <Button fx:id="btnGestionPedidos" layoutX="229.0" layoutY="145.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Gestión Pedidos" />
-         <Button fx:id="btnSalir" layoutX="229.0" layoutY="208.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="143.0" text="Salir" />
+         <Button fx:id="btnGestionClientes" layoutX="200.0" layoutY="50.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Gestión Clientes" />
+         <Button fx:id="btnGestionArticulos" layoutX="200.0" layoutY="100.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Gestión Artículos" />
+         <Button fx:id="btnGestionPedidos" layoutX="200.0" layoutY="150.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Gestión Pedidos" />
+         <Button fx:id="btnSalir" layoutX="200.0" layoutY="220.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Salir" />
       </AnchorPane>
 
    </center>

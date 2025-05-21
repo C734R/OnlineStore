@@ -221,9 +221,9 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
                 "Sí", true,
                 "No", false
         );
-        String respuesta = null;
+        String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
-        ChoiceDialog<String> dialogo = new ChoiceDialog<>("Sí", opciones);
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
         dialogo.setTitle("Seleccione una opción");
         dialogo.setHeaderText(mensaje);
         dialogo.setContentText("Opciones:");
@@ -232,6 +232,7 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
 
         if (resultado.isPresent()) {
             respuesta = resultado.get();
+            if(respuesta.isEmpty()) return null;
         }
         else return null;
         if (respuesta.equals("Sí")) {
@@ -255,7 +256,7 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         int i = 1;
         for(String entrada: lista) {
             if(lista.indexOf(entrada) == lista.lastIndexOf(lista.getFirst())) {
-                builder.append(entrada);
+                builder.append("********************************************\n");
                 ++i;
                 continue;
             }
@@ -291,8 +292,8 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         textArea.setWrapText(true);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Listado de Pedidos Enviados");
-        alert.setHeaderText("Pedidos existentes:");
+        alert.setTitle(lista.getFirst());
+        alert.setHeaderText("Listado de " + lista.getFirst()+ ": \n" );
         alert.getDialogPane().setContent(textArea);
 
         textArea.setPrefWidth(600);
@@ -305,9 +306,9 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
     public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) {
         List<String> listaString = listToStr(lista);
         // Añadir título al inicio de la lista
-        listaString.addFirst("******** " + titulo + " ********");
+        listaString.addFirst(titulo);
         listaString.addLast("********************************************");
-
+        showOptions(listaString, 0,encuadre, numeracion, false);
     }
 
     @Override

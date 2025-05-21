@@ -52,20 +52,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
 
     @Override
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < articulosDTO.size(); i++) {
-            ArticuloDTO articulo = articulosDTO.get(i);
-            builder.append(i + 1).append(" - ")
-                    .append(articulo.getCodigo()).append(" - ")
-                    .append(articulo.getDescripcion()).append("\n");
-        }
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Listado de Artículos");
-        alert.setHeaderText("Artículos disponibles:");
-        alert.setContentText(builder.toString());
-        alert.showAndWait();
-
+        showListGenerica(articulosDTO,"ARTÍCULOS", true, false);
     }
 
     public String askCodigo() {
@@ -80,7 +67,8 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
 
     public void showListArticulosStock(Map<ArticuloDTO, Integer> articuloStockMap) {
         StringBuilder builder = new StringBuilder();
-        articuloStockMap.forEach((articulo, stock) -> {
+        articuloStockMap.forEach((articulo, stock)
+                -> {
             builder.append(articulo.getCodigo()).append(" - ")
                     .append(articulo.getDescripcion()).append(" : ")
                     .append("Stock: ").append(stock).append("\n");
@@ -95,7 +83,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
 
     @Override
     public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
-
+        showListGenerica(articulosDTO,"ARTÍCULOS NUMERADOS", true, true);
     }
 
 
@@ -103,13 +91,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Detalles del Artículo");
         alert.setHeaderText("Información del artículo seleccionado:");
-        alert.setContentText(
-                "ID: " + articuloDTO.getId() + "\n" +
-                        "Código: " + articuloDTO.getCodigo() + "\n" +
-                        "Descripción: " + articuloDTO.getDescripcion() + "\n" +
-                        "Precio: " + articuloDTO.getPrecio() + "\n" +
-                        "Preparación: " + articuloDTO.getMinutosPreparacion() + " min"
-        );
+        alert.setContentText(articuloDTO.toString());
         alert.showAndWait();
     }
 

@@ -82,10 +82,12 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public int askMetodoEliminar() {
-        Map<String, Integer> mapa = Map.of(
-                "Por NIF", 1,
-                "Por Email", 2
-        );
+        Map<String, Integer> mapa = new LinkedHashMap<>();
+        int index = 1;
+        for (String mod : listMetodos) {
+            mapa.put(mod, index);
+            index++;
+        }
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
         int metodo = 0;
@@ -99,6 +101,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
         if (resultado.isPresent()) {
             respuesta = resultado.get();
+            if(respuesta.isEmpty()) return 0;
             metodo = mapa.get(respuesta);
         } else return 0;
         if (metodo == 0) {
@@ -110,11 +113,12 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public int askCategoriaCliente() {
-
-        Map<String, Integer> mapa = Map.of(
-                "Estándar", 1,
-                "Premium", 2
-        );
+        Map<String, Integer> mapa = new LinkedHashMap<>();
+        int index = 1;
+        for (String mod : listCategorias) {
+            mapa.put(mod, index);
+            index++;
+        }
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
         int categoria = 0;
@@ -128,6 +132,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
         if (resultado.isPresent()) {
             respuesta = resultado.get();
+            if(respuesta.isEmpty()) return 0;
             categoria = mapa.get(respuesta);
         } else return 0;
         if (categoria == 0) {
@@ -173,7 +178,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public int askModificacion() {
-        Map<String, Integer> mapa = new HashMap<>();
+        Map<String, Integer> mapa = new LinkedHashMap<>();
         int index = 1;
         for (String mod : listMods) {
             mapa.put(mod, index);
@@ -181,7 +186,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
         }
         String respuesta;
         List<String> opciones = new ArrayList<>(mapa.keySet());
-        int metodo = 0;
+        Integer metodo = 0;
 
         ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
         dialogo.setTitle("Seleccione una opción");
@@ -192,6 +197,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
         if (resultado.isPresent()) {
             respuesta = resultado.get();
+            if(respuesta.isEmpty()) return 0;
             metodo = mapa.get(respuesta);
         } else return 0;
         if (metodo == 0) {

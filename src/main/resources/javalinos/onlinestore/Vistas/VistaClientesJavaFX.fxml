@@ -14,7 +14,7 @@
          <Button fx:id="btnDeleteCliente" layoutX="200.0" layoutY="130.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Eliminar cliente" />
          <Button fx:id="btnListClientes" layoutX="200.0" layoutY="170.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Listar Clientes" />
          <Button fx:id="btnListClientesCategoria" layoutX="200.0" layoutY="210.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Listar Clientes Categoría" />
-         <Button fx:id="btnVolver" layoutX="200.0" layoutY="260.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Volver" />
+         <Button fx:id="btnVolver" layoutX="200.0" layoutY="270.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Volver" />
       </AnchorPane>
    </bottom>
 

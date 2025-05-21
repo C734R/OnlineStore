@@ -12,17 +12,12 @@
     <center>
         <AnchorPane prefHeight="362.0" prefWidth="601.0" BorderPane.alignment="CENTER">
 
-            <Button fx:id="btnVolver" layoutX="265.0" layoutY="297.0" mnemonicParsing="false" text="Volver" />
+            <Button fx:id="btnAddArticulo" layoutX="200.0" layoutY="50.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Añadir Artículo" />
+            <Button fx:id="btnModArticulo" layoutX="200.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Modificar Articulo" />
+            <Button fx:id="btnDeleteArticulo" layoutX="200.0" layoutY="130.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Eliminar Articulo" />
+            <Button fx:id="btnListArticulo" layoutX="200.0" layoutY="170.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Mostrar Articulos" />
+            <Button fx:id="btnVolver" layoutX="200.0" layoutY="230.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Volver" />
 
-            <Button fx:id="btnAddArticulo" layoutX="175.0" layoutY="50.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Añadir Artículo" />
-
-            <Button fx:id="btnModArticulo" layoutX="175.0" layoutY="100.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Modificar Articulo" />
-
-            <Button fx:id="btnDeleteArticulo" layoutX="175.0" layoutY="150.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Eliminar Articulo" />
-
-            <Button fx:id="btnListArticulo" layoutX="175.0" layoutY="200.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="229.0" text="Mostrar Articulos" />
-
-   
         </AnchorPane>
     </center>
 </BorderPane>

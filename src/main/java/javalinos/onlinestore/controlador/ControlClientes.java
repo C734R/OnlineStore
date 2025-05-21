@@ -457,43 +457,45 @@ public class ControlClientes extends ControlBase
     {
         enum modos {nif, email, nulo};
         modos modo = modos.nulo;
-        ClienteDTO clienteDTO;
+        ClienteDTO clienteDTO = null;
         String datoCliente;
         int intentos = 0;
-        while (true) {
-            if(configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL) datoCliente = vClientes.askStringListado(listToStr(getListaClientes()),"Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
-            else {
-                showListClientes();
-                datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
-            }
-            if (datoCliente != null) {
-                if (checkNIF(datoCliente)) modo = modos.nif;
-                else if (checkEmail(datoCliente)) modo = modos.email;
-            }
-            if(datoCliente == null || modo == modos.nulo) {
-                vClientes.showMensajePausa("NIF o Email inválido.", true);
-                intentos++;
-                continue;
-            }
-            try {
-                if (modo == modos.email) clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
-                else clienteDTO = mClientes.getClienteDTONif(datoCliente);
-                if (clienteDTO != null) {
-                    vClientes.showDatosCliente(clienteDTO);
-                    break;
+        try {
+            while (true) {
+                if (configuracion == Configuracion.JAVAFX_ORM_HIBERNATE_MYSQL)
+                    datoCliente = vClientes.askStringListado(listToStr(getListaClientes()), "Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
+                else {
+                    showListClientes();
+                    datoCliente = vClientes.askString("Introduce el NIF o el Email del cliente a modificar: ", 1, 250, false, false, false);
+                }
+                if (datoCliente != null) {
+                    if (checkNIF(datoCliente)) modo = modos.nif;
+                    else if (checkEmail(datoCliente)) modo = modos.email;
+                }
+                if (datoCliente == null || modo == modos.nulo) {
+                    vClientes.showMensajePausa("NIF o Email inválido.", true);
+                    intentos++;
+                }
+                else {
+                    if (modo == modos.email) clienteDTO = mClientes.getClienteDTOEmail(datoCliente);
+                    else clienteDTO = mClientes.getClienteDTONif(datoCliente);
+                    if (clienteDTO != null) {
+                        vClientes.showDatosCliente(clienteDTO);
+                        break;
+                    }
                 }
                 if (intentos > 2) {
                     vClientes.showMensajePausa("Error. Intentos máximos superados. Volviendo al programa principal...", true);
                     return null;
                 }
                 vClientes.showMensajePausa("Error. El cliente indicado no existe. Vuelve a intentarlo.", true);
-
-            }
-            catch (Exception e)
-            {
-                vClientes.showMensajePausa("Error al obtener la cliente a modificar: " + e,true);
             }
         }
+        catch (Exception e)
+        {
+            vClientes.showMensajePausa("Error al obtener la cliente a modificar: " + e,true);
+        }
+
         return clienteDTO;
     }
 
@@ -641,6 +643,7 @@ public class ControlClientes extends ControlBase
     public void showListClientesCategoria()
     {
         CategoriaDTO categoriaDTO = getCategoria(vClientes.askCategoriaCliente());
+        if(categoriaDTO == null) return;
         vClientes.showListClientesCategoria(getListClientesCategoria(categoriaDTO), categoriaDTO);
     }
 
