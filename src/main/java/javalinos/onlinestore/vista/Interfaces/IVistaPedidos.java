@@ -17,4 +17,7 @@ public interface IVistaPedidos extends IVistaBase {
     void showListPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO);
     void showListPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO);
     ClienteDTO askClienteOpcional(List<ClienteDTO> clientesDTO, ClienteDTO clienteDTOActual);
+    int askPedidoModificar(List<PedidoDTO> pedidosDTO);
+    int askClienteFiltro(int tipoFiltrado, List<ClienteDTO> clientesPedidos);
+    int askPedidoRemove(List<PedidoDTO> pedidosDTO);
 }

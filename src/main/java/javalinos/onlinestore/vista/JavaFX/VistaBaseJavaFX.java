@@ -47,7 +47,6 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
             default:
                 break;
         }
-
     }
 
     @Override
@@ -254,9 +253,9 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
     public void showOptions(List<String> lista, int tipoRetorno, Boolean encuadre, Boolean numeracion, Boolean opcion) {
         StringBuilder builder = new StringBuilder();
         int i = 1;
+        builder.append("********************************************\n");
         for(String entrada: lista) {
             if(lista.indexOf(entrada) == lista.lastIndexOf(lista.getFirst())) {
-                builder.append("********************************************\n");
                 ++i;
                 continue;
             }
@@ -271,7 +270,10 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
             builder.append(entrada).append("\n");
             if(encuadre) builder.append("--------------------------------------\n");
             ++i;
+
         }
+        builder.append("********************************************\n");
+
         switch (tipoRetorno) {
             case 1:
                 builder.append("0.Salir").append("\n");

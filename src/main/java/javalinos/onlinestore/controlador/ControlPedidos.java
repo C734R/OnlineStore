@@ -13,8 +13,7 @@ import javalinos.onlinestore.vista.Interfaces.IVistaPedidos;
 import java.time.LocalDate;
 import java.util.*;
 
-import static javalinos.onlinestore.OnlineStore.cClientes;
-import static javalinos.onlinestore.OnlineStore.vClientes;
+import static javalinos.onlinestore.OnlineStore.*;
 import static javalinos.onlinestore.utils.Utilidades.listToStr;
 /**
  * Controlador para gestionar la lógica relacionada con los pedidos.
@@ -102,15 +101,15 @@ public class ControlPedidos extends ControlBase{
                     updatePedido();
                     break;
                 case 4:
-                    showListPedidos(askFiltrarCliente(0));
+                    mostrarListaPedidos();
                     vPedidos.showMensajePausa("",true);
                     break;
                 case 5:
-                    showListPedidosPendientesEnviados(askFiltrarCliente(1), false);
+                    mostrarListaPedidosPendientes();
                     vPedidos.showMensajePausa("",true);
                     break;
                 case 6:
-                    showListPedidosPendientesEnviados(askFiltrarCliente(2), true);
+                    mostrarListaPedidosEnviados();
                     vPedidos.showMensajePausa("",true);
                     break;
                 case 0:
@@ -120,6 +119,26 @@ public class ControlPedidos extends ControlBase{
                     vPedidos.showMensajePausa("Error. La opción introducida no existe. Vuelva a intentarlo.", true);
             }
         }
+    }
+
+    public void mostrarListaPedidosEnviados() {
+        Boolean filtrarCliente = cPedidos.askFiltrarCliente();
+        if (filtrarCliente == null) return;
+        if (filtrarCliente) cPedidos.showListPedidosPendientesEnviados(cPedidos.askClienteFiltro(2), true);
+        else cPedidos.showListPedidosPendientesEnviados(null, true);
+    }
+
+    public void mostrarListaPedidosPendientes() {
+        Boolean filtrarCliente = cPedidos.askFiltrarCliente();
+        if (filtrarCliente == null) return;
+        if (filtrarCliente) cPedidos.showListPedidosPendientesEnviados(cPedidos.askClienteFiltro(1), false);
+        else cPedidos.showListPedidosPendientesEnviados(null, false);    }
+
+    public void mostrarListaPedidos() {
+        Boolean filtrarCliente = cPedidos.askFiltrarCliente();
+        if (filtrarCliente == null) return;
+        if (filtrarCliente) cPedidos.showListPedidos(cPedidos.askClienteFiltro(0));
+        else cPedidos.showListPedidos(null);
     }
 
     //*************************** CRUD ***************************//
@@ -184,6 +203,7 @@ public class ControlPedidos extends ControlBase{
     public void removePedidos()
     {
         List<PedidoDTO> pedidos;
+        vPedidos.showMensaje("******** Eliminar Pedido ********", true);
         try
         {
             pedidos = mPedidos.getPedidosPendientesEnviados(false, null);
@@ -192,10 +212,11 @@ public class ControlPedidos extends ControlBase{
                 vPedidos.showMensajePausa("Error. No existen pedidos a eliminar.", true);
                 return;
             }
-            vPedidos.showListPedidos(pedidos,null, true);
-            int numPedidoBorrar = vPedidos.askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true, true);
+
+            int numPedidoBorrar = vPedidos.askPedidoRemove(pedidos);
             if(numPedidoBorrar == -99999) return;
             PedidoDTO pedidoDTO = pedidos.get(numPedidoBorrar-1);
+
             mPedidos.removePedidoStockSP(pedidoDTO);
         }
         catch (Exception e)
@@ -218,11 +239,8 @@ public class ControlPedidos extends ControlBase{
                 vPedidos.showMensajePausa("No hay pedidos disponibles para modificar.", true);
                 return;
             }
-
-            vPedidos.showListPedidos(pedidosDTO, null, true);
-            int seleccion = vPedidos.askInt("Selecciona el número del pedido a modificar", 1, pedidosDTO.size(), true, true, true);
+            int seleccion = vPedidos.askPedidoModificar(pedidosDTO);
             if (seleccion == -99999) return;
-
             PedidoDTO pedidoDTOOld = pedidosDTO.get(seleccion - 1);
 
             ClienteDTO nuevoClienteDTO = vPedidos.askClienteOpcional(mClientes.getClientesDTO(), pedidoDTOOld.getCliente());
@@ -237,7 +255,7 @@ public class ControlPedidos extends ControlBase{
             if (nuevaCantidad == null) nuevaCantidad = pedidoDTOOld.getCantidad();
 
             PedidoDTO pedidoDTONew = mPedidos.makePedido(nuevoClienteDTO, pedidoDTOOld.getArticulo(), nuevaCantidad, LocalDate.now(), precioEnvio);
-            mPedidos.updatePedidoStockSP(pedidoDTOOld,pedidoDTONew);
+            mPedidos.updatePedidoStockSP(pedidoDTOOld, pedidoDTONew);
             vPedidos.showMensajePausa("Pedido actualizado correctamente.", true);
         }
         catch (Exception e)
@@ -361,14 +379,11 @@ public class ControlPedidos extends ControlBase{
 
     /**
      * Pregunta si se desea filtrar por cliente y devuelve el seleccionado.
-     * @param tipoFiltro tipo de filtrado: 0=todos, 1=enviados, 2=pendientes
      * @return cliente seleccionado o null
      */
-    public ClienteDTO askFiltrarCliente(int tipoFiltro)
+    public Boolean askFiltrarCliente()
     {
-        boolean filtrar = vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true);
-        if (filtrar) return askClienteFiltro(tipoFiltro);
-        return null;
+        return vPedidos.askBoolean("¿Deseas filtrar por usuario?", true, true);
     }
 
     /**
@@ -409,10 +424,7 @@ public class ControlPedidos extends ControlBase{
                 return null;
             }
 
-            if(tipoFiltrado == 0) vPedidos.showListClientesPedidos(clientesPedidos);
-            else if (tipoFiltrado == 1) vPedidos.showListClientesPedidosPendientes(clientesPedidos);
-            else vPedidos.showListClientesPedidosEnviados(clientesPedidos);
-            indexCliente = vPedidos.askInt("Selecciona un cliente", 1, clientesPedidos.size(), true, true, true);
+            indexCliente = vPedidos.askClienteFiltro(tipoFiltrado, clientesPedidos);
             if (indexCliente == -99999) return null;
 
             ClienteDTO clienteSeleccionado = clientesPedidos.get(indexCliente - 1);

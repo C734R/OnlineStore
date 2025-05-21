@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.*;
 
 import static javalinos.onlinestore.OnlineStore.cPedidos;
-import static javalinos.onlinestore.OnlineStore.cClientes;
 
 public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos {
 
@@ -28,219 +27,265 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
         botonNuevoPedido.setOnAction(event -> cPedidos.addPedidos());
         botonEliminarPedido.setOnAction(event -> cPedidos.removePedidos());
         botonEditarPedido.setOnAction(event -> cPedidos.updatePedido());
-        botonListarTodosPedidos.setOnAction(event -> askFiltroCliente(TipoListado.TODOS));
-        botonListarPedidosPendientes.setOnAction(event -> askFiltroCliente(TipoListado.PENDIENTES));
-        botonListarPedidosEnviados.setOnAction(event -> askFiltroCliente(TipoListado.ENVIADOS));
+        botonListarTodosPedidos.setOnAction(event -> cPedidos.mostrarListaPedidos());
+        botonListarPedidosPendientes.setOnAction(event -> cPedidos.mostrarListaPedidosPendientes());
+        botonListarPedidosEnviados.setOnAction(event -> cPedidos.mostrarListaPedidosEnviados());
         botonVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionPedidos"));
     }
 
     @Override
     public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
-        StringBuilder builder = new StringBuilder();
-        if (pedidosDTO != null) {
-            for (int i = 0; i < pedidosDTO.size(); i++) {
-                PedidoDTO pedido = pedidosDTO.get(i);
-                if (clienteDTO == null || clienteDTO.equals(pedido.getCliente())) {
-                    builder.append("--------------------------------------------------------------\n")
-                            .append(i + 1).append(" - Pedido\n")
-                            .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
-                            .append(pedido.getArticulo()).append(" - ")
-                            .append(pedido.getCliente()).append(" - ")
-                            .append(pedido.getCantidad()).append(" - ")
-                            .append(pedido.getPrecio()).append("\n")
-                            .append("-------------------------------------------------------------\n");
-                }
-            }
+        if (clienteDTO == null) {
+            showListGenerica(pedidosDTO, "LISTA DE PEDIDOS", true, false);
         }
-
-        TextArea textArea = new TextArea(builder.toString());
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Listado de Pedidos");
-        alert.setHeaderText("Pedidos existentes:");
-        alert.getDialogPane().setContent(textArea);
-
-        textArea.setPrefWidth(600);
-        textArea.setPrefHeight(400);
-
-        alert.showAndWait();
+        else {
+            showListGenerica(pedidosDTO, "LISTA DE PEDIDOS DEL CLIENTE  " + pedidosDTO.getFirst().getCliente().getNombre(), true, false);
+        }
+//        StringBuilder builder = new StringBuilder();
+//        if (pedidosDTO != null) {
+//            for (int i = 0; i < pedidosDTO.size(); i++) {
+//                PedidoDTO pedido = pedidosDTO.get(i);
+//                if (clienteDTO == null || clienteDTO.equals(pedido.getCliente())) {
+//                    builder.append("--------------------------------------------------------------\n")
+//                            .append(i + 1).append(" - Pedido\n")
+//                            .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
+//                            .append(pedido.getArticulo()).append(" - ")
+//                            .append(pedido.getCliente()).append(" - ")
+//                            .append(pedido.getCantidad()).append(" - ")
+//                            .append(pedido.getPrecio()).append("\n")
+//                            .append("-------------------------------------------------------------\n");
+//                }
+//            }
+//        }
+//
+//        TextArea textArea = new TextArea(builder.toString());
+//        textArea.setEditable(false);
+//        textArea.setWrapText(true);
+//
+//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+//        alert.setTitle("Listado de Pedidos");
+//        alert.setHeaderText("Pedidos existentes:");
+//        alert.getDialogPane().setContent(textArea);
+//
+//        textArea.setPrefWidth(600);
+//        textArea.setPrefHeight(400);
+//
+//        alert.showAndWait();
 
     }
 
-    private void askFiltroCliente(TipoListado tipoListado) { // Recibe el tipo de listado deseado
-        Map<String, Integer> mapa = Map.of(
-                "Sí", 1,
-                "No", 2
-        );
-        String respuesta;
-        List<String> opciones = new ArrayList<>(mapa.keySet());
-        int filtro = 0;
-
-        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
-        dialogo.setTitle("Seleccione una opción");
-        dialogo.setHeaderText("¿Quieres filtrar por cliente?");
-        dialogo.setContentText("Opciones:");
-
-        Optional<String> resultado = dialogo.showAndWait();
-        if (resultado.isPresent()) {
-            respuesta = resultado.get();
-            filtro = mapa.get(respuesta);
-        }
-        if (filtro == 0) {
-            showMensajePausa("Volviendo atrás...", true);
-            return;
-        }
-
-        ClienteDTO clienteDTO = null;
-        if (filtro == 1) {
-            clienteDTO = cPedidos.askCliente(false);
-            if (clienteDTO == null) {
-                showMensajePausa("Selección de cliente cancelada. Volviendo atrás...", true);
-                return;
-            }
-        }
-        if (tipoListado == TipoListado.PENDIENTES) {
-            cPedidos.showListPedidosPendientesEnviados(clienteDTO, false);
-        } else if (tipoListado == TipoListado.ENVIADOS) {
-            cPedidos.showListPedidosPendientesEnviados(clienteDTO, true);
-        } else if (tipoListado == TipoListado.TODOS) {
-            cPedidos.showListPedidos(clienteDTO);
-        }
-    }
+//    private void askFiltroCliente(TipoListado tipoListado) { // Recibe el tipo de listado deseado
+//        Map<String, Integer> mapa = Map.of(
+//                "Sí", 1,
+//                "No", 2
+//        );
+//        String respuesta;
+//        List<String> opciones = new ArrayList<>(mapa.keySet());
+//        int filtro = 0;
+//
+//        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+//        dialogo.setTitle("Seleccione una opción");
+//        dialogo.setHeaderText("¿Quieres filtrar por cliente?");
+//        dialogo.setContentText("Opciones:");
+//
+//        Optional<String> resultado = dialogo.showAndWait();
+//        if (resultado.isPresent()) {
+//            respuesta = resultado.get();
+//            filtro = mapa.get(respuesta);
+//        }
+//        if (filtro == 0) {
+//            showMensajePausa("Volviendo atrás...", true);
+//            return;
+//        }
+//
+//        ClienteDTO clienteDTO = null;
+//        if (filtro == 1) {
+//            clienteDTO = cPedidos.askCliente(false);
+//            if (clienteDTO == null) {
+//                showMensajePausa("Selección de cliente cancelada. Volviendo atrás...", true);
+//                return;
+//            }
+//        }
+//        if (tipoListado == TipoListado.PENDIENTES) {
+//            cPedidos.showListPedidosPendientesEnviados(clienteDTO, false);
+//        } else if (tipoListado == TipoListado.ENVIADOS) {
+//            cPedidos.showListPedidosPendientesEnviados(clienteDTO, true);
+//        } else if (tipoListado == TipoListado.TODOS) {
+//            cPedidos.showListPedidos(clienteDTO);
+//        }
+//    }
 
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
-
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES", true, false);
     }
 
     @Override
     public void showListClientesPedidos(List<ClienteDTO> clientesDTO) {
-
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS", true, false);
     }
 
     @Override
     public void showListClientesPedidosPendientes(List<ClienteDTO> clientesDTO) {
-
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, false);
     }
 
     @Override
     public void showListClientesPedidosEnviados(List<ClienteDTO> clientesDTO) {
-
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS ENVIADOS", true, false);
     }
 
     @Override
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
-
+        showListGenerica(articulosDTO, "LISTA DE ARTICULOS", true, false);
     }
 
     @Override
     public void showPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS", true, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS DEL CLIENTE " + clienteDTO.getNombre(), true, false);
     }
 
     @Override
     public void showListPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        StringBuilder builder = new StringBuilder();
-
-        if (pedidosDTO == null || pedidosDTO.isEmpty()) {
-            builder.append("No existen pedidos pendientes de envío para mostrar.");
-        } else {
-            for (int i = 0; i < pedidosDTO.size(); i++) {
-                PedidoDTO pedido = pedidosDTO.get(i);
-                if (clienteDTO == null || clienteDTO.equals(pedido.getCliente())) {
-                    builder.append("-------------------------------------------------------------\n")
-                            .append(i + 1).append(" - ")
-                            .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
-                            .append(pedido.getArticulo()).append(" - ")
-                            .append(pedido.getCliente()).append(" - ")
-                            .append(pedido.getCantidad()).append(" - ")
-                            .append(pedido.getPrecio()).append("\n")
-                            .append("-------------------------------------------------------------\n");
-                }
-            }
-            if (builder.isEmpty() && clienteDTO != null) {
-                builder.append("No hay pedidos pendientes de envío para el cliente seleccionado.");
-            }
-        }
-        TextArea textArea = new TextArea(builder.toString());
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Listado de Pedidos Pendientes de Envío");
-        alert.setHeaderText("Pedidos existentes:");
-        alert.getDialogPane().setContent(textArea);
-
-        textArea.setPrefWidth(600);
-        textArea.setPrefHeight(400);
-
-        alert.showAndWait();
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES", true, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES DEL CLIENTE " + clienteDTO.getNombre(), true, false);
     }
 
     @Override
     public void showListPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        StringBuilder builder = new StringBuilder();
-
-        if (pedidosDTO == null || pedidosDTO.isEmpty()) {
-            builder.append("No existen pedidos enviados para mostrar.");
-        } else {
-            for (int i = 0; i < pedidosDTO.size(); i++) {
-                PedidoDTO pedido = pedidosDTO.get(i);
-                if (clienteDTO == null || clienteDTO.equals(pedido.getCliente())) {
-                    builder.append("-------------------------------------------------------------\n")
-                            .append(i + 1).append(" - ")
-                            .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
-                            .append(pedido.getArticulo()).append(" - ")
-                            .append(pedido.getCliente()).append(" - ")
-                            .append(pedido.getCantidad()).append(" - ")
-                            .append(pedido.getPrecio()).append("\n")
-                            .append("-------------------------------------------------------------\n");
-                }
-            }
-            if (builder.isEmpty() && clienteDTO != null) {
-                builder.append("No hay pedidos enviados para el cliente seleccionado.");
-            }
-        }
-
-        TextArea textArea = new TextArea(builder.toString());
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Listado de Pedidos Enviados");
-        alert.setHeaderText("Pedidos existentes:");
-        alert.getDialogPane().setContent(textArea);
-
-        textArea.setPrefWidth(600);
-        textArea.setPrefHeight(400);
-
-        alert.showAndWait();
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS", true, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS DEL CLIENTE " + clienteDTO.getNombre(), true, false);
     }
 
     @Override
     public ClienteDTO askClienteOpcional(List<ClienteDTO> clientesDTO, ClienteDTO clienteDTOActual) {
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Filtro por cliente");
-        dialog.setHeaderText("Introduzca el DNI del cliente");
-        dialog.setContentText("DNI:");
-
-        var result = dialog.showAndWait();
-        if (result.isPresent()) {
-            try {
-                String dniIngresado = result.get();
-                for (ClienteDTO cliente : clientesDTO) {
-                    if (cliente.getNif().equalsIgnoreCase(dniIngresado)){
-                        return cliente;
-                    }
-                }
-            } catch (NumberFormatException ignored) {}
-            dialog.setHeaderText("Valor inválido. Introduce un número entre");
-        } else {
-            return null;
+        LinkedHashMap<String, Integer> mapa = new LinkedHashMap<>();
+        mapa.put("", 0);
+        int index = 1;
+        for (ClienteDTO clienteDTO : clientesDTO) {
+            mapa.put(clienteDTO.getNombre() + " - " + clienteDTO.getNif() + " - " + clienteDTO.getEmail(), index);
+            index++;
         }
-        return null;
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el nuevo cliente (VACÍO para mantener actual)");
+
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            seleccion = mapa.get(respuesta);
+        }
+        else return null;
+        if (seleccion == 0) return null;
+        return clientesDTO.get(seleccion-1);
     }
+
+    @Override
+    public int askPedidoModificar(List<PedidoDTO> pedidosDTO) {
+        LinkedHashMap<String, Integer> mapa = new LinkedHashMap<>();
+        int index = 1;
+        for (PedidoDTO pedido : pedidosDTO) {
+            mapa.put(pedido.getNumero() + " - " + pedido.getCliente().getNombre() + " - " + pedido.getArticulo().getDescripcion() + " - " + pedido.getCantidad(), index);
+            index++;
+        }
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el pedido a modificar");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            if (respuesta.isEmpty()) return -99999;
+            seleccion = mapa.get(respuesta);
+        }
+        else return -99999;
+        if (seleccion == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+            return -99999;
+        }
+        return seleccion;
+    }
+
+    @Override
+    public int askClienteFiltro(int tipoFiltrado, List<ClienteDTO> clientesPedidos) {
+
+        LinkedHashMap<String, Integer> mapa = new LinkedHashMap<>();
+        int index = 1;
+        for (ClienteDTO cliente : clientesPedidos) {
+            mapa.put(cliente.getNombre() + " - " + cliente.getNif() + " - " + cliente.getEmail(), index);
+            index++;
+        }
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione un cliente por el que filtrar");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            if (respuesta.isEmpty()) return -99999;
+            seleccion = mapa.get(respuesta);
+        }
+        else return -99999;
+        if (seleccion == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+            return -99999;
+        }
+        return seleccion;
+    }
+
+    @Override
+    public int askPedidoRemove(List<PedidoDTO> pedidosDTO) {
+        LinkedHashMap<String, Integer> mapa = new LinkedHashMap<>();
+        int index = 1;
+        for (PedidoDTO pedido : pedidosDTO) {
+            mapa.put(pedido.getNumero() + " - " + pedido.getCliente().getNombre() + " - " + pedido.getArticulo().getDescripcion() + " - " + pedido.getCantidad(), index);
+            index++;
+        }
+
+        String respuesta;
+        List<String> opciones = new ArrayList<>(mapa.keySet());
+        int seleccion;
+
+        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
+        dialogo.setTitle("Seleccione una opción");
+        dialogo.setHeaderText("Seleccione el pedido a eliminar");
+        dialogo.setContentText("Opciones:");
+
+        Optional<String> resultado = dialogo.showAndWait();
+
+        if (resultado.isPresent()) {
+            respuesta = resultado.get();
+            if (respuesta.isEmpty()) return -99999;
+            seleccion = mapa.get(respuesta);
+        }
+        else return -99999;
+        if (seleccion == 0) {
+            showMensajePausa("Volviendo atrás...", true);
+            return -99999;
+        }
+        return seleccion;    }
 
 }

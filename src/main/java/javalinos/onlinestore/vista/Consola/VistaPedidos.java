@@ -160,4 +160,24 @@ public class VistaPedidos extends VistaBase implements IVistaPedidos {
             return null;
         }
     }
+
+    @Override
+    public int askPedidoModificar(List<PedidoDTO> pedidosDTO) {
+        showListPedidos(pedidosDTO, null, true);
+        return askInt("Selecciona el número del pedido a modificar", 1, pedidosDTO.size(), true, true, true);
+    }
+
+    @Override
+    public int askClienteFiltro(int tipoFiltrado, List<ClienteDTO> clientesPedidos) {
+        if(tipoFiltrado == 0) showListClientesPedidos(clientesPedidos);
+        else if (tipoFiltrado == 1) showListClientesPedidosPendientes(clientesPedidos);
+        else showListClientesPedidosEnviados(clientesPedidos);
+        return askInt("Selecciona un cliente", 1, clientesPedidos.size(), true, true, true);
+    }
+
+    @Override
+    public int askPedidoRemove(List<PedidoDTO> pedidos) {
+        showListPedidos(pedidos,null, true);
+        return askInt("Ingresa el numero de pedido que quieres borrar: ", 1, pedidos.size(), true, true, true);
+    }
 }

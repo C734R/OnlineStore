@@ -103,7 +103,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
     @Override
     public int askRemoveArticulo(List<ArticuloDTO> articulosDTO) {
 
-        Map<String, Integer> mapa = new HashMap<>();
+        Map<String, Integer> mapa = new LinkedHashMap<>();
         int index = 1;
         for (ArticuloDTO articulo : articulosDTO) {
             mapa.put(articulo.getCodigo() + " - " + articulo.getDescripcion(), index);
@@ -126,7 +126,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
             seleccion = mapa.get(respuesta);
         }
         else return -99999;
-         if (seleccion == 0) {
+        if (seleccion == 0) {
             showMensajePausa("Volviendo atrás...", true);
             return -99999;
         }
@@ -156,6 +156,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
 
         if (resultado.isPresent()) {
             respuesta = resultado.get();
+            if(respuesta.isEmpty()) return -99999;
             seleccion = mapa.get(respuesta);
         }
         else return -99999;

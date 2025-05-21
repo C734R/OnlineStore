@@ -175,6 +175,7 @@ public class ControlClientes extends ControlBase
      */
     public void removeCliente()
     {
+        vClientes.showMensaje("******** Eliminar Cliente ********", true);
         int opcion = vClientes.askMetodoEliminar();
 
         switch (opcion) {
@@ -192,8 +193,8 @@ public class ControlClientes extends ControlBase
      */
     public void removeClienteNif()
     {
+        showListClientes();
         String nif = vClientes.askNIF(false, false, false);
-
         if (nif == null) return;
         ClienteDTO clienteDTO;
         try
@@ -225,6 +226,7 @@ public class ControlClientes extends ControlBase
      */
     public void removeClienteEmail()
     {
+        showListClientes();
         String email = vClientes.askEmail(false, false, false);
         if (email == null) return;
         ClienteDTO clienteDTO = null;
