@@ -17,8 +17,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
     @FXML private Button btnModArticulo;
     @FXML private Button btnDeleteArticulo;
     @FXML private Button btnListArticulo;
-
-    @FXML private TableView<ArticuloDTO> tblArticulos;
+    @FXML private Button btnListArticuloStock;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -26,8 +25,9 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
         btnDeleteArticulo.setOnAction(event -> cArticulos.removeArticulo());
         btnModArticulo.setOnAction(event -> cArticulos.updateArticulo());
         btnListArticulo.setOnAction(event -> cArticulos.showListArticulos());
+        btnListArticuloStock.setOnAction(event -> cArticulos.showStockArticulos());
         btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionArticulos"));
-  }
+    }
 
     @Override
     public float askPrecio(float min, float max) {
@@ -52,7 +52,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
 
     @Override
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
-        showListGenerica(articulosDTO,"ARTÍCULOS", true, false);
+        showListGenerica(articulosDTO,"ARTÍCULOS", true, false, false);
     }
 
     public String askCodigo() {
@@ -83,7 +83,7 @@ public class VistaArticulosJavaFX extends VistaBaseJavaFX implements IVistaArtic
 
     @Override
     public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
-        showListGenerica(articulosDTO,"ARTÍCULOS NUMERADOS", true, true);
+        showListGenerica(articulosDTO,"ARTÍCULOS NUMERADOS", true, true, true);
     }
 
 

@@ -16,7 +16,8 @@
             <Button fx:id="btnModArticulo" layoutX="200.0" layoutY="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Modificar Articulo" />
             <Button fx:id="btnDeleteArticulo" layoutX="200.0" layoutY="130.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Eliminar Articulo" />
             <Button fx:id="btnListArticulo" layoutX="200.0" layoutY="170.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Mostrar Articulos" />
-            <Button fx:id="btnVolver" layoutX="200.0" layoutY="230.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Volver" />
+            <Button fx:id="btnListArticuloStock" layoutX="200.0" layoutY="210.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Mostrar Stock Articulos" />
+            <Button fx:id="btnVolver" layoutX="200.0" layoutY="270.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="200.0" text="Volver" />
 
         </AnchorPane>
     </center>

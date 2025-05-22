@@ -278,7 +278,7 @@ public class ControlArticulos extends ControlBase {
     /**
      * Muestra el stock de todos los artículos.
      */
-    private void showStockArticulos() {
+    public void showStockArticulos() {
         Map<ArticuloDTO, Integer> stockArticulos;
         try{
             stockArticulos = mArticulos.getArticuloStocksDTO();

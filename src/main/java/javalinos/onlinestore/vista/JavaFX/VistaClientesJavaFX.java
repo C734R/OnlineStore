@@ -23,16 +23,10 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
     @FXML private Button btnAddCliente;
     @FXML private Button btnModCliente;
     @FXML private Button btnDeleteCliente;
+    @FXML private Button btnShowCliente;
     @FXML private Button btnListClientes;
     @FXML private Button btnListClientesCategoria;
     @FXML private Button btnVolver;
-
-    @FXML private TableView<ClienteDTO> tblClientes;
-    @FXML private TableColumn<ClienteDTO, String> colNombre;
-    @FXML private TableColumn<ClienteDTO, String> colDomicilio;
-    @FXML private TableColumn<ClienteDTO, String> colEmail;
-    @FXML private TableColumn<ClienteDTO, String> colDNI;
-    @FXML private TableColumn<ClienteDTO, String> colCategoria;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -40,6 +34,7 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
         btnAddCliente.setOnAction(event -> cClientes.addCliente());
         btnDeleteCliente.setOnAction(event -> cClientes.removeCliente());
         btnModCliente.setOnAction(event -> cClientes.modCliente());
+        btnShowCliente.setOnAction(event -> cClientes.showCliente());
         btnListClientes.setOnAction(event -> cClientes.showListClientes());
         btnListClientesCategoria.setOnAction(event -> cClientes.showListClientesCategoria());
         btnVolver.setOnAction(event -> GestorEscenas.cerrarVentana("GestionClientes"));
@@ -143,17 +138,17 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO,"CLIENTES", true, false);
+        showListGenerica(clientesDTO,"CLIENTES", true, false, false);
     }
 
     @Override
     public void showListClientesNumerada(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO,"CLIENTES NUMERADOS", true, true);
+        showListGenerica(clientesDTO,"CLIENTES NUMERADOS", true, true , false);
     }
 
     @Override
     public void showListClientesCategoria(List<ClienteDTO> clientesDTO, CategoriaDTO categoriaDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES DE CATEGORÍA "+ categoriaDTO.getNombre(), true, false);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES DE CATEGORÍA "+ categoriaDTO.getNombre(), true, false, false);
     }
 
     @Override
@@ -173,7 +168,9 @@ public class VistaClientesJavaFX extends VistaBaseJavaFX implements IVistaClient
 
     @Override
     public void showCliente(ClienteDTO clienteDTO) {
-
+        showMensaje("******** Datos del cliente ********\n" +
+                clienteDTO.toString() + "\n" +
+                "***********************************************", true);
     }
 
     @Override

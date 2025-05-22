@@ -239,9 +239,9 @@ public abstract class VistaBase implements IVistaBase {
      * @param encuadre si se muestra encuadre.
      * @param numeracion si se numera.
      */
-    public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) {
+    public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion, boolean opcion) {
         showMensaje("******** " + titulo + " ********", true);
-        showOptions(listToStr(lista), 0, encuadre, numeracion, false);
+        showOptions(listToStr(lista), 0, encuadre, numeracion, opcion);
         showMensaje("********************************************", true);
     }
 

@@ -67,35 +67,35 @@ public class VistaPedidos extends VistaBase implements IVistaPedidos {
      * @param clientesDTO Lista con los clientes
      */
     public void showListClientes(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES", true, true);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES", true, true, false);
     }
     /**
      * Muestra una lista con todos los clientes.
      * @param clientesDTO Lista de clientes.
      */
     public void showListClientesPedidos(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS", true, true);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS", true, true, false);
     }
     /**
      * Muestra una lista de clientes que tienen al menos un pedido.
      * @param clientesDTO Lista de clientes con pedidos.
      */
     public void showListClientesPedidosPendientes(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, true);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, true, false);
     }
     /**
      * Muestra una lista de clientes con pedidos enviados.
      * @param clientesDTO Lista de clientes con pedidos enviados.
      */
     public void showListClientesPedidosEnviados(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS ENVIADOS", true, true);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS ENVIADOS", true, true, false);
     }
     /**
      * Muestra la lista de artículos disponibles.
      * @param articulosDTO Lista de artículos.
      */
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
-        showListGenerica(articulosDTO, "LISTA DE ARTICULOS", true, false);
+        showListGenerica(articulosDTO, "LISTA DE ARTICULOS", true, true, false);
     }
 
     /**
@@ -104,8 +104,8 @@ public class VistaPedidos extends VistaBase implements IVistaPedidos {
      * @param clienteDTO clientes (puede ser null).
      */
     public void showPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS", true, true);
-        else showListGenerica(pedidosDTO, "PEDIDOS DEL CLIENTE " + clienteDTO.getNombre(), true, true);
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS", true, true, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS DEL CLIENTE " + clienteDTO.getNombre(), true, true, false);
     }
 
     /**
@@ -114,8 +114,8 @@ public class VistaPedidos extends VistaBase implements IVistaPedidos {
      * @param clienteDTO cliente (puede ser null).
      */
     public void showListPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES", true, true);
-        else showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES DEL CLIENTE " + clienteDTO.getNombre(), true, true);
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES", true, true, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES DEL CLIENTE " + clienteDTO.getNombre(), true, true, false);
     }
 
     /**
@@ -124,8 +124,8 @@ public class VistaPedidos extends VistaBase implements IVistaPedidos {
      * @param clienteDTO cliente (puede ser null).
      */
     public void showListPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS", true, true);
-        else showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS DEL CLIENTE " + clienteDTO.getNombre(), true, true);
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS", true, true, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS DEL CLIENTE " + clienteDTO.getNombre(), true, true, false);
     }
 
     /**

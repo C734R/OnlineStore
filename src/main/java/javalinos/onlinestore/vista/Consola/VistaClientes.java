@@ -136,7 +136,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      */
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO,"CLIENTES", true, false);
+        showListGenerica(clientesDTO,"CLIENTES", true, false, false);
     }
 
     /**
@@ -145,7 +145,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      */
     @Override
     public void showListClientesNumerada(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO,"CLIENTES NUMERADOS", true, true);
+        showListGenerica(clientesDTO,"CLIENTES NUMERADOS", true, true, true);
     }
 
     /**
@@ -155,7 +155,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
      */
     @Override
     public void showListClientesCategoria(List<ClienteDTO> clientesDTO, CategoriaDTO categoriaDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES DE CATEGORÍA "+ categoriaDTO.getNombre(), true, false);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES DE CATEGORÍA "+ categoriaDTO.getNombre(), true, false, false);
     }
 
     /**
@@ -193,6 +193,7 @@ public class VistaClientes extends VistaBase implements IVistaClientes {
         showMensaje("******** DATOS DEL CLIENTE " + clienteDTO.getNombre() +" ********", true);
         showMensaje(clienteDTO.toString(), true);
         showMensaje("*****************************************", true);
+        showMensajePausa("", true);
     }
 
     @Override

@@ -16,7 +16,7 @@ public interface IVistaBase {
     Boolean askBoolean(String mensaje, boolean reintentar, boolean maxIntentos);
     void showMensaje(String mensaje, boolean salto);
     void showOptions(List<String> lista, int tipoRetorno, Boolean encuadre, Boolean numeracion, Boolean opcion);
-    <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) ;
+    <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion, boolean opcion);
     LocalDate askFecha(String mensaje);
     void showMensajePausa(String mensaje, boolean salto);
 
@@ -24,6 +24,4 @@ public interface IVistaBase {
     Float askFloatOpcional(String mensaje, float min, float max);
     Float askPrecioOpcional(String mensaje, float min, float max);
     Integer askIntOpcional(String mensaje, int min, int max);
-
-
 }

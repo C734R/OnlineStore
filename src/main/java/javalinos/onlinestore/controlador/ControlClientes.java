@@ -614,7 +614,6 @@ public class ControlClientes extends ControlBase
                 return;
             }
             vClientes.showCliente(clienteDTO);
-            vClientes.showMensajePausa("", true);
         }
         catch (Exception e)
         {

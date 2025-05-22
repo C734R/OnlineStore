@@ -256,12 +256,6 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
         builder.append("********************************************\n");
         for(String entrada: lista) {
             if(lista.indexOf(entrada) == lista.lastIndexOf(lista.getFirst())) {
-                ++i;
-                continue;
-            }
-            else if(lista.indexOf(entrada) == lista.lastIndexOf(lista.getLast())) {
-                builder.append(entrada);
-                ++i;
                 continue;
             }
             if(encuadre) builder.append("--------------------------------------\n");
@@ -305,12 +299,11 @@ public class VistaBaseJavaFX extends Application implements IVistaBase, Initiali
     }
 
     @Override
-    public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion) {
+    public <T> void showListGenerica(List<T> lista, String titulo, boolean encuadre, boolean numeracion, boolean opcion) {
         List<String> listaString = listToStr(lista);
         // Añadir título al inicio de la lista
         listaString.addFirst(titulo);
-        listaString.addLast("********************************************");
-        showOptions(listaString, 0,encuadre, numeracion, false);
+        showOptions(listaString, 0,encuadre, numeracion, opcion);
     }
 
     @Override

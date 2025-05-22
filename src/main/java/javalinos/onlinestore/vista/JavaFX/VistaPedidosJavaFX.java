@@ -36,126 +36,54 @@ public class VistaPedidosJavaFX extends VistaBaseJavaFX implements IVistaPedidos
     @Override
     public void showListPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO, boolean opcion) {
         if (clienteDTO == null) {
-            showListGenerica(pedidosDTO, "LISTA DE PEDIDOS", true, false);
+            showListGenerica(pedidosDTO, "LISTA DE PEDIDOS", true, false, false);
         }
         else {
-            showListGenerica(pedidosDTO, "LISTA DE PEDIDOS DEL CLIENTE  " + pedidosDTO.getFirst().getCliente().getNombre(), true, false);
+            showListGenerica(pedidosDTO, "LISTA DE PEDIDOS DEL CLIENTE  " + pedidosDTO.getFirst().getCliente().getNombre(), true, false, false);
         }
-//        StringBuilder builder = new StringBuilder();
-//        if (pedidosDTO != null) {
-//            for (int i = 0; i < pedidosDTO.size(); i++) {
-//                PedidoDTO pedido = pedidosDTO.get(i);
-//                if (clienteDTO == null || clienteDTO.equals(pedido.getCliente())) {
-//                    builder.append("--------------------------------------------------------------\n")
-//                            .append(i + 1).append(" - Pedido\n")
-//                            .append("Número de pedido: ").append(pedido.getNumero()).append(" - ")
-//                            .append(pedido.getArticulo()).append(" - ")
-//                            .append(pedido.getCliente()).append(" - ")
-//                            .append(pedido.getCantidad()).append(" - ")
-//                            .append(pedido.getPrecio()).append("\n")
-//                            .append("-------------------------------------------------------------\n");
-//                }
-//            }
-//        }
-//
-//        TextArea textArea = new TextArea(builder.toString());
-//        textArea.setEditable(false);
-//        textArea.setWrapText(true);
-//
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Listado de Pedidos");
-//        alert.setHeaderText("Pedidos existentes:");
-//        alert.getDialogPane().setContent(textArea);
-//
-//        textArea.setPrefWidth(600);
-//        textArea.setPrefHeight(400);
-//
-//        alert.showAndWait();
-
     }
-
-//    private void askFiltroCliente(TipoListado tipoListado) { // Recibe el tipo de listado deseado
-//        Map<String, Integer> mapa = Map.of(
-//                "Sí", 1,
-//                "No", 2
-//        );
-//        String respuesta;
-//        List<String> opciones = new ArrayList<>(mapa.keySet());
-//        int filtro = 0;
-//
-//        ChoiceDialog<String> dialogo = new ChoiceDialog<>("", opciones);
-//        dialogo.setTitle("Seleccione una opción");
-//        dialogo.setHeaderText("¿Quieres filtrar por cliente?");
-//        dialogo.setContentText("Opciones:");
-//
-//        Optional<String> resultado = dialogo.showAndWait();
-//        if (resultado.isPresent()) {
-//            respuesta = resultado.get();
-//            filtro = mapa.get(respuesta);
-//        }
-//        if (filtro == 0) {
-//            showMensajePausa("Volviendo atrás...", true);
-//            return;
-//        }
-//
-//        ClienteDTO clienteDTO = null;
-//        if (filtro == 1) {
-//            clienteDTO = cPedidos.askCliente(false);
-//            if (clienteDTO == null) {
-//                showMensajePausa("Selección de cliente cancelada. Volviendo atrás...", true);
-//                return;
-//            }
-//        }
-//        if (tipoListado == TipoListado.PENDIENTES) {
-//            cPedidos.showListPedidosPendientesEnviados(clienteDTO, false);
-//        } else if (tipoListado == TipoListado.ENVIADOS) {
-//            cPedidos.showListPedidosPendientesEnviados(clienteDTO, true);
-//        } else if (tipoListado == TipoListado.TODOS) {
-//            cPedidos.showListPedidos(clienteDTO);
-//        }
-//    }
 
     @Override
     public void showListClientes(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES", true, false);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES", true, true, false);
     }
 
     @Override
     public void showListClientesPedidos(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS", true, false);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS", true, false, false);
     }
 
     @Override
     public void showListClientesPedidosPendientes(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, false);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS PENDIENTES", true, false, false);
     }
 
     @Override
     public void showListClientesPedidosEnviados(List<ClienteDTO> clientesDTO) {
-        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS ENVIADOS", true, false);
+        showListGenerica(clientesDTO, "LISTA DE CLIENTES CON PEDIDOS ENVIADOS", true, false, false);
     }
 
     @Override
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
-        showListGenerica(articulosDTO, "LISTA DE ARTICULOS", true, false);
+        showListGenerica(articulosDTO, "LISTA DE ARTICULOS", true, true, false);
     }
 
     @Override
     public void showPedidos(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS", true, false);
-        else showListGenerica(pedidosDTO, "PEDIDOS DEL CLIENTE " + clienteDTO.getNombre(), true, false);
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS", true, false, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS DEL CLIENTE " + clienteDTO.getNombre(), true, false, false);
     }
 
     @Override
     public void showListPedidosPendientes(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES", true, false);
-        else showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES DEL CLIENTE " + clienteDTO.getNombre(), true, false);
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES", true, false, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS PENDIENTES DEL CLIENTE " + clienteDTO.getNombre(), true, false, false);
     }
 
     @Override
     public void showListPedidosEnviados(List<PedidoDTO> pedidosDTO, ClienteDTO clienteDTO) {
-        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS", true, false);
-        else showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS DEL CLIENTE " + clienteDTO.getNombre(), true, false);
+        if (clienteDTO == null) showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS", true, false, false);
+        else showListGenerica(pedidosDTO, "PEDIDOS ENVIADOS DEL CLIENTE " + clienteDTO.getNombre(), true, false, false);
     }
 
     @Override

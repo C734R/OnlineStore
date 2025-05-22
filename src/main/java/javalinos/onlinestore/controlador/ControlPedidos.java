@@ -170,7 +170,7 @@ public class ControlPedidos extends ControlBase{
 
             if (!articulosDisponibles.isEmpty())
             {
-                vPedidos.showOptions(listToStr(articulosDisponibles), 0, true, true, true);
+                vPedidos.showListArticulos(articulosDisponibles);
                 int indexArticulo = vPedidos.askInt("Selecciona el articulo que quiere comprar entre los disponibles", 1, articulosDisponibles.size(), true, true, true);
                 if (indexArticulo == -99999) return;
                 indexArticulo = indexArticulo - 1;

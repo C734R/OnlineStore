@@ -65,7 +65,7 @@ public class VistaArticulos extends VistaBase implements IVistaArticulos {
      */
     public void showListArticulos(List<ArticuloDTO> articulosDTO) {
         showMensaje("Lista de artículos disponibles:", true);
-        showListGenerica(articulosDTO,"ARTÍCULOS", true, false);
+        showListGenerica(articulosDTO,"ARTÍCULOS", true, false, false);
     }
 
     /**
@@ -89,7 +89,7 @@ public class VistaArticulos extends VistaBase implements IVistaArticulos {
      * @param articulosDTO lista de artículos.
      */
     public void showListArticulosNumerada(List<ArticuloDTO> articulosDTO) {
-        showListGenerica(articulosDTO,"ARTÍCULOS NUMERADOS", true, true);
+        showListGenerica(articulosDTO,"ARTÍCULOS NUMERADOS", true, true, true);
     }
     /**
      * Muestra los datos detallados de un artículo.
